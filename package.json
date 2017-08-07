@@ -1,6 +1,6 @@
 {
   "name": "sim-ui-components",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Component Library for SimCore apps",
   "author": "jase.smith@simcoretech.com",
   "private": true,
@@ -17,7 +17,14 @@
     "vue": "^2.3.3"
   },
   "files": [
-    "src/components"
+    "Autocomplete.vue",
+    "Datalist.vue",
+    "IconText.vue",
+    "Overlay.vue",
+    "Panel.vue",
+    "Selection.vue",
+    "Switch.vue",
+    "Tooltip.vue"
   ],
   "devDependencies": {
     "autoprefixer": "^7.1.2",
