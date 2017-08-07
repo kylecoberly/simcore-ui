@@ -1,6 +1,6 @@
 {
   "name": "sim-ui-components",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Component Library for SimCore apps",
   "author": "jase.smith@simcoretech.com",
   "private": true,
@@ -16,9 +16,6 @@
   "dependencies": {
     "vue": "^2.3.3"
   },
-  "files": [
-    "src/components"
-  ],
   "directories": {
     "src/components": "/"
   },
