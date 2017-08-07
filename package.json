@@ -17,14 +17,14 @@
     "vue": "^2.3.3"
   },
   "files": [
-    "src/components/Autocomplete.vue",
-    "src/components/Datalist.vue",
-    "src/components/IconText.vue",
-    "src/components/Overlay.vue",
-    "src/components/Panel.vue",
-    "src/components/Selection.vue",
-    "src/components/Switch.vue",
-    "src/components/Tooltip.vue"
+    "components/Autocomplete.vue",
+    "components/Datalist.vue",
+    "components/IconText.vue",
+    "components/Overlay.vue",
+    "components/Panel.vue",
+    "components/Selection.vue",
+    "components/Switch.vue",
+    "components/Tooltip.vue"
   ],
   "devDependencies": {
     "autoprefixer": "^7.1.2",
