@@ -18,14 +18,8 @@
     "vue": "^2.3.3"
   },
   "files": [
-    "components/Autocomplete.vue",
-    "components/Datalist.vue",
-    "components/IconText.vue",
-    "components/Overlay.vue",
-    "components/Panel.vue",
-    "components/Selection.vue",
-    "components/Switch.vue",
-    "components/Tooltip.vue"
+    "src/components",
+    "src/index.js"
   ],
   "devDependencies": {
     "autoprefixer": "^7.1.2",
