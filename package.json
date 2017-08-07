@@ -16,7 +16,7 @@
   "dependencies": {
     "vue": "^2.3.3"
   },
-  "files:": [
+  "files": [
     "src/components"
   ],
   "devDependencies": {
