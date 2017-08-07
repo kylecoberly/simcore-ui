@@ -14,8 +14,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "files": [
-    "src/",
-    "src/components"
+    "src/components",
   ],
   "dependencies": {
     "vue": "^2.3.3"
