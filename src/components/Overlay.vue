@@ -1,22 +1,22 @@
 <template lang="html">
-  <div class="sim-overlay" :class="{active: active}">
+  <div class="sim-overlay" :class="{active: isOpen}">
     <slot></slot>
-    <div class="sim-overlay__dismiss" v-if="showDismiss" @click="dismissThis">&times;</div>
+    <div class="sim-overlay__dismiss" v-if="showShowDismiss" @click="isOpen = false">&times;</div>
   </div>
 </template>
 
 <script>
   export default {
     name: 'sim-overlay',
-    props: ['show-dismiss'],
-    data() {
+    props: ['should-be-open', 'should-show-dismiss'],
+    data () {
       return {
-        active: false,
+        isOpen: false
       }
     },
-    methods: {
-      toggleThis(force) {
-        this.active = (force === undefined ? !this.active : force)
+    watch: {
+      shouldBeOpen (value) {
+        this.isOpen = value
       },
     },
   }

@@ -1,22 +1,22 @@
 <template lang="html">
-  <div class="sim-panel" :class="{active: active}">
+  <div class="sim-panel" :class="{active: isOpen}">
     <router-view name="panel" />
-    <div class="sim-panel__dismiss" v-if="showDismiss" @click="dismissThis">&times;</div>
+    <div class="sim-panel__dismiss" v-if="shouldShowDismiss" @click="isOpen = false">&times;</div>
   </div>
 </template>
 
 <script>
   export default {
     name: 'sim-panel',
-    props: ['show-dismiss'],
-    data() {
+    props: ['should-be-open', 'should-show-dismiss'],
+    data () {
       return {
-        active: false,
+        isOpen: false
       }
     },
-    methods: {
-      toggleThis(force) {
-        this.active = (force === undefined ? !this.active : force)
+    watch: {
+      shouldBeOpen (value) {
+        this.isOpen = value
       },
     },
   }
