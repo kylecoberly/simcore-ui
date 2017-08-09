@@ -15,4 +15,4 @@ mv * ../../
 cd ../../
 echo 'up 2'
 pwd
-find ./ -type d -exec rm -fr {} +
+# find ./ -type d -exec rm -fr {} +
