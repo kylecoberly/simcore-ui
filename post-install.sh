@@ -11,4 +11,4 @@ mv * ../../
 cd ../../
 echo 'remove directories'
 pwd
-find -mindepth 1 -maxdepth 1 -type d -exec rm -r {} \;
+find ./ -mindepth 1 -maxdepth 1 -type d -exec rm -r {} \;
