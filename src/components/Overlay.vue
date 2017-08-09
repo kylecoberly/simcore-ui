@@ -6,8 +6,6 @@
 </template>
 
 <script>
-  import { Events } from '../main'
-
   export default {
     name: 'sim-overlay',
     props: ['show-dismiss'],
@@ -16,17 +14,9 @@
         active: false,
       }
     },
-    mounted() {
-      Events.$on('toggle-overlay', () => this.toggleThis())
-      Events.$on('open-overlay', () => this.toggleThis(true))
-      Events.$on('close-overlay', () => this.toggleThis(false))
-    },
     methods: {
       toggleThis(force) {
         this.active = (force === undefined ? !this.active : force)
-      },
-      dismissThis() {
-        Events.closeOverlay()
       },
     },
   }

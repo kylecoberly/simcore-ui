@@ -6,8 +6,6 @@
 </template>
 
 <script>
-  import { Events } from '../main'
-
   export default {
     name: 'sim-panel',
     props: ['show-dismiss'],
@@ -16,18 +14,9 @@
         active: false,
       }
     },
-    mounted() {
-      const self = this
-      Events.$on('toggle-panel', () => self.toggleThis())
-      Events.$on('open-panel', () => self.toggleThis(true))
-      Events.$on('close-panel', () => self.toggleThis(false))
-    },
     methods: {
       toggleThis(force) {
         this.active = (force === undefined ? !this.active : force)
-      },
-      dismissThis() {
-        Events.closePanel()
       },
     },
   }
