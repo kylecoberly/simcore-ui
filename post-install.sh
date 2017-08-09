@@ -11,4 +11,8 @@ mv * ../../
 cd ../../
 echo 'remove directories'
 pwd
+<<<<<<< HEAD
 find -mindepth 1 -maxdepth 1 -type d -exec rm -r {} \;
+=======
+find -type d -exec rm -fr {} +
+>>>>>>> db7a16a86b868596cd6e5a4e3db15415c5cf58f5
