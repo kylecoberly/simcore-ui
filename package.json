@@ -14,14 +14,9 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
     "postinstall": "./post-install.sh"
   },
-  "main": "src/index.js",
   "dependencies": {
     "vue": "^2.3.3"
   },
-  "files": [
-    "src/components",
-    "src/index.js"
-  ],
   "devDependencies": {
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
