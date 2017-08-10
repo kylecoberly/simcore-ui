@@ -1,0 +1,31 @@
+.app-nav {
+  display: flex;
+  align-items: center;
+  a {
+    padding: 1em;
+    transition: calc(var(--ms)/2) linear;
+    &:hover {
+      box-shadow: 0 -.1em 0 0 var(--accent) inset;
+    }
+    &.router-link-active {
+      // box-shadow: 0 -.2em 0 0 var(--accent) inset;
+      color: var(--accent-text);
+      background: var(--accent);
+    }
+  }
+  .greeting {
+    padding: 0 1em;
+    opacity: .6;
+  }
+}
+nav {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  li {
+    list-style: none;
+    + li {
+      // border-left: 2px solid #eee;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+.app-header {
+  border-bottom: 1px solid #ddd;
+  background: var(--header-bg);
+  color: var(--shade);
+  font-size: 1em;
+  a {
+    color: var(--accent);
+  }
+}
+
+.logo {
+  line-height: 0;
+  padding: 1em;
+  svg {
+    width: 9.5em;
+    height: 2em;
+  }
+}

@@ -1,0 +1,50 @@
+a {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--base-link-color);
+  &.router-link-exact-active {
+    color: var(--base-color);
+  }
+  svg {
+    line-height: 0;
+  }
+}
+
+.accent {
+  color: var(--accent);
+}
+
+input,
+select,
+button,
+textarea {
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+h1, h2 {
+  font-weight: normal;
+}
+
+p {
+  margin: 0;
+  + p {
+    margin-top: .5em;
+  }
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  li {
+    padding: .5em 0;
+    + li {
+      // border-top: 1px solid rgba(#000, .1);
+    }
+    ul li {
+      padding: .5em 0 .5em 1em;
+    }
+  }
+}

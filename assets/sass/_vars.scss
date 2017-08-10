@@ -1,0 +1,52 @@
+:root {
+  --base: #257AA5;
+  --dark: #242931;
+  --light: #fff;
+  --snow: #fafafa;
+  --dust: #f7f7f7;
+  --cloud: #dadadc;
+  --shadow: #bfbfc1;
+  --shade: #969699;
+
+  --action: #4A93B9; //#337AB7;
+
+  --accent: #26c7d9;
+  --accent-text: #fff;
+
+  --helper: #ff6300;
+
+  --base-font-family: 'Montserrat', Helvetica, Arial, sans-serif;
+  --base-bg: var(--light);
+  --base-color: var(--dark);
+  --base-link-color: var(--action);
+  --base-radius: .2em;
+
+  --ms: 350ms;
+
+  --header-bg: var(--dark);
+  --header-fg: var(--accent);
+
+  --menu-bg: var(--dust);
+  --menu-fg: var(--dark);
+
+  --panel-bg: var(--dark);
+  --panel-fg: var(--snow);
+  --panel-width: 30em;
+
+  --overlay-bg: var(--base-bg);
+  --overlay-fg: var(--base-color);
+
+  --tooltip-bg: var(--dark);
+  --tooltip-fg: var(--light);
+
+  --footprint: 100vw;
+  --footprint-margin: 0 auto;
+
+  // icons
+  --icon-font-family: 'FontAwesome';
+  --icon-check-circle: '\f058';
+  --icon-check-square: '\f14a';
+  --icon-check-square-o: '\f046';
+  --icon-circle-thin: '\f1db';
+  --icon-cloud-download: '\f0ed';
+}
