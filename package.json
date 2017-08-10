@@ -19,6 +19,9 @@
     "shelljs": "^0.7.8",
     "vue": "^2.3.3"
   },
+  "files": [
+    "components"
+  ],
   "devDependencies": {
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
