@@ -32,7 +32,7 @@
     },
     data() {
       return {
-        msg: 'Badges',
+        msg: 'Badge',
       }
     },
     computed: {

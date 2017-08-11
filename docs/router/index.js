@@ -117,9 +117,9 @@ export default new Router({
           },
         },
         {
-          path: 'badges',
-          name: 'badges',
-          label: 'Badges',
+          path: 'badge',
+          name: 'badge',
+          label: 'Badge',
           components: {
             details: DocBadges,
           },
