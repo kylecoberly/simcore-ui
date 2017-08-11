@@ -5,7 +5,7 @@ import Vue from 'vue'
 import 'font-awesome/css/font-awesome.min.css'
 import VueHighlightJS from 'vue-highlightjs'
 
-import App from './App.vue'
+import App from './App'
 import router from './router'
 import common from './mixins'
 

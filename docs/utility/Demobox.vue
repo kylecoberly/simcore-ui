@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import SimIcontext from 'sim-ui-components/IconText.vue'
+import SimIcontext from '../../components/IconText'
 
 export default {
   name: 'demobox',

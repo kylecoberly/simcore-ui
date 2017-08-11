@@ -2,25 +2,25 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // Docs: Components
-import DocIconText from 'sim-ui-components/IconText.vue'
-import DocSelection from 'sim-ui-components/Selection.vue'
-import DocSwitch from 'sim-ui-components/Switch.vue'
-import DocDatalist from 'sim-ui-components/Datalist.vue'
-import DocOverlay from 'sim-ui-components/Overlay.vue'
-import DocPanel from 'sim-ui-components/Panel.vue'
-import DocTooltip from 'sim-ui-components/Tooltip.vue'
-import DocAutocomplete from 'sim-ui-components/Autocomplete.vue'
+import DocIconText from '../components/IconText'
+import DocSelection from '../components/Selection'
+import DocSwitch from '../components/Switch'
+import DocDatalist from '../components/Datalist'
+import DocOverlay from '../components/Overlay'
+import DocPanel from '../components/Panel'
+import DocTooltip from '../components/Tooltip'
+import DocAutocomplete from '../components/Autocomplete'
 
 // Nav
-import Hello from '../docs/Hello.vue'
-import GettingStarted from '../docs/GettingStarted.vue'
-import ComponentLibrary from '../docs/ComponentLibrary.vue'
-import StyleLibrary from '../docs/StyleLibrary.vue'
-import Extras from '../docs/Extras.vue'
+import Hello from '../Hello'
+import GettingStarted from '../GettingStarted'
+import ComponentLibrary from '../ComponentLibrary'
+import StyleLibrary from '../StyleLibrary'
+import Extras from '../Extras'
 
 // Docs: Styles
-import GuideIntro from '../docs/styles/Intro.vue'
-import GuideButtons from '../docs/styles/Buttons.vue'
+import GuideIntro from '../styles/Intro'
+import GuideButtons from '../styles/Buttons'
 
 Vue.use(Router)
 

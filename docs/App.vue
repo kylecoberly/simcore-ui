@@ -27,12 +27,12 @@
 
 <script>
 // library components
-import IconText from 'sim-ui-components/IconText.vue'
-import Overlay from 'sim-ui-components/Overlay.vue'
-import Panel from 'sim-ui-components/Panel.vue'
+import IconText from '../components/IconText'
+import Overlay from '../components/Overlay'
+import Panel from '../components/Panel'
 
 // internal components
-import Directory from './docs/utility/Directory.vue'
+import Directory from './utility/Directory'
 
 import common from './mixins'
 

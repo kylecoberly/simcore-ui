@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import common from '../mixins'
+import common from './mixins'
 
 export default {
   name: 'getting-started',
