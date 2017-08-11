@@ -2,7 +2,7 @@
 
 > Component Library for SimCore apps
 
-## Include In Your Project
+## To Use In Your Project
 ``` bash
 # in your package.json
 "dependencies": {
@@ -10,7 +10,7 @@
 }
 ```
 
-## View & Work on Library Directly
+## Documentation / Work on Library Directly
 
 ``` bash
 # install dependencies
