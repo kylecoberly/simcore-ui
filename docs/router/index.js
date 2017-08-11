@@ -10,6 +10,7 @@ import DocOverlay from '../pages/components/Overlay'
 import DocPanel from '../pages/components/Panel'
 import DocTooltip from '../pages/components/Tooltip'
 import DocAutocomplete from '../pages/components/Autocomplete'
+import DocBadges from '../pages/components/Badge'
 
 // Nav
 import Hello from '../Hello'
@@ -113,6 +114,14 @@ export default new Router({
           label: 'Autocomplete',
           components: {
             details: DocAutocomplete,
+          },
+        },
+        {
+          path: 'badges',
+          name: 'badges',
+          label: 'Badges',
+          components: {
+            details: DocBadges,
           },
         },
       ],
