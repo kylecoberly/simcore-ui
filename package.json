@@ -22,7 +22,7 @@
   },
   "files": [
     "components",
-    "styles"
+    "styles/app.min.css"
   ],
   "devDependencies": {
     "autoprefixer": "^7.1.2",
