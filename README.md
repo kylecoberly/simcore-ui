@@ -2,7 +2,15 @@
 
 > Component Library for SimCore apps
 
-## Build Setup
+## Include In Your Project
+``` bash
+# in your package.json
+"dependencies": {
+    "simcore-ui": "git+ssh@github.com:SimCoreTechnology/simcore-ui.git#master"
+}
+```
+
+## View & Work on Library Directly
 
 ``` bash
 # install dependencies
