@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import Demobox from '../utility/Demobox'
-import SimSelection from '../../components/Selection'
+import Demobox from '../../utility/Demobox'
+import SimSelection from '../../../components/Selection'
 
 export default {
   name: 'selection-doc',

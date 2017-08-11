@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import Demobox from '../utility/Demobox'
-import SimTooltip from '../../components/Tooltip'
+import Demobox from '../../utility/Demobox'
+import SimTooltip from '../../../components/Tooltip'
 
 export default {
   name: 'icontext-doc',

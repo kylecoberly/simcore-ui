@@ -26,12 +26,12 @@
 </template>
 
 <script>
-// library components
+// library pages
 import IconText from '../components/IconText'
 import Overlay from '../components/Overlay'
 import Panel from '../components/Panel'
 
-// internal components
+// internal pages
 import Directory from './utility/Directory'
 
 import common from './mixins'
@@ -40,12 +40,12 @@ export default {
   name: 'app',
   mixins: [common],
   components: {
-    // library components
+    // library pages
     'sim-icontext': IconText,
     'sim-overlay': Overlay,
     'sim-panel': Panel,
 
-    // internal components
+    // internal pages
     directory: Directory,
   },
   computed: {

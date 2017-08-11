@@ -21,7 +21,8 @@
     "vue-highlightjs": "^1.3.3"
   },
   "files": [
-    "components"
+    "components",
+    "styles"
   ],
   "devDependencies": {
     "autoprefixer": "^7.1.2",

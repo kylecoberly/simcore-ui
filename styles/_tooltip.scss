@@ -1,0 +1,20 @@
+.sim-tooltip {
+  &__cue {
+    opacity: .4;
+  }
+  &__bubble {
+    width: 12em;
+    background: var(--tooltip-bg);
+    color: var(--tooltip-fg);
+    font-size: .8em;
+    padding: .7em 1em;
+    border-radius: .2em;
+    box-shadow: 0 .5em 2em -.5em #000;
+    &--up::after {
+      border-top-color: var(--tooltip-bg);
+    }
+    &--down::after {
+      border-bottom-color: var(--tooltip-bg);
+    }
+  }
+}

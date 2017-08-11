@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import Demobox from '../utility/Demobox'
-import SimIcontext from '../../components/IconText'
+import Demobox from '../../utility/Demobox'
+import SimIcontext from '../../../components/IconText'
 
 export default {
   name: 'icontext-doc',

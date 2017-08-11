@@ -1,0 +1,14 @@
+.sim-datalist {
+  li {
+    padding: .5em;
+    &:hover {
+      background: rgba(#000, .05);
+    }
+    + li {
+      border-top: 1px solid rgba(#888, .15);
+    }
+  }
+  + .sim-datalist {
+    margin-top: 2em;
+  }
+}

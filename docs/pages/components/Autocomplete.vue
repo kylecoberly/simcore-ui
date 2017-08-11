@@ -58,8 +58,8 @@
 </template>
 
 <script>
-import Demobox from '../utility/Demobox'
-import SimAutocomplete from '../../components/Autocomplete'
+import Demobox from '../../utility/Demobox'
+import SimAutocomplete from '../../../components/Autocomplete'
 
 export default {
   name: 'autocomplete-doc',

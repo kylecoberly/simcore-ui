@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Demobox from '../utility/Demobox'
+import Demobox from '../../utility/Demobox'
 
 export default {
   name: 'panel-doc',

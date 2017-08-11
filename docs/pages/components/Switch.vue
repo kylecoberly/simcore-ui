@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import Demobox from '../utility/Demobox'
-import SimSwitch from '../../components/Switch'
+import Demobox from '../../utility/Demobox'
+import SimSwitch from '../../../components/Switch'
 
 export default {
   name: 'switch-doc',

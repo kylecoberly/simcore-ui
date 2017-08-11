@@ -2,14 +2,14 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // Docs: Components
-import DocIconText from '../components/IconText'
-import DocSelection from '../components/Selection'
-import DocSwitch from '../components/Switch'
-import DocDatalist from '../components/Datalist'
-import DocOverlay from '../components/Overlay'
-import DocPanel from '../components/Panel'
-import DocTooltip from '../components/Tooltip'
-import DocAutocomplete from '../components/Autocomplete'
+import DocIconText from '../pages/components/IconText'
+import DocSelection from '../pages/components/Selection'
+import DocSwitch from '../pages/components/Switch'
+import DocDatalist from '../pages/components/Datalist'
+import DocOverlay from '../pages/components/Overlay'
+import DocPanel from '../pages/components/Panel'
+import DocTooltip from '../pages/components/Tooltip'
+import DocAutocomplete from '../pages/components/Autocomplete'
 
 // Nav
 import Hello from '../Hello'
@@ -19,8 +19,8 @@ import StyleLibrary from '../StyleLibrary'
 import Extras from '../Extras'
 
 // Docs: Styles
-import GuideIntro from '../styles/Intro'
-import GuideButtons from '../styles/Buttons'
+import GuideIntro from '../pages/styles/Intro'
+import GuideButtons from '../pages/styles/Buttons'
 
 Vue.use(Router)
 

@@ -67,8 +67,8 @@
 </template>
 
 <script>
-import Demobox from '../utility/Demobox'
-import SimDatalist from '../../components/Datalist'
+import Demobox from '../../utility/Demobox'
+import SimDatalist from '../../../components/Datalist'
 
 export default {
   name: 'datalist-doc',
