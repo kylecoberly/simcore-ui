@@ -8,9 +8,11 @@
         </template>
         <template slot="view">
           <p><sim-icontext icon="fa-star" text="Getting Started" /></p>
+          <p><sim-icontext icon="fa-star" :text="3" /></p>
         </template>
         <template slot="html">
           <pre v-highlightjs><code class="html">&lt;sim-icontext icon="fa-star" text="Getting Started" /></code></pre>
+          <pre v-highlightjs><code class="html">&lt;sim-icontext icon="fa-star" :text="3" /></code></pre>
         </template>
       </demobox>
 

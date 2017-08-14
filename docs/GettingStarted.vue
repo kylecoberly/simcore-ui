@@ -1,8 +1,38 @@
 <template lang="html">
   <main>
-    <h1>{{ msg }}</h1>
-    <hr />
-    <p>Boo</p>
+    <h1>SimCore UI Components</h1>
+    <p>Component Library for SimCore apps</p>
+
+    <h2>To Use In Your Project</h2>
+    <p># in your package.json</p>
+    <pre v-highlightjs><code class="html" v-pre>
+"dependencies": {
+  "simcore-ui": "git+ssh@github.com:SimCoreTechnology/simcore-ui.git#master"
+}</code></pre>
+
+    <h2>Documentation / Work on Library Directly</h2>
+    <div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> install dependencies</span>
+    npm install
+
+    <span class="pl-c"><span class="pl-c">#</span> serve with hot reload at localhost:8080</span>
+    npm run dev
+
+    <span class="pl-c"><span class="pl-c">#</span> build for production with minification</span>
+    npm run build
+
+    <span class="pl-c"><span class="pl-c">#</span> build for production and view the bundle analyzer report</span>
+    npm run build --report
+
+    <span class="pl-c"><span class="pl-c">#</span> run unit tests</span>
+    npm run unit
+
+    <span class="pl-c"><span class="pl-c">#</span> run e2e tests</span>
+    npm run e2e
+
+    <span class="pl-c"><span class="pl-c">#</span> run all tests</span>
+    npm <span class="pl-c1">test</span></pre></div>
+    <p>For detailed explanation on how things work, checkout the <a href="http://vuejs-templates.github.io/webpack/">guide</a> and <a href="http://vuejs.github.io/vue-loader">docs for vue-loader</a>.</p>
+
     <p>
       <label><input type="radio" v-model="sortKey" value="index" /> by index</label>
       <label><input type="radio" v-model="sortKey" value="item" /> by alpha</label>
@@ -26,13 +56,13 @@
 
 <script>
 import common from './mixins'
+import Demobox from './utility/Demobox'
 
 export default {
   name: 'getting-started',
   mixins: [common],
   data() {
     return {
-      msg: 'Getting Started',
       list: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'.split(' '),
       sortKey: 'index',
       search: '',

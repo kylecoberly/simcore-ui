@@ -10,7 +10,7 @@
     name: 'sim-icontext',
     props: {
       icon: String,
-      text: String,
+      text: [Number, String],
       round: Boolean,
     },
   }
