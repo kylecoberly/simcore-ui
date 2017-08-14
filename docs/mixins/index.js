@@ -1,11 +1,11 @@
 export default {
-  capitalizeFirstLetter: (str) => str.charAt(0).toUpperCase() + str.slice(1),
+  capitalizeFirstLetter: string => string.charAt(0).toUpperCase() + string.slice(1),
 
   getRandomInt: (min, max) => Math.floor(Math.random() * ((max - min) + 1)) + min,
 
   clone: (collection, property) => collection.map(item => (property ? item[property] : item)),
 
-  unique: (array) => {
+  unique: array => {
     const t = {}
     return array.filter(item => {
       if (Object.prototype.hasOwnProperty.call(t, item)) {
@@ -23,6 +23,5 @@ export default {
     }
     return 0
   }),
-
 
 }

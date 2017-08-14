@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="sim-overlay" :class="{active: isOpen}">
     <slot></slot>
-    <div class="sim-overlay__dismiss" v-if="showShowDismiss" @click="isOpen = false">&times;</div>
+    <div class="sim-overlay__dismiss" v-if="shouldShowDismiss" @click="isOpen = false">&times;</div>
   </div>
 </template>
 
