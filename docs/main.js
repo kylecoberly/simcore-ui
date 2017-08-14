@@ -1,8 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-/* eslint-disable import/no-extraneous-dependencies */
-// import 'font-awesome/css/font-awesome.min.css'
 import VueHighlightJS from 'vue-highlightjs'
 
 import App from './App'
