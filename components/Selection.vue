@@ -27,3 +27,7 @@
     },
   }
 </script>
+
+<style lang="scss">
+  @import '../styles/selection';
+</style>

@@ -27,6 +27,8 @@
 </script>
 
 <style lang="scss">
+  @import '../styles/switch';
+
   .sim-switch {
     display: inline-block;
     label {
