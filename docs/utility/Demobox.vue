@@ -52,7 +52,7 @@ export default {
   position: relative;
   &__content {
     border: 1px solid var(--cloud);
-    background: var(--light);
+    background: var(--lightest);
     border-radius: var(--base-radius);
   }
   &--output {

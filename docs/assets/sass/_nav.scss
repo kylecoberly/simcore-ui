@@ -5,11 +5,10 @@
     padding: 1em;
     transition: calc(var(--ms)/2) linear;
     &:hover {
-      box-shadow: 0 -.1em 0 0 var(--accent) inset;
+      box-shadow: 0 -.1em 0 0 var(--lighter) inset;
     }
     &.router-link-active {
-      // box-shadow: 0 -.2em 0 0 var(--accent) inset;
-      color: var(--accent-text);
+      color: var(--light);
       background: var(--accent);
     }
   }
@@ -24,8 +23,5 @@ nav {
   display: flex;
   li {
     list-style: none;
-    + li {
-      // border-left: 2px solid #eee;
-    }
   }
 }

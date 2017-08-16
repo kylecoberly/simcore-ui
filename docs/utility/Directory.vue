@@ -49,12 +49,13 @@ export default {
   a {
     color: var(--action);
     &.router-link-exact-active {
-      color: var(--shade);
+      color: var(--medium-grey);
     }
   }
   header {
     padding: .5em 1em;
-    background: var(--cloud);
+    color: var(--light);
+    background: var(--medium-grey);
     margin: 0 -1em;
   }
   section li {

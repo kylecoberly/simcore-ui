@@ -1,10 +1,9 @@
 .app-header {
-  border-bottom: 1px solid #ddd;
   background: var(--header-bg);
-  color: var(--shade);
+  color: var(--header-fg);
   font-size: 1em;
   a {
-    color: var(--accent);
+    // color: var(--accent);
   }
 }
 
