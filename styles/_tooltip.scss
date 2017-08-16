@@ -1,20 +1,81 @@
 .sim-tooltip {
+  display: inline-block;
+  position: relative;
+  &__cue {
+    cursor: default;
+  }
+  &__bubble {
+    display: none;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0;
+    position: absolute;
+    z-index: 10;
+    left: 50%;
+    transition: all var(--ms, var(--default-ms)) ease-out;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      border: .5em solid transparent;
+      transform: translate(-50%, -100%);
+    }
+    &--up {
+      transform: translate(-50%, 50%) scale(.5);
+      bottom: calc(100% + .5em);
+      &::after {
+        top: calc(100% + 1em - 1px);
+      }
+    }
+    &--down {
+      transform: translate(-50%, -50%) scale(.65);
+      top: calc(100% + .5em);
+      &::after {
+        bottom: calc(100% - 1em - 1px);
+      }
+    }
+  }
+  &:hover {
+    .sim-tooltip__bubble {
+      display: block;
+      &--up, &--down {
+        animation: tooltipsVert calc(var(--ms, var(--default-ms)) / 2) ease-out forwards;
+      }
+    }
+  }
+}
+@keyframes tooltipsVert {
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0%) scale(1);
+  }
+}
+
+@keyframes tooltipsHorz {
+  to {
+    opacity: 1;
+    transform: translate(0%, -50%) scale(1);
+  }
+}
+
+// opinions
+.sim-tooltip {
   &__cue {
     opacity: .4;
   }
   &__bubble {
     width: 12em;
-    background: var(--tooltip-bg, var(--default-tooltip-bg));
-    color: var(--tooltip-fg, var(--default-tooltip-fg));
+    background: var(--tooltip-bg, var(--darker));
+    color: var(--tooltip-fg, var(--lightest));
     font-size: .8em;
     padding: .7em 1em;
     border-radius: .3em;
-    box-shadow: 0 .5em 2em -.5em var(--tooltip-shadow, var(--default-tooltip-shadow));
+    box-shadow: 0 .5em 2em -.5em var(--tooltip-shadow, var(--shadow));
     &--up::after {
-      border-top-color: var(--tooltip-bg, var(--default-tooltip-bg));
+      border-top-color: var(--tooltip-bg, var(--darker));
     }
     &--down::after {
-      border-bottom-color: var(--tooltip-bg, var(--default-tooltip-bg));
+      border-bottom-color: var(--tooltip-bg, var(--darker));
     }
   }
 }

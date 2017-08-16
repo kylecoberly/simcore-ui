@@ -1,0 +1,24 @@
+:root {
+  --darkest: #000;
+  --darker: #222;
+  --dark: #333;
+  --dark-grey: #444;
+  --medium-grey: #777;
+  --light-grey: #ccc;
+  --light: #eee;
+  --lighter: #fafafa;
+  --lightest: #fff;
+
+  --accent: var(--medium-grey);
+  --action: #4A93B9;
+
+  --shadow: rgba(#000, .8);
+  --shade: rgba(#000, .05);
+  --edge: rgba(#888, .15);
+
+  --default-ms: 350ms;
+
+  // alternate spellings
+  --light-gray: var(--light-grey);
+  --dark-gray: var(--dark-grey);
+}

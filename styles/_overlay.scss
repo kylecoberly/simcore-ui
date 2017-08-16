@@ -1,8 +1,48 @@
 .sim-overlay {
-  color: var(--overlay-fg, var(--default-overlay-fg));
-  background: var(--overlay-bg, var(--default-overlay-bg));
-  max-width: var(--overlay-width, var(--default-overlay-width));
-  margin: var(--overlay-margin, var(--default-overlay-margin));
+  opacity: 0;
+  z-index: 2;
+  position: fixed;
+  bottom: 100%;
+  height: 100vh;
+  left: 0;
+  right: 0;
+  will-change: transform;
+  transition: transform var(--ms, var(--default-ms)) ease-out, opacity var(--ms, var(--default-ms)) linear;
+
+  display: flex;
+  flex-direction: column;
+
+  &.active {
+    transform: translateY(100%);
+    opacity: 1;
+    ~ .app-content {
+      transform: translateY(15vh);
+    }
+    .sim-overlay__dismiss {
+      transform: translate(-50%, 50%) scale(1)
+    }
+  }
+  &--content {
+    overflow: auto;
+  }
+  &__dismiss {
+    line-height: 0;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--ms, var(--default-ms)) ease-out;
+    transition-delay: calc(var(--ms, var(--default-ms)) / 2);
+    transform: translate(-50%, 50%) scale(0);
+  }
+}
+
+// opinions
+.sim-overlay {
+  color: var(--overlay-fg, var(--dark));
+  background: var(--overlay-bg, var(--lightest));
+  max-width: var(--overlay-width, 100vw);
+  margin: var(--overlay-margin, 0 auto);
 
   // overlay parts
   &__dismiss {
@@ -15,8 +55,8 @@
     font-weight: 100;
     width: 1em;
     height: 1em;
-    color: var(--overlay-x-fg, var(--default-overlay-x-fg));
-    background: var(--overlay-x-bg, var(--default-overlay-x-bg));
+    color: var(--overlay-x-fg, var(--lightest));
+    background: var(--overlay-x-bg, var(--accent));
     border-radius: .5em;
   }
 }

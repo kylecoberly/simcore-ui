@@ -67,3 +67,7 @@
     },
   }
 </script>
+
+<style lang="scss">
+  @import '../styles/autocomplete';
+</style>

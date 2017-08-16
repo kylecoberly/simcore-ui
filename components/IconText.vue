@@ -19,30 +19,5 @@
 </script>
 
 <style lang="scss">
-  .sim-icontext {
-    display: inline-flex;
-    * + span {
-      margin-left: .5em;
-    }
-    .sim-icon {
-      flex: 0 0 auto;
-    }
-    &.circled .sim-icon,
-    &.rounded .sim-icon,
-    &.squared .sim-icon {
-      width: 1.5em;
-      height: 1.5em;
-      margin: -0.75em 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 0 .125em;
-    }
-    &.rounded .sim-icon {
-      border-radius: .3em;
-    }
-    &.circled .sim-icon {
-      border-radius: .75em;
-    }
-  }
+  @import '../styles/icontext';
 </style>

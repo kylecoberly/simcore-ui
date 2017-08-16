@@ -1,5 +1,6 @@
+//opinions
 .sim-autocomplete {
   li.highlighted {
-    background: var(--autocomplete-highlight, var(--default-autocomplete-highlight));
+    background: var(--autocomplete-highlight, var(--lighter));
   }
 }

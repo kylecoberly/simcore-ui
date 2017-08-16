@@ -1,10 +1,47 @@
-@import 'vars';
-
 .sim-switch {
+  display: inline-block;
+  label {
+    display: inline-flex;
+    align-items: center;
+    > * {
+      margin: 0;
+      + * {
+        margin-left: 1ch;
+      }
+    }
+  }
   input {
+    appearance: none;
+    position: relative;
+    padding: .8ch 1.8ch;
+    font: inherit;
+    cursor: pointer;
+    outline: 0;
     border-radius: 1em;
+    will-change: transform, background;
+    transition: all var(--ms, var(--default-ms)) ease-out;
+    background: var(--switch-color, var(--light-grey));
+    &:active {
+      transform: scale(.9);
+    }
+    // the dot
     &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      padding: .9ch;
       border-radius: 1em;
+      box-shadow: 0 0 0 1px;
+      transform: translate(-100%, -50%);
+      background: var(--switch-handle-color, var(--lightest));
+      transition: transform var(--ms, var(--default-ms)) ease-out;
+    }
+    &:checked {
+      background: var(--switch-color-active, var(--action));
+      &::before {
+        transform: translate(0%, -50%);
+      }
     }
   }
 }

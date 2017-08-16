@@ -22,29 +22,5 @@
 </script>
 
 <style lang="scss">
-  .sim-datalist {
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    li {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      transition: all var(--ms, var(--default-ms)) cubic-bezier(1,.02,0,1.05), background 0ms;
-      transition-delay: calc(var(--delay, 0) * 15ms); // placeholder for inline --delay
-    }
-    // transitions
-    &-enter,
-    &-leave-to {
-      opacity: 0;
-      font-size: 0;
-      transform: translateY(2em);
-    }
-    &-enter-active,
-    &-leave-active {
-      position: relative;
-    }
-  }
+  @import '../styles/datalist';
 </style>

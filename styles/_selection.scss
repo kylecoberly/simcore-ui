@@ -1,5 +1,3 @@
-@import 'vars';
-
 .sim-selection {
   display: inline-block;
   label {
@@ -13,9 +11,6 @@
     }
   }
   input {
-    -webkit-appearance: none;
-       -moz-appearance: none;
-        -ms-appearance: none;
     appearance: none;
     outline: none;
     font: inherit;
@@ -29,18 +24,18 @@
     justify-content: center;
     transform: scale(1.5);
     will-change: transform;
-    transition: transform var(--ms, var(--default-ms)) ease-out;
+    transition: transform var(--ms, var(--default-ms, 350ms)) ease-out;
     &:active:not(:disabled) {
       transform: scale(.9);
     }
     &::before {
-      content: var(--selection-unchecked-icon, var(--default-selection-unchecked-icon));
-      font-family: var(--icon-font-family, var(--default-icon-font-family));
+      content: var(--selection-unchecked-icon, var(--icon-circle-thin, '\f1db'));
+      font-family: var(--icon-font-family, 'FontAwesome');
     }
     &:checked {
-      color: var(--selection-color, var(--default-selection-color));
+      color: var(--selection-color, var(--action));
       &::before {
-        content: var(--selection-checked-icon, var(--default-selection-checked-icon));
+        content: var(--selection-checked-icon, var(--icon-check-circle, '\f058'));
       }
     }
   }
