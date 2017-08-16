@@ -4,17 +4,17 @@
   }
   &__bubble {
     width: 12em;
-    background: var(--tooltip-bg);
-    color: var(--tooltip-fg);
+    background: var(--tooltip-bg, var(--default-tooltip-bg));
+    color: var(--tooltip-fg, var(--default-tooltip-fg));
     font-size: .8em;
     padding: .7em 1em;
-    border-radius: .2em;
-    box-shadow: 0 .5em 2em -.5em #000;
+    border-radius: .3em;
+    box-shadow: 0 .5em 2em -.5em var(--tooltip-shadow, var(--default-tooltip-shadow));
     &--up::after {
-      border-top-color: var(--tooltip-bg);
+      border-top-color: var(--tooltip-bg, var(--default-tooltip-bg));
     }
     &--down::after {
-      border-bottom-color: var(--tooltip-bg);
+      border-bottom-color: var(--tooltip-bg, var(--default-tooltip-bg));
     }
   }
 }

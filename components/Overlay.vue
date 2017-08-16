@@ -25,7 +25,6 @@
 <style lang="scss">
   .sim-overlay {
     opacity: 0;
-
     z-index: 2;
     position: fixed;
     bottom: 100%;

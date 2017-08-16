@@ -43,32 +43,32 @@
       appearance: none;
       position: relative;
       padding: .8ch 1.8ch;
-      border-radius: 1em;
       font: inherit;
       cursor: pointer;
       outline: 0;
       will-change: transform, background;
-      transition: background var(--ms, var(--default-ms)) ease-out, transform var(--ms, var(--default-ms)) ease-out;
-
+      transition: all var(--ms, var(--default-ms)) ease-out;
+      background: var(--switch-color, var(--default-switch-color));
       &:active {
         transform: scale(.9);
       }
-
       // the dot
       &::before {
         content: '';
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-100%, -50%);
         padding: .9ch;
-        border-radius: 1em;
-        box-shadow: 0 0 0 1px var(--color);
+        box-shadow: 0 0 0 1px;
+        transform: translate(-100%, -50%);
+        background: var(--switch-handle-color, var(--default-switch-handle-color));
         transition: transform var(--ms, var(--default-ms)) ease-out;
       }
-
-      &:checked::before {
-        transform: translate(0%, -50%);
+      &:checked {
+        background: var(--switch-color-active, var(--default-switch-color-active));
+        &::before {
+          transform: translate(0%, -50%);
+        }
       }
     }
   }

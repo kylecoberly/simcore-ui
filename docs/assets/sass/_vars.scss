@@ -21,8 +21,6 @@
   --base-link-color: var(--action);
   --base-radius: .2em;
 
-  --ms: 350ms;
-
   --header-bg: var(--dark);
   --header-fg: var(--accent);
 
@@ -36,17 +34,6 @@
   --overlay-bg: var(--base-bg);
   --overlay-fg: var(--base-color);
 
-  --tooltip-bg: var(--dark);
-  --tooltip-fg: var(--light);
-
   --footprint: 100vw;
   --footprint-margin: 0 auto;
-
-  // icons
-  --icon-font-family: 'FontAwesome';
-  --icon-check-circle: '\f058';
-  --icon-check-square: '\f14a';
-  --icon-check-square-o: '\f046';
-  --icon-circle-thin: '\f1db';
-  --icon-cloud-download: '\f0ed';
 }

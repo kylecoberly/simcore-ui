@@ -7,7 +7,8 @@
           Normal / Default
         </template>
         <template slot="view">
-          <p><sim-badge :count="badgeCount">Some text</sim-badge> Some more text</p>
+          <p><sim-badge :badge="badge">Some text</sim-badge> Some more text</p>
+          <input type="text" v-model="example" />
         </template>
         <template slot="html">
           <pre v-highlightjs><code class="html"></code></pre>
@@ -33,18 +34,19 @@
     data() {
       return {
         msg: 'Badge',
+        example: 9
       }
     },
     computed: {
-      badgeCount() {
-        return 9 // common.getRandomInt(0, 100)
+      badge() {
+        return this.example // common.getRandomInt(0, 100)
       },
     },
   }
 </script>
 
 <style lang="scss">
-  .sim-badge {
-
+  .sim-badge_content {
+    background: rebeccapurple;
   }
 </style>

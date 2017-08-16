@@ -12,6 +12,8 @@
   }
   input {
     -webkit-appearance: none;
+       -moz-appearance: none;
+        -ms-appearance: none;
     appearance: none;
     outline: none;
     font: inherit;
@@ -25,18 +27,18 @@
     justify-content: center;
     transform: scale(1.5);
     will-change: transform;
-    transition: transform var(--ms) ease-out;
+    transition: transform var(--ms, var(--default-ms)) ease-out;
     &:active:not(:disabled) {
       transform: scale(.9);
     }
     &::before {
-      content: var(--icon-circle-thin);
-      font-family: var(--icon-font-family);
+      content: var(--selection-unchecked-icon, var(--default-selection-unchecked-icon));
+      font-family: var(--icon-font-family, var(--default-icon-font-family));
     }
     &:checked {
       color: var(--selection-color, var(--default-selection-color));
       &::before {
-        content: var(--checked-icon, var(--icon-check-circle));
+        content: var(--selection-checked-icon, var(--default-selection-checked-icon));
       }
     }
   }

@@ -1,49 +1,44 @@
 :root {
-  --base: #257AA5;
-  --dark: #242931;
-  --light: #fff;
-  --snow: #fafafa;
-  --dust: #f7f7f7;
-  --cloud: #dadadc;
-  --shadow: #bfbfc1;
-  --shade: #969699;
+  --default-ms: 350ms;
 
-  --action: #4A93B9; //#337AB7;
-
-  --accent: #26c7d9;
-  --accent-text: #fff;
-
-  --helper: #ff6300;
-
-  --base-font-family: 'Montserrat', Helvetica, Arial, sans-serif;
-  --base-bg: var(--light);
-  --base-color: var(--dark);
-  --base-link-color: var(--action);
-  --base-radius: .2em;
-
-  --header-bg: var(--dark);
-  --header-fg: var(--accent);
-
-  --menu-bg: var(--dust);
-  --menu-fg: var(--dark);
-
-  --panel-bg: var(--dark);
-  --panel-fg: var(--snow);
-
-  --overlay-bg: var(--base-bg);
-  --overlay-fg: var(--base-color);
-
-  --tooltip-bg: var(--dark);
-  --tooltip-fg: var(--light);
-
-  --footprint: 100vw;
-  --footprint-margin: 0 auto;
-
-  // icons
-  --icon-font-family: 'FontAwesome';
+  --default-icon-font-family: 'FontAwesome';
   --icon-check-circle: '\f058';
   --icon-check-square: '\f14a';
   --icon-check-square-o: '\f046';
   --icon-circle-thin: '\f1db';
   --icon-cloud-download: '\f0ed';
+
+  --default-autocomplete-highlight: #fafafa;
+
+  --default-badge-bg: #444;
+  --default-badge-fg: #fff;
+
+  --default-datalist-item-highlight: rgba(#000, .05);
+  --default-datalist-border-color: rgba(#888, .15);
+
+  --default-overlay-fg: #222;
+  --default-overlay-bg: #fff;
+  --default-overlay-width: 100vw;
+  --default-overlay-margin: 0 auto;
+  --default-overlay-x-fg: #fff;
+  --default-overlay-x-bg: #26c7d9;
+
+  --default-panel-width: 30em;
+  --default-panel-bg: #222;
+  --default-panel-fg: #fff;
+  --default-panel-accent: #26c7d9;
+  --default-panel-x-fg: #fff;
+  --default-panel-x-bg: #26c7d9;
+
+  --default-selection-unchecked-icon: var(--icon-circle-thin);
+  --default-selection-checked-icon: var(--icon-check-circle);
+  --default-selection-color: #4A93B9;
+
+  --default-switch-handle-color: #fff;
+  --default-switch-color: #bfbfc1;
+  --default-switch-color-active: #4A93B9;
+
+  --default-tooltip-bg: #222;
+  --default-tooltip-fg: #fff;
+  --default-tooltip-shadow: #000;
 }

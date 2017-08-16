@@ -1,15 +1,8 @@
 .sim-switch {
   input {
-    background: var(--shadow);
+    border-radius: 1em;
     &::before {
-      --switch-color: var(--shadow, var(--default-switch-color));
-      background: var(--light);
-    }
-    &:checked {
-      background: var(--action);
-      &::before {
-        --switch-color: var(--action, var(--default-switch-color-active));
-      }
+      border-radius: 1em;
     }
   }
 }

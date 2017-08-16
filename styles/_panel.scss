@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: column;
 
-  background: var(--panel-bg);
-  color: var(--panel-fg);
-  box-shadow: .2em 0 0 0 var(--accent) inset;
-  border-left: .2em solid var(--accent);
+  background: var(--panel-bg, var(--default-panel-bg));
+  color: var(--panel-fg, var(--default-panel-fg));
+  box-shadow: .2em 0 0 0 var(--panel-accent, var(--default-panel-accent)) inset;
+  border-left: .2em solid var(--panel-accent, var(--default-panel-accent));
   padding: 1em;
 
   // panel parts
@@ -20,10 +20,10 @@
     font-weight: 100;
     width: 1em;
     height: 1em;
-    color: var(--accent-text);
-    background: var(--accent);
+    color: var(--panel-x-fg, var(--default-panel-x-fg));
+    background: var(--panel-x-bg, var(--default-panel-x-bg));
     border-radius: 50%;
-    box-shadow: 0 0.25em 1em -0.15em rgba(#000, .6);
+    // box-shadow: 0 0.25em 1em -0.15em rgba(#000, .6);
   }
   header {
     flex: none;

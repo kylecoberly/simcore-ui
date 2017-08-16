@@ -1,7 +1,8 @@
 <template lang="html">
   <article>
-      <h2>{{ msg }}</h2>
 
+      <h2>{{ msg }}</h2>
+      @STUCK - how to open a component without event bus at the app root level?
       <demobox :open="true">
         <template slot="intro">
           Normal / Default
@@ -11,16 +12,19 @@
           <p><button @click="openOverlay" class="secondary">Open Overlay</button></p>
           <p><button @click="closeOverlay" class="secondary">Close Overlay</button></p>
         </template>
+        <template slot="html">
+          <pre><code class="html">&lt;SimOverlay :show-dismiss="true" :should-be-open="shouldBeOpen">&lt;/SimOverlay></code></pre>
+        </template>
         <template slot="js">
           <pre><code class="javascript">methods: {
   toggleOverlay () {
-    Events.toggleOverlay()
+    this.shouldBeOpen = !this.shouldBeOpen
   },
   openOverlay () {
-    Events.openOverlay()
+    this.shouldBeOpen = true
   },
   closeOverlay () {
-    Events.closeOverlay()
+    this.shouldBeOpen = false
   }
 }</code></pre>
         </template>
@@ -31,21 +35,30 @@
 
 <script>
 import Demobox from '../../utility/Demobox'
+// import SimOverlay from '../../../components/Overlay'
 
 export default {
   name: 'overlay-doc',
   components: {
     Demobox,
+    // SimOverlay
   },
   data() {
     return {
       msg: 'Overlay',
+      shouldBeOpen: false
     }
   },
   methods: {
-    toggleOverlay() {},
-    openOverlay() {},
-    closeOverlay() {},
+    toggleOverlay() {
+      this.$emit('overlay-toggle')
+    },
+    openOverlay() {
+      this.shouldBeOpen = true
+    },
+    closeOverlay() {
+      this.shouldBeOpen = false
+    },
   },
 }
 </script>

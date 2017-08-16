@@ -108,3 +108,26 @@ body {
   align-items: baseline;
   justify-content: space-between;
 }
+
+
+.sim-overlay {
+  section {
+    padding: 2em 2em 0 2em;
+    &.left {
+      flex: 1;
+      padding-left: 1em;
+      background: var(--light) linear-gradient(90deg, #fff, var(--light));
+    }
+    &.right {
+      flex: 1;
+      padding-right: 1em;
+      background: #fff;
+    }
+  }
+  > header,
+  > footer {
+    flex: none;
+    padding: 1em;
+    background: #fff;
+  }
+}

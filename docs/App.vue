@@ -1,7 +1,7 @@
 <template lang="html">
   <div id="app">
-    <sim-overlay :show-dismiss="true"></sim-overlay>
-    <sim-panel :show-dismiss="true"></sim-panel>
+    <SimOverlay :should-show-dismiss="true" :should-be-open="shouldOverlayBeOpen"></SimOverlay>
+    <SimPanel :should-show-dismiss="true" :should-be-open="shouldPanelBeOpen"></SimPanel>
     <header class="app-header">
       <div class="greeting">
         <router-link to="/" class="logo"><span>SIM <b>UI</b></span></router-link>
@@ -9,17 +9,17 @@
       </div>
       <div class="app-nav">
         <nav>
-          <li><router-link to="/getting-started"><sim-icontext round icon="fa-star" text="Getting Started" /></router-link></li>
-          <li><router-link to="/components"><sim-icontext round icon="fa-cubes" text="Components" /></router-link></li>
-          <li><router-link to="/styles"><sim-icontext round icon="fa-paint-brush" text="Styles" /></router-link></li>
-          <li><router-link to="/extras"><sim-icontext round icon="fa-code" text="Other Things" /></router-link></li>
+          <li><router-link to="/getting-started"><SimIconText circled icon="fa-star" text="Getting Started"></SimIconText></router-link></li>
+          <li><router-link to="/components"><SimIconText circled icon="fa-cubes" text="Components"></SimIconText></router-link></li>
+          <li><router-link to="/styles"><SimIconText circled icon="fa-paint-brush" text="Styles"></SimIconText></router-link></li>
+          <li><router-link to="/extras"><SimIconText circled icon="fa-code" text="Other Things"></SimIconText></router-link></li>
         </nav>
       </div>
     </header>
     <div class="app-content">
       <router-view />
       <aside>
-        <directory :model="menu"></directory>
+        <Directory :model="menu"></Directory>
       </aside>
     </div>
   </div>
@@ -27,9 +27,9 @@
 
 <script>
 // library pages
-import IconText from '../components/IconText'
-import Overlay from '../components/Overlay'
-import Panel from '../components/Panel'
+import SimIconText from '../components/IconText'
+import SimOverlay from '../components/Overlay'
+import SimPanel from '../components/Panel'
 
 // internal pages
 import Directory from './utility/Directory'
@@ -41,12 +41,12 @@ export default {
   mixins: [common],
   components: {
     // library pages
-    'sim-icontext': IconText,
-    'sim-overlay': Overlay,
-    'sim-panel': Panel,
+    SimIconText,
+    SimOverlay,
+    SimPanel,
 
     // internal pages
-    directory: Directory,
+    Directory,
   },
   computed: {
     routes() {
@@ -56,6 +56,8 @@ export default {
   data() {
     return {
       menu: [],
+      shouldOverlayBeOpen: false,
+      shouldPanelBeOpen: false,
       // transitionName: 'slide-left',
     }
   },
@@ -63,6 +65,13 @@ export default {
     this.menu = {
       children: this.routes,
     }
+    this.$on('overlay-toggle', function() {
+      console.log('overlay-toggle')
+      this.shouldOverlayBeOpen = !this.shouldOverlayBeOpen
+    })
+    this.$on('panel-toggle', function() {
+      this.shouldPanelBeOpen = !this.shouldPanelBeOpen
+    })
   },
   methods: {
     randomInt: (min, max) => common.getRandomInt(min, max),

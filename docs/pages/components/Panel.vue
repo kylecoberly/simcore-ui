@@ -30,22 +30,24 @@
 </template>
 
 <script>
-import Demobox from '../../utility/Demobox'
+  import Demobox from '../../utility/Demobox'
+  // import SimPanel from '../../../components/Panel'
 
-export default {
-  name: 'panel-doc',
-  components: {
-    Demobox,
-  },
-  data() {
-    return {
-      msg: 'Panel',
-    }
-  },
-  methods: {
-    togglePanel() {},
-    openPanel() {},
-    closePanel() {},
-  },
-}
+  export default {
+    name: 'panel-doc',
+    components: {
+      Demobox,
+      // SimPanel,
+    },
+    data() {
+      return {
+        msg: 'Panel',
+      }
+    },
+    methods: {
+      togglePanel() {},
+      openPanel() {},
+      closePanel() {},
+    },
+  }
 </script>

@@ -2,10 +2,10 @@
   li {
     padding: .5em;
     &:hover {
-      background: rgba(#000, .05);
+      background: var(--datalist-item-highlight, var(--default-datalist-item-highlight));
     }
     + li {
-      border-top: 1px solid rgba(#888, .15);
+      border-top: 1px solid var(--datalist-border-color, var(--default-datalist-border-color));
     }
   }
   + .sim-datalist {
