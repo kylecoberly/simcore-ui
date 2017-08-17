@@ -1,0 +1,58 @@
+.animator,
+.animatable {
+  transition: all var(--ms, var(--default-ms)) ease-out;
+}
+
+.animator {
+  &.in-from-bottom {
+    transform: translateY(var(--element-start, 100vh));
+  }
+  &.in-from-top {
+    transform: translateY(var(--element-start, -100vh));
+  }
+  &.in-from-left {
+    transform: translateX(var(--element-start, 100vw));
+  }
+  &.in-from-right {
+    transform: translateX(var(--element-start, -100vw));
+  }
+}
+
+
+.animator.active {
+  &.in-from-top,
+  &.in-from-bottom {
+    transform: translateY(calc(100vh - var(--element-width, 100vh)));
+  }
+  &.in-from-left,
+  &.in-from-right {
+    transform: translateX(calc(100vw - var(--element-width, 100vw)));
+  }
+
+  // effect on animator's animatable sibling elements
+  &.shift.in-from-bottom ~ .animatable {
+    transform: translateX(calc(var(--shift-amount, 15vh) * -1));
+  }
+  &.shift.in-from-top ~ .animatable {
+    transform: translateX(calc(var(--shift-amount, 15vh)));
+  }
+  &.shift.in-from-left ~ .animatable {
+    transform: translateX(calc(var(--shift-amount, 15vw) * -1));
+  }
+  &.shift.in-from-right ~ .animatable {
+    transform: translateX(calc(var(--shift-amount, 15vw)));
+  }
+
+  &.parallax.in-from-bottom ~ .animatable {
+    transform: translateY(calc(var(--parallax-amount, 15vh) * -1));
+  }
+  &.parallax.in-from-top ~ .animatable {
+    transform: translateY(calc(var(--parallax-amount, 15vh)));
+  }
+  &.parallax.in-from-left ~ .animatable {
+    transform: translateX(calc(var(--parallax-amount, 15vw) * -1));
+  }
+  &.parallax.in-from-right ~ .animatable {
+    transform: translateX(calc(var(--parallax-amount, 15vw)));
+  }
+}

@@ -13,7 +13,14 @@ Vue.config.productionTip = false
 Vue.use(VueHighlightJS)
 
 /* eslint-disable no-new, import/prefer-default-export */
-export const Events = new Vue({
+// export const Events = new Vue({})
+
+new Vue({
+  el: '#app',
+  router,
+  mixins: [common],
+  template: '<App/>',
+  components: { App },
   methods: {
     toggleOverlay() {
       this.$emit('toggle-overlay')
@@ -33,13 +40,14 @@ export const Events = new Vue({
     closePanel() {
       this.$emit('close-panel')
     },
+    toggleModal() {
+      this.$emit('toggle-modal')
+    },
+    openModal() {
+      this.$emit('open-modal')
+    },
+    closeModal() {
+      this.$emit('close-modal')
+    },
   },
-})
-
-new Vue({
-  el: '#app',
-  router,
-  mixins: [common],
-  template: '<App/>',
-  components: { App },
 })

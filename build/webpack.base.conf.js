@@ -10,7 +10,8 @@ function resolve (dir) {
 module.exports = {
   entry: {
     app: './docs/main.js',
-    theme: './styles/theme.scss'
+    theme: './styles/theme.scss',
+    animations: './styles/animations.scss'
   },
   output: {
     path: config.build.assetsRoot,

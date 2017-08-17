@@ -1,23 +1,21 @@
 .sim-overlay {
-  opacity: 0;
   z-index: 2;
   position: fixed;
-  bottom: 100%;
-  height: 100vh;
-  left: 0;
-  right: 0;
   will-change: transform;
-  transition: transform var(--ms, var(--default-ms)) ease-out, opacity var(--ms, var(--default-ms)) linear;
+
+  width: 100vw;
+  height: 100vh;
+
+  top: 0;
+  left: 0;
 
   display: flex;
   flex-direction: column;
 
+  // default
+  transform: translateY(var(--overlay-parallax-start, -100%));
   &.active {
-    transform: translateY(100%);
-    opacity: 1;
-    ~ .app-content {
-      transform: translateY(15vh);
-    }
+    transform: translateY(var(--overlay-parallax-end, 0%));
     .sim-overlay__dismiss {
       transform: translate(-50%, 50%) scale(1)
     }

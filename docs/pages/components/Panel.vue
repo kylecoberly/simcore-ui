@@ -7,22 +7,12 @@
           Normal / Default
         </template>
         <template slot="view">
-          <p><button @click="togglePanel">Toggle Panel</button></p>
-          <p><button @click="openPanel" class="secondary">Open Panel</button></p>
-          <p><button @click="closePanel" class="secondary">Close Panel</button></p>
+          <p><button @click="$root.togglePanel">Toggle Panel</button></p>
+          <p><button @click="$root.openPanel" class="secondary">Open Panel</button></p>
+          <p><button @click="$root.closePanel" class="secondary">Close Panel</button></p>
         </template>
-        <template slot="js">
-          <pre><code class="javascript">methods: {
-  togglePanel () {
-    Events.togglePanel()
-  },
-  openPanel () {
-    Events.openPanel()
-  },
-  closePanel () {
-    Events.closePanel()
-  }
-}</code></pre>
+        <template slot="html">
+          <pre v-highlightjs><code class="html">&lt;button @click="$root.togglePanel">Toggle Panel&lt;/button></code></pre>
         </template>
       </demobox>
 
@@ -31,23 +21,16 @@
 
 <script>
   import Demobox from '../../utility/Demobox'
-  // import SimPanel from '../../../components/Panel'
 
   export default {
     name: 'panel-doc',
     components: {
       Demobox,
-      // SimPanel,
     },
     data() {
       return {
         msg: 'Panel',
       }
-    },
-    methods: {
-      togglePanel() {},
-      openPanel() {},
-      closePanel() {},
     },
   }
 </script>
