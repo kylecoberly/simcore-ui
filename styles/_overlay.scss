@@ -56,5 +56,11 @@
     color: var(--overlay-x-fg, var(--lightest));
     background: var(--overlay-x-bg, var(--accent));
     border-radius: .5em;
+    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+      color: var(--overlay-x-fg-hover, var(--lightest));
+      background: var(--overlay-x-bg-hover, var(--action));
+    }
   }
 }
