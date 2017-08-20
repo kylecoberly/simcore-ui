@@ -11,9 +11,10 @@
     props: ['should-be-open', 'should-show-dismiss', 'dismiss-to'],
     methods: {
       dismiss () {
-        return this.$root.closePanel()
         if (this.$router && this.dismissTo) {
           this.$router.replace(this.dismissTo)
+        } else {
+          this.$root.closeOverlay()
         }
       }
     }
