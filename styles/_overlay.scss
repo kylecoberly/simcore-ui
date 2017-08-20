@@ -29,7 +29,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform var(--ms, var(--default-ms)) ease-out;
+    transition: all var(--ms, var(--default-ms)) ease-out;
     transition-delay: calc(var(--ms, var(--default-ms)) / 2);
     transform: translate(-50%, 50%) scale(0);
   }
@@ -51,6 +51,7 @@
     font-family: monospace;
     font-size: 3em;
     font-weight: 100;
+    cursor: pointer;
     width: 1em;
     height: 1em;
     color: var(--overlay-x-fg, var(--lightest));
@@ -61,6 +62,16 @@
       text-decoration: none;
       color: var(--overlay-x-fg-hover, var(--lightest));
       background: var(--overlay-x-bg-hover, var(--action));
+    }
+  }
+  &.active .sim-overlay__dismiss {
+    transition-delay: 0ms;
+    transition-duration: calc(var(--ms, var(--default-ms)) / 2);
+    &:hover {
+      transform: translate(-50%, 50%) scale(1.05);
+    }
+    &:active {
+      transform: translate(-50%, 50%) scale(.9);
     }
   }
 }

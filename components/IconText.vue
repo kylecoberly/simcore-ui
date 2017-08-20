@@ -1,5 +1,5 @@
 <template lang="html">
-  <span class="sim-icontext" :class="{ circled: circled, rounded: rounded, squared: squared }">
+  <span class="sim-icontext" :class="bling">
     <span v-if="icon" class="sim-icon fa" :class="icon"></span>
     <span v-if="text">{{ text }}</span>
   </span>
@@ -11,10 +11,24 @@
     props: {
       icon: String,
       text: [Number, String],
-      circled: Boolean,
-      rounded: Boolean,
-      squared: Boolean,
+      circle: Boolean,
+      round: Boolean,
+      square: Boolean,
     },
+    computed: {
+      bling () {
+        if (this.circle) {
+          return 'sim-icontext__circle'
+        }
+        if (this.round) {
+          return 'sim-icontext__round'
+        }
+        if (this.square) {
+          return 'sim-icontext__square'
+        }
+        return 'sim-icontext__plain'
+      }
+    }
   }
 </script>
 

@@ -4,6 +4,7 @@
   a {
     padding: 1em;
     transition: calc(var(--ms)/2) linear;
+    color: var(--action);
     &:hover {
       box-shadow: 0 -.1em 0 0 var(--lighter) inset;
     }
@@ -11,10 +12,6 @@
       color: var(--light);
       background: var(--accent);
     }
-  }
-  .greeting {
-    padding: 0 1em;
-    opacity: .6;
   }
 }
 nav {

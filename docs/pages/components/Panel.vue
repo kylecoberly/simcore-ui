@@ -7,9 +7,9 @@
           Normal / Default
         </template>
         <template slot="view">
-          <p><button @click="$root.togglePanel">Toggle Panel</button></p>
+          <p><button @click="$root.togglePanel('/')">Toggle Panel</button></p>
           <p><button @click="$root.openPanel" class="secondary">Open Panel</button></p>
-          <p><button @click="$root.closePanel" class="secondary">Close Panel</button></p>
+          <p><button @click="$root.closePanel('')" class="secondary">Close Panel</button></p>
         </template>
         <template slot="html">
           <pre v-highlightjs><code class="html">&lt;button @click="$root.togglePanel">Toggle Panel&lt;/button></code></pre>

@@ -1,9 +1,9 @@
 a {
   display: inline-block;
   text-decoration: none;
-  color: var(--base-link-color);
+  color: var(--action);
   &.router-link-exact-active {
-    color: var(--base-color);
+    color: var(--medium-grey);
   }
   svg {
     line-height: 0;

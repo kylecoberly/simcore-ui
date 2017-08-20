@@ -1,15 +1,9 @@
 .sim-icontext {
   display: inline-flex;
   align-items: var(--icontext-alignment, center);
-  * + span {
-    margin-left: .5em;
-  }
-  .sim-icon {
-    flex: 0 0 auto;
-  }
-  &.circled .sim-icon,
-  &.rounded .sim-icon,
-  &.squared .sim-icon {
+  &__circle .sim-icon,
+  &__round .sim-icon,
+  &__square .sim-icon {
     width: 1.5em;
     height: 1.5em;
     margin: -0.75em 0;
@@ -18,11 +12,17 @@
     justify-content: center;
     box-shadow: 0 0 0 .125em;
   }
-  &.rounded .sim-icon {
-    border-radius: .3em;
+  &__round .sim-icon {
+    border-radius: .25em;
   }
-  &.circled .sim-icon {
+  &__circle .sim-icon {
     border-radius: .75em;
+  }
+  .sim-icon {
+    flex: 0 0 auto;
+  }
+  * + span {
+    margin-left: .5em;
   }
 }
 

@@ -3,7 +3,10 @@
   color: var(--header-fg);
   font-size: 1em;
   a {
-    // color: var(--accent);
+    color: var(--light);
+  }
+  .greeting {
+    opacity: .6;
   }
 }
 

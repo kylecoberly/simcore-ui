@@ -22,32 +22,32 @@ new Vue({
   template: '<App/>',
   components: { App },
   methods: {
-    toggleOverlay() {
-      this.$emit('toggle-overlay')
+    toggleOverlay(callback) {
+      this.$emit('toggle-overlay', callback)
     },
-    openOverlay() {
-      this.$emit('open-overlay')
+    openOverlay(callback) {
+      this.$emit('open-overlay', callback)
     },
-    closeOverlay() {
-      this.$emit('close-overlay')
+    closeOverlay(callback) {
+      this.$emit('close-overlay', callback)
     },
-    togglePanel() {
-      this.$emit('toggle-panel')
+    togglePanel(callback) {
+      this.$emit('toggle-panel', callback)
     },
-    openPanel() {
-      this.$emit('open-panel')
+    openPanel(callback) {
+      this.$emit('open-panel', callback)
     },
-    closePanel() {
-      this.$emit('close-panel')
+    closePanel(callback) {
+      this.$emit('close-panel', callback)
     },
-    toggleModal() {
-      this.$emit('toggle-modal')
+    toggleModal(callback) {
+      this.$emit('toggle-modal', callback)
     },
-    openModal() {
-      this.$emit('open-modal')
+    openModal(callback) {
+      this.$emit('open-modal', callback)
     },
-    closeModal() {
-      this.$emit('close-modal')
+    closeModal(callback) {
+      this.$emit('close-modal', callback)
     },
   },
 })
