@@ -60,42 +60,52 @@
     mounted() {
       this.menu = {
         children: this.routes,
-      },
+      }
+      const _caller = (callback) => {
+        if(callback && typeof callback === 'function') {
+          callback.call()
+        }
+      }
+      const _setter = (variable, param) => {
+        if(param && typeof param === 'string') {
+          variable = param
+        }
+      }
       this.$root.$on('toggle-overlay', (dismissTo) => {
         this.shouldOverlayBeOpen = !this.shouldOverlayBeOpen
-        this.overlayDismissTo = dismissTo
+        _setter(this.overlayDismissTo, dismissTo)
       })
       this.$root.$on('open-overlay', (dismissTo) => {
         this.shouldOverlayBeOpen = true
-        this.overlayDismissTo = dismissTo
+        _setter(this.overlayDismissTo, dismissTo)
       })
       this.$root.$on('close-overlay', (dismissTo) => {
         this.shouldOverlayBeOpen = false
-        this.overlayDismissTo = dismissTo
+        _setter(this.overlayDismissTo, dismissTo)
       })
       this.$root.$on('toggle-panel', (dismissTo) => {
         this.shouldPanelBeOpen = !this.shouldPanelBeOpen
-        this.panelDismissTo = dismissTo
+        _setter(this.panelDismissTo, dismissTo)
       })
       this.$root.$on('open-panel', (dismissTo) => {
         this.shouldPanelBeOpen = true
-        this.panelDismissTo = dismissTo
+        _setter(this.panelDismissTo, dismissTo)
       })
       this.$root.$on('close-panel', (dismissTo) => {
         this.shouldPanelBeOpen = false
-        this.panelDismissTo = dismissTo
+        _setter(this.panelDismissTo, dismissTo)
       })
       this.$root.$on('toggle-modal', (callback) => {
         this.shouldModalBeOpen = !this.shouldModalBeOpen
-        // _caller(callback)
+        _caller(callback)
       })
       this.$root.$on('open-modal', (callback) => {
         this.shouldModalBeOpen = true
-        // _caller(callback)
+        _caller(callback)
       })
       this.$root.$on('close-modal', (callback) => {
         this.shouldModalBeOpen = false
-        // _caller(callback)
+        _caller(callback)
       })
     },
     methods: {
