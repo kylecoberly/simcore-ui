@@ -66,34 +66,29 @@
           callback.call()
         }
       }
-      const _setter = (variable, param) => {
-        if(param && typeof param === 'string') {
-          variable = param
-        }
-      }
       this.$root.$on('toggle-overlay', (dismissTo) => {
         this.shouldOverlayBeOpen = !this.shouldOverlayBeOpen
-        _setter(this.overlayDismissTo, dismissTo)
+        this.overlayDismissTo = dismissTo
       })
       this.$root.$on('open-overlay', (dismissTo) => {
         this.shouldOverlayBeOpen = true
-        _setter(this.overlayDismissTo, dismissTo)
+        this.overlayDismissTo = dismissTo
       })
       this.$root.$on('close-overlay', (dismissTo) => {
         this.shouldOverlayBeOpen = false
-        _setter(this.overlayDismissTo, dismissTo)
+        this.overlayDismissTo = dismissTo
       })
       this.$root.$on('toggle-panel', (dismissTo) => {
         this.shouldPanelBeOpen = !this.shouldPanelBeOpen
-        _setter(this.panelDismissTo, dismissTo)
+        this.panelDismissTo = dismissTo
       })
       this.$root.$on('open-panel', (dismissTo) => {
         this.shouldPanelBeOpen = true
-        _setter(this.panelDismissTo, dismissTo)
+        this.panelDismissTo = dismissTo
       })
       this.$root.$on('close-panel', (dismissTo) => {
         this.shouldPanelBeOpen = false
-        _setter(this.panelDismissTo, dismissTo)
+        this.panelDismissTo = dismissTo
       })
       this.$root.$on('toggle-modal', (callback) => {
         this.shouldModalBeOpen = !this.shouldModalBeOpen

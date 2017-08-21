@@ -11,7 +11,6 @@
     props: ['should-be-open', 'should-show-dismiss', 'dismiss-to'],
     methods: {
       dismiss () {
-        window.console.log(this.dismissTo)
         if (this.$router && this.dismissTo && typeof this.dismissTo === 'string') {
           this.$router.replace(this.dismissTo)
         } else {
