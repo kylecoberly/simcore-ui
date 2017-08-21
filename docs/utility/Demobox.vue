@@ -107,5 +107,11 @@ export default {
       font-weight: bold;
     }
   }
+  hr {
+    border: 0;
+    height: 1px;
+    margin: 1em 0;
+    background: repeating-linear-gradient(90deg, var(--light-grey) 0em, var(--light-grey) .5em, var(--lighter) .5em, var(--lighter) 1em);
+  }
 }
 </style>
