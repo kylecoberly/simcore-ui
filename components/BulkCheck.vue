@@ -30,9 +30,6 @@
         checkedItems: []
       }
     },
-    mounted () {
-
-    },
     computed: {
       shouldBeActive () {
         return this.checkedItems.length > 0
