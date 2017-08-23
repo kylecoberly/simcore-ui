@@ -1,4 +1,5 @@
 .sim-filter {
+    --active-color: var(--filter-active-color, var(--green, #9ccc66));
   + .sim-filter {
     margin-top: 1em;
   }
@@ -12,10 +13,10 @@
   .sim-selection {
     font-size: .8em;
     input:checked {
-      --color: var(--ok);
+      --selection-color: var(--active-color);
     }
   }
   &.active .sim-filter__header {
-    color: var(--ok);
+    color: var(--active-color);
   }
 }

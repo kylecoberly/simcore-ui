@@ -1,6 +1,6 @@
 <template lang="html">
-    <div class="sim-filter-by sim-accordion" :class="{active: shouldBeActive, open: isOpen}">
-        <div class="sim-filter__header sim-accordion__label" @click="toggleOpenList">{{ label }} {{ filtersApplied }}</div>
+    <div class="sim-filter sim-accordion" :class="{active: shouldBeActive, open: isOpen}">
+        <div class="sim-filter__header sim-accordion__label" @click="toggleOpenList">{{ label }}</div>
         <SimDatalist :items="list" class="sim-filter__items sim-accordion__items">
             <template slot="item" scope="props">
                 <li :key="props.item.id" class="no-wrap">
@@ -50,9 +50,9 @@
             shouldBeActive () {
                 return this.selectedItems.length > 0
             },
-            filtersApplied: function(){
-                return ` • ${this.selectedItems.length} / ${this.list.length}`
-            },
+            // filtersApplied: function(){
+            //     return ` • ${this.selectedItems.length} / ${this.list.length}`
+            // },
         },
         methods: {
             toggleOpenList: function(){
