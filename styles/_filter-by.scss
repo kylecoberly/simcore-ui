@@ -1,0 +1,21 @@
+.sim-filter {
+  + .sim-filter {
+    margin-top: 1em;
+  }
+  &__header {
+    padding: 0;
+    font-weight: 200;
+    display: block;
+    border: none;
+    white-space: nowrap;
+  }
+  .sim-selection {
+    font-size: .8em;
+    input:checked {
+      --color: var(--ok);
+    }
+  }
+  &.active .sim-filter__header {
+    color: var(--ok);
+  }
+}
