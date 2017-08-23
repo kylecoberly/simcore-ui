@@ -1,0 +1,23 @@
+.sim-bulkcheck {
+    padding: 0;
+    background: transparent;
+    color: var(--action);
+    box-shadow: none;
+    &:active,
+    &:focus {
+        box-shadow: none;
+    }
+    &.active {
+      color: inherit;
+    }
+    .sim-icontext {
+        opacity: .3;
+        + * {
+            opacity: .65;
+            margin-left: -1.25em;
+            + * {
+                opacity: 1;
+            }
+        }
+    }
+}

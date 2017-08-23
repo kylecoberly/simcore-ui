@@ -7,7 +7,7 @@
           Normal / Default
         </template>
         <template slot="view">
-          <p><SimBadge :badge="badge">Some text</SimBadge> Some more text</p>
+          <p><SimBulkCheck :items="items" @toggle="setSelectedItems"></SimBulkCheck> {{ selectedItems}} selected items</p>
           <input type="text" v-model="example" />
         </template>
         <template slot="html">
@@ -23,24 +23,30 @@
 
 <script>
   import Demobox from '../../utility/Demobox'
-  import SimBadge from '../../../components/Badge'
+  import SimBulkCheck from '../../../components/BulkCheck'
 
   export default {
     name: 'badge-doc',
     components: {
       Demobox,
-      SimBadge,
+      SimBulkCheck,
     },
     data() {
       return {
-        msg: 'Badge',
-        example: 9
+        msg: 'Bulk Check',
+        items: [{id:1},{id:2},{id:3},{id:4},{id:5}],
+        selectedItems: [],
       }
     },
     computed: {
       badge() {
         return this.example // common.getRandomInt(0, 100)
       },
+    },
+    methods: {
+      setSelectedItems (items) {
+        this.selectedItems = items
+      }
     },
   }
 </script>

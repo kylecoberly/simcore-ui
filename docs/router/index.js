@@ -11,6 +11,7 @@ import DocPanel from '../pages/components/Panel'
 import DocTooltip from '../pages/components/Tooltip'
 import DocAutocomplete from '../pages/components/Autocomplete'
 import DocBadges from '../pages/components/Badge'
+import DocBulkCheck from '../pages/components/BulkCheck'
 
 // Nav
 import Hello from '../Hello'
@@ -122,6 +123,14 @@ export default new Router({
           label: 'Badge',
           components: {
             details: DocBadges,
+          },
+        },
+        {
+          path: 'bulkcheck',
+          name: 'bulkcheck',
+          label: 'Bulk Check',
+          components: {
+            details: DocBulkCheck,
           },
         },
       ],
