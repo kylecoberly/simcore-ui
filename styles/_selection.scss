@@ -11,6 +11,8 @@
     }
   }
   input {
+    --selection-unchecked-icon: var(--icon-circle-thin, '\f1db');
+    --selection-checked-icon: var(--icon-check-circle, '\f058');
     appearance: none;
     outline: none;
     font: inherit;
@@ -29,13 +31,13 @@
       transform: scale(.9);
     }
     &::before {
-      content: var(--selection-unchecked-icon, var(--icon-circle-thin, '\f1db'));
+      content: var(--selection-unchecked-icon);
       font-family: var(--icon-font-family, 'FontAwesome');
     }
     &:checked {
       color: var(--selection-color, var(--action));
       &::before {
-        content: var(--selection-checked-icon, var(--icon-check-circle, '\f058'));
+        content: var(--selection-checked-icon);
       }
     }
   }

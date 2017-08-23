@@ -9,9 +9,20 @@
   --lighter: #fafafa;
   --lightest: #fff;
 
+  // colors
+  --red: #ca1e34;
+  --orange: #ff7042;
+  --yellow: #ffc929;
+  --green: #9ccc66;
+  --blue: #4A93B9;
+  --purple: #ab47bd;
   --accent: var(--medium-grey);
-  // --accent: #ffc929;
-  --action: #4A93B9;
+  --action: var(--blue);
+  --success: var(--green);
+  --danger: var(--red);
+  --warnign: var(--orange);
+  --alert: var(--yellow);
+  --royal: var(--purple);
 
   --shadow: rgba(#000, .8);
   --shade: rgba(#000, .05);
@@ -19,6 +30,13 @@
   --line: rgba(#777, .5);
 
   --default-ms: 350ms;
+
+  --icon-font-family: 'FontAwesome';
+  --icon-check-circle: '\f058';
+  --icon-check-square: '\f14a';
+  --icon-check-square-o: '\f046';
+  --icon-circle-thin: '\f1db';
+  --icon-minus-circle: '\f056';
 
   // alternate spellings
   --light-gray: var(--light-grey);
