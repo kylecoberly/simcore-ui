@@ -8,7 +8,6 @@
         </template>
         <template slot="view">
           <p><SimBulkCheck :items="items" @toggle="setSelectedItems"></SimBulkCheck> {{ selectedItems}} selected items</p>
-          <input type="text" v-model="example" />
         </template>
         <template slot="html">
           <pre v-highlightjs><code class="html"></code></pre>
