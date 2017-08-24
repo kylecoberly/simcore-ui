@@ -1,7 +1,7 @@
 <template lang="html">
   <span class="sim-selection" :class="{selected: isSelected}">
     <label :class="{disabled: disabled}">
-      <input type="checkbox" :disabled="disabled" :checked="isSelected" @change="toggleSelection(item)" />
+      <input type="checkbox" :disabled="disabled" :checked="isSelected" @change="toggleSelection" />
       <span><slot></slot></span>
     </label>
   </span>
@@ -10,19 +10,19 @@
 <script>
   export default {
     name: 'sim-selection',
-    props: ['item', 'disabled', 'selectedItems'],
+    props: ['item', 'disabled', 'shouldBeSelected'],
+    created () {
+        this.item.selected = this.shouldBeSelected
+    },
     computed: {
-      isSelected() {
-        return this.selectedItems && this.selectedItems.includes(this.item.id)
+      isSelected () {
+        return this.item.selected
       },
     },
     methods: {
-      toggleSelection(item) {
-        if (this.selectedItems.includes(item.id)) {
-          this.selectedItems.splice(this.selectedItems.indexOf(item.id), 1)
-        } else {
-          this.selectedItems.push(item.id)
-        }
+      toggleSelection () {
+          this.item.selected = !this.item.selected
+          this.$emit('toggle', this.item.id, this.item.selected)
       },
     },
   }

@@ -4,7 +4,7 @@
         <SimDatalist :items="list" class="sim-filter__items sim-accordion__items">
             <template slot="item" scope="props">
                 <li :key="props.item.id" class="no-wrap">
-                    <SimSelection :item="props.item" :can-edit="true" :selected-items="selectedItems">
+                    <SimSelection :item="props.item" :should-be-selected="false" @toggle="toggleSelection">
                         {{ props.item.name }}
                     </SimSelection>
                 </li>
@@ -57,6 +57,13 @@
         methods: {
             toggleOpenList: function(){
                 this.isOpen = !this.isOpen
+            },
+            toggleSelection (id, isSelected) {
+                if (isSelected) {
+                  this.selectedItems.push(id)
+                } else {
+                    this.selectedItems.splice(this.selectedItems.indexOf(id), 1)
+                }
             },
         },
         watch: {
