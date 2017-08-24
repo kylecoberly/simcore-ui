@@ -1,7 +1,7 @@
 <template lang="html">
-  <span class="sim-selection" :class="{selected: isSelected}">
+  <span class="sim-selection" :class="{selected: item.selected}">
     <label :class="{disabled: disabled}">
-      <input type="checkbox" :disabled="disabled" :checked="isSelected" @change="toggleSelection" />
+      <input type="checkbox" :disabled="disabled" :checked="item.selected" @change="toggleSelection" />
       <span><slot></slot></span>
     </label>
   </span>
@@ -13,11 +13,6 @@
     props: ['item', 'disabled', 'shouldBeSelected'],
     created () {
         this.item.selected = this.shouldBeSelected
-    },
-    computed: {
-      isSelected () {
-        return this.item.selected
-      },
     },
     methods: {
       toggleSelection () {
