@@ -1,48 +1,48 @@
 <template lang="html">
-    <button class="sim-bulkcheck" :class="{active: checkAll}" @click="toggleState">
-        <SimIconText :icon="`${icon} fa-fw`"></SimIconText>
-        <SimIconText :icon="`${icon} fa-fw`"></SimIconText>
-        <SimIconText :icon="`${icon} fa-fw`"></SimIconText>
-    </button>
+  <button class="sim-bulkcheck" :class="{active: checkAll}" @click="toggleState">
+    <SimIconText :icon="`${icon} fa-fw`"></SimIconText>
+    <SimIconText :icon="`${icon} fa-fw`"></SimIconText>
+    <SimIconText :icon="`${icon} fa-fw`"></SimIconText>
+  </button>
 </template>
 
 <script>
-    import SimIconText from './IconText'
+  import SimIconText from './IconText'
 
-    export default {
-        name: 'sim-bulkcheck',
-        components: {
-            SimIconText,
-        },
-        props: {
-            state: {
-                type: Boolean,
-                default: false
-            },
-            icon: {
-                type: String,
-                default: 'fa-check'
-            }
-        },
-        data () {
-            return {
-                checkAll: this.state
-            }
-        },
-        methods: {
-          toggleState ($event, forceState) {
-              this.checkAll = forceState ? forceState : !this.checkAll
-              this.$emit('toggle', this.checkAll)
-          },
-        },
-        watch: {
-            state (value) {
-                this.toggleState(null, value)
-            }
-        },
-    }
+  export default {
+    name: 'sim-bulkcheck',
+    components: {
+      SimIconText,
+    },
+    props: {
+      state: {
+        type: Boolean,
+        default: false
+      },
+      icon: {
+        type: String,
+        default: 'fa-check'
+      }
+    },
+    data () {
+      return {
+        checkAll: this.state
+      }
+    },
+    methods: {
+      toggleState () {
+        this.checkAll = !this.checkAll
+        this.$emit('toggle', this.checkAll)
+      },
+    },
+    watch: {
+      state (value) {
+        this.checkAll = value
+      }
+    },
+  }
 </script>
 
 <style lang="scss">
-    @import '../styles/bulkcheck';
+  @import '../styles/bulkcheck';
 </style>
