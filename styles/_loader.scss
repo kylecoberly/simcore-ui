@@ -2,20 +2,29 @@
   display: block;
   position: absolute;
   z-index: 10;
-  top: 3em;
-  left: 50%;
-  width: 1.5em;
-  height: 1.5em;
-  border-radius: 1em;
-  border: .15em solid var(--green);
-  border-left-color: transparent;
-  will-change: transform;
-  transform: translate(-50%, -50%) rotate(0deg);
+  font-size: 3em;
+  top: 0;
+  left: 0;
+  width: 1em;
+  height: 1em;
+  opacity: 1;
+  border-radius: 50%;
+  border: 2px dashed var(--yellow);
+  // border-color: transparent var(--yellow);
+  pointer-events: none;
+  will-change: opacity, transform;
+  transition: opacity var(--ms-quick, var(--ms, --default-ms)) linear;
+  transform: translate3d(-50%, -50%, 0) rotate(0deg);
   animation: loader var(--ms-loader, var(--ms, --default-ms)) linear infinite;
+}
+// transitions
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
 }
 
 @keyframes loader {
     to {
-        transform: translate(-50%, -50%) rotate(360deg);
+        transform: translate3d(-50%, -50%, 0) rotate(360deg);
     }
 }

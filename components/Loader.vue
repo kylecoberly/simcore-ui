@@ -1,10 +1,18 @@
 <template lang="html">
-  <div class="sim-loader"></div>
+  <transition name="loader">
+      <div class="sim-loader" v-if="isLoading"></div>
+  </transition>
 </template>
 
 <script>
 export default {
   name: 'sim-loader',
+  props: {
+      isLoading: {
+          type: Boolean,
+          default: false
+      }
+  }
 }
 </script>
 
