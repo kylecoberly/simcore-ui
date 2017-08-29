@@ -1,0 +1,19 @@
+.sim-tag {
+  color: var(--medium-grey);
+  background: var(--light);
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid;
+  border-radius: .2em;
+  font-size: .7em;
+  text-transform: uppercase;
+  padding: 0 .3em;
+  opacity: .7;
+  margin: .3em 0 .2em 0;
+  * + span {
+    margin-left: .5em;
+  }
+  .fa {
+    flex: 0 0 auto;
+  }
+}

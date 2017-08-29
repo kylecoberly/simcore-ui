@@ -1,0 +1,62 @@
+.sim-modal {
+  position: fixed;
+  z-index: 5;
+  will-change: transform;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: scale(0);
+
+  &.active {
+    transform: scale(1);
+    .sim-panel__dismiss {
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  &__mask {
+    background: rgba(#000,.65);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+  &__wrapper {
+    position: relative;
+    width: 65vw;
+    max-width: 60em;
+    min-width: 30em;
+    max-height: 65vh;
+    height: 30em;
+    background: var(--modal-bg, var(--lightest));
+    color: var(--modal-fg, var(--darker));
+    display: flex;
+    flex-direction: var(--cross, column);
+    border-radius: .2em;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.2), 0 1em 2em -1em;
+  }
+  &__dismiss {
+    line-height: 0;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--ms, var(--default-ms)) ease-out;
+    transition-delay: calc(var(--ms, var(--default-ms)) / 2);
+    transform: translate(-50%, -50%) scale(0);
+  }
+  &-enter-active,
+  &-leave-active {
+    transition: opacity .25s
+  }
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+  }
+}
