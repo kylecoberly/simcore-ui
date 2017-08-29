@@ -1,0 +1,14 @@
+.sim-progress {
+    position: relative;
+    height: .5em;
+    background: var(--progress-bg, var(--edge));
+    margin-right: 1em;
+    &__completed {
+        width: var(--percent);
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        background: var(--progress-fg, var(--purple));
+    }
+}
