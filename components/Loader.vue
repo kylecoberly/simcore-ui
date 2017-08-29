@@ -1,5 +1,5 @@
 <template lang="html">
-  <transition name="loader">
+  <transition name="loader" appear>
       <div class="sim-loader" v-if="isLoading"></div>
   </transition>
 </template>
