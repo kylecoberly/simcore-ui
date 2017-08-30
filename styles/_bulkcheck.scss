@@ -3,6 +3,9 @@
     background: transparent;
     color: var(--action);
     box-shadow: none;
+    &[tooltip] {
+        position: relative;
+    }
     &:active,
     &:focus {
         box-shadow: none;
