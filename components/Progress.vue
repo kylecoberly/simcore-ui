@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="sim-progress" :style="stylePercentComplete">
-      <div class="sim-progress__completed" :tooltip="bubbleText"></div>
+  <div class="sim-progress" :style="stylePercentComplete" :tooltip="bubbleText">
+    <div class="sim-progress__completed"></div>
   </div>
 </template>
 
@@ -8,15 +8,18 @@
   export default {
     name: 'sim-progress',
     props: {
-        percent: [Number, String],
+      percent: [Number, String],
     },
     computed: {
-        stylePercentComplete () {
-            return `--percent:${this.percent}%`
-        },
-        bubbleText () {
-            return `${this.percent}% Complete`
-        },
+      percentComplete () {
+        return this.percent || 0
+      },
+      stylePercentComplete () {
+        return `--percent:${this.percentComplete}%`
+      },
+      bubbleText () {
+        return `${this.percentComplete}% Complete`
+      },
     },
   }
 </script>

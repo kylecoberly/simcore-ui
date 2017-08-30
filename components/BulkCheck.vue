@@ -2,7 +2,7 @@
   <button class="sim-bulkcheck" :class="{active: checkAll}" @click="toggleState">
     <SimIconText :icon="`${icon} fa-fw`"></SimIconText>
     <SimIconText :icon="`${icon} fa-fw`"></SimIconText>
-    <SimIconText :icon="`${icon} fa-fw`"></SimIconText>
+    <SimIconText :icon="`${icon} fa-fw`" :text="text"></SimIconText>
   </button>
 </template>
 
@@ -22,6 +22,10 @@
       icon: {
         type: String,
         default: 'fa-check'
+      },
+      text: {
+        type: [String, Number],
+        default: ''
       }
     },
     data () {

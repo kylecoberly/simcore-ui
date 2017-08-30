@@ -1,7 +1,7 @@
 <template lang="html">
   <span class="sim-tag">
-      <span v-if="icon" class="fa" :class="icon"></span>
-      <span v-if="text">{{ text }}</span>
+    <span v-if="icon" class="fa" :class="icon"></span>
+    <span v-if="text">{{ text }}</span>
   </span>
 </template>
 
@@ -9,8 +9,8 @@
   export default {
     name: 'sim-tag',
     props: {
-        icon: String,
-        text: [String, Number],
+      icon: String,
+      text: [String, Number],
     },
   }
 </script>
