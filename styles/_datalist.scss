@@ -13,7 +13,7 @@
   }
   header:empty,
   footer:empty {
-      padding: 0;
+    padding: 0;
   }
   // transitions
   &-enter,
@@ -39,27 +39,27 @@
       border-top: 1px solid var(--datalist-border-color, var(--edge));
     }
     &:first-of-type {
-        border-radius: .2em .2em 0 0;
+      border-radius: .2em .2em 0 0;
     }
     &:last-of-type {
-        border-radius: 0 0 .2em .2em;
+      border-radius: 0 0 .2em .2em;
     }
     &:only-of-type {
-        border-radius: .2em;
+      border-radius: .2em;
     }
   }
   + .sim-datalist {
     margin-top: 2em;
   }
   &.tablefy {
-      li > * {
-          margin: 0 .5em;
-          &:first-child {
-              margin-left: 0;
-          }
-          &:last-child {
-              margin-right: 0;
-          }
+    li > * {
+      margin: 0 .5em;
+      &:first-child {
+        margin-left: 0;
       }
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
 }
