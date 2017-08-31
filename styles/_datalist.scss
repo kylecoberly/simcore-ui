@@ -13,7 +13,7 @@
   }
   header:empty,
   footer:empty {
-    padding: 0;
+    padding: 0 !important;
   }
   // transitions
   &-enter,
