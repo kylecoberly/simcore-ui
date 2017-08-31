@@ -51,15 +51,4 @@
   + .sim-datalist {
     margin-top: 2em;
   }
-  &.tablefy {
-    li > * {
-      margin: 0 .5em;
-      &:first-child {
-        margin-left: 0;
-      }
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-  }
 }
