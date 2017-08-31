@@ -2,16 +2,21 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // Docs: Components
-import DocIconText from '../pages/components/IconText'
-import DocSelection from '../pages/components/Selection'
-import DocSwitch from '../pages/components/Switch'
-import DocDatalist from '../pages/components/Datalist'
-import DocOverlay from '../pages/components/Overlay'
-import DocPanel from '../pages/components/Panel'
-import DocTooltip from '../pages/components/Tooltip'
 import DocAutocomplete from '../pages/components/Autocomplete'
 import DocBadges from '../pages/components/Badge'
 import DocBulkCheck from '../pages/components/BulkCheck'
+import DocDatalist from '../pages/components/Datalist'
+import DocFilterBy from '../pages/components/FilterBy'
+import DocIconText from '../pages/components/IconText'
+import DocLoader from '../pages/components/Loader'
+import DocModal from '../pages/components/Modal'
+import DocOverlay from '../pages/components/Overlay'
+import DocPanel from '../pages/components/Panel'
+import DocProgress from '../pages/components/Progress'
+import DocSelection from '../pages/components/Selection'
+import DocSwitch from '../pages/components/Switch'
+import DocTag from '../pages/components/Tag'
+import DocTooltip from '../pages/components/Tooltip'
 
 // Nav
 import Hello from '../Hello'
@@ -54,62 +59,6 @@ export default new Router({
           redirect: 'icon-text',
         },
         {
-          path: 'icon-text',
-          name: 'icon-text',
-          label: 'Icon + Text',
-          components: {
-            details: DocIconText,
-          },
-        },
-        {
-          path: 'selection',
-          name: 'selection',
-          label: 'Selection',
-          components: {
-            details: DocSelection,
-          },
-        },
-        {
-          path: 'switch',
-          name: 'switch',
-          label: 'Toggle Switch',
-          components: {
-            details: DocSwitch,
-          },
-        },
-        {
-          path: 'datalist',
-          name: 'datalist',
-          label: 'Datalist',
-          components: {
-            details: DocDatalist,
-          },
-        },
-        {
-          path: 'overlay',
-          name: 'overlay',
-          label: 'Overlay',
-          components: {
-            details: DocOverlay,
-          },
-        },
-        {
-          path: 'panel',
-          name: 'panel',
-          label: 'Panel',
-          components: {
-            details: DocPanel,
-          },
-        },
-        {
-          path: 'tooltip',
-          name: 'tooltip',
-          label: 'Tooltip',
-          components: {
-            details: DocTooltip,
-          },
-        },
-        {
           path: 'autocomplete',
           name: 'autocomplete',
           label: 'Autocomplete',
@@ -131,6 +80,102 @@ export default new Router({
           label: 'Bulk Check',
           components: {
             details: DocBulkCheck,
+          },
+        },
+        {
+          path: 'datalist',
+          name: 'datalist',
+          label: 'Datalist',
+          components: {
+            details: DocDatalist,
+          },
+        },
+        {
+          path: 'filter-by',
+          name: 'filter-by',
+          label: 'FilterBy',
+          components: {
+            details: DocFilterBy,
+          },
+        },
+        {
+          path: 'icon-text',
+          name: 'icon-text',
+          label: 'Icon + Text',
+          components: {
+            details: DocIconText,
+          },
+        },
+        {
+          path: 'loader',
+          name: 'loader',
+          label: 'Loader',
+          components: {
+            details: DocLoader,
+          },
+        },
+        {
+          path: 'modal',
+          name: 'modal',
+          label: 'Modal',
+          components: {
+            details: DocModal,
+          },
+        },
+        {
+          path: 'overlay',
+          name: 'overlay',
+          label: 'Overlay',
+          components: {
+            details: DocOverlay,
+          },
+        },
+        {
+          path: 'panel',
+          name: 'panel',
+          label: 'Panel',
+          components: {
+            details: DocPanel,
+          },
+        },
+        {
+          path: 'progress',
+          name: 'progress',
+          label: 'Progress',
+          components: {
+            details: DocProgress,
+          },
+        },
+        {
+          path: 'selection',
+          name: 'selection',
+          label: 'Selection',
+          components: {
+            details: DocSelection,
+          },
+        },
+        {
+          path: 'switch',
+          name: 'switch',
+          label: 'Toggle Switch',
+          components: {
+            details: DocSwitch,
+          },
+        },
+        {
+          path: 'tag',
+          name: 'tag',
+          label: 'Tag',
+          components: {
+            details: DocTag,
+          },
+        },
+        {
+          path: 'tooltip',
+          name: 'tooltip',
+          label: 'Tooltip',
+          components: {
+            details: DocTooltip,
           },
         },
       ],

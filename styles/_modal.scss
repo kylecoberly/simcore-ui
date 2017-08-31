@@ -57,6 +57,6 @@
     justify-content: center;
     transition: all var(--ms, var(--default-ms)) ease-out;
     transition-delay: calc(var(--ms, var(--default-ms)) / 2);
-    transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, 50%) scale(0);
   }
 }
