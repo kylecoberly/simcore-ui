@@ -1,30 +1,40 @@
 .sim-loader {
-  display: block;
+  font-size: 2em;
   position: absolute;
   z-index: 10;
-  font-size: 2em;
   top: 1em;
   left: 1em;
   width: 1em;
   height: 1em;
   opacity: 1;
   border-radius: 50%;
-  border: 2px solid transparent;
-  border-color: transparent var(--loader-color, var(--action));
   pointer-events: none;
-  will-change: opacity, transform;
-  transition: opacity var(--ms-quick, var(--ms, --default-ms)) linear;
-  transform: translate3d(-50%, -50%, 0) rotate(0deg);
-  animation: loader var(--ms-loader, var(--ms, --default-ms)) linear infinite;
+  box-shadow: 0 0 0 .1em rgba(0,0,0,.1) inset;
+  transform: translate(-50%, -50%);
+  will-change: opacity;
+  circle {
+      fill: none;
+      stroke: var(--action);
+      stroke-width: 10%;
+      stroke-linecap: round;
+      transform-origin: 50% 50%;
+      transform: rotate3d(0, 0, 1, 0deg);
+      will-change: transform;
+      animation:
+      var(--ms-loader-arc, 1656ms) loader-arc ease-in-out infinite,
+      var(--ms-loader-rotate, 1329ms) loader-rotate ease-in-out infinite;
+  }
 }
+@keyframes loader-rotate {
+  to { transform: rotate3d(0, 0, 1, 360deg); }
+}
+@keyframes loader-arc {
+  from { stroke-dasharray: 0 150; stroke-dashoffset: 0; }
+  to { stroke-dasharray: 100 150; stroke-dashoffset: -140; }
+}
+
 // transitions
 .loader-enter,
 .loader-leave-to {
     opacity: 0;
-}
-
-@keyframes loader {
-    to {
-        transform: translate3d(-50%, -50%, 0) rotate(360deg);
-    }
 }
