@@ -6,6 +6,7 @@ import DocAutocomplete from '../pages/components/Autocomplete'
 import DocBadges from '../pages/components/Badge'
 import DocBulkCheck from '../pages/components/BulkCheck'
 import DocDatalist from '../pages/components/Datalist'
+import DocDatepicker from '../pages/components/Datepicker'
 import DocFilterBy from '../pages/components/FilterBy'
 import DocIconText from '../pages/components/IconText'
 import DocLoader from '../pages/components/Loader'
@@ -88,6 +89,14 @@ export default new Router({
           label: 'Datalist',
           components: {
             details: DocDatalist,
+          },
+        },
+        {
+          path: 'datepicker',
+          name: 'datepicker',
+          label: 'Datepicker',
+          components: {
+            details: DocDatepicker,
           },
         },
         {
