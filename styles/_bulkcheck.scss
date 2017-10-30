@@ -1,7 +1,7 @@
 .sim-bulkcheck {
     padding: 0;
     background: transparent;
-    color: var(--bulk-check-color, var(--action));
+    color: var(--bulkcheck-color, var(--action));
     box-shadow: none;
     white-space: nowrap;
     &[tooltip] {
