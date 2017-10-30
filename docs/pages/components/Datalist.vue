@@ -17,7 +17,7 @@
                 <span>Static item before <samp>items</samp> loop</span>
               </li>
             </template>
-            <template slot="item" scope="props">
+            <template slot="item" slot-scope="props">
               <li :key="props.index">
                   {{ props.item.name }}
               </li>
@@ -43,7 +43,7 @@
       &lt;span>Static item before &lt;samp>items&lt;/samp> loop&lt;/span>
     &lt;/li>
   &lt;/template>
-  &lt;template slot="item" scope="props">
+  &lt;template slot="item" slot-scope="props">
     &lt;li :key="props.index">
         {{ props.item.name }}
     &lt;/li>

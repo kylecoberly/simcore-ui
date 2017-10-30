@@ -8,7 +8,7 @@
         </template>
         <template slot="view">
           <sim-autocomplete :options="options" name="film" placeholder="find a movie..." @select="onSelect">
-            <template slot="item" scope="props">
+            <template slot="item" slot-scope="props">
               <article class="media">
                 <p>
                   <strong>{{ props.option.name }}</strong>
@@ -25,7 +25,7 @@
         </template>
         <template slot="html">
           <pre v-highlightjs><code class="html" v-pre>&lt;sim-autocomplete :options="options" name="film" placeholder="find a movie..." @select="onSelect">
-  &lt;template slot="item" scope="props">
+  &lt;template slot="item" slot-scope="props">
     &lt;article class="media">
       &lt;p>
         &lt;strong>{{ props.option.name }}&lt;/strong>
