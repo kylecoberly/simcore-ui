@@ -3,6 +3,7 @@
   label {
     display: inline-flex;
     align-items: center;
+    cursor: pointer;
     > * {
       margin: 0;
       + * {
@@ -15,7 +16,7 @@
     position: relative;
     padding: .8ch 1.8ch;
     font: inherit;
-    cursor: pointer;
+    cursor: inherit;
     outline: 0;
     border-radius: 1em;
     will-change: transform, background;
