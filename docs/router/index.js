@@ -5,6 +5,7 @@ import Router from 'vue-router'
 import DocAutocomplete from '../pages/components/Autocomplete'
 import DocBadges from '../pages/components/Badge'
 import DocBulkCheck from '../pages/components/BulkCheck'
+import DocCalendar from '../pages/components/Calendar'
 import DocDatalist from '../pages/components/Datalist'
 import DocDatepicker from '../pages/components/Datepicker'
 import DocFilterBy from '../pages/components/FilterBy'
@@ -17,6 +18,7 @@ import DocProgress from '../pages/components/Progress'
 import DocSelection from '../pages/components/Selection'
 import DocSwitch from '../pages/components/Switch'
 import DocTag from '../pages/components/Tag'
+import DocTimePicker from '../pages/components/TimePicker'
 import DocTooltip from '../pages/components/Tooltip'
 
 // Nav
@@ -81,6 +83,14 @@ export default new Router({
           label: 'Bulk Check',
           components: {
             details: DocBulkCheck,
+          },
+        },
+        {
+          path: 'calendar',
+          name: 'calendar',
+          label: 'Calendar',
+          components: {
+            details: DocCalendar,
           },
         },
         {
@@ -177,6 +187,14 @@ export default new Router({
           label: 'Tag',
           components: {
             details: DocTag,
+          },
+        },
+        {
+          path: 'time-picker',
+          name: 'timepicker',
+          label: 'Time Picker',
+          components: {
+            details: DocTimePicker,
           },
         },
         {

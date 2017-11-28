@@ -100,7 +100,7 @@ export default {
     margin: 0;
     white-space: pre-wrap;
     .de-emphasize {
-      color: var(--shade);
+      color: var(--medium-grey);
     }
     .emphasize {
       color: hotpink;

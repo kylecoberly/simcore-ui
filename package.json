@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "dotenv": "^4.0.0",
+    "moment": "^2.19.x",
     "shelljs": "^0.7.8",
     "vue": "^2.5.2",
     "vue-highlightjs": "^1.3.3",
