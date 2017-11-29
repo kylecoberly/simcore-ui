@@ -25,12 +25,10 @@
 
           <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
 
-          <div v-for="day in days" @click="emitDayClick(activeYear, activeMonth, day)" class="sim-calendar--grid--day" :class="setDayClasses(day)">
-            <div class="sim-calendar--grid--date">{{ day }}</div>
-            <div class="sim-calendar--grid--time-blocks">
-              <div v-for="block in timeBlocks(day)" :style="setBlockStyles(block)"></div>
+            <div v-for="day in days" :key="day" @click="emitDayClick(activeYear, activeMonth, day)" class="sim-calendar--grid--day" :class="setDayClasses(day)">
+              <div class="sim-calendar--grid--date">{{ day }}</div>
+              <slot name="day" :day="day"></slot>
             </div>
-          </div>
 
           <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
 
@@ -46,11 +44,6 @@
 <script>
   import moment from 'moment'
   import SimIconText from './IconText'
-
-  const _zeroPad = function(num, pads) {
-    pads = pads || '000'
-    return (pads + num).substr(-2)
-  }
 
   export default {
     name: 'sim-calendar',
@@ -111,8 +104,8 @@
       emitDayClick (year, month, day) {
         this.$emit('calendar-day-clicked', {
           year: year,
-          month: _zeroPad((month+1)),
-          day: _zeroPad(day),
+          month: (month+1),
+          day: day,
         })
         this.$forceUpdate()
       },
@@ -152,15 +145,6 @@
         }
 
         return classes.join(' ')
-      },
-      timeBlocks(day) {
-        let dateOfDay = moment([this.activeYear, this.activeMonth, day]).format(this.dateFormat)
-        return this.dates[dateOfDay]
-      },
-      setBlockStyles (block) {
-        let styles = []
-        styles.push(`--duration: ${block.duration}`)
-        return styles.join(';')
       },
     },
   }

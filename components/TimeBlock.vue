@@ -1,7 +1,7 @@
 <template lang="html">
   <div :class="setClass()" :style="setStyle(block)">
     <div class="sim-timeblock--remover" @click="removeTimeBlock">
-      <SimIconText icon="fa-times fa-fw"></SimIconText>
+      <SimIconText icon="fa-times-circle fa-lg"></SimIconText>
     </div>
     <div class="sim-timeblock--handle sim-timeblock--handle--left" @mousedown="startStretchLeft"></div>
     <div class="sim-timeblock--handle sim-timeblock--handle--right" @mousedown="startStretchRight"></div>

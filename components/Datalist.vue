@@ -3,7 +3,7 @@
     <header>
       <slot name="header"></slot>
     </header>
-    <transition-group name="sim-datalist" tag="ul" mode="out-in" v-if="animate">
+    <transition-group v-if="animate" name="sim-datalist" tag="ul" mode="out-in">
         <slot name="static-before"></slot>
         <slot name="item" v-for="(item, index) in items" :item="item" :index="index"></slot>
         <slot name="static-after"></slot>

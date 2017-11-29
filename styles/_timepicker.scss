@@ -22,7 +22,7 @@
     font-size: 1.5em;
   }
   &--controls {
-    margin: -1em -1em 0 -1em;
+    margin: -1em -1em 1em -1em;
     padding: 0 0 1.5em 0;
     user-select: none;
     display: flex;
@@ -218,15 +218,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 1em;
+    // border-radius: 1em;
     left: 50%;
     top: 100%;
     transform: translate(-50%, -100%);
     cursor: pointer;
     opacity: 0;
-    transition: 300ms linear 200ms;
-    background: var(--fg);
-    color: var(--bg);
+    text-shadow: 0 0 1em white;
+    transition: 200ms linear 200ms;
+    // background: var(--light);
+    // color: var(--light);
   }
   &--handle {
     position: absolute;
