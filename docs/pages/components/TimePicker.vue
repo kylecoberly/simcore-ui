@@ -57,8 +57,9 @@
     computed: {
     },
     methods: {
-      manageDayControlPanel (dateObject) {
-        let dayMoment = moment([dateObject.year, dateObject.month-1, dateObject.day])
+      manageDayControlPanel (date) {
+        let dayMoment = moment(date)
+        // let dayMoment = moment([dateObject.year, dateObject.month-1, dateObject.day])
         this.displayDate = dayMoment.format('dddd, MMMM Do')
         this.date = dayMoment.format('YYYY-MM-DD')
         this.blocks = this.user_dates[this.date] || []

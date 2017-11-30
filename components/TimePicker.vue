@@ -136,21 +136,14 @@
         this.blocks.splice(0, this.blocks.length)
         this.$emit('all-time-blocks-removed', this.date)
       },
-      emitDayClick (year, month, day) {
-        this.$emit('calendar-day-selected', {
-          year: year,
-          month: _zeroPad((month+1)),
-          day: _zeroPad(day),
-        })
-        this.$forceUpdate()
+      emitDayClick (day) {
+        this.$emit('calendar-day-selected', day)
       },
       nextDay () {
-        let date = this.activeMoment.add(1, 'day')
-        this.emitDayClick(date.year(), date.month(), date.date())
+        this.emitDayClick(this.activeMoment.add(1, 'day').format('YYYY-MM-DD'))
       },
       prevDay () {
-        let date = this.activeMoment.subtract(1, 'day')
-        this.emitDayClick(date.year(), date.month(), date.date())
+        this.emitDayClick(this.activeMoment.subtract(1, 'day').format('YYYY-MM-DD'))
       },
     },
   }
