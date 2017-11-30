@@ -14,13 +14,8 @@
   import moment from 'moment'
   import SimIconText from './IconText'
 
-  const _zeroPad = function(num, pads) {
-    pads = pads || '000'
-    return (pads + num).substr(-2)
-  }
-
   const _cap = function(num, width, min, max) {
-    return num = (num < min ? min : (num > max - width ? max - width : num))
+    return (num < min ? min : (num > max - width ? max - width : num))
   }
 
   const _setProperty = function(element, property, value) {
@@ -30,12 +25,12 @@
     return element.style.getPropertyValue(`--${property}`)
   }
 
-  const _metrics = function (element) {
+  const _metrics = function (event, element) {
     const blockMetrics = element.getBoundingClientRect()
     const pickerMetrics = element.parentElement.getBoundingClientRect()
 
     return {
-      start_x: window.event.clientX,
+      start_x: event.clientX,
       width_x: blockMetrics.width,
       offset_x: blockMetrics.x,
       max_width: pickerMetrics.width,
@@ -115,8 +110,8 @@
         this.$emit('remove-time-block', this.index)
       },
       // ----------
-      move () {
-        let x = _cap((this.metrics.offset_x + window.event.clientX - this.metrics.start_x - this.metrics.offset_parent_x), this.metrics.width_x, 0, this.metrics.max_width)
+      move (event) {
+        let x = _cap((this.metrics.offset_x + event.clientX - this.metrics.start_x - this.metrics.offset_parent_x), this.metrics.width_x, 0, this.metrics.max_width)
         this.block.start = Math.round(x/this.metrics.segment_width)/2
         _setProperty(this.$el, 'start', this.block.start)
       },
@@ -127,18 +122,18 @@
         removeEventListener('mousemove', this.move)
         removeEventListener('mouseup', this.startMove)
       },
-      startMove () {
+      startMove (event) {
         event.preventDefault()
         event.stopPropagation()
         this.isMoving = true
-        this.metrics = _metrics(this.$el)
+        this.metrics = _metrics(event, this.$el)
         this.$emit('is-moving', true)
         addEventListener('mousemove', this.move)
         addEventListener('mouseup', this.doneMoving)
       },
       // ----------
-      stretchRight () {
-        let dur = Math.round((this.metrics.width_x + window.event.clientX - this.metrics.start_x)/this.metrics.segment_width)/2
+      stretchRight (event) {
+        let dur = Math.round((this.metrics.width_x + event.clientX - this.metrics.start_x)/this.metrics.segment_width)/2
         this.block.duration = _cap(dur, 0, 0.5, 24 - this.block.start)
         _setProperty(this.$el, 'duration', this.block.duration)
       },
@@ -148,19 +143,19 @@
         removeEventListener('mousemove', this.stretchRight)
         removeEventListener('mouseup', this.startStretchRight)
       },
-      startStretchRight () {
+      startStretchRight (event) {
         event.preventDefault()
         event.stopPropagation()
         this.isStretching = 'right'
-        this.metrics = _metrics(this.$el)
+        this.metrics = _metrics(event, this.$el)
         this.$emit('is-stretching', true)
         addEventListener('mousemove', this.stretchRight)
         addEventListener('mouseup', this.doneStretchingRight)
       },
       // ----------
-      stretchLeft () {
-        let start = Math.floor((this.metrics.offset_x + window.event.clientX - this.metrics.start_x - this.metrics.offset_parent_x)/this.metrics.segment_width)/2
-        let dur = this.metrics.dur - Math.floor((window.event.clientX - this.metrics.start_x)/this.metrics.segment_width)/2
+      stretchLeft (event) {
+        let start = Math.floor((this.metrics.offset_x + event.clientX - this.metrics.start_x - this.metrics.offset_parent_x)/this.metrics.segment_width)/2
+        let dur = this.metrics.dur - Math.floor((event.clientX - this.metrics.start_x)/this.metrics.segment_width)/2
         this.block.start = _cap(start, 0, 0, (this.metrics.start + this.metrics.dur - 0.5))
         this.block.duration = _cap(dur, 0, 0.5, (start < 0 ? this.block.duration : 24))
         _setProperty(this.$el, 'start', this.block.start)
@@ -172,11 +167,11 @@
         removeEventListener('mousemove', this.stretchLeft)
         removeEventListener('mouseup', this.startStretchLeft)
       },
-      startStretchLeft () {
+      startStretchLeft (event) {
         event.preventDefault()
         event.stopPropagation()
         this.isStretching = 'left'
-        this.metrics = _metrics(this.$el)
+        this.metrics = _metrics(event, this.$el)
         this.$emit('is-stretching', true)
         addEventListener('mousemove', this.stretchLeft)
         addEventListener('mouseup', this.doneStretchingLeft)
