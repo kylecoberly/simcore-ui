@@ -56,6 +56,11 @@
   import moment from 'moment'
   import SimIconText from './IconText'
 
+  const _zeroPad = function(num, pads) {
+    pads = pads || '000'
+    return (pads + num).substr(-2)
+  }
+
   export default {
     name: 'sim-calendar',
     components: {
@@ -96,16 +101,16 @@
         return 6 - moment([this.activeYear, this.activeMonth, this.days.length]).day()
       },
       currentWeekDays () {
-        const start = this.activeMoment.startOf('week')
+        const start = moment(this.activeMoment).startOf('week')
         let days = [start.format(this.dateFormat)]
         for (let i = 0; i < 6; i++) {
           days.push(start.add(1, 'day').format(this.dateFormat))
         }
-        console.log('week', days)
+        // window.console.log('week', days)
         return days
       },
       currentMonthDays () {
-        return Array.from(Array(this.activeMoment.daysInMonth()), (_, day) => `${this.activeYear}-${this.activeMonth+1}-${day+1}`)
+        return Array.from(Array(this.activeMoment.daysInMonth()), (_, day) => `${this.activeYear}-${_zeroPad(this.activeMonth+1)}-${_zeroPad(day+1)}`)
       },
       days () {
         return this.isMonthView ? this.currentMonthDays : this.currentWeekDays
@@ -130,12 +135,6 @@
     methods: {
       emitDayClick (day) {
         this.$emit('calendar-day-clicked', day)
-      },
-      loadNextMonth () {
-        this.emitDayClick(this.activeMoment.add(1, 'month').format(this.dateFormat))
-      },
-      loadPrevMonth () {
-        this.emitDayClick(this.activeMoment.subtract(1, 'month').format(this.dateFormat))
       },
       loadNextDays () {
         this.emitDayClick(this.activeMoment.add(1, this.displayMode).format(this.dateFormat))

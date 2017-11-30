@@ -89,17 +89,6 @@
         block: {},
       }
     },
-    computed: {
-      activeMoment () {
-        return moment(this.date)
-      },
-      activeMonth () {
-        return this.activeMoment.month()
-      },
-      activeYear () {
-        return this.activeMoment.year()
-      },
-    },
     methods: {
       manageDayControlPanel (date) {
         let dayMoment = moment(date)
