@@ -11,7 +11,7 @@
 
 .sim-timepicker {
   --picker-cursor: cell;
-  --timeblock-cursor: -webkit-grab;
+  --timeblock-cursor: move; // -webkit-grab;
   --handle-cursor: col-resize;
   flex: 1;
   display: block;
@@ -60,9 +60,9 @@
     position: relative;
     display: flex;
     &.is-moving {
-      --picker-cursor: -webkit-grabbing;
-      --timeblock-cursor: -webkit-grabbing;
-      --handle-cursor: -webkit-grabbing;
+      --picker-cursor: move; // -webkit-grabbing;
+      --timeblock-cursor: move; // -webkit-grabbing;
+      --handle-cursor: move; // -webkit-grabbing;
       .sim-timeblock:not(.is-moving) .sim-timeblock--time {
         opacity: 0;
       }
@@ -141,12 +141,6 @@
       }
     }
   }
-  // svg {
-  //   flex: none;
-  //   width: 1.5em;
-  //   height: 1.5em;
-  //   fill: currentColor;
-  // }
 }
 
 .sim-timeblock {
