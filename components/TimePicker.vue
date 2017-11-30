@@ -36,7 +36,7 @@
         @remove-time-block="removeTimeBlock"
         @is-moving="setMovingState"
         @is-stretching="setStretchingState"
-        @block-updated="sortBlocks"
+        @block-updated="blockWasUpdated"
         ></SimTimeBlock>
 
     </div>
@@ -115,6 +115,10 @@
       },
       setStretchingState (bool) {
         this.isStretching = bool
+      },
+      blockWasUpdated () {
+        this.sortBlocks()
+        this.$emit('time-block-updated', this.date)
       },
       displayHour (hour) {
         hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour)
