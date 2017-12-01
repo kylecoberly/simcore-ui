@@ -8,7 +8,7 @@
         </template>
         <template slot="view">
 
-          <SimCalendar :date="date" :dates="user_dates" @calendar-day-clicked="manageDayControlPanel">
+          <SimCalendar :date="date" :dates="user_dates" @calendar-day-selected="manageDayControlPanel">
 
             <div slot="day" slot-scope="props" class="sim-calendar--grid--time-blocks">
               <div v-for="block in timeBlocks(props.day)" :style="setBlockStyles(block)"></div>
@@ -20,6 +20,7 @@
                 @all-time-blocks-removed="allTimeBlocksRemoved"
                 @time-block-removed="timeBlockRemoved"
                 @time-block-created="timeBlockCreated"
+                @time-block-updated="doUpdateStuff"
                 >
               </SimTimePicker>
             </div>
@@ -85,6 +86,7 @@
             },
           ],
         },
+        stagedData: {},
         blocks: [],
         block: {},
       }
@@ -101,12 +103,15 @@
       },
       allTimeBlocksRemoved (date) {
         delete this.user_dates[date]
+        this.doUpdateStuff(date)
       },
       timeBlockCreated (date, blocks) {
         this.user_dates[date] = blocks
+        this.doUpdateStuff(date)
       },
       timeBlockRemoved (date, blocks) {
         this.user_dates[date] = blocks
+        this.doUpdateStuff(date)
       },
       timeBlocks(day) {
         return this.user_dates[day]
@@ -115,6 +120,12 @@
         let styles = []
         styles.push(`--duration: ${block.duration}`)
         return styles.join(';')
+      },
+      doUpdateStuff (date) {
+          // this.stagedData[date] = this.user_dates[date]
+          this.stagedData[date] = JSON.parse(JSON.stringify(this.user_dates[date]))
+          window.console.log('staged data:', this.stagedData)
+          // this.postData(this.stagedData) - example of what to do with stuff
       },
     },
   }

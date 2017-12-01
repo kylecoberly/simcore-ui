@@ -140,6 +140,7 @@
       doneStretchingRight () {
         this.isStretching = false
         this.$emit('is-stretching', false)
+        this.$emit('block-updated')
         removeEventListener('mousemove', this.stretchRight)
         removeEventListener('mouseup', this.doneStretchingRight)
       },
@@ -164,6 +165,7 @@
       doneStretchingLeft () {
         this.isStretching = false
         this.$emit('is-stretching', false)
+        this.$emit('block-updated')
         removeEventListener('mousemove', this.stretchLeft)
         removeEventListener('mouseup', this.doneStretchingLeft)
       },

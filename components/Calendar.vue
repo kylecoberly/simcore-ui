@@ -134,7 +134,7 @@
     },
     methods: {
       emitDayClick (day) {
-        this.$emit('calendar-day-clicked', day)
+        this.$emit('calendar-day-selected', day)
       },
       loadNextDays () {
         this.emitDayClick(this.activeMoment.add(1, this.displayMode).format(this.dateFormat))
