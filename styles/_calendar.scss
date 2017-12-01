@@ -13,7 +13,6 @@
   &--header {
     padding: 0 0 1em 0;
     display: flex;
-    // justify-content: space-between;
     align-items: center;
     > * {
       flex: 1;
@@ -72,11 +71,9 @@
     &--before {
       position: relative;
       flex: 0 0 calc(14.285% * var(--offset, 0)); // 0 = sunday, 6 = saturday
-      // flex: 0 0 14.285%;
     }
     &--after {
       position: relative;
-      // flex: 0 0 14.285%;
       flex: 1;
     }
     &--date {
@@ -89,18 +86,6 @@
       justify-content: center;
       border-radius: .2em;
       margin: .5em;
-    }
-    &--time-blocks {
-      display: flex;
-      flex-wrap: wrap;
-      margin: .25em;
-      div {
-        padding: .5em .25em;
-        margin: .25em;
-        width: calc(var(--duration) * 4.1667%);
-        background: var(--action);
-        border-radius: .2em;
-      }
     }
   }
   &--title {
@@ -173,11 +158,6 @@
     }
     &--header {
       color: var(--medium-grey);
-      // box-shadow: var(--lines);
-      // background: var(--picker-bg);
-      > * {
-        // box-shadow: var(--lines);
-      }
     }
   }
 
@@ -187,9 +167,6 @@
     .is-before-today {
       .sim-calendar--grid--date {
         color: #ddd;
-      }
-      .sim-calendar--grid--time-blocks div {
-        background: #ddd;
       }
     }
     .is-weekend {

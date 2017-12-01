@@ -10,7 +10,7 @@
 
           <SimCalendar :date="date" :dates="user_dates" @calendar-day-selected="manageDayControlPanel">
 
-            <div slot="day" slot-scope="props" class="sim-calendar--grid--time-blocks">
+            <div slot="day" slot-scope="props" class="user-time-blocks">
               <div v-for="block in timeBlocks(props.day)" :style="setBlockStyles(block)"></div>
             </div>
 
@@ -133,10 +133,41 @@
 
 <style lang="scss">
   .day-control-panel {
-    flex: 1;
-    background: var(--picker-bg);
-    color: var(--picker-fg);
-    box-shadow: var(--lines);
-    position: relative;
+      flex: 1;
+      background: var(--picker-bg);
+      color: var(--picker-fg);
+      box-shadow: var(--lines);
+      position: relative;
+      overflow: hidden;
+  }
+  .user-time-blocks {
+      display: flex;
+      flex-wrap: wrap;
+      margin: .25em;
+      div {
+          padding: .5em .25em;
+          margin: .25em;
+          width: calc(var(--duration) * 4.1667%);
+          background: var(--action);
+          border-radius: .2em;
+      }
+  }
+  .sim-calendar {
+      &.is-week-view {
+          .sim-calendar--grid--day {
+              display: flex;
+          }
+          .user-time-blocks {
+              flex: 1;
+          }
+      }
+      .is-before-today {
+          .sim-calendar--grid--date {
+              color: #ddd;
+          }
+          .sim-calendar--grid--time-blocks div {
+              background: #ddd;
+          }
+      }
   }
 </style>
