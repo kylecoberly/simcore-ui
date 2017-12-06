@@ -16,17 +16,17 @@
               <span class="sim-calendar-button" @click="setContext('coordinator')" :class="{active: context === 'coordinator'}">Coordinator</span> -->
             </div>
 
-            <div slot="day" slot-scope="props" class="user-day">
+            <div slot="day" slot-scope="props" class="local--day">
 
               <ul v-if="props.mode === 'week'" class="sim-calendar--grid--day--timelines">
                 <li v-for="hour in 25" @dblclick="createTimeBlock(props.day, hour-1)" :class="setHourClasses(hour-1)"></li>
               </ul>
 
-              <!-- <div class="user-event-blocks">
+              <!-- <div class="local--day--event-blocks">
                 events!
               </div> -->
 
-              <div class="user-time-blocks">
+              <div class="local--day--time-blocks">
                 <template v-for="(block, index) in timeBlocks(props.day)">
                   <SimTimeBlock v-if="props.mode == 'week'" :block="block" :index="index" :date="props.day" orientation="y" @remove-time-block="removeTimeBlock" @block-updated="doUpdateStuff" />
                   <SimTimeBlock v-else :block="block" :index="index" orientation="x" :show-controls="false" />
@@ -264,11 +264,11 @@
     }
   }
 
-  .user-day {
+  .local--day {
     position: relative;
     flex: 1;
     display: flex;
-    .user-event-blocks {
+    &--event-blocks {
       pointer-events: none;
       position: relative;
       flex: 1;
@@ -276,7 +276,7 @@
         pointer-events: auto;
       }
     }
-    .user-time-blocks {
+    &--time-blocks {
       pointer-events: none;
       position: relative;
       flex: 1;
@@ -285,10 +285,10 @@
       }
     }
   }
-  .is-month-view.is-instructor-context .user-day {
+  .is-month-view.is-instructor-context .local--day {
     flex-direction: column-reverse;
   }
-  .is-coordinator-context .user-day .user-time-blocks {
+  .is-coordinator-context .local--day .local--day--time-blocks {
     display: flex;
     justify-content: space-between;
   }
