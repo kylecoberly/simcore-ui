@@ -19,7 +19,6 @@
     <div class="sim-timepicker--inner" :class="setClass()">
       <ul>
         <li v-for="hour in 25" @mousedown="createTimeBlock(hour-1)" :class="setHourClass(hour-1)">
-
           <div v-if="hour === 13" class="sim-timepicker--time sim-timepicker--noon">
             <SimIconText icon="fa-sun-o"></SimIconText>
           </div>
@@ -32,7 +31,7 @@
         </li>
       </ul>
 
-      <SimTimeBlock v-for="(block, index) in blocks" :key="index" :block="block" :index="index"
+      <SimTimeBlock v-for="(block, index) in blocks" :key="index" :block="block" :index="index" :date="date" :orientation="orientation"
         @remove-time-block="removeTimeBlock"
         @is-moving="setMovingState"
         @is-stretching="setStretchingState"
@@ -76,6 +75,7 @@
       return {
         isMoving: false,
         isStretching: false,
+        orientation: 'x'
       }
     },
     computed: {
@@ -116,10 +116,6 @@
       setStretchingState (bool) {
         this.isStretching = bool
       },
-      blockWasUpdated () {
-        this.sortBlocks()
-        this.$emit('time-block-updated', this.date)
-      },
       displayHour (hour) {
         hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour)
         return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
@@ -142,6 +138,10 @@
       },
       emitDayClick (day) {
         this.$emit('calendar-day-selected', day)
+      },
+      blockWasUpdated (date) {
+        this.sortBlocks()
+        this.$emit('time-block-updated', date)
       },
       nextDay () {
         this.emitDayClick(this.activeMoment.add(1, 'day').format('YYYY-MM-DD'))

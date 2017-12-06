@@ -1,0 +1,192 @@
+.sim-timeblock {
+  background: var(--action);
+  opacity: 1;
+  border-radius: .2em;
+  position: absolute;
+  z-index: 1;
+  cursor: var(--timeblock-cursor, move);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // states
+  &.is-moving, &.is-stretching {
+    opacity: .7;
+    transition: all 60ms linear;
+  }
+  &.is-moving {
+    box-shadow: 0 .3em 1em -.2em rgba(0,0,0,.8);
+  }
+  &:not(.is-moving) {
+    .sim-timeblock--handle:hover {
+      opacity: 1;
+    }
+  }
+  &:hover {
+    z-index: 2;
+    &:not(.is-moving):not(.is-stretching) {
+      .sim-timeblock--remover {
+        opacity: 1;
+        transform: translate(var(--remover-x-end), var(--remover-y-end));
+        transition-delay: 600ms;
+      }
+    }
+  }
+
+  // parts
+  &--info {
+    pointer-events: none;
+    transition: opacity 300ms linear;
+    padding: .3em;
+    border-radius: .2em;
+    text-align: center;
+    &--hours {
+
+    }
+    &--time {
+
+    }
+  }
+  &--mover {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    right: 4px;
+    bottom: 0;
+  }
+  &--remover {
+    position: absolute;
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    text-shadow: 0 0 1em white;
+    transition: 200ms linear 200ms;
+  }
+  &--handle {
+    position: absolute;
+    opacity: 0;
+    transition: all 200ms linear;
+    background: rgba(0,0,0,.2);
+    cursor: var(--handle-cursor);
+    &--x {
+      top: 50%;
+      width: 2.5em;
+      height: 2.5em;
+    }
+    &--right {
+      left: calc(100% - 3px);
+      transform: translate(0, -50%);
+      border-left: 4px solid var(--accent-dark);
+      border-radius: 0 .3em .3em 0;
+    }
+    &--left {
+      left: 3px;
+      transform: translate(-100%, -50%);
+      border-right: 4px solid var(--accent-dark);
+      border-radius: .3em 0 0 .3em;
+    }
+    &--y {
+      left: 50%;
+      width: 100%;
+      height: 1.5em;
+    }
+    &--up {
+      top: 3px;
+      transform: translate(-50%, -100%);
+      border-right: 4px solid var(--accent-dark);
+      border-radius: .3em .3em 0 0;
+    }
+    &--down {
+      top: calc(100% - 3px);
+      transform: translate(-50%, 0%);
+      border-right: 4px solid var(--accent-dark);
+      border-radius: 0 0 .3em .3em;
+    }
+  }
+
+  // contexts
+  &--x {
+    --remover-x-end: -50%;
+    --remover-y-end: 50%;
+    padding: .5em 0;
+    top: 50%;
+    left: calc(var(--start, 8) * 4.1667%);
+    width: calc(var(--duration, 8) * 4.1667%);
+    height: 2.5em;
+    transform: translateY(-50%);
+    &.is-moving {
+      transform: translateY(calc(-50% - .2em));
+    }
+    &.is-display-only {
+      height: auto;
+      pointer-events: none;
+    }
+    .sim-timeblock--info {
+      background: var(--picker-bg);
+      transform: translateY(-2.25em);
+      white-space: nowrap;
+    }
+    .sim-timeblock--remover {
+      top: 100%;
+      left: 50%;
+      transform: translate(-50%, -100%);
+    }
+  }
+  &--y {
+    --remover-x-end: 0;
+    --remover-y-end: 0;
+    padding: 0 .5em;
+    top: calc(var(--start) * 4.1667%);
+    left: 0;
+    width: 100%;
+    height: calc(var(--duration) * 4.1667%);
+    &.is-moving {
+      transform: translateX(-.1em);
+    }
+    .sim-timeblock--info {
+      color: var(--picker-bg);
+      background: var(--action);
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .sim-timeblock--remover {
+      top: .5em;
+      right: .5em;
+      transform: translate(0%, 0%);
+      text-shadow: none;
+      color: var(--picker-bg);
+      z-index: 1;
+    }
+  }
+}
+
+// outset states affect blocks
+.is-moving {
+  --picker-cursor: move; // -webkit-grabbing;
+  --timeblock-cursor: move; // -webkit-grabbing;
+  --handle-cursor: move; // -webkit-grabbing;
+  .sim-timeblock:not(.is-moving) .sim-timeblock--time {
+    opacity: 0;
+  }
+}
+.is-stretching {
+  --picker-cursor: col-resize;
+  --timeblock-cursor: col-resize;
+  --handle-cursor: col-resize;
+  .sim-timeblock:not(.is-stretching) .sim-timeblock--time {
+    opacity: 0;
+  }
+}
+.sim-timeblock.is-stretching--up {
+  --timeblock-cursor: row-resize;
+  --handle-cursor: row-resize;
+}
+.sim-timeblock.is-stretching--down {
+  --timeblock-cursor: row-resize;
+  --handle-cursor: row-resize;
+}

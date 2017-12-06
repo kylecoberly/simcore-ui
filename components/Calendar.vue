@@ -3,9 +3,12 @@
 
     <div class="sim-calendar--header">
       <div class="sim-calendar--title">{{ displayDate }}</div>
+      <div class="sim-calendar--context">
+        <slot name="context-controls"></slot>
+      </div>
       <div class="sim-calendar--modes">
-        <span @click="setDisplayMode('month')" :class="{active: displayMode === 'month'}">Month</span>
-        <span @click="setDisplayMode('week')" :class="{active: displayMode === 'week'}">Week</span>
+        <span class="sim-calendar-button" @click="setDisplayMode('month')" :class="{active: isMonthView}">Month</span>
+        <span class="sim-calendar-button" @click="setDisplayMode('week')" :class="{active: isWeekView}">Week</span>
       </div>
       <div class="sim-calendar--controls">
         <span @click="loadPrevDays">
@@ -21,6 +24,7 @@
     </div>
 
     <div class="sim-calendar--body" :style="{'--start-offset': startOffset}">
+
       <div class="sim-calendar--grid">
         <div class="sim-calendar--grid--header">
           <div v-for="(day, index) in dayNames" class="sim-calendar--grid--header--day">
@@ -32,21 +36,34 @@
             </span>
           </div>
         </div>
-        <div class="sim-calendar--grid--days">
+        <div class="sim-calendar--grid--body">
+          <ul v-if="isWeekView" class="sim-calendar--grid--timelines">
+            <li v-for="hour in 25" :class="setHourClasses(hour-1)">
+              <div>
+                <SimIconText v-if="hour === 13" icon="fa-sun-o"></SimIconText>
+                <SimIconText v-else-if="hour === 1 || hour === 25" icon="fa-moon-o"></SimIconText>
+                <span v-else>
+                  {{ displayHour(hour-1) }}
+                </span>
+              </div>
+            </li>
+          </ul>
+          <div class="sim-calendar--grid--days">
 
-          <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
+            <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
 
-            <div v-for="day in days" @click="emitDayClick(day)" class="sim-calendar--grid--day" :class="setDayClasses(day)">
-              <div class="sim-calendar--grid--date" v-if="isMonthView">{{ showDayNumber(day) }}</div>
-              <slot name="day" :day="day"></slot>
+            <div v-for="day in days" @mousedown="emitDayClick(day)" class="sim-calendar--grid--day" :class="setDayClasses(day)">
+              <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber(day) }}</div>
+              <slot name="day" :day="day" :mode="displayMode"></slot>
             </div>
 
-          <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
+            <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
 
+          </div>
         </div>
       </div>
 
-      <slot name="day-control-panel"></slot>
+      <slot name="day-control-panel" :mode="displayMode"></slot>
     </div>
 
   </div>
@@ -151,6 +168,18 @@
       },
       setDisplayMode (mode) {
         this.displayMode = mode
+      },
+      displayHour (hour) {
+        hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour) // (hour % 2 === 0 ? hour : ''))
+        return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
+      },
+      setHourClasses (hour) {
+        let classes = []
+        classes.push((hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'))
+        classes.push((hour === 0 || hour === 24 ? 'is-midnight' : (hour === 12 ? 'is-noon' : '')))
+        // classes.push((hour === 8 ? 'is-start-dayshift' : ''))
+        // classes.push((hour === 18 ? 'is-end-dayshift' : ''))
+        return classes.join(' ')
       },
       setDayClasses (day) {
         let dayOfWeek = moment(day).day()
