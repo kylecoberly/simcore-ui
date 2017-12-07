@@ -54,7 +54,7 @@
 
             <div v-for="date in days" @mousedown="emitDayClick(date)" class="sim-calendar--grid--day" :class="setDayClasses(date)">
               <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber(date) }}</div>
-              <slot name="day" :day-of-week="getDayOfWeek(date)" :date="date" :mode="displayMode"></slot>
+              <slot name="day" :date="date" :mode="displayMode"></slot>
             </div>
 
             <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
@@ -65,6 +65,7 @@
       </div>
 
       <slot name="day-control-panel" :date="date" :mode="displayMode"></slot>
+      <slot name="day-bubble" :date="date" :mode="displayMode"></slot>
     </div>
 
   </div>
