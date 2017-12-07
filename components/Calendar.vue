@@ -27,7 +27,7 @@
 
       <div class="sim-calendar--grid">
         <div class="sim-calendar--grid--header">
-          <div v-for="(day, index) in dayNames" class="sim-calendar--grid--header--day">
+          <div v-for="(day, index) in $store.state.calendar_settings.day_names" class="sim-calendar--grid--header--day">
             <span class="sim-calendar--grid--header--dayname">
               {{ day }}
             </span>
@@ -52,9 +52,9 @@
 
             <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
 
-            <div v-for="day in days" @mousedown="emitDayClick(day)" class="sim-calendar--grid--day" :class="setDayClasses(day)">
-              <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber(day) }}</div>
-              <slot name="day" :day="day" :mode="displayMode"></slot>
+            <div v-for="date in days" @mousedown="emitDayClick(date)" class="sim-calendar--grid--day" :class="setDayClasses(date)">
+              <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber(date) }}</div>
+              <slot name="day" :date="date" :mode="displayMode"></slot>
             </div>
 
             <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
@@ -63,7 +63,8 @@
         </div>
       </div>
 
-      <slot name="day-control-panel" :mode="displayMode"></slot>
+      <slot name="day-control-panel" :date="date" :mode="displayMode"></slot>
+      <slot name="day-bubble" :date="date" :mode="displayMode"></slot>
     </div>
 
   </div>
@@ -86,9 +87,6 @@
     props: ['date', 'dates', 'selectedClass'],
     data () {
       return {
-        dayNames: ['Sun', 'Mon','Tue','Wed','Thu','Fri','Sat'],
-        dateFormat: 'YYYY-MM-DD',
-        weekendDays: [0,6],
         displayMode: 'month',
       }
     },
@@ -119,9 +117,9 @@
       },
       currentWeekDays () {
         const start = moment(this.activeMoment).startOf('week')
-        let days = [start.format(this.dateFormat)]
+        let days = [start.format(this.$store.state.calendar_settings.date_format.raw)]
         for (let i = 0; i < 6; i++) {
-          days.push(start.add(1, 'day').format(this.dateFormat))
+          days.push(start.add(1, 'day').format(this.$store.state.calendar_settings.date_format.raw))
         }
         // window.console.log('week', days)
         return days
@@ -133,34 +131,39 @@
         return this.isMonthView ? this.currentMonthDays : this.currentWeekDays
       },
       displayMonthName () {
-        return this.activeMoment.format('MMMM')
+        return this.activeMoment.format(this.$store.state.calendar_settings.date_format.month_name)
       },
       displayYear () {
-        return this.activeMoment.format('YYYY')
+        return this.activeMoment.format(this.$store.state.calendar_settings.date_format.year)
       },
       displayDate () {
         let display = `${this.displayMonthName} ${this.displayYear}`
         if(this.isWeekView) {
-          display = `${moment(this.currentWeekDays[0]).format('MMM Do')} – ${moment(this.currentWeekDays[6]).format('MMM Do')}`
+          display = `
+            ${moment(this.currentWeekDays[0]).format(this.$store.state.calendar_settings.date_format.month_short_day_ordinal)}
+            –
+            ${moment(this.currentWeekDays[6]).format(this.$store.state.calendar_settings.date_format.month_short_day_ordinal)}
+          `
         }
         return display
       },
     },
     mounted () {
       this.today()
+      // window.console.log(this.$store.state.active_date)
     },
     methods: {
       emitDayClick (day) {
         this.$emit('calendar-day-selected', day)
       },
       loadNextDays () {
-        this.emitDayClick(this.activeMoment.add(1, this.displayMode).format(this.dateFormat))
+        this.emitDayClick(this.activeMoment.add(1, this.displayMode).format(this.$store.state.calendar_settings.date_format.raw))
       },
       loadPrevDays () {
-        this.emitDayClick(this.activeMoment.subtract(1, this.displayMode).format(this.dateFormat))
+        this.emitDayClick(this.activeMoment.subtract(1, this.displayMode).format(this.$store.state.calendar_settings.date_format.raw))
       },
       today () {
-        this.emitDayClick(moment().format(this.dateFormat))
+        this.emitDayClick(moment().format(this.$store.state.calendar_settings.date_format.raw))
       },
       showDayNumber (date) {
         date = date.split('-')
@@ -193,7 +196,7 @@
           classes.push('is-after-today')
         }
 
-        if(this.weekendDays.includes(dayOfWeek)) {
+        if(this.$store.state.calendar_settings.weekend_days.includes(dayOfWeek)) {
           classes.push('is-weekend')
         } else {
           classes.push('is-weekday')

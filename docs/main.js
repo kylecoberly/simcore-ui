@@ -16,9 +16,44 @@ Vue.use(VueHighlightJS)
 
 window.moment = require('moment')
 
+const _dateFormatRaw = 'YYYY-MM-DD'
+const _dateFormatDisplay = 'dddd, MMMM Do'
+
 const store = new Vuex.Store({
   state: {
-    active_date: moment().format('YYYY-MM-DD'),
+    calendar_settings: {
+      date_format: {
+        raw: _dateFormatRaw,
+        display: _dateFormatDisplay,
+        month_name: 'MMMM',
+        year: 'Y',
+        month_short_day_ordinal: 'MMM Do',
+      },
+      day_names: ['Sun', 'Mon','Tue','Wed','Thu','Fri','Sat'],
+      weekend_days: [0,6],
+    },
+    active_date: moment().format(_dateFormatRaw),
+    current_user_data: {
+      events: {},
+      availability: {
+        '2017-12-04': [
+          {
+            start: 8,
+            duration: 3.5
+          },
+          {
+            start: 14,
+            duration: 2.5
+          }
+        ],
+        '2017-12-05': [
+          {
+            start: 8.5,
+            duration: 3.5
+          },
+        ],
+      },
+    },
   },
 })
 
@@ -30,6 +65,7 @@ new Vue({
   mixins: [common],
   template: '<App/>',
   components: { App },
+  store,
   methods: {
     toggleOverlay(callback) {
       this.$emit('toggle-overlay', callback)
