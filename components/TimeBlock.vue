@@ -4,10 +4,14 @@
       <div class="sim-timeblock--remover" @click="removeTimeBlock">
         <SimIconText icon="fa-times-circle fa-lg"></SimIconText>
       </div>
-      <div v-if="orientationIsX" class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--left" @mousedown="startStretchLeft"></div>
-      <div v-if="orientationIsY" class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--up" @mousedown="startStretchUp"></div>
-      <div v-if="orientationIsX" class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--right" @mousedown="startStretchRight"></div>
-      <div v-if="orientationIsY" class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--down" @mousedown="startStretchDown"></div>
+      <div v-if="orientationIsX" class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--left"
+           @mousedown="startStretchLeft"></div>
+      <div v-if="orientationIsY" class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--up"
+           @mousedown="startStretchUp"></div>
+      <div v-if="orientationIsX" class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--right"
+           @mousedown="startStretchRight"></div>
+      <div v-if="orientationIsY" class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--down"
+           @mousedown="startStretchDown"></div>
       <div class="sim-timeblock--mover" @mousedown="startMove"></div>
       <div class="sim-timeblock--info">
         <div class="sim-timeblock--info--hours">{{ displayBlockHours() }}</div>
@@ -21,43 +25,43 @@
   import moment from 'moment'
   import SimIconText from './IconText'
 
-  const _cap = function(num, previous, min, max) {
+  const _cap = (num, previous, min, max) => {
     return (num < min ? min : (num > max - previous ? max - previous : num))
   }
-  const _setProperty = function(element, property, value) {
+  const _setProperty = (element, property, value) => {
     element.style.setProperty(`--${property}`, value)
   }
-  const _getProperty = function(element, property) {
+  const _getProperty = (element, property) => {
     return element.style.getPropertyValue(`--${property}`)
   }
-  const _getMetrics = function (event, element) {
+  const _getMetrics = (event, element) => {
     const blockMetrics = element.getBoundingClientRect()
     const pickerMetrics = element.parentElement.getBoundingClientRect()
 
     return {
       start: {
-        'x': event.clientX,
-        'y': event.clientY,
+        x: event.clientX,
+        y: event.clientY,
       },
       axis: {
-        'x': blockMetrics.width,
-        'y': blockMetrics.height,
+        x: blockMetrics.width,
+        y: blockMetrics.height,
       },
       offset: {
-        'x': blockMetrics.x,
-        'y': blockMetrics.y,
+        x: blockMetrics.x,
+        y: blockMetrics.y,
       },
       max: {
-        'x': pickerMetrics.width,
-        'y': pickerMetrics.height,
+        x: pickerMetrics.width,
+        y: pickerMetrics.height,
       },
       offset_parent: {
-        'x': pickerMetrics.x,
-        'y': pickerMetrics.y,
+        x: pickerMetrics.x,
+        y: pickerMetrics.y,
       },
       segment: {
-        'x': pickerMetrics.width / 48,
-        'y': pickerMetrics.height / 48,
+        x: pickerMetrics.width / 48,
+        y: pickerMetrics.height / 48,
       },
       durationValue: parseFloat(_getProperty(element, 'duration')),
       startValue: parseFloat(_getProperty(element, 'start')),
@@ -80,82 +84,87 @@
       },
       date: {
         type: String,
-        default: ''
+        default: '',
       },
       orientation: {
         type: String,
-        default: 'x'
+        default: 'x',
       },
       showControls: {
         type: Boolean,
-        default: true
+        default: true,
       },
     },
-    data () {
+    data() {
       return {
         isMoving: false,
         stretchDirection: null,
       }
     },
     computed: {
-      orientationIsX () {
+      orientationIsX() {
         return this.orientation === 'x'
       },
-      orientationIsY () {
+      orientationIsY() {
         return this.orientation === 'y'
       },
     },
     methods: {
-      setStyle (block) {
-        let styles = []
+      setStyle(block) {
+        const styles = []
         styles.push(`--start: ${block.start}`)
         styles.push(`--duration: ${block.duration}`)
 
         return styles.join(';')
       },
-      setClass () {
-        let classes = [`sim-timeblock sim-timeblock--${this.index} sim-timeblock--${this.orientation}`]
-        if(!this.showControls) {
+      setClass() {
+        const classes = [`sim-timeblock sim-timeblock--${this.index} sim-timeblock--${this.orientation}`]
+        if (!this.showControls) {
           classes.push('is-display-only')
         }
-        if(this.isMoving) {
+        if (this.isMoving) {
           classes.push('is-moving')
         }
-        if(this.stretchDirection) {
+        if (this.stretchDirection) {
           classes.push(`is-stretching is-stretching--${this.stretchDirection}`)
         }
 
         return classes.join(' ')
       },
-      displayBlockHours () {
-        let total = this.block.duration
-        let output = total.toString().replace(/\.5/, '½').replace(/^0/, '') || 0
-        let hours = `${output} ${(total > 0 && total <= 1 ? 'hour' : 'hours')}`
+      displayBlockHours() {
+        const total = this.block.duration
+        const output = total.toString()
+          .replace(/\.5/, '½')
+          .replace(/^0/, '') || 0
+        const hours = `${output} ${(total > 0 && total <= 1 ? 'hour' : 'hours')}`
 
         return hours
       },
-      displayBlockTime () {
+      displayBlockTime() {
         let times = null
 
-        if(this.isMoving || this.stretchDirection) {
-          let day = moment().startOf('day')
-          let start = day.add(this.block.start, 'hours').format('h:mma')
-          let end =  day.add(this.block.duration, 'hours').format('h:mma')
-          times = `${start.replace(':00','')} — ${end.replace(':00','')}`
+        if (this.isMoving || this.stretchDirection) {
+          const day = moment()
+            .startOf('day')
+          const start = day.add(this.block.start, 'hours')
+            .format('h:mma')
+          const end = day.add(this.block.duration, 'hours')
+            .format('h:mma')
+          times = `${start.replace(':00', '')} — ${end.replace(':00', '')}`
         }
 
         return times
       },
-      removeTimeBlock (event) {
+      removeTimeBlock(event) {
         event.stopPropagation()
         event.preventDefault()
         this.$emit('remove-time-block', this.index)
       },
       // ----------
-      setStretchingStart (event, mouseCoordinate) {
+      setStretchingStart(event, mouseCoordinate) {
         // for stretch left/up
-        let calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
-        let currentStart = Math.floor(calc/this.metrics.segment[this.orientation])/2
+        const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
+        const currentStart = Math.floor(calc / this.metrics.segment[this.orientation]) / 2
         this.block.start = _cap(currentStart, 0, 0, (this.metrics.startValue + this.metrics.durationValue - 0.5))
 
         // @FIXME dont make this a global setter?
@@ -163,44 +172,51 @@
 
         return currentStart
       },
-      setMovingStart (event) {
-        let mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
-        let calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
-        let currentStart = _cap(calc, this.metrics.axis[this.orientation], 0, this.metrics.max[this.orientation])
-        this.block.start = Math.round(currentStart/this.metrics.segment[this.orientation])/2
+      setMovingStart(event) {
+        const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
+        const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
+        const currentStart = _cap(calc, this.metrics.axis[this.orientation], 0, this.metrics.max[this.orientation])
+        this.block.start = Math.round(currentStart / this.metrics.segment[this.orientation]) / 2
 
         // @FIXME dont make this a global setter?
         _setProperty(this.$el, 'start', this.block.start)
       },
-      setDurationFromEnd (event, mouseCoordinate) {
+      setDurationFromEnd(event, mouseCoordinate) {
         // For down or right
-        let currentDuration = Math.round((this.metrics.axis[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation])/this.metrics.segment[this.orientation])/2
+        const currentDuration = Math.round(
+          (
+            this.metrics.axis[this.orientation]
+            + mouseCoordinate
+            - this.metrics.start[this.orientation]
+          )
+          / this.metrics.segment[this.orientation]
+        ) / 2
         this.block.duration = _cap(currentDuration, 0, 0.5, 24 - this.block.start)
 
         // @FIXME dont make this a global setter?
         _setProperty(this.$el, 'duration', this.block.duration)
       },
-      setDurationFromStart (event, mouseCoordinate, currentStart) {
+      setDurationFromStart(event, mouseCoordinate, currentStart) {
         // For up or left
-        let currentDuration = this.metrics.durationValue - Math.floor((mouseCoordinate - this.metrics.start[this.orientation])/this.metrics.segment[this.orientation])/2
+        const currentDuration = this.metrics.durationValue - Math.floor((mouseCoordinate - this.metrics.start[this.orientation]) / this.metrics.segment[this.orientation]) / 2
         this.block.duration = _cap(currentDuration, 0, 0.5, (currentStart < 0 ? this.block.duration : 24))
 
         // @FIXME dont make this a global setter?
         _setProperty(this.$el, 'duration', this.block.duration)
       },
       // ----------
-      move (event) {
+      move(event) {
         this.setMovingStart(event, event.clientX)
       },
-      doneMoving () {
+      doneMoving() {
         this.isMoving = false
         this.$emit('is-moving', false)
         this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.move)
         removeEventListener('mouseup', this.doneMoving)
       },
-      startMove (event) {
-        if(event.which === 1) {
+      startMove(event) {
+        if (event.which === 1) {
           window.console.log('start move', this.orientation)
           // event.preventDefault()
           // event.stopPropagation()
@@ -212,18 +228,18 @@
         }
       },
       // ----------
-      stretchRight (event) {
+      stretchRight(event) {
         this.setDurationFromEnd(event, event.clientX)
       },
-      doneStretchingRight () {
+      doneStretchingRight() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
         this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchRight)
         removeEventListener('mouseup', this.doneStretchingRight)
       },
-      startStretchRight (event) {
-        if(event.which === 1) {
+      startStretchRight(event) {
+        if (event.which === 1) {
           event.preventDefault()
           event.stopPropagation()
           this.stretchDirection = 'right'
@@ -234,18 +250,18 @@
         }
       },
       // ----------
-      stretchDown (event) {
+      stretchDown(event) {
         this.setDurationFromEnd(event, event.clientY)
       },
-      doneStretchingDown () {
+      doneStretchingDown() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
         this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchDown)
         removeEventListener('mouseup', this.doneStretchingDown)
       },
-      startStretchDown (event) {
-        if(event.which === 1) {
+      startStretchDown(event) {
+        if (event.which === 1) {
           event.preventDefault()
           event.stopPropagation()
           this.stretchDirection = 'down'
@@ -256,19 +272,19 @@
         }
       },
       // ----------
-      stretchLeft (event) {
-        let currentStart = this.setStretchingStart(event, event.clientX)
+      stretchLeft(event) {
+        const currentStart = this.setStretchingStart(event, event.clientX)
         this.setDurationFromStart(event, event.clientX, currentStart)
       },
-      doneStretchingLeft () {
+      doneStretchingLeft() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
         this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchLeft)
         removeEventListener('mouseup', this.doneStretchingLeft)
       },
-      startStretchLeft (event) {
-        if(event.which === 1) {
+      startStretchLeft(event) {
+        if (event.which === 1) {
           event.preventDefault()
           event.stopPropagation()
           this.stretchDirection = 'left'
@@ -279,19 +295,19 @@
         }
       },
       // ----------
-      stretchUp (event) {
-        let currentStart = this.setStretchingStart(event, event.clientY)
+      stretchUp(event) {
+        const currentStart = this.setStretchingStart(event, event.clientY)
         this.setDurationFromStart(event, event.clientY, currentStart)
       },
-      doneStretchingUp () {
+      doneStretchingUp() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
         this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchUp)
         removeEventListener('mouseup', this.doneStretchingUp)
       },
-      startStretchUp (event) {
-        if(event.which === 1) {
+      startStretchUp(event) {
+        if (event.which === 1) {
           event.preventDefault()
           event.stopPropagation()
           this.stretchDirection = 'up'
