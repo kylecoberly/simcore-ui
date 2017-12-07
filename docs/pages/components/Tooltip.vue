@@ -8,15 +8,15 @@
         </template>
         <template slot="view">
           <p>
-            Never give up
+            Never gonna give you up
             <sim-tooltip pop="up">
-              <span slot="text">It always seems impossible until it's done.</span>
+              <span slot="text">Never gonna let you down</span>
             </sim-tooltip>
           </p>
           <p>
-            Never surrender
+            Never gonna make you cry
             <sim-tooltip pop="down">
-              <span slot="text">When something really matters, you should never give up or give in.</span>
+              <span slot="text">Never gonna say goodbye</span>
             </sim-tooltip>
           </p>
         </template>
