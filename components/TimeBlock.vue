@@ -14,6 +14,7 @@
            @mousedown="startStretchDown"></div>
       <div class="sim-timeblock--mover" @mousedown="startMove"></div>
       <div class="sim-timeblock--info">
+        {{date}}
         <div class="sim-timeblock--info--hours">{{ displayBlockHours() }}</div>
         <div class="sim-timeblock--info--time">{{ displayBlockTime() }}</div>
       </div>
@@ -211,7 +212,7 @@
       doneMoving() {
         this.isMoving = false
         this.$emit('is-moving', false)
-        this.$emit('block-updated', this.date)
+        // this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.move)
         removeEventListener('mouseup', this.doneMoving)
       },
@@ -234,7 +235,7 @@
       doneStretchingRight() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
-        this.$emit('block-updated', this.date)
+        // this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchRight)
         removeEventListener('mouseup', this.doneStretchingRight)
       },
@@ -256,7 +257,7 @@
       doneStretchingDown() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
-        this.$emit('block-updated', this.date)
+        // this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchDown)
         removeEventListener('mouseup', this.doneStretchingDown)
       },
@@ -279,7 +280,7 @@
       doneStretchingLeft() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
-        this.$emit('block-updated', this.date)
+        // this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchLeft)
         removeEventListener('mouseup', this.doneStretchingLeft)
       },
@@ -302,7 +303,7 @@
       doneStretchingUp() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
-        this.$emit('block-updated', this.date)
+        // this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchUp)
         removeEventListener('mouseup', this.doneStretchingUp)
       },

@@ -31,14 +31,15 @@
         </li>
       </ul>
 
-      <SimTimeBlock v-for="(block, index) in blocks" :key="index" :block="block" :index="index" :date="date" :orientation="orientation"
-        @remove-time-block="removeTimeBlock"
-        @is-moving="setMovingState"
-        @is-stretching="setStretchingState"
-        @block-updated="blockWasUpdated"
-        ></SimTimeBlock>
-
+      <SimTimeBlock v-for="(block, index) in blocks" :key="index" :block="block" :index="index" :date="date"
+                    :orientation="orientation"
+                    @remove-time-block="removeTimeBlock"
+                    @is-moving="setMovingState"
+                    @is-stretching="setStretchingState"
+                    @block-updated="blockWasUpdated"
+      ></SimTimeBlock>
     </div>
+
   </div>
 </template>
 
@@ -47,11 +48,6 @@
   import SimIconText from './IconText'
   import SimTimeBlock from './TimeBlock'
 
-  const _zeroPad = function(num, pads) {
-    pads = pads || '000'
-    return (pads + num).substr(-2)
-  }
-
   export default {
     name: 'sim-timepicker',
     components: {
@@ -59,95 +55,118 @@
       SimTimeBlock,
     },
     props: {
-      date: {
-        type: String,
-        default: ''
-      },
-      blocks: {
-        type: Array,
-      },
       shouldShowDate: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
-    data () {
+    data() {
       return {
         isMoving: false,
         isStretching: false,
-        orientation: 'x'
+        orientation: 'x',
+        blocks: this.$store.state.current_user_data.availability[this.$store.state.active_date] || [],
       }
     },
+    watch: {
+      date(newDate) {
+        this.blocks = this.$store.state.current_user_data.availability[newDate] || []
+      },
+    },
     computed: {
-      activeMoment () {
+      activeMoment() {
         return moment(this.date)
       },
-      displayDate () {
-        return moment(this.date).format('dddd, MMMM Do')
+      displayDate() {
+        return moment(this.date)
+          .format('dddd, MMMM Do')
       },
-      totalHours () {
-        return this.blocks.map((block) => block.duration).reduce((sum, value) => sum + value, 0)
+      totalHours() {
+        return this.blocks
+          .map((block) => { return block.duration })
+          .reduce((sum, value) => sum + value, 0)
       },
-      displayDateTotalHours () {
-        let output = this.totalHours.toString().replace(/\.5/, '½').replace(/^0/, '') || 0
-        let hours = `${output} ${(this.totalHours > 0 && this.totalHours <= 1 ? 'hour' : 'hours')}`
-        return hours
+      displayDateTotalHours() {
+        const output = this.totalHours.toString()
+          .replace(/\.5/, '½')
+          .replace(/^0/, '') || 0
+
+        return `${output} ${(this.totalHours > 0 && this.totalHours <= 1 ? 'hour' : 'hours')}`
+      },
+      date() {
+        return this.$store.state.active_date
       },
     },
     methods: {
-      sortBlocks () {
-        this.blocks.sort(function(a, b) {
-          return parseFloat(a.start) - parseFloat(b.start);
-        })
-      },
-      setClass () {
-        let classes = []
-        if(this.isMoving) {
+      // UI Management Methods
+      setClass() {
+        const classes = []
+        if (this.isMoving) {
           classes.push('is-moving')
         }
-        if(this.isStretching) {
+        if (this.isStretching) {
           classes.push('is-stretching')
         }
         return classes.join(' ')
       },
-      setMovingState (bool) {
+      setMovingState(bool) {
         this.isMoving = bool
       },
-      setStretchingState (bool) {
+      setStretchingState(bool) {
         this.isStretching = bool
       },
-      displayHour (hour) {
+      displayHour(hour) {
         hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour)
+
         return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
       },
-      setHourClass (hour) {
+      setHourClass(hour) {
         return hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'
       },
-      createTimeBlock (hour) {
-        this.blocks.push({start: hour, duration: 1})
+      // Time Block Methods.
+      updateBlocks() {
         this.sortBlocks()
-        this.$emit('time-block-created', this.date, this.blocks)
+
+        this.$store.commit('setAvailabilityBlocksForDay', { date: this.date, blocks: this.blocks })
       },
-      removeTimeBlock (index) {
+      sortBlocks() {
+        this.blocks.sort((a, b) => {
+          return parseFloat(a.start) - parseFloat(b.start)
+        })
+      },
+      createTimeBlock(hour) {
+        this.blocks.push({ start: hour, duration: 1 })
+
+        this.updateBlocks()
+      },
+      removeTimeBlock(index) {
         this.blocks.splice(index, 1)
-        this.$emit('time-block-removed', this.date, this.blocks)
+
+        this.updateBlocks()
       },
-      removeAllTimeBlocks () {
+      removeAllTimeBlocks() {
         this.blocks.splice(0, this.blocks.length)
-        this.$emit('all-time-blocks-removed', this.date)
+
+        this.updateBlocks()
       },
-      emitDayClick (day) {
+      blockWasUpdated() {
+        this.updateBlocks()
+      },
+      // Date Management Methods.
+      emitDayClick(day) {
         this.$emit('calendar-day-selected', day)
       },
-      blockWasUpdated (date) {
-        this.sortBlocks()
-        this.$emit('time-block-updated', date)
+      nextDay() {
+        const date = this.activeMoment.add(1, 'day')
+          .format('YYYY-MM-DD')
+
+        this.$store.commit('setActiveDate', date)
       },
-      nextDay () {
-        this.emitDayClick(this.activeMoment.add(1, 'day').format('YYYY-MM-DD'))
-      },
-      prevDay () {
-        this.emitDayClick(this.activeMoment.subtract(1, 'day').format('YYYY-MM-DD'))
+      prevDay() {
+        const date = this.activeMoment.subtract(1, 'day')
+          .format('YYYY-MM-DD')
+
+        this.$store.commit('setActiveDate', date)
       },
     },
   }

@@ -1,18 +1,19 @@
 <template lang="html">
   <article>
-      <h2>{{ msg }}</h2>
+    <h2>{{ msg }}</h2>
 
-      <demobox>
-        <template slot="intro">
-          Normal / Default
-        </template>
-        <template slot="view">
+    <demobox>
+      <template slot="intro">
+        Normal / Default
+      </template>
+      <template slot="view">
 
-          <SimCalendar :class="`is-${contextLabel}-context`" :date="date" :dates="user_data" @calendar-day-selected="manageDayControlPanel">
+        <SimCalendar :class="`is-${contextLabel}-context`" :date="date" :dates="user_data"
+                     @calendar-day-selected="setDate">
 
-            <div slot="context-controls">
-              <SimSwitch v-model="contextSwitch" left-label="Instructor" right-label="Coordinator" />
-            </div>
+          <div slot="context-controls">
+            <SimSwitch v-model="contextSwitch" left-label="Instructor" right-label="Coordinator"/>
+          </div>
 
             <div class="local--day" slot="day" slot-scope="props">
               <ul v-if="props.mode === 'week'" class="sim-calendar--grid--day--timelines">
@@ -36,6 +37,31 @@
                     ></SimBubbleTrigger>
                 </template>
               </div>
+          <div class="local--day" slot="day" slot-scope="props">
+
+            <!--<ul v-if="props.mode === 'week'" class="sim-calendar&#45;&#45;grid&#45;&#45;day&#45;&#45;timelines">-->
+              <!--<li v-for="hour in 25" @dblclick="createTimeBlock(props.date, hour-1)"-->
+                  <!--:class="setHourClasses(hour-1)"></li>-->
+            <!--</ul>-->
+
+            <!-- <div class="local--day--event-blocks">
+              events!
+            </div> -->
+
+            <div class="local--day--time-blocks">
+              <calendar-day v-for="day in timeBlocks(props.date)"
+                :day="day"
+              ></calendar-day>
+              <!--<template v-for="(block, index) in timeBlocks(props.date)">-->
+                <!--<SimTimeBlock v-if="props.mode == 'week'" :block="block" :index="index" :date="props.date"-->
+                              <!--orientation="y" />-->
+                <!--<SimTimeBlock v-else :block="block" :index="index" orientation="x" :show-controls="false" />-->
+              <!--</template>-->
+            </div>
+
+            <div v-if="isCoordinatorContext && props.mode === 'month'" class="calendar-quadrants--outer">
+              <div class="calendar-quadrant" v-for="quad in density"
+                   :style="`--percent: ${(quad.percent / 100)}`"></div>
             </div>
 
             <div class="day-control-panel" slot="day-control-panel" slot-scope="props">
@@ -48,6 +74,15 @@
               >
               </SimTimePicker>
             </div>
+          </div>
+
+          <div class="day-control-panel" slot="day-control-panel" slot-scope="props">
+            <SimTimePicker v-if="isInstructorContext && props.mode === 'month'" :date="props.date"
+                           :should-show-date="true"
+                           @calendar-day-selected="setDate"
+            >
+            </SimTimePicker>
+
 
             <SimBubble v-if="isCoordinatorContext && shouldBubbleBeOpen && props.mode === 'month'"
               slot="day-bubble"
@@ -65,6 +100,29 @@
           <pre><code class="javascript"></code></pre>
         </template>
       </demobox>
+          </div>
+
+          <div class="bubble-boy" slot="day-bubble" slot-scope="props">
+            <div>here's a bubble for this thing on {{ props.date }}</div>
+          </div>
+
+        </SimCalendar>
+
+        <br/>
+        <p>Data</p>
+        <div class="flex-baseline-around">
+          <pre><code class="javascript">{{ date }}</code></pre>
+          <pre><code class="javascript">{{ user_data }}</code></pre>
+        </div>
+
+      </template>
+      <template slot="html">
+        <pre v-highlightjs><code class="html"></code></pre>
+      </template>
+      <template slot="js">
+        <pre><code class="javascript"></code></pre>
+      </template>
+    </demobox>
 
   </article>
 </template>
@@ -77,6 +135,8 @@
   import SimCalendar from '../../../components/Calendar'
   import SimSlideDeck from '../../../components/SlideDeck'
   import SimSwitch from '../../../components/Switch'
+  import SimCalendar from '../../../components/Calendar'
+  import SimCalendarDay from '../../../components/CalendarDay'
   import SimTimeBlock from '../../../components/TimeBlock'
   import SimTimePicker from '../../../components/TimePicker'
 
@@ -89,6 +149,8 @@
       SimCalendar,
       SimSwitch,
       SimSlideDeck,
+      SimCalendar,
+      SimCalendarDay,
       SimTimeBlock,
       SimTimePicker,
     },
@@ -97,53 +159,51 @@
         msg: 'TimePicker',
         dateFormat: this.$store.state.calendar_settings.date_format.raw,
         date: this.$store.state.active_date,
-        displayDate: moment().format(this.$store.state.calendar_settings.date_format.display),
+        displayDate: moment()
+          .format(this.$store.state.calendar_settings.date_format.display),
         current_user_availability: this.$store.state.current_user_data.availability,
         current_user_events: this.$store.state.current_user_data.events,
         density: [
           {
             percent: 100,
             start: 0,
-            end: 6
+            end: 6,
           },
           {
             percent: 35,
             start: 6,
-            end: 12
+            end: 12,
           },
           {
             percent: 65,
             start: 12,
-            end: 18
+            end: 18,
           },
           {
             percent: 10,
             start: 18,
-            end: 24
+            end: 24,
           },
         ],
         stagedData: {},
-        blocks: [],
+        blocks: this.$store.state.current_user_data.availability[this.date] || [],
         events: [],
         block: {},
         contextSwitch: true,
         slides: this.$store.state.slides,
       }
     },
-    mounted () {
-      // window.console.log(this.$store.state.active_date)
-    },
     computed: {
-      isInstructorContext (){
+      isInstructorContext() {
         return (this.contextSwitch === false)
       },
-      isCoordinatorContext (){
+      isCoordinatorContext() {
         return (this.contextSwitch === true)
       },
-      user_data () {
+      user_data() {
         return this.isInstructorContext ? this.current_user_availability : this.current_user_events
       },
-      contextLabel () {
+      contextLabel() {
         return this.isInstructorContext ? 'instructor' : 'coordinator'
       },
       bubbleData() {
@@ -154,8 +214,8 @@
       },
     },
     methods: {
-      setHourClasses (hour) {
-        let classes = []
+      setHourClasses(hour) {
+        const classes = []
         classes.push((hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'))
         classes.push((hour === 0 || hour === 24 ? 'is-midnight' : (hour === 12 ? 'is-noon' : '')))
         return classes.join(' ')
@@ -173,45 +233,14 @@
 
       manageDayControlPanel (date) {
         let dayMoment = moment(date)
+      setDate(date) {
+        const dayMoment = moment(date)
+
         this.displayDate = dayMoment.format('dddd, MMMM Do')
         this.date = dayMoment.format('YYYY-MM-DD')
-        this.blocks = this.user_data[this.date] || []
-        if(this.blocks.length) {
-          this.user_data[this.date] = this.blocks
-        }
-      },
-      allTimeBlocksRemoved (date) {
-        delete this.user_data[date]
-        this.doUpdateStuff(date)
-      },
-      createTimeBlock (date, hour) {
-        if(this.date === date) {
-          let blocks = []
-          blocks = this.user_data[date] || []
-          blocks.push({start: hour, duration: 1})
-          blocks.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
-          this.timeBlockCreated(date, blocks)
-        }
-      },
-      timeBlockCreated (date, blocks) {
-        this.user_data[date] = blocks
-        this.doUpdateStuff(date)
-      },
-      removeTimeBlock (index) {
-        this.blocks.splice(index, 1)
-      },
-      timeBlockRemoved (date, blocks) {
-        this.user_data[date] = blocks
-        this.doUpdateStuff(date)
       },
       timeBlocks(day) {
         return this.user_data[day]
-      },
-      doUpdateStuff (date) {
-          this.stagedData[date] = JSON.parse(JSON.stringify(this.user_data[date]))
-          window.console.log('staged data:', this.stagedData)
-          // this.postData(this.stagedData) - example of what to do with stuff
-          this.$forceUpdate()
       },
     },
   }
@@ -279,7 +308,7 @@
     position: relative;
     flex: 1;
     border-left: .2em solid #fff;
-    box-shadow: -.2em 0 0 0 rgba(0,0,0,.2);
+    box-shadow: -.2em 0 0 0 rgba(0, 0, 0, .2);
     display: flex;
     &.active {
       &::before {
@@ -296,6 +325,9 @@
     }
     &--inner {}
     &::after {
+    &--inner {
+    }
+    &:after {
       content: '';
       flex: 1;
       background: var(--action);
@@ -327,9 +359,11 @@
       }
     }
   }
+
   .is-month-view.is-instructor-context .local--day {
     flex-direction: column-reverse;
   }
+
   .is-coordinator-context .local--day .local--day--time-blocks {
     display: flex;
     justify-content: space-between;

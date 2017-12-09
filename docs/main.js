@@ -42,6 +42,7 @@ const store = new Vuex.Store({
     current_user_data: {
       events: {},
       availability: {
+        last_updated: {},
         '2017-12-04': [
           {
             start: 8,
@@ -52,7 +53,7 @@ const store = new Vuex.Store({
             duration: 2.5,
           },
         ],
-        '2017-12-05': [
+        '2017-12-07': [
           {
             start: 8.5,
             duration: 3.5,
@@ -120,10 +121,29 @@ const store = new Vuex.Store({
       }
     },
   },
+  mutations: {
+    setActiveDate(state, date) {
+      state.active_date = date
+    },
+    setAvailabilityBlocksForDay(state, availability) {
+      if (state.current_user_data.availability.last_updated !== availability.date) {
+        state.current_user_data.availability.last_updated = availability.date
+      }
+
+      if (availability.blocks.length === 0) {
+        delete state.current_user_data.availability[availability.date]
+      } else {
+        state.current_user_data.availability[availability.date] = Object.assign(availability.blocks, state.current_user_data.availability)
+      }
+    },
+  },
+  getters: {
+    getLastUpdated: state => () => { return state.current_user_data.availability.last_updated },
+    getActiveDate: (state) => () => { return state.active_date },
+  },
 })
 
 /* eslint-disable no-new, import/prefer-default-export */
-
 new Vue({
   el: '#app',
   router,
