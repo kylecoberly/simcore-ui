@@ -54,17 +54,17 @@
 
             <div v-for="date in days" @mousedown="emitDayClick(date)" class="sim-calendar--grid--day" :class="setDayClasses(date)">
               <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber(date) }}</div>
-              <slot name="day" :date="date" :mode="displayMode"></slot>
+              <slot name="day" :day-of-week="getDayOfWeek(date)" :date="date" :mode="displayMode"></slot>
             </div>
 
             <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
 
           </div>
+          <slot name="day-bubble" :date="date" :mode="displayMode"></slot>
         </div>
       </div>
 
       <slot name="day-control-panel" :date="date" :mode="displayMode"></slot>
-      <slot name="day-bubble" :date="date" :mode="displayMode"></slot>
     </div>
 
   </div>
@@ -172,6 +172,9 @@
       setDisplayMode (mode) {
         this.displayMode = mode
       },
+      getDayOfWeek(date) {
+        return moment(date).day()
+      },
       displayHour (hour) {
         hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour) // (hour % 2 === 0 ? hour : ''))
         return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
@@ -184,13 +187,13 @@
         // classes.push((hour === 18 ? 'is-end-dayshift' : ''))
         return classes.join(' ')
       },
-      setDayClasses (day) {
-        let dayOfWeek = moment(day).day()
+      setDayClasses (date) {
+        let dayOfWeek = this.getDayOfWeek(date)
         let classes = [`day-${dayOfWeek}`]
 
-        if(moment().isSame(day, 'day')) {
+        if(moment().isSame(date, 'day')) {
           classes.push('is-today')
-        } else if(moment().isAfter(day, 'day')) {
+        } else if(moment().isAfter(date, 'day')) {
           classes.push('is-before-today')
         } else {
           classes.push('is-after-today')
@@ -202,7 +205,7 @@
           classes.push('is-weekday')
         }
 
-        if(moment(this.date).isSame(day, 'day')) {
+        if(moment(this.date).isSame(date, 'day')) {
           classes.push(this.selectedClass || 'is-selected')
         }
 

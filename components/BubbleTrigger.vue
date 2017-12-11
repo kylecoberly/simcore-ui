@@ -1,0 +1,25 @@
+<template lang="html">
+  <div class="sim-bubble-trigger" @mousedown="setBubbleData($event)">
+    <slot></slot>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'sim-bubble-trigger',
+  props: ['data'],
+  methods: {
+    setBubbleData(event) {
+      let bubblePosition = JSON.parse(JSON.stringify(event.target.getBoundingClientRect()))
+      bubblePosition.dinkY = event.clientY
+      bubblePosition.dinkX = event.clientX
+
+      const bubbleData = Object.assign(bubblePosition, this.data)
+
+      this.$store.commit('updateBubbleData', bubbleData)
+      this.$store.commit('updateBubbleState', true)
+      // this.$emit('open-the-bubble')
+    },
+  },
+}
+</script>

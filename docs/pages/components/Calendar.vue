@@ -15,26 +15,27 @@
             </div>
 
             <div class="local--day" slot="day" slot-scope="props">
-
               <ul v-if="props.mode === 'week'" class="sim-calendar--grid--day--timelines">
                 <li v-for="hour in 25" @dblclick="createTimeBlock(props.date, hour-1)" :class="setHourClasses(hour-1)"></li>
               </ul>
-
               <!-- <div class="local--day--event-blocks">
                 events!
               </div> -->
-
               <div class="local--day--time-blocks">
                 <template v-for="(block, index) in timeBlocks(props.date)">
                   <SimTimeBlock v-if="props.mode == 'week'" :block="block" :index="index" :date="props.date" orientation="y" @remove-time-block="removeTimeBlock" @block-updated="doUpdateStuff" />
                   <SimTimeBlock v-else :block="block" :index="index" orientation="x" :show-controls="false" />
                 </template>
               </div>
-
               <div v-if="isCoordinatorContext && props.mode === 'month'" class="calendar-quadrants--outer">
-                <div class="calendar-quadrant" v-for="quad in density" :style="`--percent: ${(quad.percent / 100)}`"></div>
+                <template v-for="quad in density">
+                  <SimBubbleTrigger class="calendar-quadrant"
+                    :class="{active: shouldBubbleBeOpen && bubbleData.item === quad && date === props.date}"
+                    :style="`--percent: ${(quad.percent / 100)}`"
+                    :data="{item: quad, dayOfWeek: props.dayOfWeek, date: props.date, x: props.dayOfWeek+1}"
+                    ></SimBubbleTrigger>
+                </template>
               </div>
-
             </div>
 
             <div class="day-control-panel" slot="day-control-panel" slot-scope="props">
@@ -46,22 +47,15 @@
                 @time-block-updated="doUpdateStuff"
               >
               </SimTimePicker>
-
-
             </div>
 
-            <div class="bubble-boy" slot="day-bubble" slot-scope="props">
-                <div>here's a bubble for this thing on {{ props.date }}</div>
-            </div>
-
+            <SimBubble v-if="isCoordinatorContext && shouldBubbleBeOpen && props.mode === 'month'"
+              slot="day-bubble"
+              slot-scope="props"
+              >
+              <SimSlideDeck :slides="slides"></SimSlideDeck>
+            </SimBubble>
           </SimCalendar>
-
-          <br />
-          <p>Data</p>
-          <div class="flex-baseline-around">
-            <pre><code class="javascript">{{ date }}</code></pre>
-            <pre><code class="javascript">{{ user_data }}</code></pre>
-          </div>
 
         </template>
         <template slot="html">
@@ -78,8 +72,11 @@
 <script>
   import moment from 'moment'
   import Demobox from '../../utility/Demobox'
-  import SimSwitch from '../../../components/Switch'
+  import SimBubble from '../../../components/Bubble'
+  import SimBubbleTrigger from '../../../components/BubbleTrigger'
   import SimCalendar from '../../../components/Calendar'
+  import SimSlideDeck from '../../../components/SlideDeck'
+  import SimSwitch from '../../../components/Switch'
   import SimTimeBlock from '../../../components/TimeBlock'
   import SimTimePicker from '../../../components/TimePicker'
 
@@ -87,8 +84,11 @@
     name: 'calendar-doc',
     components: {
       Demobox,
-      SimSwitch,
+      SimBubble,
+      SimBubbleTrigger,
       SimCalendar,
+      SimSwitch,
+      SimSlideDeck,
       SimTimeBlock,
       SimTimePicker,
     },
@@ -126,7 +126,8 @@
         blocks: [],
         events: [],
         block: {},
-        contextSwitch: false,
+        contextSwitch: true,
+        slides: this.$store.state.slides,
       }
     },
     mounted () {
@@ -144,6 +145,12 @@
       },
       contextLabel () {
         return this.isInstructorContext ? 'instructor' : 'coordinator'
+      },
+      bubbleData() {
+        return this.$store.state.bubble_data
+      },
+      shouldBubbleBeOpen() {
+        return this.$store.state.bubble_is_open
       },
     },
     methods: {
@@ -163,6 +170,7 @@
         this.context = context
         this.manageDayControlPanel(this.date)
       },
+
       manageDayControlPanel (date) {
         let dayMoment = moment(date)
         this.displayDate = dayMoment.format('dddd, MMMM Do')
@@ -210,6 +218,47 @@
 </script>
 
 <style lang="scss">
+  .sim-calendar .sim-bubble {
+    top: -1em;
+    bottom: -1em;
+    width: 20em;
+    &::after {
+      top: calc(var(--dink-y) * 1px);
+    }
+    &--left {
+      left: calc(14.285% * var(--x) - 1px);
+    }
+    &--right {
+      left: calc(14.285% * (var(--x) - 1) - 1px);
+      transform: translateX(-100%);
+    }
+    section {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+    .content {
+      flex: 0 0 100%;
+      padding: 1em;
+      overflow: auto;
+      will-change: transform;
+      transform: translateX(0%);
+      transition: transform .3s ease-out;
+    }
+    [step="2"] .content {
+      transform: translateX(-100%);
+    }
+    [step="3"] .content {
+      transform: translateX(-200%);
+    }
+    [step="4"] .content {
+      transform: translateX(-300%);
+    }
+  }
+
+
+
   .day-control-panel {
     flex: 1;
     background: var(--picker-bg);
@@ -217,11 +266,7 @@
     position: relative;
   }
 
-  .bubble-boy {
-    position: absolute;
-    background: var(--dark);
-    color: var(--lighter);
-  }
+  .is-selected .calendar-quadrant {}
 
   .calendar-quadrants--outer {
     display: flex;
@@ -229,13 +274,28 @@
     width: 20%;
     min-width: 2em;
   }
+
   .calendar-quadrant {
+    position: relative;
     flex: 1;
     border-left: .2em solid #fff;
     box-shadow: -.2em 0 0 0 rgba(0,0,0,.2);
     display: flex;
+    &.active {
+      &::before {
+        content: '';
+        position: absolute;
+        background: var(--red);
+        left: calc(100% * -5 + 1.5em);
+        right: .5em;
+        top: 0;
+        bottom: 0;
+        opacity: .15;
+        transform: translate(.5em, 0);
+      }
+    }
     &--inner {}
-    &:after {
+    &::after {
       content: '';
       flex: 1;
       background: var(--action);
