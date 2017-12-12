@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuex from 'vuex'
+
+import moment from 'moment'
 import VueHighlightJS from 'vue-highlightjs'
 
 import App from './App'
@@ -14,10 +16,66 @@ Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueHighlightJS)
 
-window.moment = require('moment')
-
 const dateFormatRaw = 'YYYY-MM-DD'
 const dateFormatDisplay = 'dddd, MMMM Do'
+
+const slideAlphabetStart = {
+  state: {
+    componentType: 'SimSlide',
+    title: 'None',
+    subtitle: 'bot',
+    items: [
+      { id: 1, name: 'Brian' },
+      { id: 2, name: 'Dustin' },
+      { id: 3, name: 'Jase' },
+      { id: 4, name: 'Chad' },
+      { id: 5, name: 'Rick' },
+      { id: 6, name: 'Kaiti' },
+      { id: 7, name: 'Eric' },
+      { id: 8, name: 'Gary' },
+      { id: 9, name: 'Mike' },
+      { id: 10, name: 'Yaz' },
+      { id: 11, name: 'Brian Deux' },
+      { id: 12, name: 'Dustin Deux' },
+      { id: 13, name: 'Jase Deux' },
+      { id: 14, name: 'Chad Deux' },
+      { id: 15, name: 'Rick Deux' },
+      { id: 16, name: 'Kaiti Deux' },
+      { id: 17, name: 'Eric Deux' },
+      { id: 18, name: 'Gary Deus' },
+      { id: 19, name: 'Mike Deux' },
+      { id: 20, name: 'Yaz Deux' },
+    ],
+  },
+  actions: {
+    setItems(items = []) {
+      this.state.items = items
+    },
+  },
+}
+
+const slideDeck = {
+  currentSlideIndex: 0,
+  currentSlideContent: {},
+  slides: [
+    slideAlphabetStart.state,
+    {
+      id: 2,
+      step: 2,
+      componentType: 'SimSlide',
+      title: 'Hey!',
+      content: 'World',
+    },
+    {
+      id: 3,
+      step: 3,
+      componentType: 'SimSlide',
+      title: 'Hey!',
+      subtitle: 'Check this out',
+      content: 'World',
+    },
+  ],
+}
 
 const store = new Vuex.Store({
   state: {
@@ -38,7 +96,7 @@ const store = new Vuex.Store({
       orientation: 'left',
     },
     bubble_is_open: false,
-    active_date: window.moment().format(dateFormatRaw),
+    active_date: moment().format(dateFormatRaw),
     current_user_data: {
       events: {},
       availability: {
@@ -60,48 +118,46 @@ const store = new Vuex.Store({
           },
         ],
       },
-    },
-    slides: [
-      {
-        id: 1,
-        step: 1,
-        componentType: 'SimSlide',
-        items: [
-          { id: 1, name: 'Dustin' },
-          { id: 2, name: 'Jase' },
-          { id: 3, name: 'Chad' },
-          { id: 4, name: 'Rick' },
-          { id: 5, name: 'Kaiti' },
-          { id: 6, name: 'Eric' },
+      availability_density: {
+        '2017-12-12': [
+          {
+            percent: 100,
+            start: 0,
+            end: 6,
+          },
+          {
+            percent: 35,
+            start: 6,
+            end: 12,
+          },
+          {
+            percent: 65,
+            start: 12,
+            end: 18,
+          },
+          {
+            percent: 10,
+            start: 18,
+            end: 24,
+          },
         ],
       },
-      {
-        id: 2,
-        step: 2,
-        componentType: 'SimSlide',
-        title: 'Hey!',
-        content: 'World',
-      },
-      {
-        id: 3,
-        step: 3,
-        componentType: 'SimSlide',
-        title: 'Hey!',
-        subtitle: 'Check this out',
-        content: 'World',
-      },
-    ],
-    currentSlideIndex: 0,
+    },
+    slideDeck,
   },
   mutations: {
+    // TODO: Set these in a separate file. - Chad/Jase
+    setCurrentSlideContent(state, content) {
+      state.slideDeck.currentSlideContent = content
+    },
     updateCurrentSlideIndex(state, payload) {
-      state.currentSlideIndex = payload
+      state.slideDeck.currentSlideIndex = payload
     },
     nextSlideIndex(state) {
-      state.currentSlideIndex += 1
+      state.slideDeck.currentSlideIndex += 1
     },
     prevSlideIndex(state) {
-      state.currentSlideIndex -= 1
+      state.slideDeck.currentSlideIndex -= 1
     },
     updateBubbleState(state, payload) {
       state.bubble_is_open = payload
@@ -124,14 +180,16 @@ const store = new Vuex.Store({
       state.active_date = date
     },
     setAvailabilityBlocksForDay(state, availability) {
-      if (state.current_user_data.availability.last_updated !== availability.date) {
-        state.current_user_data.availability.last_updated = availability.date
+      const UserAvailability = state.current_user_data.availability
+      const date = availability.date
+      if (UserAvailability.last_updated !== date) {
+        UserAvailability.last_updated = date
       }
 
       if (availability.blocks.length === 0) {
-        delete state.current_user_data.availability[availability.date]
+        delete UserAvailability[date]
       } else {
-        state.current_user_data.availability[availability.date] = Object.assign(availability.blocks, state.current_user_data.availability)
+        UserAvailability[date] = Object.assign(availability.blocks, UserAvailability)
       }
     },
   },

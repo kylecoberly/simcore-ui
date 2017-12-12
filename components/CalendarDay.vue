@@ -2,52 +2,49 @@
   <div class="sim-calendar--grid--day sim-calendar-day"
        @mousedown="setActiveDateToToday"
        :class="dayClasses"
-  >
+       >
     <div class="local--day">
+
       <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber }}</div>
-      <ul v-else-if="isWeekView" class="sim-calendar--grid--day--timelines">
+      <ul v-if="isWeekView" class="sim-calendar--grid--day--timelines">
         <li v-for="hour in 25" @dblclick="createTimeBlock(hour-1)"
             :class="setHourClasses(hour-1)"></li>
       </ul>
 
-      <div class="local--day--time-blocks">
-        <template v-for="(block, index) in blocks">
-          <SimTimeBlock v-if="isWeekView"
-                        :block="block"
-                        :index="index"
-                        orientation="y" />
-          <SimTimeBlock v-if="isMonthView"
-                        :block="block"
-                        :index="index"
-                        :show-controls="false"
-                        orientation="x" />
-        </template>
-      </div>
+      <template v-if="isInstructorContext">
+        <div class="local--day--time-blocks">
+          <SimTimeBlock v-for="(block, index) in blocks"
+            :key="index"
+            :block="block"
+            :index="index"
+            :show-controls="showTimeBlockControls"
+            :orientation="timeBlockOrientation"
+            />
+        </div>
+      </template>
 
-      <div class="local--day--time-blocks">
-        <template v-for="(block, index) in blocks">
-          <SimTimeBlock v-if="isWeekView"
-                        :block="block"
-                        :index="index"
-                        :show-controls="false"
-                        orientation="y" />
-          <SimTimeBlock v-if="isMonthView"
-                        :block="block"
-                        :index="index"
-                        :show-controls="false"
-                        orientation="x" />
-        </template>
-      </div>
+      <template v-if="isCoordinatorContext">
+        <div class="local--day--event-blocks">
+          <SimTimeBlock v-for="(block, index) in blocks"
+            :key="index"
+            :block="block"
+            :index="index"
+            :show-controls="showTimeBlockControls"
+            :orientation="timeBlockOrientation"
+            />
+        </div>
+        <div v-if="isMonthView" class="calendar-density-blocks--outer">
+          <SimBubbleTrigger v-for="(block, index) in availabilityDensityBlocks"
+            class="calendar-density-block"
+            :key="index"
+            :class="setDensityBlockClasses(block)"
+            :style="`--percent: ${(block.percent / 100)}`"
+            :data="{item: block, dayOfWeek, date, x: dayOfWeek+1}"
+            :slideContent="slideContent"
+            />
+        </div>
+      </template>
 
-      <div v-if="isCoordinatorContext && isMonthView" class="calendar-quadrants--outer">
-        <template v-for="quad in density">
-          <SimBubbleTrigger class="calendar-quadrant"
-                            :class="{active: shouldBubbleBeOpen && bubbleData.item === quad && date === date}"
-                            :style="`--percent: ${(quad.percent / 100)}`"
-                            :data="{item: quad, dayOfWeek, date, x: dayOfWeek+1}"
-          ></SimBubbleTrigger>
-        </template>
-      </div>
     </div>
   </div>
 </template>
@@ -67,28 +64,34 @@
         dateFormat: 'YYYY-MM-DD',
         blocks: this.$store.state.current_user_data.availability[this.date],
         availability: this.$store.state.current_user_data.availability,
-        density: [
-          {
-            percent: 100,
-            start: 0,
-            end: 6,
-          },
-          {
-            percent: 35,
-            start: 6,
-            end: 12,
-          },
-          {
-            percent: 65,
-            start: 12,
-            end: 18,
-          },
-          {
-            percent: 10,
-            start: 18,
-            end: 24,
-          },
-        ],
+        availabilityDensityBlocks: this.$store.state.current_user_data.availability_density[this.date],
+        slideContent: {
+          componentType: 'SimSlide',
+          title: 'Date',
+          subtitle: 'bot',
+          items: [
+            { id: 1, name: 'Brian' },
+            { id: 2, name: 'Dustin' },
+            { id: 3, name: 'Jase' },
+            { id: 4, name: 'Chad' },
+            { id: 5, name: 'Rick' },
+            { id: 6, name: 'Kaiti' },
+            { id: 7, name: 'Eric' },
+            { id: 8, name: 'Gary' },
+            { id: 9, name: 'Mike' },
+            { id: 10, name: 'Yaz' },
+            { id: 11, name: 'Brian Deux' },
+            { id: 12, name: 'Dustin Deux' },
+            { id: 13, name: 'Jase Deux' },
+            { id: 14, name: 'Chad Deux' },
+            { id: 15, name: 'Rick Deux' },
+            { id: 16, name: 'Kaiti Deux' },
+            { id: 17, name: 'Eric Deux' },
+            { id: 18, name: 'Gary Deus' },
+            { id: 19, name: 'Mike Deux' },
+            { id: 20, name: 'Yaz Deux' },
+          ],
+        },
       }
     },
     mounted() {
@@ -113,11 +116,11 @@
         return this.displayMode === 'week'
       },
       showDayNumber() {
-        const date = this.date.split('-')
-
-        return parseInt(date[2])
+        return parseInt(this.date.split('-')[2])
       },
-      dayOfWeek() { return moment(this.date).day() },
+      dayOfWeek() {
+        return moment(this.date).day()
+      },
       dayClasses() {
         const dayOfWeek = moment(this.date).day()
         const classes = [`day-${dayOfWeek}`]
@@ -153,11 +156,30 @@
       isCoordinatorContext() {
         return (this.userContext === 'coordinator')
       },
+      timeBlockOrientation() {
+        return (this.isMonthView ? 'x' : 'y')
+      },
+      showTimeBlockControls() {
+        return (this.isMonthView ? false : true)
+      },
     },
     methods: {
       setActiveDateToToday() {
         this.$store.commit('setActiveDate', this.date)
       },
+
+      setDensityBlockClasses(block) {
+        const classes = []
+
+
+        if (this.shouldBubbleBeOpen && this.bubbleData.item === block) {
+          console.log(this.bubbleData.date)
+          classes.push('active')
+        }
+
+        return classes.join(' ')
+      },
+
       setHourClasses(hour) {
         const classes = []
         classes.push((hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'))
@@ -178,5 +200,5 @@
 </script>
 
 <style lang="scss">
-  // @import '../styles/calendar';
+  @import '../styles/calendar-day';
 </style>

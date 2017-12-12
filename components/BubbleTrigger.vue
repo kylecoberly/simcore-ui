@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'sim-bubble-trigger',
-  props: ['data'],
+  props: ['data', 'slideContent'],
   methods: {
     setBubbleData(event) {
       const bubblePosition = JSON.parse(JSON.stringify(event.target.getBoundingClientRect()))
@@ -16,6 +16,7 @@ export default {
 
       const bubbleData = Object.assign(bubblePosition, this.data)
 
+      this.$store.commit('setCurrentSlideContent', this.slideContent)
       this.$store.commit('updateBubbleData', bubbleData)
       this.$store.commit('updateBubbleState', true)
     },

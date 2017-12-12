@@ -54,28 +54,27 @@
 
             <template v-if="isMonthView">
               <CalendarDay v-for="date in currentMonthDays"
-                           class="sim-calendar--grid--day"
-                           :displayMode="displayMode"
-                           :date="date"
-                           :user-context="contextLabel"
-              >
-              </CalendarDay>
+                class="sim-calendar--grid--day"
+                :key="date"
+                :displayMode="displayMode"
+                :date="date"
+                :user-context="contextLabel"
+                />
             </template>
 
             <template v-if="isWeekView">
               <CalendarDay v-for="date in currentWeekDays"
-                           class="sim-calendar--grid--day"
-                           :displayMode="displayMode"
-                           :date="date"
-                           :user-context="contextLabel"
-              >
-              </CalendarDay>
+                class="sim-calendar--grid--day"
+                :key="date"
+                :displayMode="displayMode"
+                :date="date"
+                :user-context="contextLabel"
+                />
             </template>
 
             <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
 
           </div>
-          <!--<slot name="day-bubble" :display-mode="displayMode"></slot>-->
 
           <SimBubble v-if="isCoordinatorContext && shouldBubbleBeOpen && isMonthView">
             <SimSlideDeck :slides="slides"></SimSlideDeck>
@@ -91,7 +90,6 @@
         </SimTimePicker>
       </div>
 
-      <!--<slot name="day-control-panel" :display-mode="displayMode"></slot>-->
     </div>
 
   </div>
@@ -122,7 +120,7 @@
       return {
         displayMode: 'month',
         contextSwitch: true,
-        slides: this.$store.state.slides,
+        slides: this.$store.state.slideDeck.slides,
       }
     },
     computed: {
@@ -300,48 +298,6 @@
     background: var(--picker-bg);
     color: var(--picker-fg);
     position: relative;
-  }
-
-  .is-selected .calendar-quadrant {
-  }
-
-  .calendar-quadrants--outer {
-    display: flex;
-    flex-direction: column;
-    width: 20%;
-    min-width: 2em;
-  }
-
-  .calendar-quadrant {
-    position: relative;
-    flex: 1;
-    border-left: .2em solid #fff;
-    box-shadow: -.2em 0 0 0 rgba(0, 0, 0, .2);
-    display: flex;
-    &.active {
-      &::before {
-        content: '';
-        position: absolute;
-        background: var(--red);
-        left: calc(100% * -5 + 1.5em);
-        right: .5em;
-        top: 0;
-        bottom: 0;
-        opacity: .15;
-        transform: translate(.5em, 0);
-      }
-    }
-    &--inner {
-    }
-    &::after {
-      content: '';
-      flex: 1;
-      background: var(--action);
-      opacity: var(--percent);
-    }
-    + .calendar-quadrant {
-      margin-top: .2em;
-    }
   }
 
   .local--day {

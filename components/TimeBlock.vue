@@ -14,7 +14,7 @@
            @mousedown="startStretchDown"></div>
       <div class="sim-timeblock--mover" @mousedown="startMove"></div>
       <div class="sim-timeblock--info">
-        {{date}}
+        <!-- {{date}} -->
         <div class="sim-timeblock--info--hours">{{ displayBlockHours() }}</div>
         <div class="sim-timeblock--info--time">{{ displayBlockTime() }}</div>
       </div>

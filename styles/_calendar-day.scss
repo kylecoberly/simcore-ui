@@ -1,0 +1,39 @@
+.calendar-density-blocks--outer {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  min-width: 2em;
+}
+
+.calendar-density-block {
+  position: relative;
+  flex: 1;
+  border-left: .2em solid #fff;
+  box-shadow: -.2em 0 0 0 rgba(0, 0, 0, .2);
+  display: flex;
+
+  &.active {
+    &::before {
+      content: '';
+      position: absolute;
+      background: var(--red);
+      left: calc(100% * -5 + 1.5em);
+      right: .5em;
+      top: 0;
+      bottom: 0;
+      opacity: .15;
+      transform: translate(.5em, 0);
+    }
+  }
+
+  &::after {
+    content: '';
+    flex: 1;
+    background: var(--action);
+    opacity: var(--percent);
+  }
+
+  + .calendar-density-block {
+    margin-top: .2em;
+  }
+}
