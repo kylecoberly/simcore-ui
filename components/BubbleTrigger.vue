@@ -10,7 +10,7 @@ export default {
   props: ['data'],
   methods: {
     setBubbleData(event) {
-      let bubblePosition = JSON.parse(JSON.stringify(event.target.getBoundingClientRect()))
+      const bubblePosition = JSON.parse(JSON.stringify(event.target.getBoundingClientRect()))
       bubblePosition.dinkY = event.clientY
       bubblePosition.dinkX = event.clientX
 
@@ -18,7 +18,6 @@ export default {
 
       this.$store.commit('updateBubbleData', bubbleData)
       this.$store.commit('updateBubbleState', true)
-      // this.$emit('open-the-bubble')
     },
   },
 }

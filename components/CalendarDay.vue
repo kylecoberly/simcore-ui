@@ -24,10 +24,30 @@
         </template>
       </div>
 
-      <!--<div v-if="isCoordinatorContext && props.mode === 'month'" class="calendar-quadrants&#45;&#45;outer">-->
-        <!--<div class="calendar-quadrant" v-for="quad in density"-->
-             <!--:style="`&#45;&#45;percent: ${(quad.percent / 100)}`"></div>-->
-      <!--</div>-->
+      <div class="local--day--time-blocks">
+        <template v-for="(block, index) in blocks">
+          <SimTimeBlock v-if="isWeekView"
+                        :block="block"
+                        :index="index"
+                        :show-controls="false"
+                        orientation="y" />
+          <SimTimeBlock v-if="isMonthView"
+                        :block="block"
+                        :index="index"
+                        :show-controls="false"
+                        orientation="x" />
+        </template>
+      </div>
+
+      <div v-if="isCoordinatorContext && isMonthView" class="calendar-quadrants--outer">
+        <template v-for="quad in density">
+          <SimBubbleTrigger class="calendar-quadrant"
+                            :class="{active: shouldBubbleBeOpen && bubbleData.item === quad && date === date}"
+                            :style="`--percent: ${(quad.percent / 100)}`"
+                            :data="{item: quad, dayOfWeek, date, x: dayOfWeek+1}"
+          ></SimBubbleTrigger>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -36,17 +56,39 @@
   import moment from 'moment'
 
   import SimTimeBlock from './TimeBlock'
+  import SimBubbleTrigger from './BubbleTrigger'
 
   export default {
     name: 'sim-calendar-day',
-    components: { SimTimeBlock },
-    props: ['date', 'index', 'displayMode'],
+    components: { SimTimeBlock, SimBubbleTrigger },
+    props: ['date', 'index', 'displayMode', 'userContext'],
     data() {
       return {
         dateFormat: 'YYYY-MM-DD',
-        weekendDays: [0, 6],
         blocks: this.$store.state.current_user_data.availability[this.date],
         availability: this.$store.state.current_user_data.availability,
+        density: [
+          {
+            percent: 100,
+            start: 0,
+            end: 6,
+          },
+          {
+            percent: 35,
+            start: 6,
+            end: 12,
+          },
+          {
+            percent: 65,
+            start: 12,
+            end: 18,
+          },
+          {
+            percent: 10,
+            start: 18,
+            end: 24,
+          },
+        ],
       }
     },
     mounted() {
@@ -75,6 +117,7 @@
 
         return parseInt(date[2])
       },
+      dayOfWeek() { return moment(this.date).day() },
       dayClasses() {
         const dayOfWeek = moment(this.date).day()
         const classes = [`day-${dayOfWeek}`]
@@ -97,6 +140,18 @@
         }
 
         return classes.join(' ')
+      },
+      bubbleData() {
+        return this.$store.state.bubble_data
+      },
+      shouldBubbleBeOpen() {
+        return this.$store.state.bubble_is_open
+      },
+      isInstructorContext() {
+        return (this.userContext === 'instructor')
+      },
+      isCoordinatorContext() {
+        return (this.userContext === 'coordinator')
       },
     },
     methods: {

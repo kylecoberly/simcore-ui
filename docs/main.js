@@ -120,8 +120,6 @@ const store = new Vuex.Store({
         orientation: payload.orientation,
       }
     },
-  },
-  mutations: {
     setActiveDate(state, date) {
       state.active_date = date
     },

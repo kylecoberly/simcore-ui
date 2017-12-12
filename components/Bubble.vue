@@ -22,13 +22,15 @@
       },
       bubbleData() {
         return this.$store.state.bubble_data
-      }
+      },
     },
     mounted() {
       this.metrics = this.getMetrics()
-      const next = this.$el.querySelector('.next')
-      const back = this.$el.querySelector('.back')
-      const max = this.$el.querySelectorAll('.content').length
+    },
+    watch: {
+      'bubbleData.dinkY': function () {
+        this.metrics = this.getMetrics()
+      },
     },
     methods: {
       getMetrics() {
@@ -51,7 +53,7 @@
 
         return styles.join(';')
       },
-    }
+    },
   }
 </script>
 
