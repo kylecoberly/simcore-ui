@@ -24,28 +24,6 @@ const slideAlphabetStart = {
     componentType: 'SimSlide',
     title: 'None',
     subtitle: 'bot',
-    items: [
-      { id: 1, name: 'Brian' },
-      { id: 2, name: 'Dustin' },
-      { id: 3, name: 'Jase' },
-      { id: 4, name: 'Chad' },
-      { id: 5, name: 'Rick' },
-      { id: 6, name: 'Kaiti' },
-      { id: 7, name: 'Eric' },
-      { id: 8, name: 'Gary' },
-      { id: 9, name: 'Mike' },
-      { id: 10, name: 'Yaz' },
-      { id: 11, name: 'Brian Deux' },
-      { id: 12, name: 'Dustin Deux' },
-      { id: 13, name: 'Jase Deux' },
-      { id: 14, name: 'Chad Deux' },
-      { id: 15, name: 'Rick Deux' },
-      { id: 16, name: 'Kaiti Deux' },
-      { id: 17, name: 'Eric Deux' },
-      { id: 18, name: 'Gary Deus' },
-      { id: 19, name: 'Mike Deux' },
-      { id: 20, name: 'Yaz Deux' },
-    ],
   },
   actions: {
     setItems(items = []) {
@@ -66,14 +44,14 @@ const slideDeck = {
       title: 'Hey!',
       content: 'World',
     },
-    {
-      id: 3,
-      step: 3,
-      componentType: 'SimSlide',
-      title: 'Hey!',
-      subtitle: 'Check this out',
-      content: 'World',
-    },
+    // {
+    //   id: 3,
+    //   step: 3,
+    //   componentType: 'SimSlide',
+    //   title: 'Hey!',
+    //   subtitle: 'Check this out',
+    //   content: 'World',
+    // },
   ],
 }
 
@@ -90,18 +68,36 @@ const store = new Vuex.Store({
       day_names: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       weekend_days: [0, 6],
     },
-    bubble_data: {},
-    previous_bubble_data: {
+    calendar_display_mode: 'month',
+    bubble_meta_data: {},
+    previous_bubble_meta_data: {
       x: 3,
       orientation: 'left',
     },
     bubble_is_open: false,
     active_date: moment().format(dateFormatRaw),
     current_user_data: {
-      events: {},
+      events: {
+        '2017-12-12': [
+          {
+            start: 10,
+            duration: 4.5,
+          },
+          {
+            start: 15,
+            duration: 1.5,
+          },
+        ],
+        '2017-12-13': [
+          {
+            start: 9.5,
+            duration: 3,
+          },
+        ],
+      },
       availability: {
         last_updated: {},
-        '2017-12-04': [
+        '2017-12-11': [
           {
             start: 8,
             duration: 3.5,
@@ -111,10 +107,48 @@ const store = new Vuex.Store({
             duration: 2.5,
           },
         ],
-        '2017-12-07': [
+        '2017-12-13': [
           {
             start: 8.5,
             duration: 3.5,
+          },
+        ],
+      },
+      all_availability: {
+        '2017-12-11': [
+          {
+            start: 2,
+            duration: 10.5,
+            user_ids: [1, 2, 4, 6, 7, 9, 10, 14, 16],
+          },
+          {
+            start: 15,
+            duration: 3.5,
+            user_ids: [5, 13, 18, 20, 21, 23],
+          },
+        ],
+        '2017-12-12': [
+          {
+            start: 8,
+            duration: 3.5,
+            user_ids: [1, 2, 4, 6, 7, 9, 10, 14, 16],
+          },
+          {
+            start: 14,
+            duration: 2.5,
+            user_ids: [3, 4, 5, 7, 8, 11],
+          },
+        ],
+        '2017-12-13': [
+          {
+            start: 8.5,
+            duration: 3.5,
+            user_ids: [5, 13, 18, 20, 21, 23],
+          },
+          {
+            start: 13,
+            duration: 4,
+            user_ids: [6, 12, 17, 21, 22, 25],
           },
         ],
       },
@@ -141,9 +175,58 @@ const store = new Vuex.Store({
             end: 24,
           },
         ],
+        '2017-12-13': [
+          {
+            percent: 0,
+            start: 0,
+            end: 6,
+          },
+          {
+            percent: 100,
+            start: 6,
+            end: 12,
+          },
+          {
+            percent: 50,
+            start: 12,
+            end: 18,
+          },
+          {
+            percent: 0,
+            start: 18,
+            end: 24,
+          },
+        ],
       },
     },
     slideDeck,
+    users: [
+      { id: 1, firstname: 'Chevy', lastname: 'Knee' },
+      { id: 2, firstname: 'Penny', lastname: 'Chumley' },
+      { id: 3, firstname: 'Lonee', lastname: 'Banasevich' },
+      { id: 4, firstname: 'Phylys', lastname: 'Hewins' },
+      { id: 5, firstname: 'Prescott', lastname: 'Clipston' },
+      { id: 6, firstname: 'Rab', lastname: 'Le Pine' },
+      { id: 7, firstname: 'Sansone', lastname: 'Peetermann' },
+      { id: 8, firstname: 'Thedrick', lastname: 'Glassford' },
+      { id: 9, firstname: 'Eadie', lastname: 'Ravel' },
+      { id: 10, firstname: 'Allistir', lastname: 'Stride' },
+      { id: 11, firstname: 'Brit', lastname: 'Boyen' },
+      { id: 12, firstname: 'Alexio', lastname: 'O\'Cleary' },
+      { id: 13, firstname: 'Eydie', lastname: 'Campany' },
+      { id: 14, firstname: 'Alfie', lastname: 'Athy' },
+      { id: 15, firstname: 'Red', lastname: 'Gwalter' },
+      { id: 16, firstname: 'Linzy', lastname: 'Josifovitz' },
+      { id: 17, firstname: 'Benjie', lastname: 'Niven' },
+      { id: 18, firstname: 'Amata', lastname: 'Dilland' },
+      { id: 19, firstname: 'Timmy', lastname: 'Lorrain' },
+      { id: 20, firstname: 'Latrina', lastname: 'Cosley' },
+      { id: 21, firstname: 'Issi', lastname: 'Udey' },
+      { id: 22, firstname: 'Alden', lastname: 'Rooze' },
+      { id: 23, firstname: 'Felecia', lastname: 'Dahlman' },
+      { id: 24, firstname: 'Charleen', lastname: 'Cruikshank' },
+      { id: 25, firstname: 'Sal', lastname: 'Mynett' },
+    ],
   },
   mutations: {
     // TODO: Set these in a separate file. - Chad/Jase
@@ -159,25 +242,31 @@ const store = new Vuex.Store({
     prevSlideIndex(state) {
       state.slideDeck.currentSlideIndex -= 1
     },
-    updateBubbleState(state, payload) {
+    bubbleShouldBeOpen(state, payload) {
       state.bubble_is_open = payload
     },
-    updateBubbleData(state, payload) {
-      if (payload.x > state.previous_bubble_data.x && payload.x > 2) {
+    updateBubbleMetaData(state, payload) {
+      if (payload.x > state.previous_bubble_meta_data.x && payload.x > 2) {
         payload.orientation = 'right'
-      } else if (payload.x < state.previous_bubble_data.x && payload.x < 6) {
+      } else if (payload.x < state.previous_bubble_meta_data.x && payload.x < 6) {
         payload.orientation = 'left'
       } else {
-        payload.orientation = state.previous_bubble_data.orientation
+        payload.orientation = state.previous_bubble_meta_data.orientation
       }
-      state.bubble_data = payload
-      state.previous_bubble_data = {
+      state.bubble_meta_data = payload
+      state.previous_bubble_meta_data = {
         x: payload.x,
         orientation: payload.orientation,
       }
     },
     setActiveDate(state, date) {
       state.active_date = date
+    },
+    setCalendarDisplayModeToWeek(state) {
+      state.calendar_display_mode = 'week'
+    },
+    setCalendarDisplayModeToMonth(state) {
+      state.calendar_display_mode = 'month'
     },
     setAvailabilityBlocksForDay(state, availability) {
       const UserAvailability = state.current_user_data.availability

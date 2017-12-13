@@ -7,18 +7,18 @@
 <script>
 export default {
   name: 'sim-bubble-trigger',
-  props: ['data', 'slideContent'],
+  props: ['bubble-meta-data', 'slideContent'],
   methods: {
     setBubbleData(event) {
       const bubblePosition = JSON.parse(JSON.stringify(event.target.getBoundingClientRect()))
-      bubblePosition.dinkY = event.clientY
-      bubblePosition.dinkX = event.clientX
+      bubblePosition.dinkY = bubblePosition.top + bubblePosition.height / 2
+      bubblePosition.dinkX = bubblePosition.left + bubblePosition.width / 2
 
-      const bubbleData = Object.assign(bubblePosition, this.data)
+      const bubbleMetaData = Object.assign(bubblePosition, this.bubbleMetaData)
 
       this.$store.commit('setCurrentSlideContent', this.slideContent)
-      this.$store.commit('updateBubbleData', bubbleData)
-      this.$store.commit('updateBubbleState', true)
+      this.$store.commit('updateBubbleMetaData', bubbleMetaData)
+      this.$store.commit('bubbleShouldBeOpen', true)
     },
   },
 }

@@ -10,30 +10,121 @@
   font-family: sans-serif;
   font-size: calc(.5em + .5vmin);
   color: var(--fg);
+
   &--header {
-    padding: 0 0 1em 0;
+    padding: 0 0 1em;
     display: flex;
     align-items: center;
+
     > * {
       flex: 1;
     }
+
+    &--title {
+      font-weight: 300;
+      font-size: 2em;
+    }
+
+    &--modes {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .9em;
+    }
+
+    &--context {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .9em;
+    }
+
+    &--controls {
+      justify-content: flex-end;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      margin: -.5em 0;
+      line-height: 1;
+      text-transform: uppercase;
+      border-radius: .3em;
+
+      > * {
+        padding: .5em 1em;
+        border-radius: .3em;
+        cursor: pointer;
+        transition: 300ms ease-in-out;
+
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
   }
+
   &--body {
     position: relative;
+    display: flex;
+    flex-flow: row-reverse;
   }
+
+  &--main {
+    flex: 1;
+    display: flex;
+  }
+
+  &--aside {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    width: 20em;
+
+    &--header {
+      padding: 1em 0;
+    }
+
+    &--body {
+      flex: 1;
+      padding: 1em;
+      box-shadow: var(--lines);
+      background: linear-gradient(135deg, var(--dark-grey), var(--medium-grey));
+      color: var(--lighter);
+    }
+  }
+
+  &--filters {
+    .filter-molecule {
+      + .filter-molecule {
+        margin-top: 1.5em;
+        padding-top: 1.5em;
+      }
+    }
+  }
+
+  &--day-control-panel {
+
+  }
+
   &--grid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
     &--header {
       display: flex;
+
       > * {
         flex: 1;
         text-align: center;
       }
+
       &--day {
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 1em 0;
       }
+
       &--date {
         width: 2em;
         height: 2em;
@@ -42,6 +133,7 @@
         justify-content: center;
         border-radius: 1em;
         margin: -.5em 0;
+
         &.is-today {
           margin-left: .5em;
           background: var(--medium-grey);
@@ -49,10 +141,13 @@
         }
       }
     }
+
     &--body {
-      position: relative;
+      flex: 1;
       display: flex;
+      position: relative;
     }
+
     &--timelines {
       position: absolute;
       pointer-events: none;
@@ -64,6 +159,7 @@
       display: flex;
       flex-direction: column;
       opacity: .5;
+
       li {
         flex: 1;
         position: relative;
@@ -71,42 +167,25 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        // text-align: center;
-        // div {
-        //   width: 2.5em;
-        //   margin-left: -2.5em;
-        //   display: block;
-        // }
-        // &::after {
-        //   content: '';
-        //   position: absolute;
-        //   top: 50%;
-        //   left: 0;
-        //   height: 1px;
-        //   width: 100%;
-        //   transform: translateY(-50%);
-        // }
-        // &.is-noon::after {
-        //   height: 2px;
-        // }
       }
     }
+
     &--days {
       flex: 1;
       display: flex;
       flex-flow: row wrap;
     }
+
     &--day {
       position: relative;
       flex: 0 0 14.285%;
-      // overflow: hidden;
-      padding: 0;
-      height: 6vmax;
-      min-height: 6em;
+      // height: 7vmax;
+      min-height: 7em;
       padding: .5em;
       cursor: pointer;
       display: flex;
       flex-direction: column;
+
       &--timelines {
         position: absolute;
         top: 0;
@@ -116,40 +195,39 @@
         display: flex;
         flex-direction: column;
         opacity: .25;
+
         li {
           flex: 1;
           position: relative;
           padding: 0;
           box-shadow: 0 -1px 0 0;
+
           &:last-of-type {
             pointer-events: none;
             flex: none;
             height: 1px;
             margin-top: -1px;
           }
+
           &.is-noon {
             box-shadow: 0 -1px 0 0, 0 1px 0 0 inset;
           }
         }
       }
-      &:hover {
-        // z-index: 1;
-      }
     }
+
     &--before {
       position: relative;
       flex: 0 0 calc(14.285% * var(--offset, 0)); // 0 = sunday, 6 = saturday
     }
+
     &--after {
       position: relative;
       flex: 1;
     }
+
     &--date {
-      position: absolute;
-      top: .5em;
-      left: .5em;
       pointer-events: none;
-      display: inline-block;
       width: 1.5em;
       height: 1.5em;
       display: flex;
@@ -158,93 +236,72 @@
       border-radius: .2em;
     }
   }
-  &--title {
-    font-weight: 300;
-    font-size: 2em;
-  }
-  &--modes {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: .9em;
-  }
-  &--context {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: .9em;
-  }
-  &--controls {
-    justify-content: flex-end;
-    user-select: none;
-    display: flex;
-    align-items: center;
-    margin: -.5em 0;
-    line-height: 1;
-    text-transform: uppercase;
-    border-radius: .3em;
-    > * {
-      padding: .5em 1em;
-      border-radius: .3em;
-      cursor: pointer;
-      transition: 300ms ease-in-out;
-      &:hover {
-        transform: scale(1.2);
-      }
-    }
-  }
+
   .sim-calendar-button {
     padding: .5em 1em;
     margin: 0 .5em;
     border-radius: .3em;
     cursor: pointer;
     transition: 300ms ease-in-out;
+
     &:hover {
       transform: scale(1.2);
     }
   }
 
   // borders & colors
-  &--controls {
+  &--header--controls {
     background: var(--fg);
+
     > * {
       color: var(--action);
+
       &:hover {
         color: #fff;
         background: var(--action);
       }
     }
   }
+
   .sim-calendar-button {
     background: var(--light);
+
     &.active {
       background: var(--action);
       color: var(--lighter);
     }
   }
+
   &--grid {
     &--day {
       box-shadow: var(--lines);
+
       &--timelines li {
         &.is-nighttime {
           background: rgba(0,0,0, .2);
         }
+
         &::after {
           background: rgba(0,0,0,.2);
         }
+
         &.is-noon::after {
           background: rgba(0,0,0,.5);
         }
       }
     }
-    &--before, &--after {
+
+    &--before,
+    &--after {
       box-shadow: var(--lines);
       background: var(--picker-bg);
       background-image: repeating-linear-gradient(-45deg, transparent 0px, transparent 5px, var(--light) 5px, var(--light) 7px);
     }
+
     &--date {
       color: var(--medium-grey);
     }
+
     &--header {
       color: var(--medium-grey);
     }
@@ -253,29 +310,40 @@
   // calendar day states
   &--grid--days {
     user-select: none;
-    .is-before-today {
-      .sim-calendar--grid--date {
-        color: #ddd;
-      }
-    }
-    .is-weekend {
-      background-color: #e9f9fc;
-      &:hover {
-        background-color: #e7f3e7;
-      }
-    }
+
     .is-weekday {
       background-color: #fff;
+
       &:hover {
         background-color: #fcf9e9;
       }
     }
+
     .is-today {
       .sim-calendar--grid--date {
         background: var(--medium-grey);
         color: #fff;
       }
     }
+
+    .is-before-today {
+      // background-image: repeating-linear-gradient(-45deg, transparent 0px, transparent 5px, var(--lighter) 5px, var(--lighter) 7px);
+      background-color: var(--lighter);
+      filter: grayscale(.7);
+
+      .sim-calendar--grid--date {
+        color: #ddd;
+      }
+    }
+
+    .is-weekend {
+      background-color: var(--light); //#e9f9fc;
+
+      &:hover {
+        background-color: #f3f0e1; //#e7f3e7;
+      }
+    }
+
     .is-selected {
       z-index: 2;
       box-shadow: 0 0 0 3px var(--action), 0 0 1em -.3em;
@@ -284,24 +352,24 @@
   }
 
   &.is-week-view {
-    .sim-calendar--body {
-      margin-left: 2.5em;
-    }
     .sim-calendar--grid {
       &--before,
       &--after {
         display: none;
       }
+
+      &--body {
+        margin-left: 2.5em;
+      }
+
       &--days {
         flex-wrap: nowrap;
       }
+
       &--day {
         flex: 1;
         height: 48em;
         max-height: 70vh;
-        &.is-weekend:hover {
-          background-color: #e9fcf9;
-        }
       }
     }
   }
