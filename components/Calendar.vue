@@ -206,9 +206,6 @@
       isCoordinatorContext() {
         return (this.contextSwitch === true)
       },
-      user_data() {
-        return this.isInstructorContext ? this.current_user_availability : this.current_user_events
-      },
       contextLabel() {
         return this.isInstructorContext ? 'instructor' : 'coordinator'
       },

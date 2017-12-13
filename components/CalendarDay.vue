@@ -65,12 +65,10 @@
         blocks: this.$store.state.availabilities.blocks[this.date],
         availability: this.$store.state.availabilities.blocks,
         availabilityDensityBlocks: this.$store.state.availabilities.density_blocks[this.date],
-        slideContent: {
-          componentType: 'SimSlide',
-          title: 'Date',
-          subtitle: 'bot',
-          items: [],
-        },
+        slideContent: { items: [
+            { id: 1, name: 'Brian' },
+            { id: 2, name: 'Dustin' },
+        ] },
       }
     },
     mounted() {

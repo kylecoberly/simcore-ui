@@ -16,7 +16,11 @@ export default {
 
       const bubbleData = Object.assign(bubblePosition, this.data)
 
-      this.$store.commit('setCurrentSlideContent', this.slideContent)
+      this.$store.commit('setContentForTheSlideAtIndex', {
+        index: 0,
+        content: this.slideContent,
+      })
+
       this.$store.commit('updateBubbleData', bubbleData)
       this.$store.commit('updateBubbleState', true)
     },

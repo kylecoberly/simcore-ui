@@ -5,7 +5,6 @@
         v-for="(slide, index) in slides"
         :key="index"
         :data="slide"
-        :content="$store.state.slideDeck.currentSlideContent"
         :is="slide.componentType" />
     </section>
     <footer v-if="showNavigationControls">
@@ -17,18 +16,22 @@
 
 <script>
   import SimSlide from './Slide'
+  import SimSlideWithAList from './SlideWithAList'
+  import SimSlideWithHTML from './SlideWithHTML'
 
   export default {
     name: 'sim-slide-deck',
     components: {
       SimSlide,
+      SimSlideWithAList,
+      SimSlideWithHTML,
     },
     props: ['slides', 'shouldHideNavigationControls'],
     computed: {
       showNavigationControls() {
         let willShowNavigationControls = true
 
-        if(this.shouldHideNavigationControls || this.slides.length <= 1) {
+        if (this.shouldHideNavigationControls || this.slides.length <= 1) {
           willShowNavigationControls = false
         }
 

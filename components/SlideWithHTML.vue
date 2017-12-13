@@ -10,9 +10,7 @@
       {{ data.intro }}
     </div>
 
-    <div v-if="data.content">
-      {{ data.content }}
-    </div>
+    <div v-if="data.content" v-html="data.content"></div>
   </div>
 </template>
 
