@@ -18,10 +18,10 @@
     },
     computed: {
       shouldBeOpen() {
-        return this.$store.state.bubble_is_open
+        return this.$store.state.bubble.is_open
       },
       bubbleData() {
-        return this.$store.state.bubble_data
+        return this.$store.state.bubble.data
       },
     },
     mounted() {

@@ -25,7 +25,10 @@
   },
   "files": [
     "components",
-    "styles"
+    "styles",
+    "external",
+    "modules",
+    "models"
   ],
   "devDependencies": {
     "autoprefixer": "^7.2.1",

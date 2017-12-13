@@ -65,12 +65,12 @@
         isMoving: false,
         isStretching: false,
         orientation: 'x',
-        blocks: this.$store.state.current_user_data.availability[this.$store.state.active_date] || [],
+        blocks: this.$store.state.availabilities.blocks[this.$store.state.activeDate.date] || [],
       }
     },
     watch: {
       date(newDate) {
-        this.blocks = this.$store.state.current_user_data.availability[newDate] || []
+        this.blocks = this.$store.state.availabilities.blocks[newDate] || []
       },
     },
     computed: {
@@ -94,7 +94,7 @@
         return `${output} ${(this.totalHours > 0 && this.totalHours <= 1 ? 'hour' : 'hours')}`
       },
       date() {
-        return this.$store.state.active_date
+        return this.$store.state.date
       },
     },
     methods: {

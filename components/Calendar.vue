@@ -27,7 +27,7 @@
 
       <div class="sim-calendar--grid">
         <div class="sim-calendar--grid--header">
-          <div v-for="(day, index) in $store.state.calendar_settings.day_names" class="sim-calendar--grid--header--day">
+          <div v-for="(day, index) in $store.state.calendar.settings.day_names" class="sim-calendar--grid--header--day">
             <span class="sim-calendar--grid--header--dayname">
               {{ day }}
             </span>
@@ -83,7 +83,7 @@
       </div>
 
       <div class="day-control-panel">
-        <SimTimePicker v-if="isInstructorContext && isMonthView" :date="$store.state.active_date"
+        <SimTimePicker v-if="isInstructorContext && isMonthView" :date="$store.state.activeDate.date"
                        :should-show-date="true"
                        @calendar-day-selected="setDate"
         >
@@ -97,6 +97,8 @@
 
 <script>
   import moment from 'moment'
+
+  import availabilities from '../external/availabilities'
 
   import CalendarDay from './CalendarDay'
   import SimBubble from './Bubble'
@@ -125,7 +127,7 @@
     },
     computed: {
       componentClasses() {
-       const classes = [`is-${this.contextLabel}-context`]
+        const classes = [`is-${this.contextLabel}-context`]
 
         if (this.isCurrentMonth) {
           classes.push('is-current-month')
@@ -142,7 +144,7 @@
         return classes.join(' ')
       },
       activeMoment() {
-        return moment(this.$store.state.active_date)
+        return moment(this.$store.state.activeDate.date)
       },
       activeMonth() {
         return this.activeMoment.month()
@@ -179,20 +181,20 @@
         return this.setDays(start, limit)
       },
       displayMonthName() {
-        return this.activeMoment.format(this.$store.state.calendar_settings.date_format.month_name)
+        return this.activeMoment.format(this.$store.state.calendar.settings.date_format.month_name)
       },
       displayYear() {
-        return this.activeMoment.format(this.$store.state.calendar_settings.date_format.year)
+        return this.activeMoment.format(this.$store.state.calendar.settings.date_format.year)
       },
       displayDate() {
         let display = `${this.displayMonthName} ${this.displayYear}`
         if (this.isWeekView) {
           display = `
             ${moment(this.currentWeekDays[0])
-            .format(this.$store.state.calendar_settings.date_format.month_short_day_ordinal)}
+            .format(this.$store.state.calendar.settings.date_format.month_short_day_ordinal)}
             –
             ${moment(this.currentWeekDays[6])
-            .format(this.$store.state.calendar_settings.date_format.month_short_day_ordinal)}
+            .format(this.$store.state.calendar.settings.date_format.month_short_day_ordinal)}
           `
         }
 
@@ -211,37 +213,40 @@
         return this.isInstructorContext ? 'instructor' : 'coordinator'
       },
       shouldBubbleBeOpen() {
-        return this.$store.state.bubble_is_open
+        return this.$store.state.bubble.is_open
       },
+    },
+    created() {
+      this.$store.commit('setAllAvailabilityBlocks', availabilities.availabilities())
     },
     mounted() {
       this.setTheActiveDateToToday()
     },
     methods: {
       setDays(start, limit) {
-        const dateStrings = [start.format(this.$store.state.calendar_settings.date_format.raw)]
+        const dateStrings = [start.format(this.$store.state.calendar.settings.date_format.raw)]
 
         for (let i = 1; i < limit; i++) {
           dateStrings.push(start.add(1, 'day')
-            .format(this.$store.state.calendar_settings.date_format.raw))
+            .format(this.$store.state.calendar.settings.date_format.raw))
         }
 
         return dateStrings
       },
       loadNextDays() {
         const nextDays = moment(this.activeMoment).add(1, this.displayMode)
-          .format(this.$store.state.calendar_settings.date_format.raw)
+          .format(this.$store.state.calendar.settings.date_format.raw)
 
         this.$store.commit('setActiveDate', nextDays)
       },
       loadPrevDays() {
         const previousDays = moment(this.activeMoment).subtract(1, this.displayMode)
-          .format(this.$store.state.calendar_settings.date_format.raw)
+          .format(this.$store.state.calendar.settings.date_format.raw)
 
         this.$store.commit('setActiveDate', previousDays)
       },
       setTheActiveDateToToday() {
-        this.$store.commit('setActiveDate', moment().format(this.$store.state.calendar_settings.date_format.raw))
+        this.$store.commit('setActiveDate', moment().format(this.$store.state.calendar.settings.date_format.raw))
       },
       displayHour(hour) {
         hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour) // (hour % 2 === 0 ? hour : ''))

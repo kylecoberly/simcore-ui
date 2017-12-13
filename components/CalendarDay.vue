@@ -48,7 +48,7 @@
     </div>
   </div>
 </template>
-
+ 
 <script>
   import moment from 'moment'
 
@@ -62,35 +62,14 @@
     data() {
       return {
         dateFormat: 'YYYY-MM-DD',
-        blocks: this.$store.state.current_user_data.availability[this.date],
-        availability: this.$store.state.current_user_data.availability,
-        availabilityDensityBlocks: this.$store.state.current_user_data.availability_density[this.date],
+        blocks: this.$store.state.availabilities.blocks[this.date],
+        availability: this.$store.state.availabilities.blocks,
+        availabilityDensityBlocks: this.$store.state.availabilities.density_blocks[this.date],
         slideContent: {
           componentType: 'SimSlide',
           title: 'Date',
           subtitle: 'bot',
-          items: [
-            { id: 1, name: 'Brian' },
-            { id: 2, name: 'Dustin' },
-            { id: 3, name: 'Jase' },
-            { id: 4, name: 'Chad' },
-            { id: 5, name: 'Rick' },
-            { id: 6, name: 'Kaiti' },
-            { id: 7, name: 'Eric' },
-            { id: 8, name: 'Gary' },
-            { id: 9, name: 'Mike' },
-            { id: 10, name: 'Yaz' },
-            { id: 11, name: 'Brian Deux' },
-            { id: 12, name: 'Dustin Deux' },
-            { id: 13, name: 'Jase Deux' },
-            { id: 14, name: 'Chad Deux' },
-            { id: 15, name: 'Rick Deux' },
-            { id: 16, name: 'Kaiti Deux' },
-            { id: 17, name: 'Eric Deux' },
-            { id: 18, name: 'Gary Deus' },
-            { id: 19, name: 'Mike Deux' },
-            { id: 20, name: 'Yaz Deux' },
-          ],
+          items: [],
         },
       }
     },
@@ -99,13 +78,13 @@
       // If so, refresh this day's time blocks.
       this.$store.watch(this.$store.getters.getLastUpdated, (date) => {
         if (date === this.date) {
-          this.blocks = this.$store.state.current_user_data.availability[this.date]
+          this.blocks = this.$store.state.availabilities.blocks[this.date]
         }
       })
 
       // When the week/month is updated, refresh this day's blocks.
       this.$store.watch(this.$store.getters.getActiveDate, () => {
-        this.blocks = this.$store.state.current_user_data.availability[this.date]
+        this.blocks = this.$store.state.availabilities.blocks[this.date]
       })
     },
     computed: {
@@ -133,22 +112,22 @@
           classes.push('is-after-today')
         }
 
-        if (this.$store.state.calendar_settings.weekend_days.includes(dayOfWeek)) {
+        if (this.$store.state.calendar.settings.weekend_days.includes(dayOfWeek)) {
           classes.push('is-weekend')
         } else {
           classes.push('is-weekday')
         }
-        if (moment(this.$store.state.active_date).isSame(this.date, 'day')) {
+        if (moment(this.$store.state.activeDate.date).isSame(this.date, 'day')) {
           classes.push(this.selectedClass || 'is-selected')
         }
 
         return classes.join(' ')
       },
       bubbleData() {
-        return this.$store.state.bubble_data
+        return this.$store.state.bubble.data
       },
       shouldBubbleBeOpen() {
-        return this.$store.state.bubble_is_open
+        return this.$store.state.bubble.is_open
       },
       isInstructorContext() {
         return (this.userContext === 'instructor')

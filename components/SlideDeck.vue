@@ -39,7 +39,7 @@
       },
       maxSlides() {
         return this.slides.length - 1
-      }
+      },
     },
     mounted() {
       this.$store.commit('updateCurrentSlideIndex', 0)

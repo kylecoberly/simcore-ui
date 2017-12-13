@@ -25,9 +25,9 @@
       </SimDatalist>
     </template>
 
-    <div v-if="data.content">
-      {{ data.content }}
-    </div>
+    <!--<div v-if="data.content">-->
+      <!--{{ data.content }}-->
+    <!--</div>-->
 
   </div>
 </template>
@@ -70,7 +70,7 @@
     },
     computed: {
       foundItems () {
-          return sortByKey(this.data.items.filter(item => {
+          return sortByKey(this.data.content.items.filter(item => {
               return `${item.name}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
           }), 'name', 'asc')
       },
