@@ -20,15 +20,19 @@
       shouldBeOpen() {
         return this.$store.state.bubble.is_open
       },
-      bubbleData() {
+      bubbleMetaData() {
         return this.$store.state.bubble.data
       },
     },
     mounted() {
       this.metrics = this.getMetrics()
+      addEventListener('keyup', this.dismissWithEscapeKey)
+    },
+    destroyed() {
+      removeEventListener('keyup', this.dismissWithEscapeKey)
     },
     watch: {
-      'bubbleData.dinkY': function () {
+      'bubbleMetaData.dinkY': function () {
         this.metrics = this.getMetrics()
       },
     },
@@ -36,20 +40,25 @@
       getMetrics() {
         return this.$el.getBoundingClientRect()
       },
+      dismissWithEscapeKey(event) {
+        if (event.which === 27) {
+          this.dismiss()
+        }
+      },
       dismiss() {
-        this.$store.commit('updateBubbleState', false)
+        this.$store.commit('bubbleShouldBeOpen', false)
       },
       setClasses() {
         const classes = []
-        classes.push(`sim-bubble--${this.bubbleData.orientation}`)
+        classes.push(`sim-bubble--${this.bubbleMetaData.orientation}`)
 
         return classes.join(' ')
       },
       setStyles() {
         const styles = []
-        styles.push(`--x: ${parseInt(this.bubbleData.x)}`)
-        styles.push(`--y: ${parseInt(this.bubbleData.y)}`)
-        styles.push(`--dink-y: ${parseInt(this.bubbleData.dinkY - this.metrics.top)}`)
+        styles.push(`--x: ${parseInt(this.bubbleMetaData.x)}`)
+        styles.push(`--y: ${parseInt(this.bubbleMetaData.y)}`)
+        styles.push(`--dink-y: ${parseInt(this.bubbleMetaData.dinkY - this.metrics.top)}`)
 
         return styles.join(';')
       },

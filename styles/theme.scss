@@ -15,10 +15,12 @@
   --orange: #ff7042;
   --yellow: #ffc929;
   --green: #9ccc66;
+  --aqua: #00c1d9;
   --blue: #4A93B9;
   --purple: #ab47bd;
   --accent: var(--medium-grey);
   --action: var(--blue);
+  --focus: var(--aqua);
   --success: var(--green);
   --danger: var(--red);
   --warnign: var(--orange);
@@ -26,12 +28,14 @@
   --royal: var(--purple);
 
   --shadow: rgba(#000, .8);
+  --dusk: rgba(#000, .3);
   --shade: rgba(#000, .05);
   --dust: rgba(#777, .05);
   --edge: rgba(#777, .15);
   --line: rgba(#777, .5);
   --mist: rgba(#fff, .2);
   --fog: rgba(#fff, .5);
+  --frost: rgba(#fff, .8);
 
   --default-ms: 350ms;
 
@@ -43,8 +47,8 @@
   --icon-minus-circle: '\f056';
 
   // alternate spellings
-  --light-gray: var(--light-grey);
   --dark-gray: var(--dark-grey);
   --medium-gray: var(--medium-grey);
+  --light-gray: var(--light-grey);
   --lighter-gray: var(--lighter-grey);
 }

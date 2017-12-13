@@ -1,18 +1,18 @@
 <template lang="html">
-  <div class="sim-timepicker">
+  <div class="sim-timepicker" :class="`sim-timepicker--${orientation}`">
 
     <div v-if="shouldShowDate" class="sim-timepicker--controls">
       <div class="sim-timepicker--prev-day" @click="prevDay">
-        <SimIconText icon="fa-arrow-left"></SimIconText>
+        <SimIconText icon="fa-arrow-circle-left fa-lg"></SimIconText>
       </div>
       <div class="sim-timepicker--display-date">
-        <span>{{ displayDate }} &mdash; <b>{{ displayDateTotalHours }}</b></span>
+        <span>{{ displayDate }} <br /><b>{{ displayDateTotalHours }}</b></span>
         <span v-if="totalHours > 0" class="sim-timepicker--remove-blocks" @click="removeAllTimeBlocks">
           <SimIconText icon="fa-times"></SimIconText>
         </span>
       </div>
       <div class="sim-timepicker--next-day" @click="nextDay">
-        <SimIconText icon="fa-arrow-right"></SimIconText>
+        <SimIconText icon="fa-arrow-circle-right fa-lg"></SimIconText>
       </div>
     </div>
 
@@ -59,6 +59,10 @@
         type: Boolean,
         default: false,
       },
+      orientation: {
+        type: String,
+        default: 'x',
+      }
     },
     data() {
       return {
@@ -79,7 +83,7 @@
       },
       displayDate() {
         return moment(this.date)
-          .format('dddd, MMMM Do')
+          .format('dddd, MMM D')
       },
       totalHours() {
         return this.blocks

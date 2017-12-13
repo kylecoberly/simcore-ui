@@ -1,24 +1,35 @@
 <template lang="html">
   <div :class="setClass()" :style="setStyle(block)">
+
     <template v-if="showControls">
+
       <div class="sim-timeblock--remover" @click="removeTimeBlock">
         <SimIconText icon="fa-times-circle fa-lg"></SimIconText>
       </div>
-      <div v-if="orientationIsX" class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--left"
-           @mousedown="startStretchLeft"></div>
-      <div v-if="orientationIsY" class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--up"
-           @mousedown="startStretchUp"></div>
-      <div v-if="orientationIsX" class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--right"
-           @mousedown="startStretchRight"></div>
-      <div v-if="orientationIsY" class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--down"
-           @mousedown="startStretchDown"></div>
+
+      <template v-if="orientationIsX">
+        <div class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--left"
+          @mousedown="startStretchLeft"></div>
+        <div class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--right"
+          @mousedown="startStretchRight"></div>
+      </template>
+
+      <template v-if="orientationIsY">
+        <div class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--up"
+          @mousedown="startStretchUp"></div>
+        <div class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--down"
+          @mousedown="startStretchDown"></div>
+      </template>
+
       <div class="sim-timeblock--mover" @mousedown="startMove"></div>
+
       <div class="sim-timeblock--info">
-        <!-- {{date}} -->
         <div class="sim-timeblock--info--hours">{{ displayBlockHours() }}</div>
         <div class="sim-timeblock--info--time">{{ displayBlockTime() }}</div>
       </div>
+
     </template>
+
   </div>
 </template>
 

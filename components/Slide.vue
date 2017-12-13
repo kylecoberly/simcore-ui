@@ -1,25 +1,114 @@
 <template lang="html">
   <div class="sim-slide">
 
-    <header v-if="data.title || data.subtitle" class="sim-slide--header">
-      <h2 v-if="data.title" class="sim-slide--title">{{ data.title }}</h2>
-      <div v-if="data.subtitle" class="sim-slide--subtitle">{{ data.subtitle }}</div>
+    <header v-if="content.title || content.subtitle" class="sim-slide--header">
+      <h2 v-if="content.title" class="sim-slide--title">{{ content.title }}</h2>
+      <h4 v-if="content.subtitle" class="sim-slide--subtitle">{{ content.subtitle }}</h4>
     </header>
 
-    <div v-if="data.intro">
-      {{ data.intro }}
+    <div v-if="content.intro">
+      {{ content.intro }}
     </div>
 
-    <div v-if="data.content">
-      {{ data.content }}
+    <!-- {{ content }}
+    {{ content.title }} -->
+
+    <template v-if="users">
+      <SimDatalist :items="foundUsers" :animate="true">
+        <div slot="static-before" key="before">
+          <input type="search" v-model="itemSearch" placeholder="find..." />
+        </div>
+        <li slot="item" slot-scope="props" :key="props.item.id">
+          <sim-selection :item="props.item" :disabled="props.item.disabled" :selected-items="selectedItems">
+            {{ props.item.firstname }} {{ props.item.lastname }}
+          </sim-selection>
+        </li>
+      </SimDatalist>
+    </template>
+
+    <div v-if="content.content">
+      {{ content.content }}
     </div>
   </div>
 </template>
 
 <script>
+  import SimDatalist from './Datalist'
+  import SimSelection from './Selection'
+
+  // @FIXME should be using common.unique(...) | jase
+  const unique = function(array) {
+    if(array && array.length) {
+      const t = {}
+      return array.filter((item) => {
+        if (Object.prototype.hasOwnProperty.call(t, item)) {
+          return false
+        }
+        return (t[item] = true)
+      })
+    }
+    return []
+  }
+
+  // @FIXME should be using common.sortByKey(...) | jase
+  const sortByKey = function(list, key, direction) {
+    if (list && list.length) {
+      let newList = list.sort((a, b) => {
+        if (a[key] < b[key]) {
+          return -1
+        } else if (a[key] > b[key]) {
+          return 1
+        }
+        return 0
+      })
+      if (direction === 'desc') {
+        return newList.reverse()
+      }
+      return newList
+    }
+    return []
+  }
+
+  // @FIXME should be using common.getListFromIds(...) | jase
+  const getListFromIds = function(array, source, sortKey) {
+    if (array && array.length) {
+      let list = source.filter((item) => unique(array).find((id) => item.id === id))
+      if (sortKey){
+        return sortByKey(list, sortKey)
+      }
+      return list
+    }
+    return []
+  }
+
   export default {
     name: 'sim-slide',
-    props: ['data'],
+    components: {
+    },
+    props: ['content'],
+    data() {
+      return {
+        selectedItems: [],
+        itemSearch: '',
+      }
+    },
+    computed: {
+      slideData() {
+        return this.$store.state.slideDeck.currentSlideContent
+      },
+      users() {
+        return this.slideData.block.user_ids ? getListFromIds(this.slideData.block.user_ids, this.$store.state.users, 'lastname') : null
+      },
+      foundUsers() {
+        return sortByKey(this.users.filter(item => {
+            return `${item.firstname} ${item.lastname}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
+        }), 'lastname', 'asc')
+      },
+    },
+    methods: {
+    },
+      SimSelection,
+      SimDatalist,
   }
 </script>
 

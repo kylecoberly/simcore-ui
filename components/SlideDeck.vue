@@ -5,7 +5,9 @@
         v-for="(slide, index) in slides"
         :key="index"
         :data="slide"
-        :is="slide.componentType" />
+        :content="slideContent"
+        :is="slide.componentType"
+        />
     </section>
     <footer v-if="showNavigationControls">
       <button class="cancel back" @click="previousSlide" :disabled="currentStep == 0">back</button>
@@ -42,6 +44,9 @@
       },
       maxSlides() {
         return this.slides.length - 1
+      },
+      slideContent() {
+        return this.$store.state.slideDeck.currentSlideContent
       },
     },
     mounted() {

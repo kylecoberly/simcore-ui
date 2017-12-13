@@ -1,18 +1,29 @@
 <template lang="html">
-  <div class="sim-calendar--grid--day sim-calendar-day"
+  <div class="sim-calendar-day"
        @mousedown="setActiveDateToToday"
+       @click.meta="toggleCalendarDisplayMode"
        :class="dayClasses"
        >
     <div class="local--day">
 
       <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber }}</div>
+
       <ul v-if="isWeekView" class="sim-calendar--grid--day--timelines">
-        <li v-for="hour in 25" @dblclick="createTimeBlock(hour-1)"
-            :class="setHourClasses(hour-1)"></li>
+        <li v-for="hour in 25" @dblclick="createBlock(hour-1)"
+        :class="setHourClasses(hour-1)"></li>
       </ul>
 
       <template v-if="isInstructorContext">
-        <div class="local--day--time-blocks">
+        <div class="local--day--blocks local--day--event-blocks">
+          <SimTimeBlock v-for="(block, index) in events"
+            :key="index"
+            :block="block"
+            :index="index"
+            :show-controls="false"
+            :orientation="timeBlockOrientation"
+            />
+        </div>
+        <div class="local--day--blocks local--day--time-blocks">
           <SimTimeBlock v-for="(block, index) in blocks"
             :key="index"
             :block="block"
@@ -24,8 +35,30 @@
       </template>
 
       <template v-if="isCoordinatorContext">
+
+        <div v-if="isWeekView" class="local--day--availability-blocks">
+          <SimTimeBlock v-for="(block, index) in allAvailabilityBlocks"
+            :key="index"
+            :block="block"
+            :index="index"
+            :show-controls="false"
+            :orientation="timeBlockOrientation"
+            />
+        </div>
+
         <div class="local--day--event-blocks">
-          <SimTimeBlock v-for="(block, index) in blocks"
+          <SimTimeBlock v-for="(block, index) in events"
+            :key="index"
+            :block="block"
+            :index="index"
+            :show-controls="false"
+            :orientation="timeBlockOrientation"
+            />
+        </div>
+
+        <div class="local--day--time-blocks">
+          <SimTimeBlock v-for="(block, index) in stagedEvents"
+            class="sim-timeblock--pending-event"
             :key="index"
             :block="block"
             :index="index"
@@ -33,14 +66,15 @@
             :orientation="timeBlockOrientation"
             />
         </div>
+
         <div v-if="isMonthView" class="calendar-density-blocks--outer">
           <SimBubbleTrigger v-for="(block, index) in availabilityDensityBlocks"
-            class="calendar-density-block"
+            class="calendar-density-block sim-timeblock sim-timeblock--y"
             :key="index"
             :class="setDensityBlockClasses(block)"
-            :style="`--percent: ${(block.percent / 100)}`"
-            :data="{item: block, dayOfWeek, date, x: dayOfWeek+1}"
-            :slideContent="slideContent"
+            :style="`--start: ${block.start};--duration: ${block.duration}`"
+            :bubble-meta-data="{key: getMetaKey(block), x: dayOfWeek+1}"
+            :slideContent="packageSlideContent(block)"
             />
         </div>
       </template>
@@ -63,8 +97,10 @@
       return {
         dateFormat: 'YYYY-MM-DD',
         blocks: this.$store.state.availabilities.blocks[this.date],
-        availability: this.$store.state.availabilities.blocks,
         availabilityDensityBlocks: this.$store.state.availabilities.density_blocks[this.date],
+        allAvailabilityBlocks: this.$store.state.current_user_data.all_availability[this.date],
+        events: this.$store.state.current_user_data.events[this.date],
+        stagedEvents: [],
         slideContent: { items: [
             { id: 1, name: 'Brian' },
             { id: 2, name: 'Dustin' },
@@ -99,8 +135,7 @@
         return moment(this.date).day()
       },
       dayClasses() {
-        const dayOfWeek = moment(this.date).day()
-        const classes = [`day-${dayOfWeek}`]
+        const classes = [`day-${this.dayOfWeek}`]
 
         if (moment().isSame(this.date, 'day')) {
           classes.push('is-today')
@@ -110,7 +145,7 @@
           classes.push('is-after-today')
         }
 
-        if (this.$store.state.calendar.settings.weekend_days.includes(dayOfWeek)) {
+        if (this.$store.state.calendar_settings.weekend_days.includes(this.dayOfWeek)) {
           classes.push('is-weekend')
         } else {
           classes.push('is-weekday')
@@ -121,7 +156,7 @@
 
         return classes.join(' ')
       },
-      bubbleData() {
+      bubbleMetaData() {
         return this.$store.state.bubble.data
       },
       shouldBubbleBeOpen() {
@@ -134,23 +169,50 @@
         return (this.userContext === 'coordinator')
       },
       timeBlockOrientation() {
-        return (this.isMonthView ? 'x' : 'y')
+        return (this.isMonthView ? 'y' : 'y')
       },
       showTimeBlockControls() {
         return (this.isMonthView ? false : true)
       },
     },
     methods: {
+      getMetaKey(block) {
+        return `${this.date}:${block.start}`
+      },
+      packageSlideContent(block) {
+        return {
+          block,
+          title: this.formateDateForDisplay(this.date),
+          subtitle: this.formatTimesForDisplay(block.start, block.duration)
+        }
+      },
+      formateDateForDisplay(date) {
+        return moment(date).format(this.$store.state.calendar_settings.date_format.display)
+      },
+
+      formatTimesForDisplay(start, duration) {
+        const day = moment().startOf('day')
+        const startTime = day.add(start, 'hours').format('h:mma')
+        const endTime = day.add(duration, 'hours').format('h:mma')
+        return `${startTime.replace(':00', '')} — ${endTime.replace(':00', '')}`
+      },
+
       setActiveDateToToday() {
         this.$store.commit('setActiveDate', this.date)
+      },
+
+      toggleCalendarDisplayMode() {
+        if (this.isMonthView) {
+          this.$store.commit('setCalendarDisplayModeToWeek')
+        } else {
+          this.$store.commit('setCalendarDisplayModeToMonth')
+        }
       },
 
       setDensityBlockClasses(block) {
         const classes = []
 
-
-        if (this.shouldBubbleBeOpen && this.bubbleData.item === block) {
-          console.log(this.bubbleData.date)
+        if (this.shouldBubbleBeOpen && this.bubbleMetaData.key === `${this.date}:${block.start}`) {
           classes.push('active')
         }
 
@@ -165,12 +227,28 @@
         return classes.join(' ')
       },
 
+      createBlock(hour) {
+        if (this.isInstructorContext) {
+          this.createTimeBlock(hour)
+        } else {
+          this.createEventBlock(hour)
+        }
+      },
+
       createTimeBlock(hour) {
-        const blocks = this.availability[this.date] || []
+        const blocks = this.blocks || []
         blocks.push({ start: hour, duration: 1 })
         blocks.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
 
         this.$store.commit('setAvailabilityBlocksForDay', { date: this.date, blocks })
+      },
+
+      createEventBlock(hour) {
+        const blocks = this.stagedEvents || []
+        blocks.push({ start: hour, duration: 1 })
+        blocks.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
+
+        // this.$store.commit('setAvailabilityBlocksForDay', { date: this.date, blocks })
       },
     },
   }

@@ -2,15 +2,15 @@
   <div class="sim-calendar" :class="componentClasses">
 
     <div class="sim-calendar--header">
-      <div class="sim-calendar--title">{{ displayDate }}</div>
-      <div class="sim-calendar--context">
+      <div class="sim-calendar--header--title">{{ displayDate }}</div>
+      <div class="sim-calendar--header--context">
         <SimSwitch v-model="contextSwitch" left-label="Instructor" right-label="Coordinator"/>
       </div>
-      <div class="sim-calendar--modes">
-        <span class="sim-calendar-button" @click="setDisplayMode('month')" :class="{active: isMonthView}">Month</span>
-        <span class="sim-calendar-button" @click="setDisplayMode('week')" :class="{active: isWeekView}">Week</span>
+      <div class="sim-calendar--header--modes">
+        <span class="sim-calendar-button" @click="$store.commit('setCalendarDisplayModeToMonth')" :class="{active: isMonthView}">Month</span>
+        <span class="sim-calendar-button" @click="$store.commit('setCalendarDisplayModeToWeek')" :class="{active: isWeekView}">Week</span>
       </div>
-      <div class="sim-calendar--controls">
+      <div class="sim-calendar--header--controls">
         <span @click="loadPrevDays">
           <SimIconText icon="fa-arrow-left fa-fw"></SimIconText>
         </span>
@@ -25,8 +25,9 @@
 
     <div class="sim-calendar--body" :style="{'--start-offset': startOffset}">
 
-      <div class="sim-calendar--grid">
-        <div class="sim-calendar--grid--header">
+      <main class="sim-calendar--main">
+        <div class="sim-calendar--grid">
+          <div class="sim-calendar--grid--header">
           <div v-for="(day, index) in $store.state.calendar.settings.day_names" class="sim-calendar--grid--header--day">
             <span class="sim-calendar--grid--header--dayname">
               {{ day }}
@@ -35,60 +36,100 @@
               {{ showDayNumber(currentWeekDays[index]) }}
             </span>
           </div>
+          <div class="sim-calendar--grid--body">
+            <ul v-if="isWeekView" class="sim-calendar--grid--timelines">
+              <li v-for="hour in 25">
+                <div>
+                  <SimIconText v-if="hour === 13" icon="fa-sun-o"></SimIconText>
+                  <SimIconText v-else-if="hour === 1 || hour === 25" icon="fa-moon-o"></SimIconText>
+                  <span v-else>
+                    {{ displayHour(hour-1) }}
+                  </span>
+                </div>
+              </li>
+            </ul>
+            <div class="sim-calendar--grid--days">
+
+              <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
+
+              <template v-if="isMonthView">
+                <CalendarDay v-for="date in currentMonthDays"
+                  class="sim-calendar--grid--day"
+                  :key="date"
+                  :displayMode="displayMode"
+                  :date="date"
+                  :user-context="contextLabel"
+                  />
+              </template>
+
+              <template v-if="isWeekView">
+                <CalendarDay v-for="date in currentWeekDays"
+                  class="sim-calendar--grid--day"
+                  :key="date"
+                  :displayMode="displayMode"
+                  :date="date"
+                  :user-context="contextLabel"
+                  />
+              </template>
+
+              <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
+
+            </div>
+
+            <SimBubble v-if="isCoordinatorContext && shouldBubbleBeOpen && isMonthView">
+              <SimSlideDeck :slides="slides"></SimSlideDeck>
+            </SimBubble>
+          </div>
         </div>
-        <div class="sim-calendar--grid--body">
-          <ul v-if="isWeekView" class="sim-calendar--grid--timelines">
-            <li v-for="hour in 25">
-              <div>
-                <SimIconText v-if="hour === 13" icon="fa-sun-o"></SimIconText>
-                <SimIconText v-else-if="hour === 1 || hour === 25" icon="fa-moon-o"></SimIconText>
-                <span v-else>
-                  {{ displayHour(hour-1) }}
-                </span>
-              </div>
-            </li>
-          </ul>
-          <div class="sim-calendar--grid--days">
+      </main>
 
-            <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
+      <template v-if="isCoordinatorContext">
+        <aside class="sim-calendar--aside sim-calendar--filters">
+          <div class="sim-calendar--aside--header">
+            <b>Filters</b>
+          </div>
+          <div class="sim-calendar--aside--body">
 
-            <template v-if="isMonthView">
-              <CalendarDay v-for="date in currentMonthDays"
-                class="sim-calendar--grid--day"
-                :key="date"
-                :displayMode="displayMode"
-                :date="date"
-                :user-context="contextLabel"
-                />
-            </template>
+            <div class="filter-molecule">
+              <p>
+                <label>
+                  Event Length: <b>{{ halfGlyph(filterEventLength, 'Hour', 'Hours') }}</b>
+                  <br />
+                  <br />
+                  <input v-model="filterEventLength" type="range" min="0.5" max="6" step="0.5" />
+                </label>
+              </p>
+            </div>
 
-            <template v-if="isWeekView">
-              <CalendarDay v-for="date in currentWeekDays"
-                class="sim-calendar--grid--day"
-                :key="date"
-                :displayMode="displayMode"
-                :date="date"
-                :user-context="contextLabel"
-                />
-            </template>
-
-            <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
+            <div class="filter-molecule">
+              <p>
+                <label>
+                  Instructors
+                  <br />
+                  <br />
+                  <input type="text" placeholder="autocomplete instructors..." />
+                </label>
+              </p>
+            </div>
 
           </div>
+        </aside>
+      </template>
 
-          <SimBubble v-if="isCoordinatorContext && shouldBubbleBeOpen && isMonthView">
-            <SimSlideDeck :slides="slides"></SimSlideDeck>
-          </SimBubble>
-        </div>
-      </div>
-
-      <div class="day-control-panel">
-        <SimTimePicker v-if="isInstructorContext && isMonthView" :date="$store.state.activeDate.date"
-                       :should-show-date="true"
-                       @calendar-day-selected="setDate"
-        >
-        </SimTimePicker>
-      </div>
+      <template v-if="isInstructorContext && isMonthView">
+        <aside class="sim-calendar--aside sim-calendar--day-control-panel">
+          <div class="sim-calendar--aside--header">
+            <b>My Availability</b>
+          </div>
+          <div class="sim-calendar--aside--body">
+            <SimTimePicker :date="$store.state.active_date"
+              :should-show-date="true"
+              orientation="y"
+              @calendar-day-selected="setDate"
+              />
+          </div>
+        </aside>
+      </template>
 
     </div>
 
@@ -120,12 +161,15 @@
     props: ['selectedClass'],
     data() {
       return {
-        displayMode: 'month',
-        contextSwitch: true,
+        contextSwitch: false,
         slides: this.$store.state.slideDeck.slides,
+        filterEventLength: 0.5,
       }
     },
     computed: {
+      displayMode() {
+        return this.$store.state.calendar_display_mode
+      },
       componentClasses() {
         const classes = [`is-${this.contextLabel}-context`]
 
@@ -166,7 +210,7 @@
         return moment([this.activeYear, this.activeMonth, 1]).day()
       },
       endOffset() {
-        return 6 - moment([this.activeYear, this.activeMonth, this.currentWeekDays.length]).day()
+        return 6 - moment([this.activeYear, this.activeMonth, this.currentMonthDays.length]).day()
       },
       currentWeekDays() {
         const start = moment(this.activeMoment).startOf('week')
@@ -220,6 +264,14 @@
       this.setTheActiveDateToToday()
     },
     methods: {
+      halfGlyph(number, singularUnit, pluralUnits) {
+        const grammaticalUnit = number > 0 && number <= 1 ? singularUnit : pluralUnits
+        const glyph = number.toString()
+          .replace(/\.5/, '½')
+          .replace(/^0/, '') || 0
+
+        return `${glyph} ${grammaticalUnit}`
+      },
       setDays(start, limit) {
         const dateStrings = [start.format(this.$store.state.calendar.settings.date_format.raw)]
 
@@ -254,11 +306,6 @@
         date = date.split('-')
 
         return parseInt(date[2])
-      },
-      setDisplayMode(mode) {
-        this.displayMode = mode
-
-        this.$forceUpdate()
       },
       setHourClasses(hour) {
         const classes = []
@@ -295,48 +342,11 @@
     }
   }
 
-  .day-control-panel {
-    flex: 1;
-    background: var(--picker-bg);
-    color: var(--picker-fg);
-    position: relative;
-  }
-
-  .local--day {
-    position: relative;
-    flex: 1;
-    display: flex;
-    &--event-blocks {
-      pointer-events: none;
-      position: relative;
-      flex: 1;
-      > * {
-        pointer-events: auto;
-      }
-    }
-    &--time-blocks {
-      pointer-events: none;
-      position: relative;
-      flex: 1;
-      > * {
-        pointer-events: auto;
-      }
-    }
-  }
-
-  .is-month-view.is-instructor-context .local--day {
-    flex-direction: column-reverse;
-  }
-
-  .is-coordinator-context .local--day .local--day--time-blocks {
-    display: flex;
-    justify-content: space-between;
-  }
-
   .sim-calendar {
     --switch-color: var(--lighter-grey);
     --switch-color-active: var(--lighter-grey);
     --switch-handle-color: var(--action);
+    // --timeblock-color: var(--green);
     .sim-switch input {
       box-shadow: 0 0 0 1px var(--light-grey);
       &::before {
