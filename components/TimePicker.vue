@@ -62,19 +62,18 @@
       orientation: {
         type: String,
         default: 'x',
-      }
+      },
     },
     data() {
       return {
         isMoving: false,
         isStretching: false,
-        orientation: 'x',
-        blocks: this.$store.state.availabilities.blocks[this.$store.state.activeDate.date] || [],
+        blocks: this.$store.state.user.availabilities[this.$store.state.activeDate.date] || [],
       }
     },
     watch: {
       date(newDate) {
-        this.blocks = this.$store.state.availabilities.blocks[newDate] || []
+        this.blocks = this.$store.state.user.availabilities[newDate] || []
       },
     },
     computed: {
@@ -98,7 +97,7 @@
         return `${output} ${(this.totalHours > 0 && this.totalHours <= 1 ? 'hour' : 'hours')}`
       },
       date() {
-        return this.$store.state.date
+        return this.$store.state.activeDate.date
       },
     },
     methods: {
@@ -157,9 +156,6 @@
         this.updateBlocks()
       },
       // Date Management Methods.
-      emitDayClick(day) {
-        this.$emit('calendar-day-selected', day)
-      },
       nextDay() {
         const date = this.activeMoment.add(1, 'day')
           .format('YYYY-MM-DD')

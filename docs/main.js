@@ -15,6 +15,7 @@ import calendar from '../modules/calendar'
 import bubble from '../modules/bubble'
 import events from '../modules/events'
 import slideDeck from '../modules/slideDeck'
+import user from '../modules/user'
 
 Vue.config.productionTip = false
 
@@ -30,33 +31,7 @@ const store = new Vuex.Store({
     events,
     bubble,
     slideDeck,
-    users: [
-      { id: 1, firstname: 'Chevy', lastname: 'Knee' },
-      { id: 2, firstname: 'Penny', lastname: 'Chumley' },
-      { id: 3, firstname: 'Lonee', lastname: 'Banasevich' },
-      { id: 4, firstname: 'Phylys', lastname: 'Hewins' },
-      { id: 5, firstname: 'Prescott', lastname: 'Clipston' },
-      { id: 6, firstname: 'Rab', lastname: 'Le Pine' },
-      { id: 7, firstname: 'Sansone', lastname: 'Peetermann' },
-      { id: 8, firstname: 'Thedrick', lastname: 'Glassford' },
-      { id: 9, firstname: 'Eadie', lastname: 'Ravel' },
-      { id: 10, firstname: 'Allistir', lastname: 'Stride' },
-      { id: 11, firstname: 'Brit', lastname: 'Boyen' },
-      { id: 12, firstname: 'Alexio', lastname: 'O\'Cleary' },
-      { id: 13, firstname: 'Eydie', lastname: 'Campany' },
-      { id: 14, firstname: 'Alfie', lastname: 'Athy' },
-      { id: 15, firstname: 'Red', lastname: 'Gwalter' },
-      { id: 16, firstname: 'Linzy', lastname: 'Josifovitz' },
-      { id: 17, firstname: 'Benjie', lastname: 'Niven' },
-      { id: 18, firstname: 'Amata', lastname: 'Dilland' },
-      { id: 19, firstname: 'Timmy', lastname: 'Lorrain' },
-      { id: 20, firstname: 'Latrina', lastname: 'Cosley' },
-      { id: 21, firstname: 'Issi', lastname: 'Udey' },
-      { id: 22, firstname: 'Alden', lastname: 'Rooze' },
-      { id: 23, firstname: 'Felecia', lastname: 'Dahlman' },
-      { id: 24, firstname: 'Charleen', lastname: 'Cruikshank' },
-      { id: 25, firstname: 'Sal', lastname: 'Mynett' },
-    ],
+    user,
   },
 })
 

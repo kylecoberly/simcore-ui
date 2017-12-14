@@ -24,7 +24,7 @@
             />
         </div>
         <div class="local--day--blocks local--day--time-blocks">
-          <SimTimeBlock v-for="(block, index) in blocks"
+          <SimTimeBlock v-for="(block, index) in currentUserAvailabilityBlocks"
             :key="index"
             :block="block"
             :index="index"
@@ -37,7 +37,7 @@
       <template v-if="isCoordinatorContext">
 
         <div v-if="isWeekView" class="local--day--availability-blocks">
-          <SimTimeBlock v-for="(block, index) in allAvailabilityBlocks"
+          <SimTimeBlock v-for="(block, index) in aggregateAvailabilityBlocks"
             :key="index"
             :block="block"
             :index="index"
@@ -68,12 +68,12 @@
         </div>
 
         <div v-if="isMonthView" class="calendar-density-blocks--outer">
-          <SimBubbleTrigger v-for="(block, index) in availabilityDensityBlocks"
+          <SimBubbleTrigger v-for="(block, index) in aggregateAvailabilityBlocks"
             class="calendar-density-block sim-timeblock sim-timeblock--y"
             :key="index"
             :class="setDensityBlockClasses(block)"
             :style="`--start: ${block.start};--duration: ${block.duration}`"
-            :bubble-meta-data="{key: getMetaKey(block), x: dayOfWeek+1}"
+            :bubble-properties="{key: getMetaKey(block), x: dayOfWeek+1}"
             :slideContent="packageSlideContent(block)"
             />
         </div>
@@ -96,10 +96,9 @@
     data() {
       return {
         dateFormat: 'YYYY-MM-DD',
-        blocks: this.$store.state.availabilities.blocks[this.date],
-        availabilityDensityBlocks: this.$store.state.availabilities.density_blocks[this.date],
-        allAvailabilityBlocks: this.$store.state.current_user_data.all_availability[this.date],
-        events: this.$store.state.current_user_data.events[this.date],
+        currentUserAvailabilityBlocks: this.$store.state.user.availabilities[this.date],
+        aggregateAvailabilityBlocks: this.$store.state.availabilities.blocks[this.date],
+        events: this.$store.state.events[this.date],
         stagedEvents: [],
         slideContent: { items: [
             { id: 1, name: 'Brian' },
@@ -112,13 +111,13 @@
       // If so, refresh this day's time blocks.
       this.$store.watch(this.$store.getters.getLastUpdated, (date) => {
         if (date === this.date) {
-          this.blocks = this.$store.state.availabilities.blocks[this.date]
+          this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities[this.date]
         }
       })
 
       // When the week/month is updated, refresh this day's blocks.
       this.$store.watch(this.$store.getters.getActiveDate, () => {
-        this.blocks = this.$store.state.availabilities.blocks[this.date]
+        this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities[this.date]
       })
     },
     computed: {
@@ -145,7 +144,7 @@
           classes.push('is-after-today')
         }
 
-        if (this.$store.state.calendar_settings.weekend_days.includes(this.dayOfWeek)) {
+        if (this.$store.state.calendar.settings.weekend_days.includes(this.dayOfWeek)) {
           classes.push('is-weekend')
         } else {
           classes.push('is-weekday')
@@ -156,8 +155,8 @@
 
         return classes.join(' ')
       },
-      bubbleMetaData() {
-        return this.$store.state.bubble.data
+      bubbleProperties() {
+        return this.$store.state.bubble.properties
       },
       shouldBubbleBeOpen() {
         return this.$store.state.bubble.is_open
@@ -183,11 +182,11 @@
         return {
           block,
           title: this.formateDateForDisplay(this.date),
-          subtitle: this.formatTimesForDisplay(block.start, block.duration)
+          subtitle: this.formatTimesForDisplay(block.start, block.duration),
         }
       },
       formateDateForDisplay(date) {
-        return moment(date).format(this.$store.state.calendar_settings.date_format.display)
+        return moment(date).format(this.$store.state.calendar.settings.date_format.display)
       },
 
       formatTimesForDisplay(start, duration) {
@@ -212,7 +211,7 @@
       setDensityBlockClasses(block) {
         const classes = []
 
-        if (this.shouldBubbleBeOpen && this.bubbleMetaData.key === `${this.date}:${block.start}`) {
+        if (this.shouldBubbleBeOpen && this.bubbleProperties.key === `${this.date}:${block.start}`) {
           classes.push('active')
         }
 
@@ -236,7 +235,7 @@
       },
 
       createTimeBlock(hour) {
-        const blocks = this.blocks || []
+        const blocks = this.currentUserAvailabilityBlocks || []
         blocks.push({ start: hour, duration: 1 })
         blocks.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
 

@@ -20,8 +20,8 @@
       shouldBeOpen() {
         return this.$store.state.bubble.is_open
       },
-      bubbleMetaData() {
-        return this.$store.state.bubble.data
+      bubbleProperties() {
+        return this.$store.state.bubble.properties
       },
     },
     mounted() {
@@ -32,7 +32,7 @@
       removeEventListener('keyup', this.dismissWithEscapeKey)
     },
     watch: {
-      'bubbleMetaData.dinkY': function () {
+      'bubbleProperties.dinkY': function () {
         this.metrics = this.getMetrics()
       },
     },
@@ -46,19 +46,19 @@
         }
       },
       dismiss() {
-        this.$store.commit('bubbleShouldBeOpen', false)
+        this.$store.commit('toggleBubbleVisibility', false)
       },
       setClasses() {
         const classes = []
-        classes.push(`sim-bubble--${this.bubbleMetaData.orientation}`)
+        classes.push(`sim-bubble--${this.bubbleProperties.orientation}`)
 
         return classes.join(' ')
       },
       setStyles() {
         const styles = []
-        styles.push(`--x: ${parseInt(this.bubbleMetaData.x)}`)
-        styles.push(`--y: ${parseInt(this.bubbleMetaData.y)}`)
-        styles.push(`--dink-y: ${parseInt(this.bubbleMetaData.dinkY - this.metrics.top)}`)
+        styles.push(`--x: ${parseInt(this.bubbleProperties.x)}`)
+        styles.push(`--y: ${parseInt(this.bubbleProperties.y)}`)
+        styles.push(`--dink-y: ${parseInt(this.bubbleProperties.dinkY - this.metrics.top)}`)
 
         return styles.join(';')
       },

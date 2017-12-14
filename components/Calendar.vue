@@ -28,13 +28,14 @@
       <main class="sim-calendar--main">
         <div class="sim-calendar--grid">
           <div class="sim-calendar--grid--header">
-          <div v-for="(day, index) in $store.state.calendar.settings.day_names" class="sim-calendar--grid--header--day">
-            <span class="sim-calendar--grid--header--dayname">
-              {{ day }}
-            </span>
-            <span class="sim-calendar--grid--header--date" v-if="isWeekView">
-              {{ showDayNumber(currentWeekDays[index]) }}
-            </span>
+            <div v-for="(day, index) in $store.state.calendar.settings.day_names" class="sim-calendar--grid--header--day">
+              <span class="sim-calendar--grid--header--dayname">
+                {{ day }}
+              </span>
+              <span class="sim-calendar--grid--header--date" v-if="isWeekView">
+                {{ showDayNumber(currentWeekDays[index]) }}
+              </span>
+            </div>
           </div>
           <div class="sim-calendar--grid--body">
             <ul v-if="isWeekView" class="sim-calendar--grid--timelines">
@@ -122,7 +123,7 @@
             <b>My Availability</b>
           </div>
           <div class="sim-calendar--aside--body">
-            <SimTimePicker :date="$store.state.active_date"
+            <SimTimePicker :date="$store.state.activeDate.date"
               :should-show-date="true"
               orientation="y"
               @calendar-day-selected="setDate"
@@ -168,7 +169,7 @@
     },
     computed: {
       displayMode() {
-        return this.$store.state.calendar_display_mode
+        return this.$store.state.calendar.display_mode
       },
       componentClasses() {
         const classes = [`is-${this.contextLabel}-context`]
@@ -258,7 +259,7 @@
       },
     },
     created() {
-      this.$store.commit('setAllAvailabilityBlocks', availabilities.availabilities())
+      this.$store.commit('setAggregateAvailabilityBlocks', availabilities.availabilities())
     },
     mounted() {
       this.setTheActiveDateToToday()

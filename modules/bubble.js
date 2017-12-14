@@ -1,6 +1,6 @@
 const bubble = {
   state: {
-    data: {},
+    properties: {},
     previous_data: {
       x: 3,
       orientation: 'left',
@@ -8,10 +8,14 @@ const bubble = {
     is_open: false,
   },
   mutations: {
-    updateBubbleState(state, payload) {
-      state.is_open = payload
+    toggleBubbleVisibility(state, payload) {
+      if (payload) {
+        state.is_open = payload
+      } else {
+        state.is_open = !state.is_open
+      }
     },
-    updateBubbleData(state, payload) {
+    updateBubbleProperties(state, payload) {
       if (payload.x > state.previous_data.x && payload.x > 2) {
         payload.orientation = 'right'
       } else if (payload.x < state.previous_data.x && payload.x < 6) {
@@ -19,7 +23,7 @@ const bubble = {
       } else {
         payload.orientation = state.previous_data.orientation
       }
-      state.data = payload
+      state.properties = payload
       state.previous_data = {
         x: payload.x,
         orientation: payload.orientation,

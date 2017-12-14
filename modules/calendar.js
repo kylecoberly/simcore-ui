@@ -14,6 +14,15 @@ const calendar = {
       day_names: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       weekend_days: [0, 6],
     },
+    display_mode: 'month',
+  },
+  mutations: {
+    setCalendarDisplayModeToWeek(state) {
+      state.display_mode = 'week'
+    },
+    setCalendarDisplayModeToMonth(state) {
+      state.display_mode = 'month'
+    },
   },
 }
 

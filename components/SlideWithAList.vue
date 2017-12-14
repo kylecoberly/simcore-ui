@@ -31,9 +31,9 @@
   import SimSelection from './Selection'
 
   // #FIXME should be using common.sortByKey(...)
-  const sortByKey = function(list, key, direction) {
-    if(list && list.length) {
-      let newList = list.sort((a, b) => {
+  const sortByKey = (list, key, direction) => {
+    if (list && list.length) {
+      const newList = list.sort((a, b) => {
         if (a[key] < b[key]) {
           return -1
         } else if (a[key] > b[key]) {
@@ -41,11 +41,14 @@
         }
         return 0
       })
-      if(direction === 'desc') {
+
+      if (direction === 'desc') {
         return newList.reverse()
       }
+
       return newList
     }
+
     return []
   }
 
@@ -63,7 +66,7 @@
       }
     },
     computed: {
-      foundItems () {
+      foundItems() {
         return sortByKey(this.data.content.items.filter(item => {
           return `${item.name}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
         }), 'name', 'asc')

@@ -1,58 +1,52 @@
 const availabilities = {
   state: {
     last_updated: {},
-    blocks: {},
-    density_blocks: {
+    blocks: {
+      '2017-12-11': [
+        {
+          start: 2,
+          duration: 10.5,
+          user_ids: [1, 2, 4, 6, 7, 9, 10, 14, 16],
+        },
+        {
+          start: 15,
+          duration: 3.5,
+          user_ids: [5, 13, 18, 20, 21, 23],
+        },
+      ],
       '2017-12-12': [
         {
-          percent: 100,
-          start: 0,
-          end: 6,
+          start: 8,
+          duration: 3.5,
+          user_ids: [1, 2, 4, 6, 7, 9, 10, 14, 16],
         },
         {
-          percent: 35,
-          start: 6,
-          end: 12,
+          start: 14,
+          duration: 2.5,
+          user_ids: [3, 4, 5, 7, 8, 11],
+        },
+      ],
+      '2017-12-13': [
+        {
+          start: 8.5,
+          duration: 3.5,
+          user_ids: [5, 13, 18, 20, 21, 23],
         },
         {
-          percent: 65,
-          start: 12,
-          end: 18,
-        },
-        {
-          percent: 10,
-          start: 18,
-          end: 24,
+          start: 13,
+          duration: 4,
+          user_ids: [6, 12, 17, 21, 22, 25],
         },
       ],
     },
   },
   mutations: {
-    setAllAvailabilityBlocks(state, availabilityBlocks) {
-      state.last_updated = '12-10-17'
-
+    setAggregateAvailabilityBlocks(state, availabilityBlocks) {
       state.blocks = availabilityBlocks
-    },
-    setAvailabilityBlocksForDay(state, availability) {
-      const date = availability.date
-
-      if (state.last_updated !== date) {
-        state.last_updated = date
-      }
-
-      if (availability.blocks.length === 0) {
-        delete state.blocks[date]
-      } else {
-        state.blocks[date] = Object.assign(availability.blocks, state.blocks)
-      }
     },
   },
   actions: {},
-  getters: {
-    getLastUpdated: (state) => () => {
-      return state.last_updated
-    },
-  },
+  getters: {},
 }
 
 export default availabilities
