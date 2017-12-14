@@ -141,6 +141,7 @@
   import moment from 'moment'
 
   import availabilities from '../external/availabilities'
+  import users from '../external/users'
 
   import CalendarDay from './CalendarDay'
   import SimBubble from './Bubble'
@@ -259,6 +260,7 @@
       },
     },
     created() {
+      this.$store.commit('setAllUsers', users.users())
       this.$store.commit('setAggregateAvailabilityBlocks', availabilities.availabilities())
     },
     mounted() {

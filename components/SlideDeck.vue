@@ -5,7 +5,6 @@
         v-for="(slide, index) in slides"
         :key="index"
         :data="slide"
-        :content="slideContent"
         :is="slide.componentType"
         />
     </section>
@@ -44,9 +43,6 @@
       },
       maxSlides() {
         return this.slides.length - 1
-      },
-      slideContent() {
-        return this.$store.state.slideDeck.currentSlideContent
       },
     },
     mounted() {

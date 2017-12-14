@@ -20,7 +20,7 @@
         </div>
         <li slot="item" slot-scope="props" :key="props.item.id">
           <sim-selection :item="props.item" :disabled="props.item.disabled" :selected-items="selectedItems">
-            {{ props.item.firstname }} {{ props.item.lastname }}
+            {{ props.item.last_name }}, {{ props.item.first_name }}
           </sim-selection>
         </li>
       </SimDatalist>
@@ -38,7 +38,7 @@
 
   // @FIXME should be using common.unique(...) | jase
   const unique = function(array) {
-    if(array && array.length) {
+    if (array && array.length) {
       const t = {}
       return array.filter((item) => {
         if (Object.prototype.hasOwnProperty.call(t, item)) {
@@ -84,6 +84,8 @@
   export default {
     name: 'sim-slide',
     components: {
+      SimSelection,
+      SimDatalist,
     },
     props: ['content'],
     data() {
@@ -94,21 +96,19 @@
     },
     computed: {
       slideData() {
-        return this.$store.state.slideDeck.currentSlideContent
+        return this.$store.state.slideDeck.slides[this.$store.state.slideDeck.currentSlideIndex]
       },
       users() {
-        return this.slideData.block.user_ids ? getListFromIds(this.slideData.block.user_ids, this.$store.state.users, 'lastname') : null
+        return this.slideData.content.block.user_ids ? getListFromIds(this.slideData.content.block.user_ids, this.$store.state.users.all, 'last_name') : null
       },
       foundUsers() {
         return sortByKey(this.users.filter(item => {
-            return `${item.firstname} ${item.lastname}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
-        }), 'lastname', 'asc')
+            return `${item.first_name} ${item.last_name}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
+        }), 'last_name', 'asc')
       },
     },
     methods: {
     },
-      SimSelection,
-      SimDatalist,
   }
 </script>
 

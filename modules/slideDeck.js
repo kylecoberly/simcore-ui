@@ -27,7 +27,7 @@ const slideDeck = {
       state.slides.push(slide)
     },
     setASlideAtIndex(state, slide) {
-      state.slides[slide.index] = slide.content
+      state.slides.splice(slide.index, 1, slide.content)
     },
     setContentForTheSlideAtIndex(state, newSlide) {
       const slide = state.slides[newSlide.index]
@@ -47,7 +47,11 @@ const slideDeck = {
     },
   },
   actions: {},
-  getters: {},
+  getters: {
+    currentSlide: (state) => () => {
+      return state.slides[state.currentSlideIndex]
+    },
+  },
 }
 
 export default slideDeck

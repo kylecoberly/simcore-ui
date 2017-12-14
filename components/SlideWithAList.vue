@@ -1,23 +1,23 @@
 <template lang="html">
   <div class="sim-slide">
 
-    <header v-if="data.title || data.subtitle" class="sim-slide--header">
-      <h2 v-if="data.title" class="sim-slide--title">{{ data.title }}</h2>
-      <div v-if="data.subtitle" class="sim-slide--subtitle">{{ data.subtitle }}</div>
+    <header v-if="slide.title || slide.subtitle" class="sim-slide--header">
+      <h2 v-if="slide.title" class="sim-slide--title">{{ slide.title }}</h2>
+      <div v-if="slide.subtitle" class="sim-slide--subtitle">{{ slide.subtitle }}</div>
     </header>
 
-    <div v-if="data.intro">
-      {{ data.intro }}
+    <div v-if="slide.intro">
+      {{ slide.intro }}
     </div>
 
-    <template v-if="data.content.items">
-      <SimDatalist :items="foundItems">
-        <div slot="static-before">
+    <template v-if="items">
+      <SimDatalist :items="foundItems" :animate="true">
+        <div slot="static-before" key="before">
           <input type="search" v-model="itemSearch" placeholder="find..." />
         </div>
-        <li slot="item" slot-scope="props" :key="props.index">
-          <sim-selection :item="props.item" :disabled="props.item.disabled" :selected-items="selectedItems">
-            {{ props.item.name }}
+        <li slot="item" slot-scope="props" :key="props.item.id">
+          <sim-selection :item="props.item" :item-id="props.item.id" :disabled="props.item.disabled" :selected-items="selectedItems">
+            {{ props.item.first_name }} {{ props.item.last_name }}
           </sim-selection>
         </li>
       </SimDatalist>
@@ -29,6 +29,20 @@
 <script>
   import SimDatalist from './Datalist'
   import SimSelection from './Selection'
+
+  // @FIXME should be using common.unique(...) | jase
+  const unique = (array) => {
+    if (array && array.length) {
+      const t = {}
+      return array.filter((item) => {
+        if (Object.prototype.hasOwnProperty.call(t, item)) {
+          return false
+        }
+        return (t[item] = true)
+      })
+    }
+    return []
+  }
 
   // #FIXME should be using common.sortByKey(...)
   const sortByKey = (list, key, direction) => {
@@ -52,24 +66,47 @@
     return []
   }
 
+  // @FIXME should be using common.getListFromIds(...) | jase
+  const getListFromIds = (array, source, sortKey) => {
+    if (array && array.length) {
+      const list = source.filter((item) => unique(array).find((id) => item.id === id))
+      if (sortKey) {
+        return sortByKey(list, sortKey)
+      }
+      return list
+    }
+    return []
+  }
+
   export default {
     name: 'sim-slide-with-a-list',
     components: {
       SimDatalist,
       SimSelection,
     },
-    props: ['data'],
     data() {
       return {
         selectedItems: [],
         itemSearch: '',
+        slide: this.$store.getters.currentSlide(),
       }
     },
+    mounted() {
+      this.$store.watch(this.$store.getters.currentSlide, (currentSlide) => {
+        console.log('watch')
+        this.slide = currentSlide
+      })
+    },
     computed: {
+      items() {
+        return this.slide.content.items
+            ? getListFromIds(this.slide.content.items, this.$store.state.users.all, 'last_name')
+            : null
+      },
       foundItems() {
-        return sortByKey(this.data.content.items.filter(item => {
-          return `${item.name}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
-        }), 'name', 'asc')
+        return sortByKey(this.items.filter(item => {
+          return `${item.first_name} ${item.last_name}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
+        }), 'last_name', 'asc')
       },
     },
     methods: {

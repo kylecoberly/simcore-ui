@@ -16,6 +16,7 @@ import bubble from '../modules/bubble'
 import events from '../modules/events'
 import slideDeck from '../modules/slideDeck'
 import user from '../modules/user'
+import users from '../modules/users'
 
 Vue.config.productionTip = false
 
@@ -32,6 +33,7 @@ const store = new Vuex.Store({
     bubble,
     slideDeck,
     user,
+    users,
   },
 })
 

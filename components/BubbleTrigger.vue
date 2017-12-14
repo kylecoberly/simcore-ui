@@ -16,10 +16,7 @@ export default {
 
       const bubbleProperties = Object.assign(bubblePosition, this.bubbleProperties)
 
-      this.$store.commit('setContentForTheSlideAtIndex', {
-        index: 0,
-        content: this.slideContent,
-      })
+      this.$store.commit('setASlideAtIndex', { index: 0, content: this.slideContent })
 
       this.$store.commit('updateBubbleProperties', bubbleProperties)
       this.$store.commit('toggleBubbleVisibility', true)

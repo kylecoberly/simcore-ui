@@ -100,10 +100,6 @@
         aggregateAvailabilityBlocks: this.$store.state.availabilities.blocks[this.date],
         events: this.$store.state.events[this.date],
         stagedEvents: [],
-        slideContent: { items: [
-            { id: 1, name: 'Brian' },
-            { id: 2, name: 'Dustin' },
-        ] },
       }
     },
     mounted() {
@@ -180,9 +176,12 @@
       },
       packageSlideContent(block) {
         return {
-          block,
           title: this.formateDateForDisplay(this.date),
           subtitle: this.formatTimesForDisplay(block.start, block.duration),
+          componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
+          content: {
+            items: block.user_ids,
+          },
         }
       },
       formateDateForDisplay(date) {
