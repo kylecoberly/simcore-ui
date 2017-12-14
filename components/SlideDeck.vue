@@ -6,11 +6,12 @@
         :key="index"
         :data="slide"
         :is="slide.componentType"
+        @theSlideHasAnUpdate="receiveTheUpdateFromTheSlide"
         />
     </section>
     <footer v-if="showNavigationControls">
-      <button class="cancel back" @click="previousSlide" :disabled="currentStep == 0">back</button>
-      <button class="primary next" @click="nextSlide" :disabled="currentStep == maxSlides">Next</button>
+      <button class="cancel back" @click="previousSlide" :disabled="thePreviousControlShouldBeDisabled">Back</button>
+      <button class="primary next" @click="nextSlide" :disabled="theNextControlShouldBeDisabled">Next</button>
     </footer>
   </article>
 </template>
@@ -30,6 +31,12 @@
       SimSlideWithHTML,
     },
     props: ['slides', 'shouldHideNavigationControls'],
+    data() {
+      return {
+        theNextControlShouldBeDisabled: this.makeTheNextControlDisabledIf,
+        thePreviousControlShouldBeDisabled: this.makeThePreviousControlDisabledIf,
+      }
+    },
     computed: {
       showNavigationControls() {
         let willShowNavigationControls = true
@@ -43,9 +50,6 @@
       currentStep() {
         return this.$store.state.slideDeck.currentSlideIndex
       },
-      maxSlides() {
-        return this.slides.length - 1
-      },
     },
     mounted() {
       this.$store.commit('updateCurrentSlideIndex', 0)
@@ -54,11 +58,54 @@
       this.$store.commit('updateCurrentSlideIndex', 0)
     },
     methods: {
+      makeTheNextControlDisabledIf(conditionsAreMet) {
+        console.log('are met', conditionsAreMet)
+        let conditionsHaveBeenMet = false
+
+        if (conditionsAreMet === null) {
+          if (this.$store.state.slideDeck.currentSlideIndex === this.slides.length - 1) {
+            conditionsHaveBeenMet = true
+          } else {
+            conditionsHaveBeenMet = false
+          }
+        } else {
+          conditionsHaveBeenMet = conditionsAreMet
+        }
+
+        this.theNextControlShouldBeDisabled = conditionsHaveBeenMet
+      },
+      makeThePreviousControlDisabledIf(conditionsAreMet) {
+        let conditionsHaveBeenMet = false
+
+        if (conditionsAreMet === null) {
+          if (this.$store.state.slideDeck.currentSlideIndex === 0) {
+            conditionsHaveBeenMet = true
+          } else {
+            conditionsHaveBeenMet = false
+          }
+        } else {
+          conditionsHaveBeenMet = conditionsAreMet
+        }
+
+        this.thePreviousControlShouldBeDisabled = conditionsHaveBeenMet
+      },
       previousSlide() {
         this.$store.commit('prevSlideIndex')
       },
       nextSlide() {
         this.$store.commit('nextSlideIndex')
+      },
+      receiveTheUpdateFromTheSlide(update) {
+        console.log(update.wantsToDisableTheNavigationControls)
+        if (update.wantsToDisableTheNavigationControls) {
+          if (update.wantsToDisableTheNavigationControls.hasOwnProperty('next')) {
+            this.makeTheNextControlDisabledIf(update.wantsToDisableTheNavigationControls.next)
+          }
+
+          if (update.wantsToDisableTheNavigationControls.hasOwnProperty('previous')) {
+            this.makeThePreviousControlDisabledIf(update.wantsToDisableTheNavigationControls.previous)
+          }
+        }
       },
     },
   }

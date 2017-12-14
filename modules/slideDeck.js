@@ -1,6 +1,18 @@
+const defaultNavigationControls = {
+  previous: {
+    isEnabled: true,
+    action: () => { this.currentSlideIndex -= 1 },
+  },
+  next: {
+    isEnabled: false,
+    action: () => { this.currentSlideIndex += 1 },
+  },
+}
+
 const slideDeck = {
   state: {
     currentSlideIndex: 0,
+    navigationControls: defaultNavigationControls,
     slides: [
       {
         title: 'Title Slide',
@@ -41,8 +53,16 @@ const slideDeck = {
     prevSlideIndex(state) {
       state.currentSlideIndex -= 1
     },
+    setNavigationControl(state, navigationControl) {
+      state.navigationControls[navigationControl.action] = navigationControl.control
+    },
   },
-  actions: {},
+  actions: {
+    navigationAction({ commit, state }, action) {
+      console.log(action)
+      commit('setNavigationControl', )
+    },
+  },
   getters: {
     currentSlide: (state) => () => {
       return state.slides[state.currentSlideIndex]
