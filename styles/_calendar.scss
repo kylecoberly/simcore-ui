@@ -85,6 +85,7 @@
 
     &--body {
       flex: 1;
+      display: flex;
       padding: 1em;
       box-shadow: var(--lines);
       background: linear-gradient(135deg, var(--dark-grey), var(--medium-grey));

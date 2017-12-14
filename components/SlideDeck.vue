@@ -18,6 +18,7 @@
 <script>
   import SimSlide from './Slide'
   import SimSlideWithAList from './SlideWithAList'
+  import SimSlideWithATimePicker from './SlideWithATimePicker'
   import SimSlideWithHTML from './SlideWithHTML'
 
   export default {
@@ -25,6 +26,7 @@
     components: {
       SimSlide,
       SimSlideWithAList,
+      SimSlideWithATimePicker,
       SimSlideWithHTML,
     },
     props: ['slides', 'shouldHideNavigationControls'],

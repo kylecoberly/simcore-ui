@@ -11,14 +11,10 @@ const slideDeck = {
         },
       },
       {
-        title: 'Selection Slide',
-        subtitle: 'Limited User Set',
-        componentType: 'SimSlideWithHTML',
-        content:
-          `<div>
-            <h2>Big Stuff</h2>
-            <p>For little guys.</p>
-          </div>`,
+        title: 'TimePicker Slide',
+        subtitle: 'Pick a winner!',
+        componentType: 'SimSlideWithATimePicker',
+        content: {},
       },
     ],
   },

@@ -6,8 +6,8 @@
         <SimIconText icon="fa-arrow-circle-left fa-lg"></SimIconText>
       </div>
       <div class="sim-timepicker--display-date">
-        <span>{{ displayDate }} <br /><b>{{ displayDateTotalHours }}</b></span>
-        <span v-if="totalHours > 0" class="sim-timepicker--remove-blocks" @click="removeAllTimeBlocks">
+        <span>{{ displayDate }} <br /><b>{{ displayTotalTimeBlockHours }}</b></span>
+        <span v-if="countTimeBlockHours > 0" class="sim-timepicker--remove-blocks" @click="removeAllTimeBlocks">
           <SimIconText icon="fa-times"></SimIconText>
         </span>
       </div>
@@ -16,9 +16,11 @@
       </div>
     </div>
 
+    <!-- {{ totalHours }} | {{totalHoursInterger}} | {{ segmentProduct }} -->
+
     <div class="sim-timepicker--inner" :class="setClass()">
       <ul>
-        <li v-for="hour in 25" @mousedown="createTimeBlock(hour-1)" :class="setHourClass(hour-1)">
+        <li v-for="hour in totalHours" @mousedown="createTimeBlock(hour-1)" :class="setHourClass(hour-1)">
           <div v-if="hour === 13" class="sim-timepicker--time sim-timepicker--noon">
             <SimIconText icon="fa-sun-o"></SimIconText>
           </div>
@@ -32,12 +34,13 @@
       </ul>
 
       <SimTimeBlock v-for="(block, index) in blocks" :key="index" :block="block" :index="index" :date="date"
-                    :orientation="orientation"
-                    @remove-time-block="removeTimeBlock"
-                    @is-moving="setMovingState"
-                    @is-stretching="setStretchingState"
-                    @block-updated="blockWasUpdated"
-      ></SimTimeBlock>
+        :orientation="orientation"
+        :variables="{maximumDuration: totalHoursInterger, timeShiftOffset: startTime}"
+        @remove-time-block="removeTimeBlock"
+        @is-moving="setMovingState"
+        @is-stretching="setStretchingState"
+        @block-updated="blockWasUpdated"
+        />
     </div>
 
   </div>
@@ -63,6 +66,18 @@
         type: String,
         default: 'x',
       },
+      startTime: {
+        type: Number,
+        default: 0,
+      },
+      endTime: {
+        type: Number,
+        default: 24,
+      },
+      timeBlockLimit: {
+        type: Number,
+        default: 48,
+      },
     },
     data() {
       return {
@@ -77,6 +92,19 @@
       },
     },
     computed: {
+      totalHours() {
+        const hours = []
+        for (var index = this.startTime + 1; index <= this.endTime + 1; index++) {
+          hours.push(index)
+        }
+        return hours
+      },
+      totalHoursInterger() {
+        return this.totalHours.length - 1
+      },
+      segmentProduct() {
+        return parseFloat((100 / this.totalHoursInterger).toFixed(4))
+      },
       activeMoment() {
         return moment(this.date)
       },
@@ -84,17 +112,17 @@
         return moment(this.date)
           .format('dddd, MMM D')
       },
-      totalHours() {
+      countTimeBlockHours() {
         return this.blocks
           .map((block) => { return block.duration })
           .reduce((sum, value) => sum + value, 0)
       },
-      displayDateTotalHours() {
-        const output = this.totalHours.toString()
+      displayTotalTimeBlockHours() {
+        const output = this.countTimeBlockHours.toString()
           .replace(/\.5/, '½')
           .replace(/^0/, '') || 0
 
-        return `${output} ${(this.totalHours > 0 && this.totalHours <= 1 ? 'hour' : 'hours')}`
+        return `${output} ${(this.countTimeBlockHours > 0 && this.countTimeBlockHours <= 1 ? 'hour' : 'hours')}`
       },
       date() {
         return this.$store.state.activeDate.date
@@ -138,9 +166,11 @@
         })
       },
       createTimeBlock(hour) {
-        this.blocks.push({ start: hour, duration: 1 })
+        if (this.blocks.length < this.timeBlockLimit) {
+          this.blocks.push({ start: hour, duration: 1 })
 
-        this.updateBlocks()
+          this.updateBlocks()
+        }
       },
       removeTimeBlock(index) {
         this.blocks.splice(index, 1)

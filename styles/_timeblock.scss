@@ -139,8 +139,8 @@
     --remover-x-end: -50%;
     --remover-y-end: 50%;
     top: 50%;
-    left: calc(var(--start, 8) * 4.1667%);
-    width: calc(var(--duration, 8) * 4.1667%);
+    left: calc(var(--start, 8) * var(--segment-size, 4.1667) * 1%);
+    width: calc(var(--duration, 8) * var(--segment-size, 4.1667) * 1%);
     height: 2.5em;
     transform: translateY(-50%);
 
@@ -169,10 +169,10 @@
   &--y {
     --remover-x-end: 0;
     --remover-y-end: 0;
-    top: calc(var(--start) * 4.1667%);
+    top: calc(var(--start) * var(--segment-size, 4.1667) * 1%);
     left: 0;
     width: 100%;
-    height: calc(var(--duration) * 4.1667%);
+    height: calc(var(--duration) * var(--segment-size, 4.1667) * 1%);
 
     &.is-moving {
       transform: translateX(-.1em);

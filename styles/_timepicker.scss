@@ -3,7 +3,8 @@
   --timeblock-cursor: move; // -webkit-grab;
   --handle-cursor: col-resize;
   flex: 1;
-  display: block;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   padding: 1em;
   // box-shadow: var(--lines, 0 0 0 1px);
@@ -164,6 +165,11 @@
   &--y {
     .sim-timepicker--inner {
       flex-direction: column;
+    }
+
+    .sim-timeblock--y {
+      width: calc(100% - 2em);
+      left: 1em;
     }
 
     ul {

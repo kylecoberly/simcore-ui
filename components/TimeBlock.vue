@@ -40,13 +40,8 @@
   const _cap = (num, previous, min, max) => {
     return (num < min ? min : (num > max - previous ? max - previous : num))
   }
-  const _setProperty = (element, property, value) => {
-    element.style.setProperty(`--${property}`, value)
-  }
-  const _getProperty = (element, property) => {
-    return element.style.getPropertyValue(`--${property}`)
-  }
-  const _getMetrics = (event, element) => {
+
+  const _getMetrics = (event, element, boundary) => {
     const blockMetrics = element.getBoundingClientRect()
     const pickerMetrics = element.parentElement.getBoundingClientRect()
 
@@ -72,11 +67,11 @@
         y: pickerMetrics.y,
       },
       segment: {
-        x: pickerMetrics.width / 48,
-        y: pickerMetrics.height / 48,
+        x: pickerMetrics.width / boundary / 2,
+        y: pickerMetrics.height / boundary / 2,
       },
-      durationValue: parseFloat(_getProperty(element, 'duration')),
-      startValue: parseFloat(_getProperty(element, 'start')),
+      durationValue: parseFloat(element.style.getPropertyValue('--duration')),
+      startValue: parseFloat(element.style.getPropertyValue('--start')),
     }
   }
 
@@ -106,6 +101,15 @@
         type: Boolean,
         default: true,
       },
+      variables: {
+        type: Object,
+        default() {
+          return {
+            maximumDuration: 24,
+            timeShiftOffset: 0,
+          }
+        },
+      },
     },
     data() {
       return {
@@ -120,12 +124,19 @@
       orientationIsY() {
         return this.orientation === 'y'
       },
+      segmentSize() {
+        return (100/this.variables.maximumDuration)
+      },
+    },
+    mounted() {
+      this.setStyle(this.block)
     },
     methods: {
       setStyle(block) {
         const styles = []
-        styles.push(`--start: ${block.start}`)
+        styles.push(`--start: ${block.start - this.variables.timeShiftOffset}`)
         styles.push(`--duration: ${block.duration}`)
+        styles.push(`--segment-size: ${this.segmentSize}`)
 
         return styles.join(';')
       },
@@ -172,81 +183,63 @@
         event.preventDefault()
         this.$emit('remove-time-block', this.index)
       },
-      // ----------
-      setStretchingStart(event, mouseCoordinate) {
-        // for stretch left/up
-        const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
-        const currentStart = Math.floor(calc / this.metrics.segment[this.orientation]) / 2
-        this.block.start = _cap(currentStart, 0, 0, (this.metrics.startValue + this.metrics.durationValue - 0.5))
-
-        // @FIXME dont make this a global setter?
-        _setProperty(this.$el, 'start', this.block.start)
-
-        return currentStart
-      },
+      // ---------- For moving ----------
       setMovingStart(event) {
         const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
         const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
         const currentStart = _cap(calc, this.metrics.axis[this.orientation], 0, this.metrics.max[this.orientation])
-        this.block.start = Math.round(currentStart / this.metrics.segment[this.orientation]) / 2
 
-        // @FIXME dont make this a global setter?
-        _setProperty(this.$el, 'start', this.block.start)
+        this.block.start = (Math.round((currentStart) / this.metrics.segment[this.orientation]) / 2) + this.variables.timeShiftOffset
       },
-      setDurationFromEnd(event, mouseCoordinate) {
-        // For down or right
-        const currentDuration = Math.round(
-          (
-            this.metrics.axis[this.orientation]
-            + mouseCoordinate
-            - this.metrics.start[this.orientation]
-          )
-          / this.metrics.segment[this.orientation]
-        ) / 2
-        this.block.duration = _cap(currentDuration, 0, 0.5, 24 - this.block.start)
 
-        // @FIXME dont make this a global setter?
-        _setProperty(this.$el, 'duration', this.block.duration)
+      // ---------- For stretching up or left ----------
+      setStretchingStart(event, mouseCoordinate) {
+        const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
+        const currentStart = Math.floor(calc / this.metrics.segment[this.orientation]) / 2
+        this.block.start = _cap((currentStart), 0, 0, (this.metrics.startValue + this.metrics.durationValue - 0.5)) + this.variables.timeShiftOffset
+
+        return currentStart
       },
       setDurationFromStart(event, mouseCoordinate, currentStart) {
-        // For up or left
         const currentDuration = this.metrics.durationValue - Math.floor((mouseCoordinate - this.metrics.start[this.orientation]) / this.metrics.segment[this.orientation]) / 2
-        this.block.duration = _cap(currentDuration, 0, 0.5, (currentStart < 0 ? this.block.duration : 24))
 
-        // @FIXME dont make this a global setter?
-        _setProperty(this.$el, 'duration', this.block.duration)
+        this.block.duration = _cap(currentDuration, 0, 0.5, (currentStart < 0 ? this.block.duration : this.variables.maximumDuration))
       },
-      // ----------
+      // ---------- For stretching down or right ----------
+      setDurationFromEnd(event, mouseCoordinate) {
+        const currentDuration = Math.round((this.metrics.axis[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation]) / this.metrics.segment[this.orientation]) / 2
+
+        this.block.duration = _cap(currentDuration, 0, 0.5, this.variables.maximumDuration - this.block.start + this.variables.timeShiftOffset)
+      },
+
+      // ---------- Move ----------
       move(event) {
-        this.setMovingStart(event, event.clientX)
+        this.setMovingStart(event)
       },
       doneMoving() {
         this.isMoving = false
         this.$emit('is-moving', false)
-        // this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.move)
         removeEventListener('mouseup', this.doneMoving)
       },
       startMove(event) {
         if (event.which === 1) {
-          window.console.log('start move', this.orientation)
-          // event.preventDefault()
-          // event.stopPropagation()
+          event.preventDefault()
+          event.stopPropagation()
           this.isMoving = true
-          this.metrics = _getMetrics(event, this.$el)
+          this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-moving', true)
           addEventListener('mousemove', this.move)
           addEventListener('mouseup', this.doneMoving)
         }
       },
-      // ----------
+      // ---------- Stretch Right ----------
       stretchRight(event) {
         this.setDurationFromEnd(event, event.clientX)
       },
       doneStretchingRight() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
-        // this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchRight)
         removeEventListener('mouseup', this.doneStretchingRight)
       },
@@ -255,35 +248,35 @@
           event.preventDefault()
           event.stopPropagation()
           this.stretchDirection = 'right'
-          this.metrics = _getMetrics(event, this.$el)
+          this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
           addEventListener('mousemove', this.stretchRight)
           addEventListener('mouseup', this.doneStretchingRight)
         }
       },
-      // ----------
+      // ---------- Stretch Down ----------
       stretchDown(event) {
         this.setDurationFromEnd(event, event.clientY)
       },
       doneStretchingDown() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
-        // this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchDown)
         removeEventListener('mouseup', this.doneStretchingDown)
       },
       startStretchDown(event) {
+        console.log(this.variables)
         if (event.which === 1) {
           event.preventDefault()
           event.stopPropagation()
           this.stretchDirection = 'down'
-          this.metrics = _getMetrics(event, this.$el)
+          this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
           addEventListener('mousemove', this.stretchDown)
           addEventListener('mouseup', this.doneStretchingDown)
         }
       },
-      // ----------
+      // ---------- Stretch Left ----------
       stretchLeft(event) {
         const currentStart = this.setStretchingStart(event, event.clientX)
         this.setDurationFromStart(event, event.clientX, currentStart)
@@ -291,7 +284,6 @@
       doneStretchingLeft() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
-        // this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchLeft)
         removeEventListener('mouseup', this.doneStretchingLeft)
       },
@@ -300,13 +292,13 @@
           event.preventDefault()
           event.stopPropagation()
           this.stretchDirection = 'left'
-          this.metrics = _getMetrics(event, this.$el)
+          this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
           addEventListener('mousemove', this.stretchLeft)
           addEventListener('mouseup', this.doneStretchingLeft)
         }
       },
-      // ----------
+      // ---------- Stretch Up ----------
       stretchUp(event) {
         const currentStart = this.setStretchingStart(event, event.clientY)
         this.setDurationFromStart(event, event.clientY, currentStart)
@@ -314,7 +306,6 @@
       doneStretchingUp() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
-        // this.$emit('block-updated', this.date)
         removeEventListener('mousemove', this.stretchUp)
         removeEventListener('mouseup', this.doneStretchingUp)
       },
@@ -323,7 +314,7 @@
           event.preventDefault()
           event.stopPropagation()
           this.stretchDirection = 'up'
-          this.metrics = _getMetrics(event, this.$el)
+          this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
           addEventListener('mousemove', this.stretchUp)
           addEventListener('mouseup', this.doneStretchingUp)

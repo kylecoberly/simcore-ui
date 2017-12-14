@@ -90,27 +90,28 @@
             <b>Filters</b>
           </div>
           <div class="sim-calendar--aside--body">
+            <div class="FIXME-this-is-a-flex-interceptor">
+              <div class="filter-molecule">
+                <p>
+                  <label>
+                    Event Length: <b>{{ halfGlyph(filterEventLength, 'Hour', 'Hours') }}</b>
+                    <br />
+                    <br />
+                    <input v-model="filterEventLength" type="range" min="0.5" max="6" step="0.5" />
+                  </label>
+                </p>
+              </div>
 
-            <div class="filter-molecule">
-              <p>
-                <label>
-                  Event Length: <b>{{ halfGlyph(filterEventLength, 'Hour', 'Hours') }}</b>
-                  <br />
-                  <br />
-                  <input v-model="filterEventLength" type="range" min="0.5" max="6" step="0.5" />
-                </label>
-              </p>
-            </div>
-
-            <div class="filter-molecule">
-              <p>
-                <label>
-                  Instructors
-                  <br />
-                  <br />
-                  <input type="text" placeholder="autocomplete instructors..." />
-                </label>
-              </p>
+              <div class="filter-molecule">
+                <p>
+                  <label>
+                    Instructors
+                    <br />
+                    <br />
+                    <input type="text" placeholder="autocomplete instructors..." />
+                  </label>
+                </p>
+              </div>
             </div>
 
           </div>
@@ -126,7 +127,6 @@
             <SimTimePicker :date="$store.state.activeDate.date"
               :should-show-date="true"
               orientation="y"
-              @calendar-day-selected="setDate"
               />
           </div>
         </aside>
