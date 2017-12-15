@@ -1,10 +1,10 @@
 <template lang="html">
-  <div :class="setClass()" :style="setStyle(block)">
+  <div :class="blockClasses" :style="blockStyles">
 
     <template v-if="showControls">
 
       <div class="sim-timeblock--remover" @click="removeTimeBlock">
-        <SimIconText icon="fa-times-circle fa-lg"></SimIconText>
+        <SimIconText icon="fa-times"></SimIconText>
       </div>
 
       <template v-if="orientationIsX">
@@ -24,8 +24,8 @@
       <div class="sim-timeblock--mover" @mousedown="startMove"></div>
 
       <div class="sim-timeblock--info">
-        <div class="sim-timeblock--info--hours">{{ displayBlockHours() }}</div>
-        <div class="sim-timeblock--info--time">{{ displayBlockTime() }}</div>
+        <div class="sim-timeblock--info--hours">{{ displayBlockHours }}</div>
+        <div class="sim-timeblock--info--time">{{ displayBlockTime }}</div>
       </div>
 
     </template>
@@ -106,7 +106,7 @@
         default() {
           return {
             maximumDuration: 24,
-            timeShiftOffset: 0,
+            startTime: 0,
           }
         },
       },
@@ -127,20 +127,26 @@
       segmentSize() {
         return (100/this.variables.maximumDuration)
       },
-    },
-    mounted() {
-      this.setStyle(this.block)
-    },
-    methods: {
-      setStyle(block) {
-        const styles = []
-        styles.push(`--start: ${block.start - this.variables.timeShiftOffset}`)
-        styles.push(`--duration: ${block.duration}`)
-        styles.push(`--segment-size: ${this.segmentSize}`)
-
-        return styles.join(';')
+      timeShiftOffset() {
+        return this.variables.startTime
       },
-      setClass() {
+      displayBlockTime() {
+        const day = moment().startOf('day')
+        const start = day.add(this.block.start, 'hours').format('h:mma')
+        const end = day.add(this.block.duration, 'hours').format('h:mma')
+        // times = `${start.replace(':00', '')} — ${end.replace(':00', '')}`
+
+        return `${start} — ${end}`
+      },
+      displayBlockHours() {
+        const total = this.block.duration
+        const output = total.toString()
+          .replace(/\.5/, '½')
+          .replace(/^0/, '') || 0
+
+        return `${output} ${(total > 0 && total <= 1 ? 'hour' : 'hours')}`
+      },
+      blockClasses() {
         const classes = [`sim-timeblock sim-timeblock--${this.index} sim-timeblock--${this.orientation}`]
         if (!this.showControls) {
           classes.push('is-display-only')
@@ -154,49 +160,36 @@
 
         return classes.join(' ')
       },
-      displayBlockHours() {
-        const total = this.block.duration
-        const output = total.toString()
-          .replace(/\.5/, '½')
-          .replace(/^0/, '') || 0
-        const hours = `${output} ${(total > 0 && total <= 1 ? 'hour' : 'hours')}`
+      blockStyles() {
+        const styles = []
+        styles.push(`--start: ${this.block.start - this.timeShiftOffset}`)
+        styles.push(`--duration: ${this.block.duration}`)
+        styles.push(`--segment-size: ${this.segmentSize}`)
 
-        return hours
+        return styles.join(';')
       },
-      displayBlockTime() {
-        let times = null
-
-        if (this.isMoving || this.stretchDirection) {
-          const day = moment()
-            .startOf('day')
-          const start = day.add(this.block.start, 'hours')
-            .format('h:mma')
-          const end = day.add(this.block.duration, 'hours')
-            .format('h:mma')
-          times = `${start.replace(':00', '')} — ${end.replace(':00', '')}`
-        }
-
-        return times
-      },
+    },
+    methods: {
       removeTimeBlock(event) {
         event.stopPropagation()
         event.preventDefault()
         this.$emit('remove-time-block', this.index)
       },
+
       // ---------- For moving ----------
       setMovingStart(event) {
         const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
         const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
         const currentStart = _cap(calc, this.metrics.axis[this.orientation], 0, this.metrics.max[this.orientation])
 
-        this.block.start = (Math.round((currentStart) / this.metrics.segment[this.orientation]) / 2) + this.variables.timeShiftOffset
+        this.block.start = (Math.round((currentStart) / this.metrics.segment[this.orientation]) / 2) + this.timeShiftOffset
       },
 
       // ---------- For stretching up or left ----------
       setStretchingStart(event, mouseCoordinate) {
         const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
         const currentStart = Math.floor(calc / this.metrics.segment[this.orientation]) / 2
-        this.block.start = _cap((currentStart), 0, 0, (this.metrics.startValue + this.metrics.durationValue - 0.5)) + this.variables.timeShiftOffset
+        this.block.start = _cap((currentStart), 0, 0, (this.metrics.startValue + this.metrics.durationValue - 0.5)) + this.timeShiftOffset
 
         return currentStart
       },
@@ -209,7 +202,7 @@
       setDurationFromEnd(event, mouseCoordinate) {
         const currentDuration = Math.round((this.metrics.axis[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation]) / this.metrics.segment[this.orientation]) / 2
 
-        this.block.duration = _cap(currentDuration, 0, 0.5, this.variables.maximumDuration - this.block.start + this.variables.timeShiftOffset)
+        this.block.duration = _cap(currentDuration, 0, 0.5, this.variables.maximumDuration - this.block.start + this.timeShiftOffset)
       },
 
       // ---------- Move ----------
@@ -265,7 +258,6 @@
         removeEventListener('mouseup', this.doneStretchingDown)
       },
       startStretchDown(event) {
-        console.log(this.variables)
         if (event.which === 1) {
           event.preventDefault()
           event.stopPropagation()

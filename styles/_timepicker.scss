@@ -43,7 +43,7 @@
     }
 
     .fa {
-      color: var(--action);
+      color: inherit;
       cursor: pointer;
       transition: 200ms ease-out;
 
@@ -78,12 +78,14 @@
 
   li {
     flex: 1;
-    width: 1.5em; // flex value overrides this
-    height: 2em;
     display: flex;
     position: relative;
     padding: 0;
     opacity: .5;
+
+    &:hover {
+      background: var(--action);
+    }
 
     &.is-daytime {
       background: rgba(255, 255, 255, .15);
@@ -93,11 +95,13 @@
       background: rgba(0, 0, 0, .15);
     }
 
-    &::after {
-      display: block;
-      content: '';
-      background: currentColor;
-      opacity: .5;
+    &.is-half-hour {
+      &::after {
+        display: block;
+        content: '';
+        background: currentColor;
+        opacity: .5;
+      }
     }
 
     div {
@@ -131,15 +135,20 @@
 
     li {
       align-items: flex-end;
-      justify-content: center;
+      justify-content: flex-start;
       width: 1.5em; // flex value overrides this
       height: 2em;
-      box-shadow: -1px 0 0 0, 1px 0 0 0;
 
-      &::after {
-        width: 2px;
-        height: 1em;
-        margin-left: -1px;
+      &.is-hour {
+        box-shadow: -1px 0 0 0, 1px 0 0 0 inset;
+      }
+
+      &.is-half-hour {
+        &::after {
+          width: 2px;
+          height: 1em;
+          margin-left: -1px;
+        }
       }
 
       div {
@@ -150,12 +159,7 @@
         transform: translate(-50%, calc(100% + 1em));
       }
 
-      &:first-of-type {
-        box-shadow: -1px 0 0 0, 1px 0 0 0 inset, 1px 0 0 0;
-      }
-
       &:last-of-type {
-        box-shadow: -1px 0 0 0;
         width: 1px;
         margin-right: -1px;
       }
@@ -163,7 +167,9 @@
   }
 
   &--y {
+
     .sim-timepicker--inner {
+      width: 50%;
       flex-direction: column;
     }
 
@@ -177,16 +183,21 @@
     }
 
     li {
-      align-items: center;
-      justify-content: center;
-      height: 1.5em; // flex value overrides this
+      align-items: flex-start;
+      justify-content: flex-start;
+      min-height: .8em; // flex value overrides this
       width: calc(100% - 2em);
-      box-shadow: 0 -1px 0 0, 0 1px 0 0;
 
-      &::after {
-        height: 2px;
-        width: 3em;
-        margin-top: -1px;
+      &.is-hour {
+        box-shadow: 0 -1px 0 0, 0 1px 0 0 inset;
+      }
+
+      &.is-half-hour {
+        &::after {
+          height: 2px;
+          width: 1em;
+          margin-top: -1px;
+        }
       }
 
       div {
@@ -197,12 +208,8 @@
         transform: translate(calc(-100% - 1em), 50%);
       }
 
-      &:first-of-type {
-        box-shadow: 0 -1px 0 0, 0 1px 0 0 inset, 0 -1px 0 0;
-      }
-
       &:last-of-type {
-        box-shadow: 0 1px 0 0;
+        min-height: 0;
         height: 1px;
         margin-bottom: -1px;
       }

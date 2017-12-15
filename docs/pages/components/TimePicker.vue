@@ -11,7 +11,6 @@
                        @calendar-day-selected="manageDayControlPanel"
                        @all-time-blocks-removed="allTimeBlocksRemoved"
                        @time-block-removed="timeBlockRemoved"
-                       @time-block-created="timeBlockCreated"
         >
         </SimTimePicker>
         <br/>

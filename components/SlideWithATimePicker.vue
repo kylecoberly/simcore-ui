@@ -1,22 +1,22 @@
 <template lang="html">
-  <div class="sim-slide">
-
+  <div class="sim-slide sim-slide--with-timepicker">
     <header v-if="data.title || data.subtitle" class="sim-slide--header">
       <h2 v-if="data.title" class="sim-slide--title">{{ data.title }}</h2>
       <div v-if="data.subtitle" class="sim-slide--subtitle">{{ data.subtitle }}</div>
     </header>
 
-    <div v-if="data.intro">
+    <div v-if="data.intro" class="sim-slide--intro">
       {{ data.intro }}
     </div>
 
-    <SimTimePicker :date="$store.state.activeDate.date"
-      orientation="y"
-      :time-block-limit="1"
-      :start-time="9"
-      :end-time="20"
-      />
-
+    <div class="sim-slide--content">
+      <SimTimePicker :date="$store.state.activeDate.date"
+        orientation="y"
+        :time-block-limit="1"
+        :start-time="8"
+        :end-time="17.5"
+        />
+    </div>
   </div>
 </template>
 
@@ -33,5 +33,5 @@
 </script>
 
 <style lang="scss">
-  @import '../styles/slide';
+  // uses: '../styles/slide';
 </style>

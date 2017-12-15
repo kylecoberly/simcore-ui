@@ -26,4 +26,26 @@
   input {
     color: var(--dark);
   }
+
+}
+
+.sim-slide--with-timepicker {
+  display: flex;
+  flex-direction: column;
+
+  .sim-slide {
+    &--header {
+      flex: none;
+    }
+
+    &--intro {
+      flex: none;
+    }
+
+    &--content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }

@@ -16,26 +16,24 @@
       </div>
     </div>
 
-    <!-- {{ totalHours }} | {{totalHoursInterger}} | {{ segmentProduct }} -->
-
-    <div class="sim-timepicker--inner" :class="setClass()">
+    <div class="sim-timepicker--inner" :class="timelineClasses">
       <ul>
-        <li v-for="hour in totalHours" @mousedown="createTimeBlock(hour-1)" :class="setHourClass(hour-1)">
-          <div v-if="hour === 13" class="sim-timepicker--time sim-timepicker--noon">
+        <li v-for="segment in totalSegments" @mousedown="createTimeBlock($event, segment-1)" :class="setHourClasses(segment-1)">
+          <div v-if="segment === 13" class="sim-timepicker--time sim-timepicker--noon">
             <SimIconText icon="fa-sun-o"></SimIconText>
           </div>
-          <div v-else-if="hour === 1 || hour === 25" class="sim-timepicker--time sim-timepicker--midnight">
+          <div v-else-if="segment === 1 || segment === 25" class="sim-timepicker--time sim-timepicker--midnight">
             <SimIconText icon="fa-moon-o"></SimIconText>
           </div>
-          <div v-else class="sim-timepicker--time">
-            {{ displayHour(hour-1) }}
+          <div v-else-if="isWholeNumber(segment)" class="sim-timepicker--time">
+            {{ displayHour(segment-1) }}
           </div>
         </li>
       </ul>
 
       <SimTimeBlock v-for="(block, index) in blocks" :key="index" :block="block" :index="index" :date="date"
         :orientation="orientation"
-        :variables="{maximumDuration: totalHoursInterger, timeShiftOffset: startTime}"
+        :variables="blockVariables"
         @remove-time-block="removeTimeBlock"
         @is-moving="setMovingState"
         @is-stretching="setStretchingState"
@@ -92,18 +90,21 @@
       },
     },
     computed: {
-      totalHours() {
-        const hours = []
-        for (var index = this.startTime + 1; index <= this.endTime + 1; index++) {
-          hours.push(index)
+      blockVariables() {
+        return {
+          maximumDuration: this.totalHoursInterger,
+          startTime: this.startTime,
         }
-        return hours
+      },
+      totalSegments() {
+        const segments = []
+        for (var index = this.startTime + 1; index <= this.endTime + 1; index+=0.5) {
+          segments.push(index)
+        }
+        return segments
       },
       totalHoursInterger() {
-        return this.totalHours.length - 1
-      },
-      segmentProduct() {
-        return parseFloat((100 / this.totalHoursInterger).toFixed(4))
+        return this.endTime - this.startTime
       },
       activeMoment() {
         return moment(this.date)
@@ -127,10 +128,7 @@
       date() {
         return this.$store.state.activeDate.date
       },
-    },
-    methods: {
-      // UI Management Methods
-      setClass() {
+      timelineClasses() {
         const classes = []
         if (this.isMoving) {
           classes.push('is-moving')
@@ -139,6 +137,12 @@
           classes.push('is-stretching')
         }
         return classes.join(' ')
+      },
+    },
+    methods: {
+      // UI Management Methods
+      isWholeNumber(value) {
+        return Math.ceil(parseFloat(value)) === parseInt(value)
       },
       setMovingState(bool) {
         this.isMoving = bool
@@ -151,9 +155,24 @@
 
         return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
       },
-      setHourClass(hour) {
-        return hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'
+      setHourClasses(hour) {
+        const classes = []
+
+        if (hour >= 6 && hour <= 17.5) {
+          classes.push('is-daytime')
+        } else {
+          classes.push('is-nighttime')
+        }
+
+        if (this.isWholeNumber(hour)) {
+          classes.push(`is-hour is-hour-${hour}`)
+        } else {
+          classes.push(`is-half-hour is-hour-${Math.floor(hour)}-half`)
+        }
+
+        return classes
       },
+
       // Time Block Methods.
       updateBlocks() {
         this.sortBlocks()
@@ -165,9 +184,12 @@
           return parseFloat(a.start) - parseFloat(b.start)
         })
       },
-      createTimeBlock(hour) {
-        if (this.blocks.length < this.timeBlockLimit) {
-          this.blocks.push({ start: hour, duration: 1 })
+      createTimeBlock(event, hour) {
+        if (event.which === 1 && this.blocks.length < this.timeBlockLimit) {
+          const useModifier = (hour === Math.floor(this.endTime) || Math.ceil(hour) === this.endTime)
+          const maxDuration = useModifier ? 0.5 : 1
+
+          this.blocks.push({ start: hour, duration: maxDuration })
 
           this.updateBlocks()
         }
