@@ -102,7 +102,9 @@
         this.slide = currentSlide
       })
 
-      this.$emit('theSlideHasAnUpdate', { wantsToDisableTheNavigationControls: { next: true } })
+      this.$emit('theSlideHasAnUpdate', {
+        wantsToDisableTheNavigationControls: { next: true },
+      })
     },
     computed: {
       items() {
@@ -130,10 +132,17 @@
           selectedItemsWasUpdated = true
         }
 
+        let nextSlide = null
+
+        if (this.selectedItems.length > 0) {
+          nextSlide = this.$store.state.slideDeck.slideTemplates.event_time_picker
+          nextSlide.content.items = this.selectedItems
+          nextSlide.title = this.slide.title
+        }
+
         if (selectedItemsWasUpdated) {
           this.$emit('theSlideHasAnUpdate', {
-            items: this.selectedItems,
-            wantsToDisableTheNavigationControls: { next: this.selectedItems.length <= 0 },
+            nextSlide,
           })
         }
       },
