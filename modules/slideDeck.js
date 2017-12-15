@@ -18,6 +18,10 @@ const slideDeck = {
     setSlideTemplates(state, slideTemplates = {}) {
       state.slideTemplates = slideTemplates
     },
+    setCurrentSlide(state, slide) {
+      state.slideHistory.slides[state.slideHistory.size -1] = slide
+      state.slideHistory.currentSlide = state.slideHistory.slides[state.slideHistory.size - 1]
+    },
     addASlide(state, slide = {}) {
       state.slideHistory.slides.push(slide)
 

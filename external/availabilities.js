@@ -5,7 +5,7 @@ export default {
   // TODO: // Get data from a remote api. - Chad
   availabilities() {
     return {
-      '2017-12-11': [
+      '2017-12-19': [
         {
           start: 2,
           duration: 10.5,
@@ -17,7 +17,7 @@ export default {
           user_ids: [5, 13, 18, 20, 21, 23],
         },
       ],
-      '2017-12-12': [
+      '2017-12-18': [
         {
           start: 8,
           duration: 3.5,
@@ -29,7 +29,7 @@ export default {
           user_ids: [3, 4, 5, 7, 8, 11],
         },
       ],
-      '2017-12-13': [
+      '2017-12-15': [
         {
           start: 8.5,
           duration: 3.5,

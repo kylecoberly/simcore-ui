@@ -81,7 +81,7 @@
       return {
         isMoving: false,
         isStretching: false,
-        blocks: this.$store.state.user.availabilities[this.$store.state.activeDate.date] || [],
+        blocks: this.propBlocks || this.$store.state.user.availabilities[this.$store.state.activeDate.date],
       }
     },
     watch: {

@@ -97,15 +97,6 @@
         slide: this.$store.getters.currentSlide(),
       }
     },
-    mounted() {
-      this.$store.watch(this.$store.getters.currentSlide, (currentSlide) => {
-        this.slide = currentSlide
-      })
-
-      this.$emit('theSlideHasAnUpdate', {
-        wantsToDisableTheNavigationControls: { next: true },
-      })
-    },
     computed: {
       items() {
         return this.slide.content.items
@@ -119,16 +110,17 @@
       },
     },
     methods: {
-      toggleItemInSelectedItems(item, value) {
+      toggleItemInSelectedItems(itemId, value) {
         let selectedItemsWasUpdated = false
 
-        if (value && !this.selectedItems.includes(item)) {
-          this.selectedItems.push(item)
+        const foundItem = this.foundItems.find((item) => item.id === itemId)
 
-          selectedItemsWasUpdated = true
-        } else if (value === false && this.selectedItems.indexOf(item) >= 0) {
-          this.selectedItems.splice(this.selectedItems.indexOf(item), 1)
-
+        if (foundItem) {
+          if (value === true) {
+            this.selectedItems.push(foundItem)
+          } else if (value === false) {
+            this.selectedItems.splice(this.selectedItems.indexOf(foundItem), 1)
+          }
           selectedItemsWasUpdated = true
         }
 
@@ -136,15 +128,23 @@
 
         if (this.selectedItems.length > 0) {
           nextSlide = this.$store.state.slideDeck.slideTemplates.event_time_picker
-          nextSlide.content.items = this.selectedItems
+          nextSlide.items = this.selectedItems
           nextSlide.title = this.slide.title
           // nextSlide.subtitle = this.slide.subtitle
           nextSlide.start_time = this.slide.content.start_time
           nextSlide.end_time = this.slide.content.end_time
         }
 
+        const currentSlide = this.slide
+
+        currentSlide.selectedItems = this.selectedItems
+        currentSlide.itemSearch = this.itemSearch
+        currentSlide.items = this.items
+        currentSlide.foundItems = this.foundItems
+
         if (selectedItemsWasUpdated) {
           this.$emit('theSlideHasAnUpdate', {
+            currentSlide,
             nextSlide,
           })
         }

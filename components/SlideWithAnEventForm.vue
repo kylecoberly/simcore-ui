@@ -2,11 +2,54 @@
   <div class="sim-slide sim-slide--with-form">
 
     <SimSlideHeader :title="data.title" :subtitle="data.subtitle" />
+
     <SimSlideIntro :content="data.intro" />
 
     <div class="sim-slide--content">
-      Yay! Event Form!
+
+      <div class="filter-molecule">
+        <p>
+          <label>
+            <b>Event title</b>
+            <br /><br />
+            <input type="text" placeholder="..." />
+          </label>
+        </p>
+      </div>
+
+      <div class="filter-molecule">
+        <p>
+          <label>
+            <b>Description</b>
+            <br /><br />
+            <textarea placeholder="..."></textarea>
+          </label>
+        </p>
+      </div>
+
+      <div class="filter-molecule">
+        <p>
+          <label>
+            <b>Notes</b>
+            <br /><br />
+            <textarea placeholder="..."></textarea>
+          </label>
+        </p>
+      </div>
+
+      <div class="filter-molecule">
+        <p>
+          <label>
+            <b>Department</b>
+            <br /><br />
+            <textarea placeholder="..."></textarea>
+          </label>
+        </p>
+      </div>
+
+
     </div>
+
   </div>
 </template>
 

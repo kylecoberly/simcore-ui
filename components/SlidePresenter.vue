@@ -4,7 +4,7 @@
       <component class="sim-slide-presenter--slide"
         v-for="(slide, index) in slides"
         :key="index"
-        :data="slide"
+        :content="slide"
         :is="slide.componentType"
         @theSlideHasAnUpdate="receiveTheUpdateFromTheSlide"
         />
@@ -101,6 +101,11 @@
         }
       },
       receiveTheUpdateFromTheSlide(update) {
+        this.$store.commit(
+          'setCurrentSlide',
+          update.currentSlide,
+        )
+
         if (update.nextSlide || update.nextSlide === null) {
           this.nextControl.slide = update.nextSlide
         }

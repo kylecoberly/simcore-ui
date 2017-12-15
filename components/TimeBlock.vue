@@ -89,10 +89,10 @@
         type: Number,
         default: 0,
       },
-      date: {
-        type: String,
-        default: '',
-      },
+      // date: {
+      //   type: String,
+      //   default: '',
+      // },
       orientation: {
         type: String,
         default: 'x',
