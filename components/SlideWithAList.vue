@@ -16,7 +16,13 @@
           <input type="search" v-model="itemSearch" placeholder="find..." />
         </div>
         <li slot="item" slot-scope="props" :key="props.item.id">
-          <sim-selection :item="props.item" :item-id="props.item.id" :disabled="props.item.disabled" :selected-items="selectedItems">
+          <sim-selection
+            :item="props.item"
+            :item-id="props.item.id"
+            :disabled="props.item.disabled"
+            :selected-items="props.item.selectedItems"
+            @toggle="toggleItemInSelectedItems"
+          >
             {{ props.item.first_name }} {{ props.item.last_name }}
           </sim-selection>
         </li>
@@ -93,8 +99,11 @@
     },
     mounted() {
       this.$store.watch(this.$store.getters.currentSlide, (currentSlide) => {
-        console.log('watch')
         this.slide = currentSlide
+      })
+
+      this.$emit('theSlideHasAnUpdate', {
+        wantsToDisableTheNavigationControls: { next: true },
       })
     },
     computed: {
@@ -110,6 +119,35 @@
       },
     },
     methods: {
+      toggleItemInSelectedItems(item, value) {
+        let selectedItemsWasUpdated = false
+
+        if (value && !this.selectedItems.includes(item)) {
+          this.selectedItems.push(item)
+
+          selectedItemsWasUpdated = true
+        } else if (value === false && this.selectedItems.indexOf(item) >= 0) {
+          this.selectedItems.splice(this.selectedItems.indexOf(item), 1)
+
+          selectedItemsWasUpdated = true
+        }
+
+        let nextSlide = null
+
+        if (this.selectedItems.length > 0) {
+          nextSlide = this.$store.state.slideDeck.slideTemplates.event_time_picker
+          nextSlide.content.items = this.selectedItems
+          nextSlide.title = this.slide.title
+          nextSlide.start_time = this.slide.content.start_time
+          nextSlide.end_time = this.slide.content.end_time
+        }
+
+        if (selectedItemsWasUpdated) {
+          this.$emit('theSlideHasAnUpdate', {
+            nextSlide,
+          })
+        }
+      },
     },
   }
 </script>

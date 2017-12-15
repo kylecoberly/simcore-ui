@@ -1,51 +1,41 @@
 const slideDeck = {
   state: {
-    currentSlideIndex: 0,
-    slides: [
-      {
-        title: 'Title Slide',
-        subtitle: null,
-        componentType: 'SimSlideWithAList',
-        content: {
-          items: [],
-        },
-      },
-      {
-        title: 'TimePicker Slide',
-        subtitle: 'Pick a winner!',
-        componentType: 'SimSlideWithATimePicker',
-        content: {},
-      },
-    ],
+    slideTemplates: {}, // The pre-set templates to use.
+    slideHistory: {
+      size: 0,
+      currentSlide: {},
+      slides: [],       // The history of 'templates + content' which produces an individual slide.
+    },
   },
   mutations: {
-    appendASlide(state, slide = {}) {
-      state.slides.push(slide)
-    },
-    setASlideAtIndex(state, slide) {
-      state.slides.splice(slide.index, 1, slide.content)
-    },
-    setContentForTheSlideAtIndex(state, newSlide) {
-      const slide = state.slides[newSlide.index]
-
-      if (slide) {
-        slide.content = Object.assign(slide.content, newSlide.content)
+    resetHistory(state) {
+      state.slideHistory = {
+        size: 0,
+        currentSlide: {},
+        slides: [],
       }
     },
-    updateCurrentSlideIndex(state, payload) {
-      state.currentSlideIndex = payload
+    setSlideTemplates(state, slideTemplates = {}) {
+      state.slideTemplates = slideTemplates
     },
-    nextSlideIndex(state) {
-      state.currentSlideIndex += 1
+    addASlide(state, slide = {}) {
+      state.slideHistory.slides.push(slide)
+
+      state.slideHistory.size = state.slideHistory.slides.length
+      state.slideHistory.currentSlide = state.slideHistory.slides[state.slideHistory.size - 1]
     },
-    prevSlideIndex(state) {
-      state.currentSlideIndex -= 1
+    navigateToThePreviousSlide(state) {
+      state.slideHistory.slides.pop()
+
+      state.slideHistory.size = state.slideHistory.slides.length
+      state.slideHistory.currentSlide = state.slideHistory.slides[state.slideHistory.size - 1]
     },
   },
-  actions: {},
+  actions: {
+  },
   getters: {
     currentSlide: (state) => () => {
-      return state.slides[state.currentSlideIndex]
+      return state.slideHistory.currentSlide
     },
   },
 }

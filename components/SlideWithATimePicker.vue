@@ -13,8 +13,8 @@
       <SimTimePicker :date="$store.state.activeDate.date"
         orientation="y"
         :time-block-limit="1"
-        :start-time="8"
-        :end-time="17.5"
+        :start-time="data.start_time"
+        :end-time="data.end_time"
         />
     </div>
   </div>
@@ -26,9 +26,23 @@
   export default {
     name: 'sim-slide',
     components: {
-      SimTimePicker
+      SimTimePicker,
     },
     props: ['data'],
+    watcher: {
+      timeBlock(newBlock) {
+        if (newBlock !== null) {
+          const nextSlide = this.$store.state.slideDeck.slideTemplates.event_form
+          nextSlide.title = this.data.title
+          nextSlide.start_time = this.data.content.start_time
+          nextSlide.end_time = this.data.content.end_time
+
+          this.$emit('theSlideHasAnUpdate', {
+            nextSlide,
+          })
+        }
+      },
+    },
   }
 </script>
 

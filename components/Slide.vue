@@ -51,9 +51,9 @@
   }
 
   // @FIXME should be using common.sortByKey(...) | jase
-  const sortByKey = function(list, key, direction) {
+  const sortByKey = (list, key, direction) => {
     if (list && list.length) {
-      let newList = list.sort((a, b) => {
+      const newList = list.sort((a, b) => {
         if (a[key] < b[key]) {
           return -1
         } else if (a[key] > b[key]) {
@@ -70,10 +70,10 @@
   }
 
   // @FIXME should be using common.getListFromIds(...) | jase
-  const getListFromIds = function(array, source, sortKey) {
+  const getListFromIds = (array, source, sortKey) => {
     if (array && array.length) {
-      let list = source.filter((item) => unique(array).find((id) => item.id === id))
-      if (sortKey){
+      const list = source.filter((item) => unique(array).find((id) => item.id === id))
+      if (sortKey) {
         return sortByKey(list, sortKey)
       }
       return list
@@ -96,7 +96,7 @@
     },
     computed: {
       slideData() {
-        return this.$store.state.slideDeck.slides[this.$store.state.slideDeck.currentSlideIndex]
+        return this.$store.state.slideDeck.slides[this.$store.state.slideDeck.slideHistory.size - 1]
       },
       users() {
         return this.slideData.content.block.user_ids ? getListFromIds(this.slideData.content.block.user_ids, this.$store.state.users.all, 'last_name') : null
