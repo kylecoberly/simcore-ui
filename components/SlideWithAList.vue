@@ -138,6 +138,8 @@
           nextSlide = this.$store.state.slideDeck.slideTemplates.event_time_picker
           nextSlide.content.items = this.selectedItems
           nextSlide.title = this.slide.title
+          nextSlide.start_time = this.slide.content.start_time
+          nextSlide.end_time = this.slide.content.end_time
         }
 
         if (selectedItemsWasUpdated) {

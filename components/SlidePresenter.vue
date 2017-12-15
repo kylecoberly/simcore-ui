@@ -19,6 +19,7 @@
 <script>
   import SimSlide from './Slide'
   import SimSlideWithAList from './SlideWithAList'
+  import SimSlideWithAnEventForm from './SlideWithAnEventForm'
   import SimSlideWithATimePicker from './SlideWithATimePicker'
   import SimSlideWithHTML from './SlideWithHTML'
 
@@ -27,6 +28,7 @@
     components: {
       SimSlide,
       SimSlideWithAList,
+      SimSlideWithAnEventForm,
       SimSlideWithATimePicker,
       SimSlideWithHTML,
     },

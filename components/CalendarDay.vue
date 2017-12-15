@@ -181,6 +181,8 @@
           componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
           content: {
             items: block.user_ids,
+            start_time: block.start,
+            end_time: block.start + block.duration,
           },
         }
       },
