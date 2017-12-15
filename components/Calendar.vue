@@ -78,7 +78,7 @@
             </div>
 
             <SimBubble v-if="isCoordinatorContext && shouldBubbleBeOpen && isMonthView">
-              <SimSlideDeck :slides="slides"></SimSlideDeck>
+              <SimSlidePresenter :slides="slides"></SimSlidePresenter>
             </SimBubble>
           </div>
         </div>
@@ -142,11 +142,12 @@
 
   import availabilities from '../external/availabilities'
   import users from '../external/users'
+  import eventEditorSlides from '../external/eventEditorSlides'
 
   import CalendarDay from './CalendarDay'
   import SimBubble from './Bubble'
   import SimIconText from './IconText'
-  import SimSlideDeck from './SlideDeck'
+  import SimSlidePresenter from './SlidePresenter'
   import SimSwitch from './Switch'
   import SimTimePicker from './TimePicker'
 
@@ -156,7 +157,7 @@
       CalendarDay,
       SimBubble,
       SimIconText,
-      SimSlideDeck,
+      SimSlidePresenter,
       SimSwitch,
       SimTimePicker,
     },
@@ -260,6 +261,7 @@
       },
     },
     created() {
+      this.$store.commit('setSlideTemplates', eventEditorSlides)
       this.$store.commit('setAllUsers', users.users())
       this.$store.commit('setAggregateAvailabilityBlocks', availabilities.availabilities())
     },

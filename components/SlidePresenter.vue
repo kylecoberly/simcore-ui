@@ -1,7 +1,7 @@
 <template lang="html">
-  <article class="sim-slide-deck" :style="`--step: ${currentStep}`">
-    <section class="sim-slide-deck--slides">
-      <component class="sim-slide-deck--slide"
+  <article class="sim-slide-presenter" :style="`--step: ${currentStep}`">
+    <section v-if="slideDeck" class="sim-slide-presenter--slides">
+      <component class="sim-slide-presenter--slide"
         v-for="(slide, index) in slides"
         :key="index"
         :data="slide"
@@ -22,52 +22,52 @@
   import SimSlideWithHTML from './SlideWithHTML'
 
   export default {
-    name: 'sim-slide-deck',
+    name: 'sim-slide-presenter',
     components: {
       SimSlide,
       SimSlideWithAList,
       SimSlideWithHTML,
     },
-    props: ['slides', 'shouldHideNavigationControls'],
+    props: ['shouldHideNavigationControls'],
     data() {
       return {
+        slideDeck: this.$store.state.slideDeck,
+        nextControl: { slide: null },
         theNextControlShouldBeDisabled: this.makeTheNextControlDisabledIf,
         thePreviousControlShouldBeDisabled: this.makeThePreviousControlDisabledIf,
       }
     },
     computed: {
+      slides() {
+        return this.slideDeck.slideHistory.slides
+      },
       showNavigationControls() {
         let willShowNavigationControls = true
 
-        if (this.shouldHideNavigationControls || this.slides.length <= 1) {
+        if (this.shouldHideNavigationControls || this.slideDeck.slideHistory.size < 1) {
           willShowNavigationControls = false
         }
 
         return willShowNavigationControls
       },
       currentStep() {
-        return this.$store.state.slideDeck.currentSlideIndex
+        this.makeTheNextControlDisabledIf()
+        this.makeThePreviousControlDisabledIf()
+
+        return this.slideDeck.slideHistory.size - 1
       },
     },
-    mounted() {
-      this.$store.commit('updateCurrentSlideIndex', 0)
-    },
     destroyed() {
-      this.$store.commit('updateCurrentSlideIndex', 0)
+      this.$store.commit('resetHistory')
     },
     methods: {
-      makeTheNextControlDisabledIf(conditionsAreMet) {
-        console.log('are met', conditionsAreMet)
+      makeTheNextControlDisabledIf() {
         let conditionsHaveBeenMet = false
 
-        if (conditionsAreMet === null) {
-          if (this.$store.state.slideDeck.currentSlideIndex === this.slides.length - 1) {
-            conditionsHaveBeenMet = true
-          } else {
-            conditionsHaveBeenMet = false
-          }
-        } else {
-          conditionsHaveBeenMet = conditionsAreMet
+        if (this.slideDeck.slideHistory.size === this.slideDeck.size) {
+          conditionsHaveBeenMet = true
+        } else if (this.nextControl.slide === null) {
+          conditionsHaveBeenMet = true
         }
 
         this.theNextControlShouldBeDisabled = conditionsHaveBeenMet
@@ -75,11 +75,9 @@
       makeThePreviousControlDisabledIf(conditionsAreMet) {
         let conditionsHaveBeenMet = false
 
-        if (conditionsAreMet === null) {
-          if (this.$store.state.slideDeck.currentSlideIndex === 0) {
+        if (conditionsAreMet === null || conditionsAreMet === undefined) {
+          if (this.slideDeck.slideHistory.size === 1) {
             conditionsHaveBeenMet = true
-          } else {
-            conditionsHaveBeenMet = false
           }
         } else {
           conditionsHaveBeenMet = conditionsAreMet
@@ -88,21 +86,19 @@
         this.thePreviousControlShouldBeDisabled = conditionsHaveBeenMet
       },
       previousSlide() {
-        this.$store.commit('prevSlideIndex')
+        this.$store.commit('navigateToThePreviousSlide')
       },
       nextSlide() {
-        this.$store.commit('nextSlideIndex')
+        if (this.nextControl.slide) {
+          this.$store.commit(
+            'addASlide',
+            this.nextControl.slide,
+          )
+        }
       },
       receiveTheUpdateFromTheSlide(update) {
-        console.log(update.wantsToDisableTheNavigationControls)
-        if (update.wantsToDisableTheNavigationControls) {
-          if (update.wantsToDisableTheNavigationControls.hasOwnProperty('next')) {
-            this.makeTheNextControlDisabledIf(update.wantsToDisableTheNavigationControls.next)
-          }
-
-          if (update.wantsToDisableTheNavigationControls.hasOwnProperty('previous')) {
-            this.makeThePreviousControlDisabledIf(update.wantsToDisableTheNavigationControls.previous)
-          }
+        if (update.nextSlide || update.nextSlide === null) {
+          this.nextControl.slide = update.nextSlide
         }
       },
     },
@@ -110,5 +106,5 @@
 </script>
 
 <style lang="scss">
-  @import '../styles/slide-deck';
+  @import '../styles/slide-presenter';
 </style>
