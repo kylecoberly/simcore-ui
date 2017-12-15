@@ -1,20 +1,19 @@
 <template lang="html">
   <div class="sim-filter sim-accordion" :class="{ active: shouldBeActive, open: isOpen }">
-    <div class="sim-filter__header sim-accordion__label" @click="toggleOpenList">{{ label }}</div>
-    <SimDatalist :items="list" :animate="true" class="sim-filter__items sim-accordion__items">
-      <template slot="static-before">
-        <li key="static-before" class="static system-echo" v-if="showSystemEcho">
-          {{ systemEcho }}
-        </li>
-      </template>
-      <template slot="item" slot-scope="props">
-        <li :key="props.item.id" class="no-wrap">
-          <SimSelection :item-id="props.item.id" :should-be-selected="false" @toggle="toggleSelection">
-            {{ props.item.name }}
-          </SimSelection>
-        </li>
-      </template>
+
+    <div class="sim-filter--header sim-accordion--label" @click="toggleOpenList">{{ label }}</div>
+
+    <SimDatalist :items="list" :animate="true" class="sim-filter--items sim-accordion--items">
+      <li slot="static-before" key="static-before" class="static system-echo FIXME-generic-classes" v-if="showSystemEcho">
+        {{ systemEcho }}
+      </li>
+      <li slot="item" slot-scope="props" :key="props.item.id" class="no-wrap">
+        <SimSelection :item-id="props.item.id" :should-be-selected="false" @toggle="toggleSelection">
+          {{ props.item.name }}
+        </SimSelection>
+      </li>
     </SimDatalist>
+
   </div>
 </template>
 

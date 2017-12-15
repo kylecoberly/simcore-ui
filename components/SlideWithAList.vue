@@ -1,33 +1,29 @@
 <template lang="html">
-  <div class="sim-slide">
+  <div class="sim-slide sim-slide--with-list">
 
-    <header v-if="slide.title || slide.subtitle" class="sim-slide--header">
-      <h2 v-if="slide.title" class="sim-slide--title">{{ slide.title }}</h2>
-      <div v-if="slide.subtitle" class="sim-slide--subtitle">{{ slide.subtitle }}</div>
-    </header>
+    <SimSlideHeader :title="slide.title" :subtitle="slide.subtitle" />
+    <SimSlideIntro :content="slide.intro" />
 
-    <div v-if="slide.intro">
-      {{ slide.intro }}
+    <div class="sim-slide--content">
+      <template v-if="items">
+        <SimDatalist v-if="items" :items="foundItems" :animate="true">
+          <div slot="static-before" key="before">
+            <input type="search" v-model="itemSearch" placeholder="find..." />
+          </div>
+          <li slot="item" slot-scope="props" :key="props.item.id">
+            <sim-selection
+              :item="props.item"
+              :item-id="props.item.id"
+              :disabled="props.item.disabled"
+              :selected-items="props.item.selectedItems"
+              @toggle="toggleItemInSelectedItems"
+            >
+              {{ props.item.first_name }} {{ props.item.last_name }}
+            </sim-selection>
+          </li>
+        </SimDatalist>
+      </template>
     </div>
-
-    <template v-if="items">
-      <SimDatalist :items="foundItems" :animate="true">
-        <div slot="static-before" key="before">
-          <input type="search" v-model="itemSearch" placeholder="find..." />
-        </div>
-        <li slot="item" slot-scope="props" :key="props.item.id">
-          <sim-selection
-            :item="props.item"
-            :item-id="props.item.id"
-            :disabled="props.item.disabled"
-            :selected-items="props.item.selectedItems"
-            @toggle="toggleItemInSelectedItems"
-          >
-            {{ props.item.first_name }} {{ props.item.last_name }}
-          </sim-selection>
-        </li>
-      </SimDatalist>
-    </template>
 
   </div>
 </template>
@@ -35,6 +31,8 @@
 <script>
   import SimDatalist from './Datalist'
   import SimSelection from './Selection'
+  import SimSlideHeader from './SlideHeader'
+  import SimSlideIntro from './SlideIntro'
 
   // @FIXME should be using common.unique(...) | jase
   const unique = (array) => {
@@ -89,6 +87,8 @@
     components: {
       SimDatalist,
       SimSelection,
+      SimSlideHeader,
+      SimSlideIntro,
     },
     data() {
       return {
@@ -138,6 +138,7 @@
           nextSlide = this.$store.state.slideDeck.slideTemplates.event_time_picker
           nextSlide.content.items = this.selectedItems
           nextSlide.title = this.slide.title
+          // nextSlide.subtitle = this.slide.subtitle
           nextSlide.start_time = this.slide.content.start_time
           nextSlide.end_time = this.slide.content.end_time
         }
@@ -153,5 +154,5 @@
 </script>
 
 <style lang="scss">
-  @import '../styles/slide';
+  // uses: '../styles/slide';
 </style>

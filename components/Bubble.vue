@@ -1,16 +1,23 @@
 <template lang="html">
-  <div v-show="shouldBeOpen" class="sim-bubble" :class="setClasses()" :style="setStyles()">
+  <div v-show="shouldBeOpen" class="sim-bubble" :class="setClasses" :style="setStyles">
     <div class="sim-bubble--content">
       <slot></slot>
     </div>
-    <div class="sim-bubble--dismiss" @click="dismiss">&times;</div>
+    <div class="sim-bubble--dismiss" @click="dismiss">
+      <SimIconText icon="fa-times fa-lg"></SimIconText>
+    </div>
   </div>
 </template>
 
 <script>
+  import SimIconText from './IconText'
+
   export default {
     name: 'sim-bubble',
     props: {},
+    components: {
+      SimIconText,
+    },
     data() {
       return {
         metrics: {},
@@ -22,6 +29,20 @@
       },
       bubbleProperties() {
         return this.$store.state.bubble.properties
+      },
+      setClasses() {
+        const classes = []
+        classes.push(`sim-bubble--${this.bubbleProperties.orientation}`)
+
+        return classes.join(' ')
+      },
+      setStyles() {
+        const styles = []
+        styles.push(`--x: ${parseInt(this.bubbleProperties.x)}`)
+        styles.push(`--y: ${parseInt(this.bubbleProperties.y)}`)
+        styles.push(`--dink-y: ${parseInt(this.bubbleProperties.dinkY - this.metrics.top)}`)
+
+        return styles.join(';')
       },
     },
     mounted() {
@@ -47,20 +68,6 @@
       },
       dismiss() {
         this.$store.commit('toggleBubbleVisibility', false)
-      },
-      setClasses() {
-        const classes = []
-        classes.push(`sim-bubble--${this.bubbleProperties.orientation}`)
-
-        return classes.join(' ')
-      },
-      setStyles() {
-        const styles = []
-        styles.push(`--x: ${parseInt(this.bubbleProperties.x)}`)
-        styles.push(`--y: ${parseInt(this.bubbleProperties.y)}`)
-        styles.push(`--dink-y: ${parseInt(this.bubbleProperties.dinkY - this.metrics.top)}`)
-
-        return styles.join(';')
       },
     },
   }

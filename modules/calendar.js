@@ -1,4 +1,5 @@
 const dateFormatDisplay = 'dddd, MMMM Do'
+const dateFormatDisplayShort = 'dddd, MMM Do'
 const dateFormatRaw = 'YYYY-MM-DD'
 
 const calendar = {
@@ -7,6 +8,7 @@ const calendar = {
       date_format: {
         raw: dateFormatRaw,
         display: dateFormatDisplay,
+        short: dateFormatDisplayShort,
         month_name: 'MMMM',
         year: 'Y',
         month_short_day_ordinal: 'MMM Do',

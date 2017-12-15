@@ -111,4 +111,5 @@
 
 <style lang="scss">
   @import '../styles/slide-presenter';
+  @import '../styles/slide';
 </style>

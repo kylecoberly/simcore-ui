@@ -16,6 +16,7 @@
       <template v-if="isInstructorContext">
         <div class="local--day--blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
+            class="sim-timeblock--theme--event"
             :key="index"
             :block="block"
             :index="index"
@@ -25,6 +26,7 @@
         </div>
         <div class="local--day--blocks local--day--time-blocks">
           <SimTimeBlock v-for="(block, index) in currentUserAvailabilityBlocks"
+            class="sim-timeblock--theme--default"
             :key="index"
             :block="block"
             :index="index"
@@ -38,6 +40,7 @@
 
         <div v-if="isWeekView" class="local--day--availability-blocks">
           <SimTimeBlock v-for="(block, index) in aggregateAvailabilityBlocks"
+            class="sim-timeblock--theme--available"
             :key="index"
             :block="block"
             :index="index"
@@ -48,6 +51,7 @@
 
         <div class="local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
+            class="sim-timeblock--theme--event"
             :key="index"
             :block="block"
             :index="index"
@@ -58,7 +62,7 @@
 
         <div class="local--day--time-blocks">
           <SimTimeBlock v-for="(block, index) in stagedEvents"
-            class="sim-timeblock--pending-event"
+            class="sim-timeblock--pending-event sim-timeblock--theme--pending-event"
             :key="index"
             :block="block"
             :index="index"
@@ -69,7 +73,7 @@
 
         <div v-if="isMonthView" class="calendar-density-blocks--outer">
           <SimBubbleTrigger v-for="(block, index) in aggregateAvailabilityBlocks"
-            class="calendar-density-block sim-timeblock sim-timeblock--y"
+            class="calendar-density-block sim-timeblock sim-timeblock--y sim-timeblock--theme--available"
             :key="index"
             :class="setDensityBlockClasses(block)"
             :style="`--start: ${block.start};--duration: ${block.duration}`"

@@ -1,25 +1,43 @@
 <template lang="html">
-  <div class="sim-slide">
+  <div class="sim-slide sim-slide--with-form">
 
-    <header v-if="data.title || data.subtitle" class="sim-slide--header">
-      <h2 v-if="data.title" class="sim-slide--title">{{ data.title }}</h2>
-      <div v-if="data.subtitle" class="sim-slide--subtitle">{{ data.subtitle }}</div>
-    </header>
+    <SimSlideHeader :title="data.title" :subtitle="data.subtitle" />
+    <SimSlideIntro :content="data.intro" />
 
-    <div v-if="data.intro">
-      {{ data.intro }}
+    <div class="sim-slide--content">
+      Yay! Event Form!
     </div>
-
-    <div v-if="data.content"></div>
   </div>
 </template>
 
 <script>
+import SimSlideHeader from './SlideHeader'
+import SimSlideIntro from './SlideIntro'
+
   export default {
+    name: 'sim-slide-with-a-form',
+    components: {
+      SimSlideHeader,
+      SimSlideIntro,
+    },
     props: ['data'],
+    watcher: {
+      timeBlock(newBlock) {
+        if (newBlock !== null) {
+          const nextSlide = this.$store.state.slideDeck.slideTemplates.event_form
+          nextSlide.title = this.data.title
+          nextSlide.start_time = this.data.content.start_time
+          nextSlide.end_time = this.data.content.end_time
+
+          this.$emit('theSlideHasAnUpdate', {
+            nextSlide,
+          })
+        }
+      },
+    },
   }
 </script>
 
 <style lang="scss">
-  @import '../styles/slide';
+  // uses: '../styles/slide';
 </style>

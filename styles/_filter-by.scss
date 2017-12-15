@@ -1,22 +1,80 @@
 .sim-filter {
-    --active-color: var(--filter-active-color, var(--green, #9ccc66));
+  --active-color: var(--filter-active-color, var(--green, #9ccc66));
+
   + .sim-filter {
     margin-top: 1em;
   }
-  &__header {
+
+  &--header {
     padding: 0;
-    font-weight: 200;
+    font-weight: 300;
     display: block;
-    border: none;
+    border: 0;
     white-space: nowrap;
   }
+
   .sim-selection {
     font-size: .8em;
-    input:checked {
-      --selection-color: var(--active-color);
+
+    input {
+      &:checked {
+        --selection-color: var(--active-color);
+      }
     }
   }
-  &.active .sim-filter__header {
-    color: var(--active-color);
+
+  &.active {
+    .sim-filter--header {
+      color: var(--active-color);
+    }
+  }
+}
+
+.sim-accordion {
+  &--label {
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+
+    &::before {
+      content: '\f0da';
+      display: inline-block;
+      position: relative;
+      margin: 0 .5em;
+      font-family: FontAwesome;
+      font-size: 1.3em;
+      transform: rotate(0);
+      transition: transform calc(var(--ms, 300ms) / 2) ease-out;
+      opacity: .35;
+    }
+
+    + .sim-accordion--items {
+      max-height: 0;
+      overflow: hidden;
+      transition: var(--ms, 300ms) linear;
+      opacity: 0;
+    }
+  }
+
+  &--items {
+    margin-left: 1.75em;
+  }
+
+  &.open {
+    .sim-accordion--label {
+      &::before {
+        transform: rotate(90deg);
+      }
+
+      + .sim-accordion--items {
+        opacity: 1;
+        max-height: 90vh;
+        overflow: auto;
+      }
+    }
+
+    .sim-accordion--items {
+      padding: .5em 0;
+    }
   }
 }

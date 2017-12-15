@@ -7,7 +7,7 @@ const eventEditorSlides = {
   },
   event_time_picker: {
     title: 'Event Time Picker',
-    subtitle: 'Pick the Time',
+    subtitle: '',
     componentType: 'SimSlideWithATimePicker',
     content: {},
   },

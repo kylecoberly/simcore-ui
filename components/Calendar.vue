@@ -28,11 +28,11 @@
       <main class="sim-calendar--main">
         <div class="sim-calendar--grid">
           <div class="sim-calendar--grid--header">
-            <div v-for="(day, index) in $store.state.calendar.settings.day_names" class="sim-calendar--grid--header--day">
+            <div v-for="(dayName, index) in $store.state.calendar.settings.day_names" class="sim-calendar--grid--header--day">
               <span class="sim-calendar--grid--header--dayname">
-                {{ day }}
+                {{ dayName }}
               </span>
-              <span class="sim-calendar--grid--header--date" v-if="isWeekView">
+              <span v-if="isWeekView" class="sim-calendar--grid--header--date" :class="{ 'is-today': isCurrentDay(currentWeekDays[index]) }">
                 {{ showDayNumber(currentWeekDays[index]) }}
               </span>
             </div>
@@ -87,33 +87,28 @@
       <template v-if="isCoordinatorContext">
         <aside class="sim-calendar--aside sim-calendar--filters">
           <div class="sim-calendar--aside--header">
-            <b>Filters</b>
+            <b>Availability &amp; Event Filters</b>
           </div>
           <div class="sim-calendar--aside--body">
-            <div class="FIXME-this-is-a-flex-interceptor">
+            <div class="sim-flex--1">
+
               <div class="filter-molecule">
-                <p>
-                  <label>
-                    Event Length: <b>{{ halfGlyph(filterEventLength, 'Hour', 'Hours') }}</b>
-                    <br />
-                    <br />
-                    <input v-model="filterEventLength" type="range" min="0.5" max="6" step="0.5" />
-                  </label>
-                </p>
+                <SimFilterBy xv-if="userTypeIsClient" system-echo="No facility filters" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
+                <SimFilterBy system-echo="No department filters" label="Departments" type="department_id" :list="departments" @filter="applyFilter"></SimFilterBy>
+                <SimFilterBy system-echo="No professional title filters" label="Professional Titles" type="title_id" :list="professionalTitles" @filter="applyFilter"></SimFilterBy>
               </div>
 
               <div class="filter-molecule">
                 <p>
                   <label>
-                    Instructors
-                    <br />
-                    <br />
+                    <b>Instructors</b>
+                    <br /><br />
                     <input type="text" placeholder="autocomplete instructors..." />
                   </label>
                 </p>
               </div>
-            </div>
 
+            </div>
           </div>
         </aside>
       </template>
@@ -147,6 +142,7 @@
   import CalendarDay from './CalendarDay'
   import SimBubble from './Bubble'
   import SimIconText from './IconText'
+  import SimFilterBy from './FilterBy'
   import SimSlidePresenter from './SlidePresenter'
   import SimSwitch from './Switch'
   import SimTimePicker from './TimePicker'
@@ -157,6 +153,7 @@
       CalendarDay,
       SimBubble,
       SimIconText,
+      SimFilterBy,
       SimSlidePresenter,
       SimSwitch,
       SimTimePicker,
@@ -164,9 +161,13 @@
     props: ['selectedClass'],
     data() {
       return {
-        contextSwitch: false,
+        contextSwitch: true,
         slides: this.$store.state.slideDeck.slides,
-        filterEventLength: 0.5,
+        // filterEventLength: 0.5,
+
+        institutions: [],
+        departments: [],
+        professionalTitles: [],
       }
     },
     computed: {
@@ -241,7 +242,8 @@
             .format(this.$store.state.calendar.settings.date_format.month_short_day_ordinal)}
             –
             ${moment(this.currentWeekDays[6])
-            .format(this.$store.state.calendar.settings.date_format.month_short_day_ordinal)}
+            .format(this.$store.state.calendar.settings.date_format.month_short_day_ordinal)},
+            ${this.displayYear}
           `
         }
 
@@ -269,13 +271,8 @@
       this.setTheActiveDateToToday()
     },
     methods: {
-      halfGlyph(number, singularUnit, pluralUnits) {
-        const grammaticalUnit = number > 0 && number <= 1 ? singularUnit : pluralUnits
-        const glyph = number.toString()
-          .replace(/\.5/, '½')
-          .replace(/^0/, '') || 0
-
-        return `${glyph} ${grammaticalUnit}`
+      isCurrentDay(date) {
+        return moment().isSame(date, 'day')
       },
       setDays(start, limit) {
         const dateStrings = [start.format(this.$store.state.calendar.settings.date_format.raw)]
@@ -312,17 +309,39 @@
 
         return parseInt(date[2])
       },
-      setHourClasses(hour) {
-        const classes = []
-        classes.push((hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'))
-        classes.push((hour === 0 || hour === 24 ? 'is-midnight' : (hour === 12 ? 'is-noon' : '')))
-        return classes.join(' ')
-      },
-      setDate(date) {
-        const dayMoment = moment(date)
-
-        this.displayDate = dayMoment.format('dddd, MMMM Do')
-        this.date = dayMoment.format('YYYY-MM-DD')
+      // setHourClasses(hour) {
+      //   const classes = []
+      //   classes.push((hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'))
+      //   classes.push((hour === 0 || hour === 24 ? 'is-midnight' : (hour === 12 ? 'is-noon' : '')))
+      //   return classes.join(' ')
+      // },
+      // setDate(date) {
+      //   const dayMoment = moment(date)
+      //
+      //   this.displayDate = dayMoment.format('dddd, MMMM Do')
+      //   this.date = dayMoment.format('YYYY-MM-DD')
+      // },
+      // halfGlyph(number, singularUnit, pluralUnits) {
+      //   const grammaticalUnit = number > 0 && number <= 1 ? singularUnit : pluralUnits
+      //   const glyph = number.toString()
+      //     .replace(/\.5/, '½')
+      //     .replace(/^0/, '') || 0
+      //
+      //   return `${glyph} ${grammaticalUnit}`
+      // },
+      applyFilter (type, data) {
+          this.filters.find((filter) => filter.type === type).items = data
+          this.filteredUsers = this.users.filter((item) => {
+              // @FIXME ew this.filters[n]...
+              // return this.filters.forEach(filter => filter.items.length ? filter.items.includes(item[filter.type]) : true)
+              // filters[0] = institutions
+              // filters[1] = departments
+              // filters[2] = professionalTitles
+              return (this.userTypeIsClient && this.filters[0].items.length ? this.filters[0].items.includes(item[this.filters[0].type]) : true)
+                  && (this.filters[1].items.length ? this.filters[1].items.includes(item[this.filters[1].type]) : true)
+                  && (this.filters[2].items.length ? this.filters[2].items.includes(item[this.filters[2].type]) : true)
+          })
+          // this.bulkCheckState = this.isSetSelectedAlready(this.filteredUsers)
       },
     },
   }
@@ -330,6 +349,15 @@
 
 <style lang="scss">
   @import '../styles/calendar';
+
+  .sim-flex--handoff {
+    flex: 1;
+    display: flex;
+  }
+
+  .sim-flex--1 {
+    flex: 1;
+  }
 
   .sim-calendar .sim-bubble {
     top: -1em;

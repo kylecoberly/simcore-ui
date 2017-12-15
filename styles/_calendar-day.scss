@@ -34,7 +34,7 @@
   display: flex;
 
   .calendar-density-block {
-    --timeblock-color: var(--green);
+    // --timeblock-color: var(--green);
     opacity: .5;
     cursor: pointer;
   }
@@ -51,26 +51,26 @@
     }
   }
 
-  &--time-blocks {
-    .sim-timeblock {
-      --timeblock-color: var(--blue);
-    }
-    .sim-timeblock--pending-event {
-      --timeblock-color: var(--orange);
-    }
-  }
-
-  &--event-blocks {
-    .sim-timeblock {
-      --timeblock-color: var(--aqua);
-    }
-  }
-
-  &--availability-blocks {
-    .sim-timeblock {
-      --timeblock-color: var(--green);
-    }
-  }
+  // &--time-blocks {
+  //   .sim-timeblock {
+  //     --timeblock-color: var(--blue);
+  //   }
+  //   .sim-timeblock--pending-event {
+  //     --timeblock-color: var(--orange);
+  //   }
+  // }
+  //
+  // &--event-blocks {
+  //   .sim-timeblock {
+  //     --timeblock-color: var(--aqua);
+  //   }
+  // }
+  //
+  // &--availability-blocks {
+  //   .sim-timeblock {
+  //     --timeblock-color: var(--green);
+  //   }
+  // }
 }
 
 .is-month-view {

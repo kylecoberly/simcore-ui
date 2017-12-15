@@ -2,14 +2,13 @@
   --color: var(--timeblock-color, var(--action));
   background: var(--color);
   opacity: 1;
-  border-radius: 2px;
+  border-radius: .2em;
   position: absolute;
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: var(--timeblock-cursor, move);
-  box-shadow: 0 .2em 1em -.5em var(--shadow);
 
   // states
   &.is-display-only {
@@ -142,8 +141,8 @@
 
   // contexts
   &--x {
-    --remover-x-end: 0; // -50%;
-    --remover-y-end: 0; // 50%;
+    --remover-x-end: 50%;
+    --remover-y-end: -50%;
     top: 50%;
     left: calc(var(--start, 8) * var(--segment-size, 4.1667) * 1%);
     width: calc(var(--duration, 8) * var(--segment-size, 4.1667) * 1%);
@@ -155,7 +154,6 @@
     }
 
     &.is-display-only {
-      // height: auto;
       pointer-events: none;
     }
 
@@ -166,12 +164,9 @@
     }
 
     .sim-timeblock--remover {
-      // top: 100%;
-      // left: 50%;
-      // transform: translate(-50%, -100%);
-      top: -.5em;
-      right: -.5em;
-      transform: translate(0%, 0%);
+      top: 0;
+      right: 0;
+      transform: translate(50%, -50%);
       color: var(--lightest);
       z-index: 1;
       background: var(--color);
@@ -181,8 +176,8 @@
   }
 
   &--y {
-    --remover-x-end: 0;
-    --remover-y-end: 0;
+    --remover-x-end: 50%;
+    --remover-y-end: -50%;
     top: calc(var(--start) * var(--segment-size, 4.1667) * 1%);
     left: 0;
     width: 100%;
@@ -205,9 +200,9 @@
     }
 
     .sim-timeblock--remover {
-      top: -.5em;
-      right: -.5em;
-      transform: translate(0%, 0%);
+      top: 0;
+      right: 0;
+      transform: translate(50%, -50%);
       color: var(--lightest);
       z-index: 1;
       background: var(--color);
@@ -216,6 +211,28 @@
     }
   }
 }
+
+// block themes
+.sim-timeblock--theme {
+  &--default {
+    --timeblock-color: var(--blue) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
+  }
+
+  &--pending-event {
+    --timeblock-color: var(--orange) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--orange) 90%);
+  }
+
+  &--event {
+    --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--aqua) 90%);
+  }
+
+  &--available {
+    --timeblock-color: var(--green)  radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--green) 90%);
+  }
+}
+
+
+
 
 // outset states affect blocks
 .is-moving {
@@ -244,22 +261,28 @@
 
 // context overrides
 .sim-timepicker--y {
-  .sim-timeblock--info {
-    left: 100%;
-    width: 200%;
-    background: transparent;
-    text-align: left;
-    padding: 0 0 0 .5em;
-    top: 0;
-    transform: none;
+  .sim-timeblock {
+    --timeblock-color: var(--blue) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
+    box-shadow: 0 .1em 1em -.3em var(--shadow);
 
-    &--hours {
-      font-size: 1.3em;
-      font-weight: bold;
-    }
+    &--info {
+      top: 0;
+      left: 100%;
+      width: auto;
+      white-space: nowrap;
+      background: transparent;
+      text-align: left;
+      padding: 0 0 0 .5em;
+      transform: none;
 
-    &--time {
-      display: block;
+      &--hours {
+        font-size: 1.3em;
+        font-weight: bold;
+      }
+
+      &--time {
+        display: block;
+      }
     }
   }
 }

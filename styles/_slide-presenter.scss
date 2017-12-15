@@ -1,7 +1,8 @@
 .sim-slide-presenter {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; //-reverse;
+  overflow: hidden;
 
   &--slides {
     flex: 1;
@@ -17,21 +18,20 @@
     will-change: transform;
     transform: translateX(calc(var(--step, 0) * -100%));
     transition: transform 300ms ease-out;
+    background: var(--dark);
   }
 
   > footer {
     flex: none;
-    border-top: 1px solid var(--darker);
+    position: relative;
+    box-shadow: 0 0 0 1px var(--darker);
     text-align: right;
     display: flex;
     padding: 1em;
     justify-content: space-between;
-    // background: var(--mist);
+    background: var(--darker);
     color: var(--lighter);
-
-    button {
-      // border-radius: 0;
-    }
+    z-index: 1;
   }
 
   // buttons and input
@@ -58,9 +58,7 @@
     }
 
     &.primary {
-      &:not([disabled]) {
-        background: var(--action);
-      }
+      background: var(--action);
     }
 
     &.cancel {

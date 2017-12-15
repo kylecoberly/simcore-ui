@@ -12,12 +12,19 @@
 
   // colors
   --red: #ca1e34;
+  --red-film: rgba(#ca1e34, .5);
   --orange: #ff7042;
+  --orange-film: rgba(#ff7042, .5);
   --yellow: #ffc929;
+  --yellow-film: rgba(#ffc929, .5);
   --green: #9ccc66;
+  --green-film: rgba(#9ccc66, .5);
   --aqua: #00c1d9;
+  --aqua-film: rgba(#00c1d9, .5);
   --blue: #4A93B9;
+  --blue-film: rgba(#4A93B9, .5);
   --purple: #ab47bd;
+  --purple-film: rgba(#ab47bd, .5);
   --accent: var(--medium-grey);
   --action: var(--blue);
   --focus: var(--aqua);
