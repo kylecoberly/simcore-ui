@@ -53,7 +53,7 @@
       removeEventListener('keyup', this.dismissWithEscapeKey)
     },
     watch: {
-      'bubbleProperties.dinkY': function () {
+      bubbleProperties () {
         this.metrics = this.getMetrics()
       },
     },

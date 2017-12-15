@@ -7,10 +7,10 @@
 <script>
 export default {
   name: 'sim-bubble-trigger',
-  props: ['bubbleProperties', 'slideContent'],
+  props: ['bubble-properties', 'slideContent'],
   methods: {
     setBubbleData(event) {
-      const bubblePosition = JSON.parse(JSON.stringify(event.target.getBoundingClientRect()))
+      const bubblePosition = event.target.getBoundingClientRect()
       bubblePosition.dinkY = bubblePosition.top + bubblePosition.height / 2
       bubblePosition.dinkX = bubblePosition.left + bubblePosition.width / 2
 
