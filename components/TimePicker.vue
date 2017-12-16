@@ -81,7 +81,7 @@
       return {
         isMoving: false,
         isStretching: false,
-        blocks: this.propBlocks || this.$store.state.user.availabilities[this.$store.state.activeDate.date],
+        blocks: this.$store.state.user.availabilities[this.$store.state.activeDate.date] || [],
       }
     },
     watch: {
@@ -114,9 +114,13 @@
           .format('dddd, MMM D')
       },
       countTimeBlockHours() {
-        return this.blocks
-          .map((block) => { return block.duration })
+        if (this.blocks) {
+          return this.blocks
+          .map((block) => block.duration)
           .reduce((sum, value) => sum + value, 0)
+        } else {
+          return 0
+        }
       },
       displayTotalTimeBlockHours() {
         const output = this.countTimeBlockHours.toString()

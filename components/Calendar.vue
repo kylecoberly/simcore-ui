@@ -93,7 +93,7 @@
           <div class="sim-calendar--aside--body">
             <div class="sim-flex--1">
 
-              <div class="filter-molecule">
+              <div v-if="isMonthView" class="filter-molecule">
                 <b>Event Length: {{ halfGlyph(filterEventLength, 'hour', 'hours') }}</b>
                 <br /><br />
                 <input type="range" v-model="filterEventLength" min="0.5" max="6" step="0.5" />
@@ -109,7 +109,7 @@
                 <p class="sim-flex--row">
                   <b class="sim-flex--1">Instructors</b>
                   <span v-if="thereAreActiveInstructors" @click="clearAllActiveInstructors">
-                    <SimIconText icon="fa-minus-circle fa-fw"></SimIconText>
+                    <SimIconText icon="fa-times-circle fa-fw"></SimIconText>
                   </span>
                 </p>
                 <SimDatalist :items="activeInstructors" :animate="true">
@@ -123,16 +123,14 @@
                       >
                       {{ props.item.first_name }} {{ props.item.last_name }}
                     </SimSelection>
-                    <span @click="removeFromInstructorList(props.item)">
-                      <SimIconText icon="fa-minus fa-fw"></SimIconText>
+                    <span class="item-remover" @click="removeFromActiveInstructorList(props.item)">
+                      <SimIconText icon="fa-times fa-fw"></SimIconText>
                     </span>
                   </li>
                 </SimDatalist>
                 <br />
                 <SimAutocomplete
-                  :options="instructors"
-                  field="last_name"
-                  name="instructors"
+                  :options="inactiveInstructors"
                   placeholder="find instructors..."
                   @select="addToInstructorList"
                   >
@@ -185,7 +183,7 @@
   import SimTimePicker from './TimePicker'
 
   // #FIXME should be using common.lodestar(...) | jase
-const lodestar = function(element, classname, selector, test) {
+  const lodestar = function(element, classname, selector, test) {
     let items = element.querySelectorAll(selector)
     let flag = false
     console.log('here', element, items)
@@ -227,6 +225,7 @@ const lodestar = function(element, classname, selector, test) {
         professionalTitles: [],
         instructors: [],
         activeInstructors: [],
+        inactiveInstructors: [],
         selectedInstructors: [],
       }
     },
@@ -323,7 +322,7 @@ const lodestar = function(element, classname, selector, test) {
       },
       thereAreActiveInstructors() {
         return this.activeInstructors.length
-      }
+      },
     },
     created() {
       this.$store.commit('setSlideTemplates', eventEditorSlides)
@@ -333,23 +332,33 @@ const lodestar = function(element, classname, selector, test) {
     mounted() {
       this.setTheActiveDateToToday()
       this.instructors = this.$store.state.users.all
+      this.resetInactiveInstructors()
     },
     methods: {
-      onSelect(item) {
-        this.selectedOption = item
+      sortItemsByProperty(items, property) {
+        items.sort((a, b) => {
+          return (a[property] > b[property]) - (a[property] < b[property])
+        })
       },
       addToInstructorList(item) {
         const foundItem = this.activeInstructors.find((instructor) => instructor.id === item.id)
         if (!foundItem) {
           this.activeInstructors.push(item)
+          this.inactiveInstructors.splice(this.inactiveInstructors.indexOf(item), 1)
           this.toggleItemInSelectedInstructors(item.id, true)
+          this.sortItemsByProperty(this.activeInstructors, 'last_name')
+          this.sortItemsByProperty(this.inactiveInstructors, 'last_name')
         } else {
           lodestar(this.$el, 'lodestar', `.instructor-${item.id}`, 'value')
         }
       },
-      removeFromInstructorList(item) {
+      removeFromActiveInstructorList(item) {
+        const foundItem = this.activeInstructors.find((instructor) => instructor.id === item.id)
         this.toggleItemInSelectedInstructors(item.id, false)
         this.activeInstructors.splice(this.activeInstructors.indexOf(item), 1)
+        this.inactiveInstructors.push(foundItem)
+        this.sortItemsByProperty(this.activeInstructors, 'last_name')
+        this.sortItemsByProperty(this.inactiveInstructors, 'last_name')
       },
       toggleItemInSelectedInstructors(itemId, value) {
         let selectedItemsWasUpdated = false
@@ -366,9 +375,14 @@ const lodestar = function(element, classname, selector, test) {
           selectedItemsWasUpdated = true
         }
       },
+      resetInactiveInstructors() {
+        this.inactiveInstructors = JSON.parse(JSON.stringify(this.instructors))
+        this.sortItemsByProperty(this.inactiveInstructors, 'last_name')
+      },
       clearAllActiveInstructors() {
         this.activeInstructors.splice(0, this.activeInstructors.length)
         this.selectedInstructors.splice(0, this.selectedInstructors.length)
+        this.resetInactiveInstructors()
       },
       runLodestar() {
         lodestar(this.$el, 'lodestar', '.sim-calendar--filters .sim-calendar--aside--body', 'value')
@@ -473,7 +487,7 @@ const lodestar = function(element, classname, selector, test) {
     --switch-color: var(--lighter-grey);
     --switch-color-active: var(--lighter-grey);
     --switch-handle-color: var(--action);
-    // --timeblock-color: var(--green);
+    --timeblock-color: var(--green);
     .sim-switch input {
       box-shadow: 0 0 0 1px var(--light-grey);
       &::before {

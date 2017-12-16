@@ -1,10 +1,15 @@
 <template lang="html">
-  <div class="sim-autocomplete">
+  <div class="sim-autocomplete" :class="{'sim-autocomplete--options-visible': isOpen}">
+    <div class="sim-autocomplete--search-icon">
+      <SimIconText icon="fa-search"></SimIconText>
+    </div>
     <input v-model="keyword"
+      type="search"
       :placeholder="placeholder"
       @input="onInput($event.target.value)"
-      @keyup.esc="isOpen = false"
-      @blur="isOpen = true"
+      @keyup.esc="reset"
+      @focus="focus"
+      @blur="blur"
       @keydown.down="moveDown"
       @keydown.up="moveUp"
       @keydown.enter="select"
@@ -15,7 +20,7 @@
           :key="index"
           :class="{highlighted: index === position}"
           @mouseenter="position = index"
-          @mousedown="select"
+          @mousedown="clickSelect"
           >
           <slot name="item" :option="option"></slot>
         </li>
@@ -28,13 +33,14 @@
 </template>
 
 <script>
+  import SimIconText from './IconText'
+
   export default {
     name: 'sim-autocomplete',
+    components: {
+      SimIconText
+    },
     props: {
-      name: {
-        type: String,
-        default: 'autocomplete',
-      },
       options: {
         type: Array,
         required: true,
@@ -43,10 +49,6 @@
         type: String,
         default: 'find...',
       },
-      field: {
-        type: String,
-        required: true
-      }
     },
     data() {
       return {
@@ -57,8 +59,11 @@
     },
     computed: {
       filteredOptions() {
-        const expression = new RegExp(this.keyword, 'i')
-        return this.options.filter(option => option[this.field].match(expression))
+        return this.options.filter((option) => {
+          return Object.keys(option).some((prop) => {
+            return option[prop].toString().toLowerCase().includes(this.keyword.toLowerCase())
+          })
+        })
       },
       filteredOptionsCount() {
         return this.filteredOptions.length
@@ -84,8 +89,20 @@
       select() {
         const selectedOption = this.filteredOptions[this.position]
         this.$emit('select', selectedOption)
+      },
+      clickSelect() {
+        this.select()
+        this.reset()
+      },
+      reset() {
         this.isOpen = false
-        this.keyword = null // selectedOption[this.field]
+        this.keyword = ''
+      },
+      blur() {
+        this.isOpen = false
+      },
+      focus() {
+        this.isOpen = true
       },
     },
   }

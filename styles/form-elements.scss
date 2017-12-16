@@ -10,22 +10,22 @@ textarea {
 // text inputs
 input {
   font-family: inherit;
-  font-size: 1rem;
+  font-size: inherit;
   outline: none;
-  border-radius: .2em;
+  border-radius: .2rem;
   &:not([type='checkbox']):not([type='radio']):not([type='range']) {
     appearance: none;
     padding: .4em .7em;
-    border: none;
+    border: 0;
     width: 100%;
-    box-shadow: 0 0 0 1px rgba(#777, .5) inset;
+    box-shadow: 0 0 0 1px var(--dusk) inset;
     transition: all var(--ms) ease-out;
   }
   &:active,
   &:focus {
     // box-shadow: 0 0 2px 1px var(--action);
     &:not([type='checkbox']):not([type='radio']):not([type='range']) {
-      box-shadow: 0 0 0 1px rgba(#777, .5) inset, 0 0 2px 1px var(--action);
+      box-shadow: 0 0 0 1px var(--dusk) inset, 0 0 2px 1px var(--action);
     }
   }
   &[readonly] {
@@ -68,7 +68,7 @@ input[type='range'] {
   // MOZILLA
   &::-moz-range-track {
     appearance: none;
-    background: #fff;
+    background: var(--lightest);
     outline: none;
   }
 
@@ -81,7 +81,6 @@ input[type='range'] {
     width: 2em;
     height: 2em;
     border: 0;
-    // box-shadow: 0 .2em 1em -.3em #000;
     box-shadow: 0 0 0 2px var(--dark-grey);
     border-radius: 1em;
     background: var(--handle-color);
@@ -100,7 +99,7 @@ input[type='range'] {
     appearance: none;
     width: 2em;
     height: 2em;
-    border: none;
+    border: 0;
     // box-shadow: 0 .2em 1em -.3em #000;
     box-shadow: 0 0 0 2px var(--dark-grey);
     border-radius: 1em;

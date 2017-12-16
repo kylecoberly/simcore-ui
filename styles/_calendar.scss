@@ -79,8 +79,7 @@
     flex: none;
     display: flex;
     flex-direction: column;
-    width: 20%;
-    min-width: 15em;
+    width: 18em;
     position: relative;
     z-index: 1;
 
@@ -111,9 +110,19 @@
     }
 
     .sim-datalist {
+      .item-remover {
+        opacity: 0;
+      }
+
       li {
         padding: .5em 0 .5em .5em;
         border-radius: 1px;
+
+        &:hover {
+          .item-remover  {
+            opacity: 1;
+          }
+        }
       }
     }
   }

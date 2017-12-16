@@ -3,28 +3,63 @@
   position: relative;
 
   input {
+    position: relative;
+    font: inherit;
     color: var(--autocomplete-input-fg, var(--dark));
     background: var(--autocomplete-input-bg, var(--lighter));
+    border: 0;
+    padding-left: 2em !important;
+    z-index: 1;
+  }
+
+  &--search-icon {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--autocomplete-icon-fg, var(--dusk));
+    background: var(--autocomplete-icon-bg, transparent);
+    z-index: 2;
+  }
+
+  &--options-visible {
+    input {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
   }
 
   &--items {
     position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    max-height: 10em;
+    top: calc(100% + 1px);
+    left: 1px;
+    right: 1px;
+    max-height: 15em;
     overflow: auto;
     color: var(--autocomplete-items-fg, var(--dark));
     background: var(--autocomplete-items-bg, var(--lighter));
-    border-radius: 0 0 .2em .2em;
+    border-radius: 0 0 .2rem .2rem;
+    box-shadow: 0 0 0 1px var(--fog), 0 .3em 1em -.3em var(--shadow);
   }
 
   &--item-count {
     position: absolute;
+    pointer-events: none;
     top: 0;
+    bottom: 0;
     right: 0;
-    transform: translate(-30%, 30%);
-    color: var(--autocomplete-input-fg, var(--dusk));
+    width: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--autocomplete-count-fg, var(--dusk));
+    background: var(--autocomplete-count-bg, transparent);
+    z-index: 1;
   }
 
   li {
