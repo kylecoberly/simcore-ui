@@ -72,14 +72,19 @@
         </div>
 
         <div v-if="isMonthView" class="calendar-density-blocks--outer">
-          <SimBubbleTrigger v-for="(block, index) in aggregateAvailabilityBlocks"
-            class="calendar-density-block sim-timeblock sim-timeblock--y sim-timeblock--theme--available"
-            :key="index"
-            :class="setDensityBlockClasses(block)"
-            :style="`--start: ${block.start};--duration: ${block.duration}`"
-            :bubble-properties="{key: getMetaKey(block), x: dayOfWeek+1}"
-            :slideContent="packageSlideContent(block)"
-            />
+          <template v-if="aggregateAvailabilityBlocks">
+            <SimBubbleTrigger v-for="(block, index) in aggregateAvailabilityBlocks"
+              class="calendar-density-block sim-timeblock sim-timeblock--y sim-timeblock--theme--available"
+              :key="index"
+              :class="setDensityBlockClasses(block)"
+              :style="`--start: ${block.start};--duration: ${block.duration}`"
+              :bubble-properties="{key: getMetaKey(block), x: dayOfWeek+1}"
+              :slideContent="packageSlideContent(block)"
+              />
+          </template>
+          <template v-else-if="!aggregateAvailabilityBlocks">
+            <div @click="emitLodestar" class="sim-timeblock sim-timeblock--y sim-timeblock--theme--empty" style="--start: 0;--duration: 24"></div>
+          </template>
         </div>
       </template>
 
@@ -256,6 +261,10 @@
         blocks.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
 
         // this.$store.commit('setAvailabilityBlocksForDay', { date: this.date, blocks })
+      },
+
+      emitLodestar() {
+        this.$emit('run-lodestar')
       },
     },
   }

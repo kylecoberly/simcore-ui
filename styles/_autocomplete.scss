@@ -1,6 +1,38 @@
 //opinions
 .sim-autocomplete {
-  li.highlighted {
-    background: var(--autocomplete-highlight, var(--lighter));
+  position: relative;
+
+  input {
+    color: var(--autocomplete-input-fg, var(--dark));
+    background: var(--autocomplete-input-bg, var(--lighter));
+  }
+
+  &--items {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 10em;
+    overflow: auto;
+    color: var(--autocomplete-items-fg, var(--dark));
+    background: var(--autocomplete-items-bg, var(--lighter));
+    border-radius: 0 0 .2em .2em;
+  }
+
+  &--item-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-30%, 30%);
+    color: var(--autocomplete-input-fg, var(--dusk));
+  }
+
+  li {
+    padding: .5em;
+
+    &.highlighted {
+      color: var(--autocomplete-highlight-fg, var(--blue));
+      background: var(--autocomplete-highlight-bg, var(--shade));
+    }
   }
 }

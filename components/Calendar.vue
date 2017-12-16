@@ -60,6 +60,7 @@
                   :displayMode="displayMode"
                   :date="date"
                   :user-context="contextLabel"
+                  @run-lodestar="runLodestar"
                   />
               </template>
 
@@ -78,7 +79,7 @@
             </div>
 
             <SimBubble v-if="isCoordinatorContext && shouldBubbleBeOpen && isMonthView">
-              <SimSlidePresenter :slides="slides"></SimSlidePresenter>
+              <SimSlidePresenter></SimSlidePresenter>
             </SimBubble>
           </div>
         </div>
@@ -87,10 +88,16 @@
       <template v-if="isCoordinatorContext">
         <aside class="sim-calendar--aside sim-calendar--filters">
           <div class="sim-calendar--aside--header">
-            <b>Availability &amp; Event Filters</b>
+            <p><b>Availability &amp; Event Filters</b></p>
           </div>
           <div class="sim-calendar--aside--body">
             <div class="sim-flex--1">
+
+              <div class="filter-molecule">
+                <b>Event Length: {{ halfGlyph(filterEventLength, 'hour', 'hours') }}</b>
+                <br /><br />
+                <input type="range" v-model="filterEventLength" min="0.5" max="6" step="0.5" />
+              </div>
 
               <div class="filter-molecule">
                 <SimFilterBy xv-if="userTypeIsClient" system-echo="No facility filters" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
@@ -99,13 +106,40 @@
               </div>
 
               <div class="filter-molecule">
-                <p>
-                  <label>
-                    <b>Instructors</b>
-                    <br /><br />
-                    <input type="text" placeholder="autocomplete instructors..." />
-                  </label>
+                <p class="sim-flex--row">
+                  <b class="sim-flex--1">Instructors</b>
+                  <span v-if="thereAreActiveInstructors" @click="clearAllActiveInstructors">
+                    <SimIconText icon="fa-minus-circle fa-fw"></SimIconText>
+                  </span>
                 </p>
+                <SimDatalist :items="activeInstructors" :animate="true">
+                  <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
+                    <SimSelection
+                      :item="props.item"
+                      :item-id="props.item.id"
+                      :disabled="props.item.disabled"
+                      :should-be-selected="props.item.selected"
+                      @toggle="toggleItemInSelectedInstructors"
+                      >
+                      {{ props.item.first_name }} {{ props.item.last_name }}
+                    </SimSelection>
+                    <span @click="removeFromInstructorList(props.item)">
+                      <SimIconText icon="fa-minus fa-fw"></SimIconText>
+                    </span>
+                  </li>
+                </SimDatalist>
+                <br />
+                <SimAutocomplete
+                  :options="instructors"
+                  field="last_name"
+                  name="instructors"
+                  placeholder="find instructors..."
+                  @select="addToInstructorList"
+                  >
+                  <div class="item-tag" slot="item" slot-scope="props">
+                    {{ props.option.first_name }} {{ props.option.last_name }}
+                  </div>
+                </SimAutocomplete>
               </div>
 
             </div>
@@ -140,20 +174,44 @@
   import eventEditorSlides from '../external/eventEditorSlides'
 
   import CalendarDay from './CalendarDay'
+  import SimAutocomplete from './Autocomplete'
   import SimBubble from './Bubble'
+  import SimDatalist from './Datalist'
   import SimIconText from './IconText'
   import SimFilterBy from './FilterBy'
+  import SimSelection from './Selection'
   import SimSlidePresenter from './SlidePresenter'
   import SimSwitch from './Switch'
   import SimTimePicker from './TimePicker'
+
+  // #FIXME should be using common.lodestar(...) | jase
+const lodestar = function(element, classname, selector, test) {
+    let items = element.querySelectorAll(selector)
+    let flag = false
+    console.log('here', element, items)
+    items.forEach((item) => {
+      let node = item // .parentNode
+      if(!item[test]) {
+        flag = true
+        node.classList.add(classname);
+        node.addEventListener('animationend', () => {
+          node.classList.remove(classname)
+        }, false)
+      }
+    })
+    return flag
+  }
 
   export default {
     name: 'sim-calendar',
     components: {
       CalendarDay,
+      SimAutocomplete,
       SimBubble,
+      SimDatalist,
       SimIconText,
       SimFilterBy,
+      SimSelection,
       SimSlidePresenter,
       SimSwitch,
       SimTimePicker,
@@ -162,12 +220,14 @@
     data() {
       return {
         contextSwitch: true,
-        slides: this.$store.state.slideDeck.slides,
-        // filterEventLength: 0.5,
+        filterEventLength: 2,
 
         institutions: [],
         departments: [],
         professionalTitles: [],
+        instructors: [],
+        activeInstructors: [],
+        selectedInstructors: [],
       }
     },
     computed: {
@@ -261,6 +321,9 @@
       shouldBubbleBeOpen() {
         return this.$store.state.bubble.is_open
       },
+      thereAreActiveInstructors() {
+        return this.activeInstructors.length
+      }
     },
     created() {
       this.$store.commit('setSlideTemplates', eventEditorSlides)
@@ -269,8 +332,47 @@
     },
     mounted() {
       this.setTheActiveDateToToday()
+      this.instructors = this.$store.state.users.all
     },
     methods: {
+      onSelect(item) {
+        this.selectedOption = item
+      },
+      addToInstructorList(item) {
+        const foundItem = this.activeInstructors.find((instructor) => instructor.id === item.id)
+        if (!foundItem) {
+          this.activeInstructors.push(item)
+          this.toggleItemInSelectedInstructors(item.id, true)
+        } else {
+          lodestar(this.$el, 'lodestar', `.instructor-${item.id}`, 'value')
+        }
+      },
+      removeFromInstructorList(item) {
+        this.toggleItemInSelectedInstructors(item.id, false)
+        this.activeInstructors.splice(this.activeInstructors.indexOf(item), 1)
+      },
+      toggleItemInSelectedInstructors(itemId, value) {
+        let selectedItemsWasUpdated = false
+
+        const foundItem = this.activeInstructors.find((item) => item.id === itemId)
+
+        if (foundItem) {
+          if (value === true) {
+            foundItem.selected = true
+            this.selectedInstructors.push(foundItem)
+          } else if (value === false) {
+            this.selectedInstructors.splice(this.selectedInstructors.indexOf(foundItem), 1)
+          }
+          selectedItemsWasUpdated = true
+        }
+      },
+      clearAllActiveInstructors() {
+        this.activeInstructors.splice(0, this.activeInstructors.length)
+        this.selectedInstructors.splice(0, this.selectedInstructors.length)
+      },
+      runLodestar() {
+        lodestar(this.$el, 'lodestar', '.sim-calendar--filters .sim-calendar--aside--body', 'value')
+      },
       isCurrentDay(date) {
         return moment().isSame(date, 'day')
       },
@@ -309,26 +411,14 @@
 
         return parseInt(date[2])
       },
-      // setHourClasses(hour) {
-      //   const classes = []
-      //   classes.push((hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'))
-      //   classes.push((hour === 0 || hour === 24 ? 'is-midnight' : (hour === 12 ? 'is-noon' : '')))
-      //   return classes.join(' ')
-      // },
-      // setDate(date) {
-      //   const dayMoment = moment(date)
-      //
-      //   this.displayDate = dayMoment.format('dddd, MMMM Do')
-      //   this.date = dayMoment.format('YYYY-MM-DD')
-      // },
-      // halfGlyph(number, singularUnit, pluralUnits) {
-      //   const grammaticalUnit = number > 0 && number <= 1 ? singularUnit : pluralUnits
-      //   const glyph = number.toString()
-      //     .replace(/\.5/, '½')
-      //     .replace(/^0/, '') || 0
-      //
-      //   return `${glyph} ${grammaticalUnit}`
-      // },
+      halfGlyph(number, singularUnit, pluralUnits) {
+        const grammaticalUnit = number > 0 && number <= 1 ? singularUnit : pluralUnits
+        const glyph = number.toString()
+          .replace(/\.5/, '½')
+          .replace(/^0/, '') || 0
+
+        return `${glyph} ${grammaticalUnit}`
+      },
       applyFilter (type, data) {
           this.filters.find((filter) => filter.type === type).items = data
           this.filteredUsers = this.users.filter((item) => {
@@ -357,6 +447,10 @@
 
   .sim-flex--1 {
     flex: 1;
+  }
+  .sim-flex--row {
+    display: flex;
+    flex-direction: row;
   }
 
   .sim-calendar .sim-bubble {

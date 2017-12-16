@@ -47,6 +47,14 @@
         </p>
       </div>
 
+      Instructor
+      Scenario
+      Equipment
+      Learners
+      Others
+      PDF
+      Room #
+      Time period
 
     </div>
 

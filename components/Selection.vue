@@ -10,7 +10,11 @@
 <script>
   export default {
     name: 'sim-selection',
-    props: {itemId: [String, Number], shouldBeDisabled: Boolean, shouldBeSelected: Boolean},
+    props: {
+      itemId: [String, Number],
+      shouldBeDisabled: Boolean,
+      shouldBeSelected: Boolean
+    },
     data () {
       return {
         selected: this.shouldBeSelected

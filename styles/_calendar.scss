@@ -72,14 +72,17 @@
   &--main {
     flex: 1;
     display: flex;
+    position: relative;
   }
 
   &--aside {
     flex: none;
     display: flex;
     flex-direction: column;
-    width: 25%;
+    width: 20%;
     min-width: 15em;
+    position: relative;
+    z-index: 1;
 
     &--header {
       padding: 1em 0;
@@ -91,15 +94,26 @@
       padding: 1em;
       box-shadow: var(--lines);
       background: linear-gradient(135deg, var(--dark-grey), var(--medium-grey));
+      border-radius: 1px;
       color: var(--lighter);
     }
   }
 
   &--filters {
+    --ms-lodestar: 600ms;
+    --selection-color: var(--green);
+
     .filter-molecule {
       + .filter-molecule {
         margin-top: 1.5em;
-        padding-top: 1.5em;
+        // padding-top: 1.5em;
+      }
+    }
+
+    .sim-datalist {
+      li {
+        padding: .5em 0 .5em .5em;
+        border-radius: 1px;
       }
     }
   }

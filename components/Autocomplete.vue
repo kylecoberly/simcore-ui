@@ -1,12 +1,28 @@
 <template lang="html">
   <div class="sim-autocomplete">
-    <input v-model="keyword" :placeholder="placeholder" @input="onInput($event.target.value)" @keyup.esc="isOpen = false" @blur="isOpen = false" @keydown.down="moveDown" @keydown.up="moveUp" @keydown.enter="select" />
-    <div v-show="isOpen">
+    <input v-model="keyword"
+      :placeholder="placeholder"
+      @input="onInput($event.target.value)"
+      @keyup.esc="isOpen = false"
+      @blur="isOpen = true"
+      @keydown.down="moveDown"
+      @keydown.up="moveUp"
+      @keydown.enter="select"
+      />
+    <div class="sim-autocomplete--items" v-show="isOpen">
       <transition-group appear name="list" tag="ul" mode="in-out">
-        <li v-for="(option, index) in filteredOptions" :key="index" :class="{highlighted: index === position}" @mouseenter="position = index" @mousedown="select">
+        <li v-for="(option, index) in filteredOptions"
+          :key="index"
+          :class="{highlighted: index === position}"
+          @mouseenter="position = index"
+          @mousedown="select"
+          >
           <slot name="item" :option="option"></slot>
         </li>
       </transition-group>
+    </div>
+    <div class="sim-autocomplete--item-count">
+      {{ filteredOptionsCount }}
     </div>
   </div>
 </template>
@@ -27,6 +43,10 @@
         type: String,
         default: 'find...',
       },
+      field: {
+        type: String,
+        required: true
+      }
     },
     data() {
       return {
@@ -38,7 +58,10 @@
     computed: {
       filteredOptions() {
         const expression = new RegExp(this.keyword, 'i')
-        return this.options.filter(option => option.name.match(expression))
+        return this.options.filter(option => option[this.field].match(expression))
+      },
+      filteredOptionsCount() {
+        return this.filteredOptions.length
       },
     },
     methods: {
@@ -62,7 +85,7 @@
         const selectedOption = this.filteredOptions[this.position]
         this.$emit('select', selectedOption)
         this.isOpen = false
-        this.keyword = selectedOption.name
+        this.keyword = null // selectedOption[this.field]
       },
     },
   }
