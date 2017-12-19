@@ -464,6 +464,9 @@
       contextSwitch() {
         this.closeBubble()
       },
+      displayMode() {
+        this.closeBubble()
+      },
     },
     methods: {
       packageSlideContent(bubbleData) {
@@ -592,11 +595,9 @@
         this.$store.commit('setActiveDate', moment().format(this.$store.state.calendar.settings.date_format.raw))
       },
       setCalendarDisplayModeToMonth() {
-        this.closeBubble()
         this.$store.commit('setCalendarDisplayModeToMonth')
       },
       setCalendarDisplayModeToWeek() {
-        this.closeBubble()
         this.$store.commit('setCalendarDisplayModeToWeek')
       },
       displayHour(hour) {
