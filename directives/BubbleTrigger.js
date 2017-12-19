@@ -4,7 +4,6 @@ export default {
 
     const setProperties = (shouldBeDraggable) => {
       if (shouldBeDraggable === true || shouldBeDraggable === false) {
-        console.log(shouldBeDraggable)
         isDraggable = shouldBeDraggable
       }
 
