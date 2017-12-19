@@ -31,13 +31,17 @@
         </li>
       </ul>
 
-      <SimTimeBlock v-for="(block, index) in blocks" :key="index" :block="block" :index="index" :date="date"
-        :orientation="orientation"
-        :variables="blockVariables"
-        @remove-time-block="removeTimeBlock"
-        @is-moving="setMovingState"
-        @is-stretching="setStretchingState"
-        @block-updated="blockWasUpdated"
+      <SimTimeBlock v-for="(block, index) in currentUserAvailabilityBlocks"
+                    :key="index"
+                    :block="block"
+                    :index="index"
+                    :date="date"
+                    :orientation="orientation"
+                    :variables="blockVariables"
+                    @remove-time-block="removeTimeBlock"
+                    @is-moving="setMovingState"
+                    @is-stretching="setStretchingState"
+                    @block-updated="blockWasUpdated"
         />
     </div>
 
@@ -56,6 +60,9 @@
       SimTimeBlock,
     },
     props: {
+      date: {
+        type: String,
+      },
       shouldShowDate: {
         type: Boolean,
         default: false,
@@ -76,18 +83,29 @@
         type: Number,
         default: 48,
       },
+      initialEvents: {
+        type: Array,
+      },
+      initialPendingEvents: {
+        type: Array,
+      },
+      initialCurrentUserAvailabilityBlocks: {
+        type: Array,
+      },
+      initialAggregateAvailabilityBlocks: {
+        type: Array,
+      },
     },
     data() {
       return {
         isMoving: false,
         isStretching: false,
+        events: [],
+        pendingEvents: [],
+        currentUserAvailabilityBlocks: [],
+        aggregateAvailabilityBlocks: [],
         blocks: this.$store.state.user.availabilities[this.$store.state.activeDate.date] || [],
       }
-    },
-    watch: {
-      date(newDate) {
-        this.blocks = this.$store.state.user.availabilities[newDate] || []
-      },
     },
     computed: {
       blockVariables() {
@@ -98,7 +116,7 @@
       },
       totalSegments() {
         const segments = []
-        for (var index = this.startTime + 1; index <= this.endTime + 1; index+=0.5) {
+        for (let index = this.startTime + 1; index <= this.endTime + 1; index += 0.5) {
           segments.push(index)
         }
         return segments
@@ -114,9 +132,8 @@
           .format('dddd, MMM D')
       },
       countTimeBlockHours() {
-        if (this.blocks) {
-          return this.blocks
-          .map((block) => block.duration)
+        return this.currentUserAvailabilityBlocks
+          .map((block) => { return block.duration })
           .reduce((sum, value) => sum + value, 0)
         } else {
           return 0
@@ -128,9 +145,6 @@
           .replace(/^0/, '') || 0
 
         return `${output} ${(this.countTimeBlockHours > 0 && this.countTimeBlockHours <= 1 ? 'hour' : 'hours')}`
-      },
-      date() {
-        return this.$store.state.activeDate.date
       },
       timelineClasses() {
         const classes = []
@@ -181,30 +195,30 @@
       updateBlocks() {
         this.sortBlocks()
 
-        this.$store.commit('setAvailabilityBlocksForDay', { date: this.date, blocks: this.blocks })
+        this.$emit('blocksWereUpdated', { blocks: this.currentUserAvailabilityBlocks, date: this.date })
       },
       sortBlocks() {
-        this.blocks.sort((a, b) => {
+        this.currentUserAvailabilityBlocks.sort((a, b) => {
           return parseFloat(a.start) - parseFloat(b.start)
         })
       },
       createTimeBlock(event, hour) {
-        if (event.which === 1 && this.blocks.length < this.timeBlockLimit) {
+        if (event.which === 1 && this.currentUserAvailabilityBlocks.length < this.timeBlockLimit) {
           const useModifier = (hour === Math.floor(this.endTime) || Math.ceil(hour) === this.endTime)
           const maxDuration = useModifier ? 0.5 : 1
 
-          this.blocks.push({ start: hour, duration: maxDuration })
+          this.currentUserAvailabilityBlocks.push({ start: hour, duration: maxDuration })
 
           this.updateBlocks()
         }
       },
       removeTimeBlock(index) {
-        this.blocks.splice(index, 1)
+        this.currentUserAvailabilityBlocks.splice(index, 1)
 
         this.updateBlocks()
       },
       removeAllTimeBlocks() {
-        this.blocks.splice(0, this.blocks.length)
+        this.currentUserAvailabilityBlocks.splice(0, this.currentUserAvailabilityBlocks.length)
 
         this.updateBlocks()
       },
@@ -223,6 +237,34 @@
           .format('YYYY-MM-DD')
 
         this.$store.commit('setActiveDate', date)
+      },
+    },
+    mounted() {
+      if (this.initialEvents) {
+        this.events = this.initialEvents
+      }
+      if (this.initialPendingEvents) {
+        this.pendingEvents = this.initialPendingEvents
+      }
+      if (this.initialCurrentUserAvailabilityBlocks) {
+        this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
+      }
+      if (this.initialAggregateAvailabilityBlocks) {
+        this.aggregateAvailabilityBlocks = this.initialAggregateAvailabilityBlocks
+      }
+    },
+    watch: {
+      initialEvents() {
+        this.events = this.initialEvents
+      },
+      initialPendingEvents() {
+        this.pendingEvents = this.initialPendingEvents
+      },
+      initialCurrentUserAvailabilityBlocks() {
+        this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
+      },
+      initialAggregateAvailabilityBlocks() {
+        this.aggregateAvailabilityBlocks = this.initialAggregateAvailabilityBlocks
       },
     },
   }

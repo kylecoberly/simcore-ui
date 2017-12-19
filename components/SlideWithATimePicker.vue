@@ -12,12 +12,13 @@
         </span>
       </p>
 
-      <SimTimePicker :date="date"
+      <SimTimePicker
         orientation="y"
         :time-block-limit="1"
         :start-time="start_time"
         :end-time="end_time"
-        :propBlocks="blocks"
+        :blocks="blocks"
+        :date="date"
         />
     </div>
   </div>
@@ -49,9 +50,9 @@
         nextSlide: this.$store.state.slideDeck.slideTemplates.event_form,
       }
     },
-    watcher: {
-      timeBlock(newBlock) {
-        if (newBlock !== null) {
+    watch: {
+      blocks(newBlocks) {
+        if (newBlocks !== null) {
           this.nextSlide.title = this.title
           this.nextSlide.start_time = this.start_time
           this.nextSlide.end_time = this.end_time

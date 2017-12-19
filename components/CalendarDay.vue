@@ -40,7 +40,7 @@
       <template v-if="isCoordinatorContext">
 
         <div v-if="isWeekView" class="local--day--aggregate-blocks">
-          <SimTimeBlock v-for="(block, index) in aggregateAvailabilityBlocks"
+          <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
             class="sim-timeblock--theme--aggregate"
             :key="index"
             :block="block"
@@ -63,7 +63,7 @@
         </div>
 
         <div class="local--day--pending-blocks">
-          <SimTimeBlock v-for="(block, index) in stagedEvents"
+          <SimTimeBlock v-for="(block, index) in pendingEvents"
             class="sim-timeblock--theme--pending-event"
             v-bubble-trigger="{block, x: dayOfWeek+1}"
             :key="index"
@@ -105,29 +105,52 @@
   export default {
     name: 'sim-calendar-day',
     components: { SimTimeBlock },
-    props: ['date', 'index', 'displayMode', 'userContext'],
+    props: [
+      'date',
+      'index',
+      'displayMode',
+      'userContext',
+      'initialEvents',
+      'initialPendingEvents',
+      'initialCurrentUserAvailabilityBlocks',
+      'initialAggregateUserAvailabilityBlocks',
+    ],
     data() {
       return {
         dateFormat: 'YYYY-MM-DD',
-        currentUserAvailabilityBlocks: this.$store.state.user.availabilities[this.date],
-        aggregateAvailabilityBlocks: this.$store.state.availabilities.blocks[this.date],
-        events: this.$store.state.events[this.date],
-        stagedEvents: [],
+        events: [],
+        pendingEvents: [],
+        currentUserAvailabilityBlocks: [],
+        aggregateUserAvailabilityBlocks: [],
       }
     },
     mounted() {
-      // When a timeblock is added, updated, or deleted, check to see if it belongs to this date.
-      // If so, refresh this day's time blocks.
-      this.$store.watch(this.$store.getters.getLastUpdated, (date) => {
-        if (date === this.date) {
-          this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities[this.date]
-        }
-      })
-
-      // When the week/month is updated, refresh this day's blocks.
-      this.$store.watch(this.$store.getters.getActiveDate, () => {
-        this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities[this.date]
-      })
+      if (this.initialEvents) {
+        this.events = this.initialEvents
+      }
+      if (this.initialPendingEvents) {
+        this.pendingEvents = this.initialPendingEvents
+      }
+      if (this.initialCurrentUserAvailabilityBlocks) {
+        this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
+      }
+      if (this.initialAggregateUserAvailabilityBlocks) {
+        this.aggregateUserAvailabilityBlocks = this.initialAggregateUserAvailabilityBlocks
+      }
+    },
+    watch: {
+      initialEvents() {
+        this.events = this.initialEvents
+      },
+      initialPendingEvents() {
+        this.pendingEvents = this.initialPendingEvents
+      },
+      initialCurrentUserAvailabilityBlocks() {
+        this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
+      },
+      initialAggregateUserAvailabilityBlocks() {
+        this.aggregateUserAvailabilityBlocks = this.initialAggregateUserAvailabilityBlocks
+      },
     },
     computed: {
       isMonthView() {
@@ -211,19 +234,18 @@
       },
 
       createTimeBlock(hour) {
-        const blocks = this.currentUserAvailabilityBlocks || []
-        blocks.push({ start: hour, duration: 1 })
-        blocks.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
+        this.currentUserAvailabilityBlocks.push({ start: hour, duration: 1 })
+        this.currentUserAvailabilityBlocks.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
 
-        this.$store.commit('setAvailabilityBlocksForDay', { date: this.date, blocks })
+        this.$emit('blocksWereUpdated', { blocks: this.currentUserAvailabilityBlocks, date: this.date })
       },
 
       createEventBlock(hour) {
-        const blocks = this.stagedEvents || []
-        blocks.push({ start: hour, duration: 1 })
-        blocks.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
+        this.pendingEvents.push({ start: hour, duration: 1 })
+        this.pendingEvents.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
 
-        // this.$store.commit('setAvailabilityBlocksForDay', { date: this.date, blocks })
+        // TODO: Make this an emit like above. - Chad
+        this.$store.commit('setPendingEventBlocksForDay', { date: this.date, blocks: this.pendingEvents })
       },
 
       emitLodestar() {
