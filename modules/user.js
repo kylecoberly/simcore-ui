@@ -23,6 +23,18 @@ const user = {
         state.availabilities[date] = Object.assign(availability.blocks, state.availabilities)
       }
     },
+    setInstitutions(state, institutions) {
+      state.institutions = institutions
+    },
+    setDepartments(state, departments) {
+      state.departments = departments
+    },
+    setProfessionalTitles(state, professionalTitles) {
+      state.professionalTitles = professionalTitles
+    },
+    setInstructors(state, instructors) {
+      state.instructors = instructors
+    },
   },
   actions: {},
   getters: {

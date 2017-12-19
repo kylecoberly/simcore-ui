@@ -186,6 +186,8 @@
   import moment from 'moment'
   import _ from 'lodash'
 
+  import { lodestar } from '../utilities/animations'
+
   import availabilities from '../external/availabilities'
   import currentUser from '../external/currentUser'
   import events from '../external/events'
@@ -202,24 +204,6 @@
   import SimSlidePresenter from './SlidePresenter'
   import SimSwitch from './Switch'
   import SimTimePicker from './TimePicker'
-
-  // #FIXME should be using common.lodestar(...) | jase
-  const lodestar = function(element, classname, selector, test) {
-    let items = element.querySelectorAll(selector)
-    let flag = false
-    console.log('here', element, items)
-    items.forEach((item) => {
-      let node = item // .parentNode
-      if(!item[test]) {
-        flag = true
-        node.classList.add(classname);
-        node.addEventListener('animationend', () => {
-          node.classList.remove(classname)
-        }, false)
-      }
-    })
-    return flag
-  }
 
   export default {
     name: 'sim-calendar',
@@ -255,6 +239,85 @@
         monthDays: {},
         weekDays: {},
       }
+    },
+    created() {
+      this.$store.commit('setSlideTemplates', eventEditorSlides)
+      this.$store.commit('setAllUsers', users.users())
+      this.$store.commit('setAggregateEventBlocks', events.events())
+      this.$store.commit('setAggregateAvailabilityBlocks', availabilities.availabilities())
+
+      this.$store.commit('setCurrentUser', currentUser.user())
+      this.$store.commit('setInstitutions', currentUser.institutions())
+      this.$store.commit('setDepartments', currentUser.departments())
+      this.$store.commit('setProfessionalTitles', currentUser.professionalTitles())
+      this.$store.commit('setInstructors', currentUser.instructors())
+
+      this.pendingEventBlocks = this.$store.state.events.pendingBlocks
+      this.eventBlocks = this.$store.state.events.blocks
+      this.aggregateAvailabilityBlocks = this.$store.state.availabilities.blocks
+      this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
+
+      this.institutions = this.$store.state.user.institutions
+      this.departments = this.$store.state.user.departments
+      this.professionalTitles = this.$store.state.user.professionalTitles
+      this.instructors = this.$store.state.user.instructors
+    },
+    mounted() {
+      this.setTheActiveDateToToday()
+      // this.instructors = this.$store.state.users.all
+      this.resetInactiveInstructors()
+
+      // When the week/month is updated, refresh this day's currentUserAvailabilityBlocks.
+      this.$store.watch(this.$store.getters.getActiveDate, () => {
+        this.date = this.$store.state.activeDate.date
+      })
+
+      // When a time block is added, updated, or deleted, check to see if it belongs to this date.
+      // If so, refresh this day's time blocks.
+      this.$store.watch(this.$store.getters.getLastUpdatedCurrentUserAvailabilityBlocks, (date) => {
+        if (date === this.date) {
+          this.$set(
+            this.currentUserAvailabilityBlocks,
+            [date],
+            this.$store.state.user.availabilities[date],
+          )
+
+          if (this.weekDays[date]) {
+            this.$set(this.weekDays[date], 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
+          }
+          this.$set(this.monthDays[date], 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
+        }
+      })
+
+      this.$store.watch(this.$store.getters.getLastUpdatedPendingEventBlocks, (date) => {
+        if (date === this.date) {
+          this.$set(
+            this.pendingEventBlocks,
+            [date],
+            this.$store.state.events.pendingBlocks[date],
+          )
+
+          if (this.weekDays[date]) {
+            this.$set(this.weekDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
+          }
+          this.$set(this.monthDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
+        }
+      })
+
+      this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilityBlocks, (date) => {
+        if (date === this.date) {
+          this.$set(
+            this.aggregateAvailabilityBlocks,
+            [date],
+            this.$store.state.availabilities.blocks[date],
+          )
+
+          if (this.weekDays[date]) {
+            this.$set(this.weekDays[date], 'aggregateAvailabilityBlocks', this.aggregateAvailabilityBlocks[date])
+          }
+          this.$set(this.monthDays[date], 'aggregateAvailabilityBlocks', this.aggregateAvailabilityBlocks[date])
+        }
+      })
     },
     computed: {
       currentDay() {
@@ -395,75 +458,6 @@
       currentUserAvailabilityBlocksForCurrentDate() {
         return this.currentUserAvailabilityBlocks[this.date]
       },
-    },
-    created() {
-      this.$store.commit('setSlideTemplates', eventEditorSlides)
-      this.$store.commit('setAllUsers', users.users())
-      this.$store.commit('setCurrentUser', currentUser.user())
-      this.$store.commit('setAggregateEventBlocks', events.events())
-      this.$store.commit('setAggregateAvailabilityBlocks', availabilities.availabilities())
-
-      this.pendingEventBlocks = this.$store.state.events.pendingBlocks
-      this.eventBlocks = this.$store.state.events.blocks
-      this.aggregateAvailabilityBlocks = this.$store.state.availabilities.blocks
-      this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
-    },
-    mounted() {
-      this.setTheActiveDateToToday()
-      this.instructors = this.$store.state.users.all
-      this.resetInactiveInstructors()
-
-      // When the week/month is updated, refresh this day's currentUserAvailabilityBlocks.
-      this.$store.watch(this.$store.getters.getActiveDate, () => {
-        this.date = this.$store.state.activeDate.date
-      })
-
-      // When a time block is added, updated, or deleted, check to see if it belongs to this date.
-      // If so, refresh this day's time blocks.
-      this.$store.watch(this.$store.getters.getLastUpdatedCurrentUserAvailabilityBlocks, (date) => {
-        if (date === this.date) {
-          this.$set(
-            this.currentUserAvailabilityBlocks,
-            [date],
-            this.$store.state.user.availabilities[date],
-          )
-
-          if (this.weekDays[date]) {
-            this.$set(this.weekDays[date], 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
-          }
-          this.$set(this.monthDays[date], 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
-        }
-      })
-
-      this.$store.watch(this.$store.getters.getLastUpdatedPendingEventBlocks, (date) => {
-        if (date === this.date) {
-          this.$set(
-            this.pendingEventBlocks,
-            [date],
-            this.$store.state.events.pendingBlocks[date],
-          )
-
-          if (this.weekDays[date]) {
-            this.$set(this.weekDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
-          }
-          this.$set(this.monthDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
-        }
-      })
-
-      this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilityBlocks, (date) => {
-        if (date === this.date) {
-          this.$set(
-            this.aggregateAvailabilityBlocks,
-            [date],
-            this.$store.state.availabilities.blocks[date],
-          )
-
-          if (this.weekDays[date]) {
-            this.$set(this.weekDays[date], 'aggregateAvailabilityBlocks', this.aggregateAvailabilityBlocks[date])
-          }
-          this.$set(this.monthDays[date], 'aggregateAvailabilityBlocks', this.aggregateAvailabilityBlocks[date])
-        }
-      })
     },
     methods: {
       packageSlideContent(block) {
