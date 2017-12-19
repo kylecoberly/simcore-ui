@@ -1,9 +1,9 @@
 <template lang="html">
   <div class="sim-slide sim-slide--with-form">
 
-    <SimSlideHeader :title="data.title" :subtitle="data.subtitle" />
+    <SimSlideHeader :title="content.title" :subtitle="content.subtitle" />
 
-    <SimSlideIntro :content="data.intro" />
+    <SimSlideIntro :content="content.intro" />
 
     <div class="sim-slide--content">
 
@@ -63,14 +63,14 @@ import SimSlideIntro from './SlideIntro'
       SimSlideHeader,
       SimSlideIntro,
     },
-    props: ['data'],
+    props: ['content'],
     watcher: {
       timeBlock(newBlock) {
         if (newBlock !== null) {
           const nextSlide = this.$store.state.slideDeck.slideTemplates.event_form
-          nextSlide.title = this.data.title
-          nextSlide.start_time = this.data.content.start_time
-          nextSlide.end_time = this.data.content.end_time
+          nextSlide.title = this.content.title
+          nextSlide.start_time = this.content.content.start_time
+          nextSlide.end_time = this.content.content.end_time
 
           this.$emit('theSlideHasAnUpdate', {
             nextSlide,
