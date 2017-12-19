@@ -258,14 +258,18 @@
     },
     computed: {
       currentDay() {
-        let currentDay = {
+        const defaultCurrentDay = {
           eventBlocks: [],
           pendingEventBlocks: [],
           currentUserAvailabilityBlocks: [],
           aggregateUserAvailabilityBlocks: [],
         }
 
-        currentDay = (this.isMonthView) ? this.monthDays[this.date] : this.weekDays[this.date]
+        let currentDay = (this.isMonthView) ? this.monthDays[this.date] : this.weekDays[this.date]
+
+        if (currentDay === undefined) {
+          currentDay = defaultCurrentDay
+        }
 
         return currentDay
       },
