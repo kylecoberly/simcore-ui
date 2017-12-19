@@ -16,7 +16,6 @@ const bubble = {
       }
     },
     updateBubbleProperties(state, payload) {
-      window.console.log('updateBubbleProperties', payload)
       if (payload.position.x > state.previous_data.x && payload.position.x > 2) {
         payload.position.orientation = 'right'
       } else if (payload.position.x < state.previous_data.x && payload.position.x < 6) {
