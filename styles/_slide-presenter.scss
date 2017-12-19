@@ -18,19 +18,19 @@
     will-change: transform;
     transform: translateX(calc(var(--step, 0) * -100%));
     transition: transform 300ms ease-out;
-    background: var(--dark);
+    // background: var(--dark);
   }
 
   > footer {
     flex: none;
     position: relative;
-    box-shadow: 0 0 0 1px var(--darker);
+    box-shadow: 0 0 0 1px var(--dusk);
     text-align: right;
     display: flex;
     padding: 1em;
     justify-content: space-between;
-    background: var(--darker);
-    color: var(--lighter);
+    background: var(--shade);
+    // color: var(--lighter);
     z-index: 1;
   }
 

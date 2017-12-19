@@ -7,6 +7,7 @@
       <input v-model="keyword"
       type="search"
       :placeholder="placeholder"
+      :disabled="isDisabled"
       @input="onInput($event.target.value)"
       @keyup.esc="reset"
       @focus="focus"
@@ -51,6 +52,10 @@
         type: String,
         default: 'find...',
       },
+      shouldBeDisabled: {
+        type: Boolean,
+        default: false
+      }
     },
     data() {
       return {
@@ -69,6 +74,9 @@
       },
       filteredOptionsCount() {
         return this.filteredOptions.length
+      },
+      isDisabled() {
+        return this.shouldBeDisabled
       },
     },
     methods: {
@@ -103,7 +111,7 @@
         this.keyword = ''
       },
       blur() {
-        // this.isOpen = false
+        this.isOpen = false
       },
       focus() {
         this.isOpen = true

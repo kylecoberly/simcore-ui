@@ -90,7 +90,7 @@
 
             </div>
 
-            <SimBubble v-if="shouldBubbleBeOpen">
+            <SimBubble v-if="bubbleIsOpen">
               <SimSlidePresenter></SimSlidePresenter>
             </SimBubble>
           </div>
@@ -98,7 +98,7 @@
       </main>
 
       <template v-if="isCoordinatorContext">
-        <aside class="sim-calendar--aside sim-calendar--filters">
+        <aside class="sim-calendar--aside sim-calendar--filters" :class="{'sim-calendar--filters--disabled': bubbleIsOpen}">
           <div class="sim-calendar--aside--header">
             <p><b>Availability &amp; Event Filters</b></p>
           </div>
@@ -108,7 +108,7 @@
               <div v-if="isMonthView" class="filter-molecule">
                 <b>Event Length: {{ halfGlyph(filterEventLength, 'hour', 'hours') }}</b>
                 <br /><br />
-                <input type="range" v-model="filterEventLength" min="0.5" max="6" step="0.5" />
+                <input type="range" v-model="filterEventLength" :disabled="bubbleIsOpen" min="0.5" max="6" step="0.5" />
               </div>
 
               <div class="filter-molecule">
@@ -143,6 +143,7 @@
                 <br />
                 <SimAutocomplete
                   :options="inactiveInstructors"
+                  :should-be-disabled="bubbleIsOpen"
                   placeholder="find instructors..."
                   @select="addToInstructorList"
                   >
@@ -386,7 +387,7 @@
       contextLabel() {
         return this.isInstructorContext ? 'instructor' : 'coordinator'
       },
-      shouldBubbleBeOpen() {
+      bubbleIsOpen() {
         return this.$store.state.bubble.is_open
       },
       thereAreActiveInstructors() {
@@ -468,21 +469,21 @@
     methods: {
       packageSlideContent(block) {
         return {
-          // title: this.formateDateForDisplay(this.date),
-          // subtitle: this.formatTimesForDisplay(block.start, block.duration),
-          // componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
-          // content: {
-          //   items: block.user_ids,
-          //   selectedItems: [],
-          //   foundItems: [],
-          //   itemSearch: '',
-          //   start_time: block.start,
-          //   end_time: block.start + block.duration,
-          // },
           title: this.formateDateForDisplay(this.date),
           subtitle: this.formatTimesForDisplay(block.start, block.duration),
-          componentType: 'SimSlideWithAnEventForm', // TODO: Make this dynamic. - Chad/Jase
-          content: {},
+          componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
+          content: {
+            items: block.user_ids,
+            selectedItems: [],
+            foundItems: [],
+            itemSearch: '',
+            start_time: block.start,
+            end_time: block.start + block.duration,
+          },
+          // title: this.formateDateForDisplay(this.date),
+          // subtitle: this.formatTimesForDisplay(block.start, block.duration),
+          // componentType: 'SimSlideWithAnEventForm', // TODO: Make this dynamic. - Chad/Jase
+          // content: {},
         }
       },
       prepareTheBubble(bubbleProperties, bubbleData) {
@@ -645,6 +646,8 @@
   }
 
   .sim-calendar .sim-bubble {
+    // --bubble-fg: var(--dark);
+    // --bubble-bg: var(--light);
     top: -1em;
     bottom: -1em;
     width: 20em;

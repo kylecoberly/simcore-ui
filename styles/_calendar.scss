@@ -92,7 +92,7 @@
       display: flex;
       padding: 1em;
       box-shadow: var(--lines);
-      background: linear-gradient(135deg, var(--dark-grey), var(--medium-grey));
+      background: linear-gradient(135deg, var(--grey), var(--medium-grey));
       border-radius: 1px;
       color: var(--lighter);
     }
@@ -101,6 +101,13 @@
   &--filters {
     --ms-lodestar: 600ms;
     --selection-color: var(--green);
+
+    &--disabled {
+      .filter-molecule {
+        opacity: .3;
+        pointer-events: none;
+      }
+    }
 
     .filter-molecule {
       + .filter-molecule {

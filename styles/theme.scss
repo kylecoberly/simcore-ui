@@ -3,6 +3,7 @@
   --darker: #222;
   --dark: #333;
   --dark-grey: #444;
+  --grey: #565656;
   --medium-grey: #777;
   --light-grey: #ccc;
   --lighter-grey: #ddd;
@@ -55,6 +56,7 @@
 
   // alternate spellings
   --dark-gray: var(--dark-grey);
+  --gray: var(--grey);
   --medium-gray: var(--medium-grey);
   --light-gray: var(--light-grey);
   --lighter-gray: var(--lighter-grey);
