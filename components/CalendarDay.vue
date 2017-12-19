@@ -75,8 +75,8 @@
         </div>
 
         <div v-if="isMonthView" class="local--day--aggregate-blocks">
-          <template v-if="aggregateAvailabilityBlocks">
-            <SimTimeBlock v-for="(block, index) in aggregateAvailabilityBlocks"
+          <template v-if="aggregateUserAvailabilityBlocks">
+            <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
               class="sim-timeblock--theme--aggregate"
               v-bubble-trigger="{block, x: dayOfWeek+1}"
               :key="index"
@@ -86,7 +86,7 @@
               :orientation="timeBlockOrientation"
               />
           </template>
-          <template v-else-if="!aggregateAvailabilityBlocks">
+          <template v-else-if="!aggregateUserAvailabilityBlocks">
             <div @click="emitLodestar" class="sim-timeblock sim-timeblock--y sim-timeblock--theme--empty is-display-only" style="--start: 0;--duration: 24"></div>
           </template>
         </div>
@@ -110,8 +110,8 @@
       'index',
       'displayMode',
       'userContext',
-      'initialEvents',
-      'initialPendingEvents',
+      'initialEventBlocks',
+      'initialPendingEventBlocks',
       'initialCurrentUserAvailabilityBlocks',
       'initialAggregateUserAvailabilityBlocks',
     ],
@@ -125,11 +125,11 @@
       }
     },
     mounted() {
-      if (this.initialEvents) {
-        this.events = this.initialEvents
+      if (this.initialEventBlocks) {
+        this.events = this.initialEventBlocks
       }
-      if (this.initialPendingEvents) {
-        this.pendingEvents = this.initialPendingEvents
+      if (this.initialPendingEventBlocks) {
+        this.pendingEvents = this.initialPendingEventBlocks
       }
       if (this.initialCurrentUserAvailabilityBlocks) {
         this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
@@ -139,11 +139,11 @@
       }
     },
     watch: {
-      initialEvents() {
-        this.events = this.initialEvents
+      initialEventBlocks() {
+        this.events = this.initialEventBlocks
       },
-      initialPendingEvents() {
-        this.pendingEvents = this.initialPendingEvents
+      initialPendingEventBlocks() {
+        this.pendingEvents = this.initialPendingEventBlocks
       },
       initialCurrentUserAvailabilityBlocks() {
         this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
@@ -201,14 +201,9 @@
       },
     },
     methods: {
-      getBlockMetaKey(block) {
-        return `${this.date}:${block.start}`
-      },
-
       setActiveDateToToday() {
         this.$store.commit('setActiveDate', this.date)
       },
-
       toggleCalendarDisplayMode() {
         if (this.isMonthView) {
           this.$store.commit('setCalendarDisplayModeToWeek')
@@ -216,7 +211,6 @@
           this.$store.commit('setCalendarDisplayModeToMonth')
         }
       },
-
       setHourClasses(hour) {
         const classes = []
         classes.push((hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'))
@@ -224,7 +218,6 @@
 
         return classes.join(' ')
       },
-
       createBlock(hour) {
         if (this.isInstructorContext) {
           this.createTimeBlock(hour)
@@ -232,14 +225,12 @@
           this.createEventBlock(hour)
         }
       },
-
       createTimeBlock(hour) {
         this.currentUserAvailabilityBlocks.push({ start: hour, duration: 1 })
         this.currentUserAvailabilityBlocks.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
 
         this.$emit('blocksWereUpdated', { blocks: this.currentUserAvailabilityBlocks, date: this.date })
       },
-
       createEventBlock(hour) {
         this.pendingEvents.push({ start: hour, duration: 1 })
         this.pendingEvents.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
@@ -247,7 +238,6 @@
         // TODO: Make this an emit like above. - Chad
         this.$store.commit('setPendingEventBlocksForDay', { date: this.date, blocks: this.pendingEvents })
       },
-
       emitLodestar() {
         this.$emit('run-lodestar')
       },

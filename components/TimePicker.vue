@@ -83,10 +83,10 @@
         type: Number,
         default: 48,
       },
-      initialEvents: {
+      initialEventBlocks: {
         type: Array,
       },
-      initialPendingEvents: {
+      initialPendingEventBlocks: {
         type: Array,
       },
       initialCurrentUserAvailabilityBlocks: {
@@ -100,8 +100,8 @@
       return {
         isMoving: false,
         isStretching: false,
-        events: [],
-        pendingEvents: [],
+        eventBlocks: [],
+        pendingEventBlocks: [],
         currentUserAvailabilityBlocks: [],
         aggregateAvailabilityBlocks: [],
         blocks: this.$store.state.user.availabilities[this.$store.state.activeDate.date] || [],
@@ -135,9 +135,6 @@
         return this.currentUserAvailabilityBlocks
           .map((block) => { return block.duration })
           .reduce((sum, value) => sum + value, 0)
-        } else {
-          return 0
-        }
       },
       displayTotalTimeBlockHours() {
         const output = this.countTimeBlockHours.toString()
@@ -240,11 +237,11 @@
       },
     },
     mounted() {
-      if (this.initialEvents) {
-        this.events = this.initialEvents
+      if (this.initialEventBlocks) {
+        this.eventBlocks = this.initialEventBlocks
       }
-      if (this.initialPendingEvents) {
-        this.pendingEvents = this.initialPendingEvents
+      if (this.initialPendingEventBlocks) {
+        this.pendingEventBlocks = this.initialPendingEventBlocks
       }
       if (this.initialCurrentUserAvailabilityBlocks) {
         this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
@@ -254,11 +251,11 @@
       }
     },
     watch: {
-      initialEvents() {
-        this.events = this.initialEvents
+      initialEventBlocks() {
+        this.eventBlocks = this.initialEventBlocks
       },
-      initialPendingEvents() {
-        this.pendingEvents = this.initialPendingEvents
+      initialPendingEventBlocks() {
+        this.pendingEventBlocks = this.initialPendingEventBlocks
       },
       initialCurrentUserAvailabilityBlocks() {
         this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks

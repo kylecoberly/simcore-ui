@@ -57,14 +57,14 @@
                 <CalendarDay v-for="day in monthDays"
                              class="sim-calendar--grid--day"
                              @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
-                  @run-lodestar="runLodestar"
-                  @call-bubble="prepareTheBubble"
+                             @run-lodestar="runLodestar"
+                             @call-bubble="prepareTheBubble"
                              :key="day.date"
                              :displayMode="displayMode"
                              :date="day.date"
                              :user-context="contextLabel"
-                             :initialEvents="day.eventBlocks"
-                             :initialPendingEvents="day.pendingEventBlocks"
+                             :initialEventBlocks="day.eventBlocks"
+                             :initialPendingEventBlocks="day.pendingEventBlocks"
                              :initialCurrentUserAvailabilityBlocks="day.currentUserAvailabilityBlocks"
                              :initialAggregateUserAvailabilityBlocks="day.aggregateUserAvailabilityBlocks"
                   />
@@ -74,13 +74,13 @@
                 <CalendarDay v-for="day in weekDays"
                              class="sim-calendar--grid--day"
                              @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
-                  @call-bubble="prepareTheBubble"
+                             @call-bubble="prepareTheBubble"
                              :key="day.date"
                              :displayMode="displayMode"
                              :date="day.date"
                              :user-context="contextLabel"
-                             :initialEvents="day.eventBlocks"
-                             :initialPendingEvents="day.pendingEventBlocks"
+                             :initialEventBlocks="day.eventBlocks"
+                             :initialPendingEventBlocks="day.pendingEventBlocks"
                              :initialCurrentUserAvailabilityBlocks="day.currentUserAvailabilityBlocks"
                              :initialAggregateUserAvailabilityBlocks="day.aggregateUserAvailabilityBlocks"
                   />
@@ -169,8 +169,8 @@
               :date="date"
               :should-show-date="true"
               orientation="y"
-              :initialEvents="currentDay.eventBlocks"
-              :initialPendingEvents="currentDay.pendingEventBlocks"
+              :initialEventBlocks="currentDay.eventBlocks"
+              :initialPendingEventBlocks="currentDay.pendingEventBlocks"
               :initialCurrentUserAvailabilityBlocks="currentDay.currentUserAvailabilityBlocks"
               :initialAggregateUserAvailabilityBlocks="currentDay.aggregateUserAvailabilityBlocks"
               />
@@ -249,8 +249,8 @@
         activeInstructors: [],
         inactiveInstructors: [],
         selectedInstructors: [],
-        events: [],
-        pendingEvents: [],
+        eventBlocks: [],
+        pendingEventBlocks: [],
         currentUserAvailabilityBlocks: [],
         aggregateUserAvailabilityBlocks: [],
         monthDays: {},
@@ -259,7 +259,16 @@
     },
     computed: {
       currentDay() {
-        return (this.isMonthView) ? this.monthDays[this.date] : this.weekDays[this.date]
+        let currentDay = {
+          eventBlocks: [],
+          pendingEventBlocks: [],
+          currentUserAvailabilityBlocks: [],
+          aggregateUserAvailabilityBlocks: [],
+        }
+
+        currentDay = (this.isMonthView) ? this.monthDays[this.date] : this.weekDays[this.date]
+
+        return currentDay
       },
       displayMode() {
         return this.$store.state.calendar.display_mode
@@ -318,8 +327,8 @@
             date: day,
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[day] || [],
             aggregateUserAvailabilityBlocks: this.aggregateAvailabilityBlocks[day] || [],
-            eventBlocks: this.events[day] || [],
-            pendingEventBlocks: this.pendingEvents[day] || [],
+            eventBlocks: this.eventBlocks[day] || [],
+            pendingEventBlocks: this.pendingEventBlocks[day] || [],
           }
         })
 
@@ -332,14 +341,13 @@
         const newMonthDayStrings = this.setDays(start, limit)
 
         this.monthDays = {}
-
         _.each(newMonthDayStrings, (day) => {
           this.monthDays[day] = {
             date: day,
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[day] || [],
             aggregateUserAvailabilityBlocks: this.aggregateAvailabilityBlocks[day] || [],
-            eventBlocks: this.events[day] || [],
-            pendingEventBlocks: this.pendingEvents[day] || [],
+            eventBlocks: this.eventBlocks[day] || [],
+            pendingEventBlocks: this.pendingEventBlocks[day] || [],
           }
         })
 
@@ -392,8 +400,8 @@
       this.$store.commit('setAggregateEventBlocks', events.events())
       this.$store.commit('setAggregateAvailabilityBlocks', availabilities.availabilities())
 
-      this.pendingEvents = this.$store.state.events.pendingBlocks
-      this.events = this.$store.state.events.blocks
+      this.pendingEventBlocks = this.$store.state.events.pendingBlocks
+      this.eventBlocks = this.$store.state.events.blocks
       this.aggregateAvailabilityBlocks = this.$store.state.availabilities.blocks
       this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
     },
@@ -427,15 +435,15 @@
       this.$store.watch(this.$store.getters.getLastUpdatedPendingEventBlocks, (date) => {
         if (date === this.date) {
           this.$set(
-            this.pendingEvents,
+            this.pendingEventBlocks,
             [date],
             this.$store.state.events.pendingBlocks[date],
           )
 
           if (this.weekDays[date]) {
-            this.$set(this.weekDays[date], 'pendingEvents', this.pendingEvents[date])
+            this.$set(this.weekDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
           }
-          this.$set(this.monthDays[date], 'pendingEvents', this.pendingEvents[date])
+          this.$set(this.monthDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
         }
       })
 
@@ -453,15 +461,6 @@
           this.$set(this.monthDays[date], 'aggregateAvailabilityBlocks', this.aggregateAvailabilityBlocks[date])
         }
       })
-    },
-    watch: {
-      // currentUserAvailabilityBlocks(newBlocks) {
-        // console.log('new blocks')
-        // this.$store.commit('setUserAvailabilityBlocksForDay', { blocks: newBlocks, date: this.date })
-      // },
-      // date(newDate) {
-      //   // this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities[newDate] || []
-      // },
     },
     methods: {
       packageSlideContent(block) {
@@ -483,7 +482,7 @@
         // window.console.log(bubbleData)
         this.$store.commit('resetHistory')
         this.$store.commit('addASlide', this.packageSlideContent(bubbleData.block))
-        bubbleProperties.position.x =  bubbleData.x
+        bubbleProperties.position.x = bubbleData.x
         // window.console.log(bubbleProperties)
         this.$store.commit('updateBubbleProperties', { position: bubbleProperties.position, data: bubbleData })
         this.$store.commit('toggleBubbleVisibility', true)
@@ -599,31 +598,19 @@
 
         return `${glyph} ${grammaticalUnit}`
       },
-      applyFilter (type, data) {
+      applyFilter(type, data) {
           this.filters.find((filter) => filter.type === type).items = data
           this.filteredUsers = this.users.filter((item) => {
-              // @FIXME ew this.filters[n]...
-              // return this.filters.forEach(filter => filter.items.length ? filter.items.includes(item[filter.type]) : true)
-              // filters[0] = institutions
-              // filters[1] = departments
-              // filters[2] = professionalTitles
-              return (this.userTypeIsClient && this.filters[0].items.length ? this.filters[0].items.includes(item[this.filters[0].type]) : true)
-                  && (this.filters[1].items.length ? this.filters[1].items.includes(item[this.filters[1].type]) : true)
-                  && (this.filters[2].items.length ? this.filters[2].items.includes(item[this.filters[2].type]) : true)
+            // @FIXME ew this.filters[n]...
+            // return this.filters.forEach(filter => filter.items.length ? filter.items.includes(item[filter.type]) : true)
+            // filters[0] = institutions
+            // filters[1] = departments
+            // filters[2] = professionalTitles
+            return (this.userTypeIsClient && this.filters[0].items.length ? this.filters[0].items.includes(item[this.filters[0].type]) : true)
+                && (this.filters[1].items.length ? this.filters[1].items.includes(item[this.filters[1].type]) : true)
+                && (this.filters[2].items.length ? this.filters[2].items.includes(item[this.filters[2].type]) : true)
           })
           // this.bulkCheckState = this.isSetSelectedAlready(this.filteredUsers)
-      },
-      eventsForDate(date) {
-        return this.events[date]
-      },
-      pendingEventsForDate(date) {
-        return this.pendingEvents[date]
-      },
-      currentUserAvailabilityBlocksForDate(date) {
-        return this.currentUserAvailabilityBlocks[date] || []
-      },
-      aggregateUserAvailabilityBlocksForDate(date) {
-        return this.aggregateUserAvailabilityBlocks[date] || []
       },
       saveUpdatedBlocksFromACalendarDay(blocksToUpdate) {
         // TODO: Normalize this for setting any type of block. - Chad
