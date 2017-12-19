@@ -1,6 +1,6 @@
 const events = {
   state: {
-    '2017-12-12': [
+    '2017-12-19': [
       {
         start: 10,
         duration: 4.5,
@@ -23,4 +23,3 @@ const events = {
 }
 
 export default events;
-

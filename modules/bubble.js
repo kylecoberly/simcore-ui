@@ -9,7 +9,7 @@ const bubble = {
   },
   mutations: {
     toggleBubbleVisibility(state, payload) {
-      if (payload) {
+      if (payload !== undefined) {
         state.is_open = payload
       } else {
         state.is_open = !state.is_open
@@ -34,5 +34,4 @@ const bubble = {
   getters: {},
 }
 
-export default bubble;
-
+export default bubble

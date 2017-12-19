@@ -18,6 +18,10 @@ import slideDeck from '../modules/slideDeck'
 import user from '../modules/user'
 import users from '../modules/users'
 
+import BubbleTrigger from '../directives/BubbleTrigger'
+
+Vue.directive('bubble-trigger', BubbleTrigger)
+
 Vue.config.productionTip = false
 
 // helpers

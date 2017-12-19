@@ -1,46 +1,11 @@
-.calendar-density-blocks--outer {
-  flex: 1;
-  position: relative;
-
-  .calendar-density-block {
-    display: flex;
-    justify-content: flex-end;
-
-    &:hover {
-      box-shadow: 0 0 0 .2em var(--timeblock-color);
-      z-index: 2;
-    }
-
-    &.active {
-      box-shadow: 0 0 0 .2em var(--aqua);
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      pointer-events: none;
-      background: var(--green);
-      width: calc(300% + 3em);
-      top: 0;
-      bottom: 0;
-      opacity: .35;
-    }
-  }
-}
-
 .local--day {
   position: relative;
   flex: 1;
   display: flex;
 
-  .calendar-density-block {
-    // --timeblock-color: var(--green);
-    opacity: .5;
-    cursor: pointer;
-  }
-
-  &--availability-blocks,
+  &--aggregate-blocks,
   &--event-blocks,
+  &--pending-blocks,
   &--time-blocks {
     pointer-events: none;
     position: relative;
@@ -51,26 +16,16 @@
     }
   }
 
-  // &--time-blocks {
-  //   .sim-timeblock {
-  //     --timeblock-color: var(--blue);
-  //   }
-  //   .sim-timeblock--pending-event {
-  //     --timeblock-color: var(--orange);
-  //   }
-  // }
-  //
-  // &--event-blocks {
-  //   .sim-timeblock {
-  //     --timeblock-color: var(--aqua);
-  //   }
-  // }
-  //
-  // &--availability-blocks {
-  //   .sim-timeblock {
-  //     --timeblock-color: var(--green);
-  //   }
-  // }
+  &--aggregate-blocks {
+    .sim-timeblock {
+      pointer-events: auto;
+      justify-content: flex-end;
+
+      &:hover {
+        z-index: 2;
+      }
+    }
+  }
 }
 
 .is-month-view {
@@ -78,17 +33,63 @@
     > * + * {
       margin: 0 0 0 .5em;
     }
+
+    &--event-blocks,
+    &--pending-blocks {
+      z-index: 2;
+    }
+
+    &--aggregate-blocks {
+      z-index: 1;
+
+      .sim-timeblock {
+        &.active {
+          box-shadow: 0 0 0 .2em var(--aqua);
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          pointer-events: none;
+          background: var(--green);
+          border-radius: .2em;
+          width: calc(300% + 3em);
+          top: 0;
+          bottom: 0;
+          opacity: .35;
+        }
+      }
+    }
   }
 }
 
 .is-week-view {
   .local--day {
     &--event-blocks {
-      flex: 1;
+      max-width: 1em;
     }
+
+    &--pending-blocks {
+      flex: 6;
+      margin-left: .5em;
+      z-index: 2;
+    }
+
     &--time-blocks {
       flex: 6;
       margin-left: 1em;
+    }
+
+    &--aggregate-blocks {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      .sim-timeblock {
+        pointer-events: none;
+      }
     }
   }
 }
@@ -98,18 +99,6 @@
     &--time-blocks {
       display: flex;
       justify-content: space-between;
-    }
-    &--availability-blocks {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      .sim-timeblock {
-        pointer-events: none;
-        border-radius: 0;
-        opacity: .5;
-      }
     }
   }
 }

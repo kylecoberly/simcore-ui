@@ -1,5 +1,5 @@
 .sim-timeblock {
-  --color: var(--timeblock-color, var(--action));
+  --color: var(--timeblock-color, var(--dark));
   background: var(--color);
   opacity: 1;
   border-radius: .2em;
@@ -154,7 +154,7 @@
     }
 
     &.is-display-only {
-      pointer-events: none;
+      // pointer-events: none;
     }
 
     .sim-timeblock--info {
@@ -188,7 +188,7 @@
     }
 
     &.is-display-only {
-      pointer-events: none;
+      // pointer-events: none;
     }
 
     .sim-timeblock--info {
@@ -214,8 +214,9 @@
 
 // block themes
 .sim-timeblock--theme {
-  &--default {
-    --timeblock-color: var(--blue) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
+  &--default,
+  &--available {
+    --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
   }
 
   &--pending-event {
@@ -223,14 +224,21 @@
   }
 
   &--event {
-    --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--aqua) 90%);
+    --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--red-film) 0%, var(--purple) 90%);
   }
 
-  &--available {
+  &--aggregate {
     --timeblock-color: var(--green)  radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--green) 90%);
+    opacity: .5;
+    cursor: pointer;
   }
+
   &--empty {
     --timeblock-color: var(--shade);
+
+    &::before {
+      display: none;
+    }
   }
 }
 

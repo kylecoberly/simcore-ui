@@ -1,9 +1,9 @@
 <template lang="html">
   <div class="sim-calendar-day"
-       @mousedown="setActiveDateToToday"
-       @click.meta="toggleCalendarDisplayMode"
-       :class="dayClasses"
-       >
+      @mousedown="setActiveDateToToday"
+      @click.meta="toggleCalendarDisplayMode"
+      :class="dayClasses"
+      >
     <div class="local--day">
 
       <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber }}</div>
@@ -17,6 +17,7 @@
         <div class="local--day--blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             class="sim-timeblock--theme--event"
+            v-bubble-trigger="{block, x: dayOfWeek+1}"
             :key="index"
             :block="block"
             :index="index"
@@ -26,7 +27,7 @@
         </div>
         <div class="local--day--blocks local--day--time-blocks">
           <SimTimeBlock v-for="(block, index) in currentUserAvailabilityBlocks"
-            class="sim-timeblock--theme--default"
+            class="sim-timeblock--theme--available"
             :key="index"
             :block="block"
             :index="index"
@@ -38,9 +39,9 @@
 
       <template v-if="isCoordinatorContext">
 
-        <div v-if="isWeekView" class="local--day--availability-blocks">
+        <div v-if="isWeekView" class="local--day--aggregate-blocks">
           <SimTimeBlock v-for="(block, index) in aggregateAvailabilityBlocks"
-            class="sim-timeblock--theme--available"
+            class="sim-timeblock--theme--aggregate"
             :key="index"
             :block="block"
             :index="index"
@@ -52,6 +53,7 @@
         <div class="local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             class="sim-timeblock--theme--event"
+            v-bubble-trigger="{block, x: dayOfWeek+1}"
             :key="index"
             :block="block"
             :index="index"
@@ -60,9 +62,10 @@
             />
         </div>
 
-        <div class="local--day--time-blocks">
+        <div class="local--day--pending-blocks">
           <SimTimeBlock v-for="(block, index) in stagedEvents"
-            class="sim-timeblock--pending-event sim-timeblock--theme--pending-event"
+            class="sim-timeblock--theme--pending-event"
+            v-bubble-trigger="{block, x: dayOfWeek+1}"
             :key="index"
             :block="block"
             :index="index"
@@ -71,21 +74,23 @@
             />
         </div>
 
-        <div v-if="isMonthView" class="calendar-density-blocks--outer">
+        <div v-if="isMonthView" class="local--day--aggregate-blocks">
           <template v-if="aggregateAvailabilityBlocks">
-            <SimBubbleTrigger v-for="(block, index) in aggregateAvailabilityBlocks"
-              class="calendar-density-block sim-timeblock sim-timeblock--y sim-timeblock--theme--available"
+            <SimTimeBlock v-for="(block, index) in aggregateAvailabilityBlocks"
+              class="sim-timeblock--theme--aggregate"
+              v-bubble-trigger="{block, x: dayOfWeek+1}"
               :key="index"
-              :class="setDensityBlockClasses(block)"
-              :style="`--start: ${block.start};--duration: ${block.duration}`"
-              :bubble-properties="{key: getMetaKey(block), x: dayOfWeek+1}"
-              :slideContent="packageSlideContent(block)"
+              :block="block"
+              :index="index"
+              :show-controls="false"
+              :orientation="timeBlockOrientation"
               />
           </template>
           <template v-else-if="!aggregateAvailabilityBlocks">
-            <div @click="emitLodestar" class="sim-timeblock sim-timeblock--y sim-timeblock--theme--empty" style="--start: 0;--duration: 24"></div>
+            <div @click="emitLodestar" class="sim-timeblock sim-timeblock--y sim-timeblock--theme--empty is-display-only" style="--start: 0;--duration: 24"></div>
           </template>
         </div>
+
       </template>
 
     </div>
@@ -96,11 +101,10 @@
   import moment from 'moment'
 
   import SimTimeBlock from './TimeBlock'
-  import SimBubbleTrigger from './BubbleTrigger'
 
   export default {
     name: 'sim-calendar-day',
-    components: { SimTimeBlock, SimBubbleTrigger },
+    components: { SimTimeBlock },
     props: ['date', 'index', 'displayMode', 'userContext'],
     data() {
       return {
@@ -160,12 +164,6 @@
 
         return classes.join(' ')
       },
-      bubbleProperties() {
-        return this.$store.state.bubble.properties
-      },
-      shouldBubbleBeOpen() {
-        return this.$store.state.bubble.is_open
-      },
       isInstructorContext() {
         return (this.userContext === 'instructor')
       },
@@ -180,33 +178,8 @@
       },
     },
     methods: {
-      getMetaKey(block) {
+      getBlockMetaKey(block) {
         return `${this.date}:${block.start}`
-      },
-      packageSlideContent(block) {
-        return {
-          title: this.formateDateForDisplay(this.date),
-          subtitle: this.formatTimesForDisplay(block.start, block.duration),
-          componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
-          content: {
-            items: block.user_ids,
-            selectedItems: [],
-            foundItems: [],
-            itemSearch: '',
-            start_time: block.start,
-            end_time: block.start + block.duration,
-          },
-        }
-      },
-      formateDateForDisplay(date) {
-        return moment(date).format(this.$store.state.calendar.settings.date_format.display)
-      },
-
-      formatTimesForDisplay(start, duration) {
-        const day = moment().startOf('day')
-        const startTime = day.add(start, 'hours').format('h:mma')
-        const endTime = day.add(duration, 'hours').format('h:mma')
-        return `${startTime.replace(':00', '')} — ${endTime.replace(':00', '')}`
       },
 
       setActiveDateToToday() {
@@ -219,16 +192,6 @@
         } else {
           this.$store.commit('setCalendarDisplayModeToMonth')
         }
-      },
-
-      setDensityBlockClasses(block) {
-        const classes = []
-
-        if (this.shouldBubbleBeOpen && this.bubbleProperties.key === `${this.date}:${block.start}`) {
-          classes.push('active')
-        }
-
-        return classes.join(' ')
       },
 
       setHourClasses(hour) {

@@ -61,6 +61,7 @@
                   :date="date"
                   :user-context="contextLabel"
                   @run-lodestar="runLodestar"
+                  @call-bubble="prepareTheBubble"
                   />
               </template>
 
@@ -71,6 +72,7 @@
                   :displayMode="displayMode"
                   :date="date"
                   :user-context="contextLabel"
+                  @call-bubble="prepareTheBubble"
                   />
               </template>
 
@@ -78,7 +80,7 @@
 
             </div>
 
-            <SimBubble v-if="isCoordinatorContext && shouldBubbleBeOpen && isMonthView">
+            <SimBubble v-if="shouldBubbleBeOpen">
               <SimSlidePresenter></SimSlidePresenter>
             </SimBubble>
           </div>
@@ -335,6 +337,42 @@
       this.resetInactiveInstructors()
     },
     methods: {
+      packageSlideContent(block) {
+        return {
+          title: this.formateDateForDisplay(this.date),
+          subtitle: this.formatTimesForDisplay(block.start, block.duration),
+          componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
+          content: {
+            items: block.user_ids,
+            selectedItems: [],
+            foundItems: [],
+            itemSearch: '',
+            start_time: block.start,
+            end_time: block.start + block.duration,
+          },
+        }
+      },
+      prepareTheBubble(bubbleProperties, bubbleData) {
+        // window.console.log(bubbleData)
+        this.$store.commit('resetHistory')
+        this.$store.commit('addASlide', this.packageSlideContent(bubbleData.block))
+        bubbleProperties.position.x =  bubbleData.x
+        // window.console.log(bubbleProperties)
+        this.$store.commit('updateBubbleProperties', bubbleProperties.position)
+        this.$store.commit('toggleBubbleVisibility', true)
+      },
+
+      formateDateForDisplay(date) {
+        return moment(date).format(this.$store.state.calendar.settings.date_format.display)
+      },
+
+      formatTimesForDisplay(start, duration) {
+        const day = moment().startOf('day')
+        const startTime = day.add(start, 'hours').format('h:mma')
+        const endTime = day.add(duration, 'hours').format('h:mma')
+        return `${startTime.replace(':00', '')} — ${endTime.replace(':00', '')}`
+      },
+
       sortItemsByProperty(items, property) {
         items.sort((a, b) => {
           return (a[property] > b[property]) - (a[property] < b[property])
@@ -385,6 +423,7 @@
         this.resetInactiveInstructors()
       },
       runLodestar() {
+        this.$store.commit('toggleBubbleVisibility', false)
         lodestar(this.$el, 'lodestar', '.sim-calendar--filters .sim-calendar--aside--body', 'value')
       },
       isCurrentDay(date) {

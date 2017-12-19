@@ -89,10 +89,6 @@
         type: Number,
         default: 0,
       },
-      // date: {
-      //   type: String,
-      //   default: '',
-      // },
       orientation: {
         type: String,
         default: 'x',
@@ -100,6 +96,10 @@
       showControls: {
         type: Boolean,
         default: true,
+      },
+      theme: {
+        type: String,
+        default: 'default'
       },
       variables: {
         type: Object,
@@ -147,7 +147,7 @@
         return `${output} ${(total > 0 && total <= 1 ? 'hour' : 'hours')}`
       },
       blockClasses() {
-        const classes = [`sim-timeblock sim-timeblock--${this.index} sim-timeblock--${this.orientation}`]
+        const classes = [`sim-timeblock sim-timeblock--theme--${this.theme} sim-timeblock--${this.index} sim-timeblock--${this.orientation}`]
         if (!this.showControls) {
           classes.push('is-display-only')
         }
@@ -218,7 +218,7 @@
       startMove(event) {
         if (event.which === 1) {
           event.preventDefault()
-          event.stopPropagation()
+          // event.stopPropagation()
           this.isMoving = true
           this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-moving', true)
@@ -239,7 +239,7 @@
       startStretchRight(event) {
         if (event.which === 1) {
           event.preventDefault()
-          event.stopPropagation()
+          // event.stopPropagation()
           this.stretchDirection = 'right'
           this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
@@ -260,7 +260,7 @@
       startStretchDown(event) {
         if (event.which === 1) {
           event.preventDefault()
-          event.stopPropagation()
+          // event.stopPropagation()
           this.stretchDirection = 'down'
           this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
@@ -282,7 +282,7 @@
       startStretchLeft(event) {
         if (event.which === 1) {
           event.preventDefault()
-          event.stopPropagation()
+          // event.stopPropagation()
           this.stretchDirection = 'left'
           this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
@@ -304,7 +304,7 @@
       startStretchUp(event) {
         if (event.which === 1) {
           event.preventDefault()
-          event.stopPropagation()
+          // event.stopPropagation()
           this.stretchDirection = 'up'
           this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
