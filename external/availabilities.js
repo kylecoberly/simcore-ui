@@ -29,6 +29,18 @@ export default {
           user_ids: [3, 4, 5, 7, 8, 11],
         },
       ],
+      '2017-12-16': [
+        {
+          start: 8.5,
+          duration: 5.5,
+          user_ids: [5, 13, 18],
+        },
+        {
+          start: 15,
+          duration: 1,
+          user_ids: [6, 21, 22, 25],
+        },
+      ],
       '2017-12-15': [
         {
           start: 8.5,

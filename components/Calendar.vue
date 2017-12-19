@@ -483,6 +483,7 @@
         this.$store.commit('resetHistory')
         this.$store.commit('addASlide', this.packageSlideContent(bubbleData.block))
         bubbleProperties.position.x = bubbleData.x
+
         // window.console.log(bubbleProperties)
         this.$store.commit('updateBubbleProperties', { position: bubbleProperties.position, data: bubbleData })
         this.$store.commit('toggleBubbleVisibility', true)

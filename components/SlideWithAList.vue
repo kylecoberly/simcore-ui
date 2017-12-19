@@ -97,6 +97,11 @@
         slide: this.$store.getters.currentSlide(),
       }
     },
+    mounted() {
+      this.$store.watch(this.$store.getters.currentSlide, (currentSlide) => {
+        this.$set(this, 'slide', currentSlide)
+      })
+    },
     computed: {
       items() {
         return this.slide.content.items
