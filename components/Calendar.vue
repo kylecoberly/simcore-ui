@@ -93,6 +93,10 @@
             <SimBubble v-if="bubbleIsOpen">
               <SimSlidePresenter></SimSlidePresenter>
             </SimBubble>
+
+            <div class="sim-loader--shield" v-if="isLoading">
+              <SimLoader :is-loading="true"></SimLoader>
+            </div>
           </div>
         </div>
       </main>
@@ -201,6 +205,7 @@
   import SimDatalist from './Datalist'
   import SimIconText from './IconText'
   import SimFilterBy from './FilterBy'
+  import SimLoader from './Loader'
   import SimSelection from './Selection'
   import SimSlidePresenter from './SlidePresenter'
   import SimSwitch from './Switch'
@@ -215,6 +220,7 @@
       SimDatalist,
       SimIconText,
       SimFilterBy,
+      SimLoader,
       SimSelection,
       SimSlidePresenter,
       SimSwitch,
@@ -224,6 +230,8 @@
     data() {
       return {
         contextSwitch: true,
+        calendarIsUpdating: false,
+        isLoading: false,
         filterEventLength: 2,
         date: this.$store.state.activeDate.date,
         institutions: [],
@@ -467,6 +475,16 @@
       displayMode() {
         this.closeBubble()
       },
+      calendarIsUpdating(value) {
+        this.isLoading = value
+      },
+      // @FIXME temporay, mocking data update interaction | Jase
+      filterEventLength() {
+        this.calendarIsUpdating = true
+        setTimeout(() => {
+          this.calendarIsUpdating = false
+        }, 1500)
+      }
     },
     methods: {
       packageSlideContent(bubbleData) {
