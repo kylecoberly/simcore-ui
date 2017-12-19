@@ -61,9 +61,11 @@
   &--info {
     pointer-events: none;
     transition: opacity 300ms linear;
-    padding: .3em;
-    border-radius: .2em;
+    padding: 0;
     text-align: center;
+    font-size: .9em;
+    width: 100%;
+    white-space: nowrap;
 
     // &--hours {}
     &--time {
@@ -158,7 +160,7 @@
     }
 
     .sim-timeblock--info {
-      background: var(--picker-bg);
+      // background: var(--picker-bg);
       transform: translateY(-2.25em);
       white-space: nowrap;
     }
@@ -193,7 +195,7 @@
 
     .sim-timeblock--info {
       color: var(--picker-bg);
-      background: var(--color);
+      // background: var(--color);
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -275,24 +277,32 @@
   .sim-timeblock {
     --timeblock-color: var(--blue) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
     box-shadow: 0 .1em 1em -.3em var(--shadow);
+  }
+}
 
-    &--info {
-      top: 0;
+.sim-timeblock--y {
+  &.is-moving,
+  &.is-stretching {
+    .sim-timeblock--info--time {
+      display: block;
+      position: absolute;
       left: 100%;
-      width: auto;
-      white-space: nowrap;
-      background: transparent;
-      text-align: left;
-      padding: 0 0 0 .5em;
-      transform: none;
+      top: 50%;
+      transform: translate(0%, -50%);
+      padding: .5em;
+      background: var(--shadow);
+    }
+  }
+}
 
-      &--hours {
-        font-size: 1.3em;
-        font-weight: bold;
-      }
-
-      &--time {
-        display: block;
+.day-5,
+.day-6 {
+  .sim-timeblock--y {
+    &.is-moving,
+    &.is-stretching {
+      .sim-timeblock--info--time {
+        left: auto;
+        right: 100%;
       }
     }
   }
