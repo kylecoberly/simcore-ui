@@ -7,8 +7,8 @@
         <SimSwitch v-model="contextSwitch" left-label="Instructor" right-label="Coordinator"/>
       </div>
       <div class="sim-calendar--header--modes">
-        <span class="sim-calendar-button" @click="$store.commit('setCalendarDisplayModeToMonth')" :class="{active: isMonthView}">Month</span>
-        <span class="sim-calendar-button" @click="$store.commit('setCalendarDisplayModeToWeek')" :class="{active: isWeekView}">Week</span>
+        <span class="sim-calendar-button" @click="setCalendarDisplayModeToMonth" :class="{active: isMonthView}">Month</span>
+        <span class="sim-calendar-button" @click="setCalendarDisplayModeToWeek" :class="{active: isWeekView}">Week</span>
       </div>
       <div class="sim-calendar--header--controls">
         <span @click="loadPrevDays">
@@ -466,19 +466,24 @@
         }
       })
     },
+    watch: {
+      contextSwitch() {
+        this.closeBubble()
+      }
+    },
     methods: {
-      packageSlideContent(block) {
+      packageSlideContent(bubbleData) {
         return {
-          title: this.formateDateForDisplay(this.date),
-          subtitle: this.formatTimesForDisplay(block.start, block.duration),
+          title: this.formateDateForDisplay(bubbleData.date),
+          subtitle: this.formatTimesForDisplay(bubbleData.block.start, bubbleData.block.duration),
           componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
           content: {
-            items: block.user_ids,
+            items: bubbleData.block.user_ids,
             selectedItems: [],
             foundItems: [],
             itemSearch: '',
-            start_time: block.start,
-            end_time: block.start + block.duration,
+            start_time: bubbleData.block.start,
+            end_time: bubbleData.block.start + bubbleData.block.duration,
           },
           // title: this.formateDateForDisplay(this.date),
           // subtitle: this.formatTimesForDisplay(block.start, block.duration),
@@ -487,27 +492,24 @@
         }
       },
       prepareTheBubble(bubbleProperties, bubbleData) {
-        // window.console.log(bubbleData)
+        window.console.log(bubbleData)
+        // window.console.log(bubbleProperties)
         this.$store.commit('resetHistory')
-        this.$store.commit('addASlide', this.packageSlideContent(bubbleData.block))
+        this.$store.commit('addASlide', this.packageSlideContent(bubbleData))
         bubbleProperties.position.x = bubbleData.x
 
-        // window.console.log(bubbleProperties)
         this.$store.commit('updateBubbleProperties', { position: bubbleProperties.position, data: bubbleData })
         this.$store.commit('toggleBubbleVisibility', true)
       },
-
       formateDateForDisplay(date) {
         return moment(date).format(this.$store.state.calendar.settings.date_format.display)
       },
-
       formatTimesForDisplay(start, duration) {
         const day = moment().startOf('day')
         const startTime = day.add(start, 'hours').format('h:mma')
         const endTime = day.add(duration, 'hours').format('h:mma')
         return `${startTime.replace(':00', '')} — ${endTime.replace(':00', '')}`
       },
-
       sortItemsByProperty(items, property) {
         items.sort((a, b) => {
           return (a[property] > b[property]) - (a[property] < b[property])
@@ -558,11 +560,14 @@
         this.resetInactiveInstructors()
       },
       runLodestar() {
-        this.$store.commit('toggleBubbleVisibility', false)
+        this.closeBubble()
         lodestar(this.$el, 'lodestar', '.sim-calendar--filters .sim-calendar--aside--body', 'value')
       },
       isCurrentDay(date) {
         return moment().isSame(date, 'day')
+      },
+      closeBubble() {
+        this.$store.commit('toggleBubbleVisibility', false)
       },
       setDays(start, limit) {
         const dateStrings = [start.format(this.$store.state.calendar.settings.date_format.raw)]
@@ -578,16 +583,27 @@
         const nextDays = moment(this.activeMoment).add(1, this.displayMode)
           .format(this.$store.state.calendar.settings.date_format.raw)
 
+        this.closeBubble()
         this.$store.commit('setActiveDate', nextDays)
       },
       loadPrevDays() {
         const previousDays = moment(this.activeMoment).subtract(1, this.displayMode)
           .format(this.$store.state.calendar.settings.date_format.raw)
 
+        this.closeBubble()
         this.$store.commit('setActiveDate', previousDays)
       },
       setTheActiveDateToToday() {
+        this.closeBubble()
         this.$store.commit('setActiveDate', moment().format(this.$store.state.calendar.settings.date_format.raw))
+      },
+      setCalendarDisplayModeToMonth() {
+        this.closeBubble()
+        this.$store.commit('setCalendarDisplayModeToMonth')
+      },
+      setCalendarDisplayModeToWeek() {
+        this.closeBubble()
+        this.$store.commit('setCalendarDisplayModeToWeek')
       },
       displayHour(hour) {
         hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour) // (hour % 2 === 0 ? hour : ''))

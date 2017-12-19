@@ -17,7 +17,7 @@
         <div class="local--day--blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             class="sim-timeblock--theme--event"
-            v-bubble-trigger="{block, x: dayOfWeek+1, followMousemove: false}"
+            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false}"
             :key="index"
             :block="block"
             :index="index"
@@ -53,7 +53,7 @@
         <div class="local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             class="sim-timeblock--theme--event"
-            v-bubble-trigger="{block, x: dayOfWeek+1, followMousemove: false}"
+            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false}"
             :key="index"
             :block="block"
             :index="index"
@@ -65,7 +65,7 @@
         <div class="local--day--pending-blocks">
           <SimTimeBlock v-for="(block, index) in pendingEvents"
             class="sim-timeblock--theme--pending-event"
-            v-bubble-trigger="{block, x: dayOfWeek+1, followMousemove: true}"
+            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: true}"
             :key="index"
             :block="block"
             :index="index"
@@ -78,7 +78,7 @@
           <template v-if="aggregateUserAvailabilityBlocks.length">
             <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
               class="sim-timeblock--theme--aggregate"
-              v-bubble-trigger="{block, x: dayOfWeek+1, followMousemove: false}"
+              v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false}"
               :key="index"
               :block="block"
               :index="index"
