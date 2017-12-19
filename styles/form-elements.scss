@@ -5,49 +5,76 @@ textarea {
   color: inherit;
   font-size: inherit;
   font-family: inherit;
+  outline: none;
 }
 
 // text inputs
 input {
-  font-family: inherit;
-  font-size: inherit;
-  outline: none;
-  border-radius: .2rem;
-  &:not([type='checkbox']):not([type='radio']):not([type='range']) {
+  // &:not([type='checkbox']):not([type='radio']):not([type='range']) {
+
+  &[type='text'],
+  &[type='password'],
+  &[type='number'],
+  &[type='date'],
+  &[type='tel'],
+  &[type='url'],
+  &[type='search'] {
     appearance: none;
     padding: .4em .7em;
     border: 0;
+    border-radius: .2em;
     width: 100%;
     box-shadow: 0 0 0 1px var(--dusk) inset;
     transition: all var(--ms) ease-out;
-  }
-  &:active,
-  &:focus {
-    // box-shadow: 0 0 2px 1px var(--action);
-    &:not([type='checkbox']):not([type='radio']):not([type='range']) {
+
+    &:active,
+    &:focus {
       box-shadow: 0 0 0 1px var(--dusk) inset, 0 0 2px 1px var(--action);
     }
   }
+
+
   &[readonly] {
     background: transparent;
     color: inherit;
     box-shadow: none;
     padding: .4em 0;
   }
+
   &::placeholder {
     font-family: FontAwesome, sans-serif;
   }
+
   &::-webkit-inner-spin-button {
     margin: -.5em 0;
   }
+
   &::-webkit-datetime-edit-fields-wrapper {
     margin: -.5em 0;
   }
+
   &::-webkit-calendar-picker-indicator {
     margin: -.5em 0;
   }
+
   &::-webkit-datetime-edit {
     max-width: 6em;
+  }
+}
+
+select,
+textarea {
+  appearance: none;
+  padding: .4em .7em;
+  border: 0;
+  border-radius: .2em;
+  width: 100%;
+  box-shadow: 0 0 0 1px var(--dusk) inset;
+  transition: all var(--ms) ease-out;
+
+  &:active,
+  &:focus {
+    box-shadow: 0 0 0 1px var(--dusk) inset, 0 0 2px 1px var(--action);
   }
 }
 

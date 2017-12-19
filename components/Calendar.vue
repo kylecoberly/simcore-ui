@@ -163,12 +163,11 @@
             <b>My Availability</b>
           </div>
           <div class="sim-calendar--aside--body">
-            <SimTimePicker
+            <SimTimePicker orientation="y"
               @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
               :blocks="currentUserAvailabilityBlocksForCurrentDate"
               :date="date"
               :should-show-date="true"
-              orientation="y"
               :initialEventBlocks="currentDay.eventBlocks"
               :initialPendingEventBlocks="currentDay.pendingEventBlocks"
               :initialCurrentUserAvailabilityBlocks="currentDay.currentUserAvailabilityBlocks"
@@ -465,17 +464,21 @@
     methods: {
       packageSlideContent(block) {
         return {
+          // title: this.formateDateForDisplay(this.date),
+          // subtitle: this.formatTimesForDisplay(block.start, block.duration),
+          // componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
+          // content: {
+          //   items: block.user_ids,
+          //   selectedItems: [],
+          //   foundItems: [],
+          //   itemSearch: '',
+          //   start_time: block.start,
+          //   end_time: block.start + block.duration,
+          // },
           title: this.formateDateForDisplay(this.date),
           subtitle: this.formatTimesForDisplay(block.start, block.duration),
-          componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
-          content: {
-            items: block.user_ids,
-            selectedItems: [],
-            foundItems: [],
-            itemSearch: '',
-            start_time: block.start,
-            end_time: block.start + block.duration,
-          },
+          componentType: 'SimSlideWithAnEventForm', // TODO: Make this dynamic. - Chad/Jase
+          content: {},
         }
       },
       prepareTheBubble(bubbleProperties, bubbleData) {
@@ -644,10 +647,10 @@
       top: calc(var(--dink-y) * 1px);
     }
     &--left {
-      left: calc(14.285% * var(--x) - 1px);
+      left: calc(14.285% * var(--x));
     }
     &--right {
-      left: calc(14.285% * (var(--x) - 1) - 1px);
+      left: calc(14.285% * (var(--x) - 1));
       transform: translateX(-100%);
     }
   }

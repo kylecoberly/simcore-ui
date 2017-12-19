@@ -1,9 +1,10 @@
 <template lang="html">
   <div class="sim-autocomplete" :class="{'sim-autocomplete--options-visible': isOpen}">
-    <div class="sim-autocomplete--search-icon">
-      <SimIconText icon="fa-search"></SimIconText>
-    </div>
-    <input v-model="keyword"
+    <div>
+      <div class="sim-autocomplete--search-icon">
+        <SimIconText icon="fa-search"></SimIconText>
+      </div>
+      <input v-model="keyword"
       type="search"
       :placeholder="placeholder"
       @input="onInput($event.target.value)"
@@ -14,6 +15,10 @@
       @keydown.up="moveUp"
       @keydown.enter="select"
       />
+      <div class="sim-autocomplete--item-count">
+        {{ filteredOptionsCount }}
+      </div>
+    </div>
     <div class="sim-autocomplete--items" v-show="isOpen">
       <transition-group appear name="list" tag="ul" mode="in-out">
         <li v-for="(option, index) in filteredOptions"
@@ -25,9 +30,6 @@
           <slot name="item" :option="option"></slot>
         </li>
       </transition-group>
-    </div>
-    <div class="sim-autocomplete--item-count">
-      {{ filteredOptionsCount }}
     </div>
   </div>
 </template>
@@ -87,8 +89,10 @@
         this.position = (this.position - 1 < 0 ? this.filteredOptions.length - 1 : this.position - 1)
       },
       select() {
-        const selectedOption = this.filteredOptions[this.position]
-        this.$emit('select', selectedOption)
+        if (this.isOpen) {
+          const selectedOption = this.filteredOptions[this.position]
+          this.$emit('select', selectedOption)
+        }
       },
       clickSelect() {
         this.select()
@@ -99,7 +103,7 @@
         this.keyword = ''
       },
       blur() {
-        this.isOpen = false
+        // this.isOpen = false
       },
       focus() {
         this.isOpen = true
