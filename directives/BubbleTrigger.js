@@ -21,15 +21,25 @@ export default {
     if (element) {
       element.addEventListener('mousedown', () => {
         setProperties(true)
+        if (binding.value.followMousemove === true) {
+          addEventListener('mousemove', () => {
+            setProperties(null)
+          })
+        }
       })
-      addEventListener('mousemove', () => {
-        setProperties(null)
-      })
+
       addEventListener('mouseup', () => {
-        removeEventListener('mousemove', () => {
-          setProperties(null)
-        })
         setProperties(false)
+
+        element.removeEventListener('mousedown', () => {
+          setProperties(true)
+        })
+
+        if (binding.value.followMousemove === true) {
+          removeEventListener('mousemove', () => {
+            setProperties(null)
+          })
+        }
       })
     }
   },
