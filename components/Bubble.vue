@@ -32,15 +32,15 @@
       },
       setClasses() {
         const classes = []
-        classes.push(`sim-bubble--${this.bubbleProperties.orientation}`)
+        classes.push(`sim-bubble--${this.bubbleProperties.position.orientation}`)
 
         return classes.join(' ')
       },
       setStyles() {
         const styles = []
-        styles.push(`--x: ${parseInt(this.bubbleProperties.x)}`)
-        styles.push(`--y: ${parseInt(this.bubbleProperties.y)}`)
-        styles.push(`--dink-y: ${parseInt(this.bubbleProperties.dinkY - this.metrics.top)}`)
+        styles.push(`--x: ${parseInt(this.bubbleProperties.position.x)}`)
+        styles.push(`--y: ${parseInt(this.bubbleProperties.position.y)}`)
+        styles.push(`--dink-y: ${parseInt(this.bubbleProperties.position.dinkY - this.metrics.top)}`)
 
         return styles.join(';')
       },

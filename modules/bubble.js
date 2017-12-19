@@ -16,17 +16,18 @@ const bubble = {
       }
     },
     updateBubbleProperties(state, payload) {
-      if (payload.x > state.previous_data.x && payload.x > 2) {
-        payload.orientation = 'right'
-      } else if (payload.x < state.previous_data.x && payload.x < 6) {
-        payload.orientation = 'left'
+      window.console.log('updateBubbleProperties', payload)
+      if (payload.position.x > state.previous_data.x && payload.position.x > 2) {
+        payload.position.orientation = 'right'
+      } else if (payload.position.x < state.previous_data.x && payload.position.x < 6) {
+        payload.position.orientation = 'left'
       } else {
-        payload.orientation = state.previous_data.orientation
+        payload.position.orientation = state.previous_data.orientation
       }
       state.properties = payload
       state.previous_data = {
-        x: payload.x,
-        orientation: payload.orientation,
+        x: payload.position.x,
+        orientation: payload.position.orientation,
       }
     },
   },
