@@ -101,11 +101,6 @@
         }
       },
       receiveTheUpdateFromTheSlide(update) {
-        this.$store.commit(
-          'setCurrentSlide',
-          update.currentSlide,
-        )
-
         if (update.nextSlide || update.nextSlide === null) {
           this.nextControl.slide = update.nextSlide
         }

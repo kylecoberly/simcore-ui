@@ -1,11 +1,16 @@
 const user = {
   state: {
-    last_updated: {},
-    availabilities: {},
-    events: {},
+    last_updated: null,
   },
   mutations: {
-    setAvailabilityBlocksForDay(state, availability) {
+    setCurrentUser(state, nextUser) {
+      state.userId = nextUser.userId
+      state.firstName = nextUser.firstName
+      state.lastName = nextUser.lastName
+      state.availabilities = nextUser.availabilities
+      state.events = nextUser.events
+    },
+    setUserAvailabilityBlocksForDay(state, availability) {
       const date = availability.date
 
       if (state.last_updated !== date) {
@@ -21,7 +26,7 @@ const user = {
   },
   actions: {},
   getters: {
-    getLastUpdated: (state) => () => {
+    getLastUpdatedCurrentUserAvailabilityBlocks: (state) => () => {
       return state.last_updated
     },
   },
