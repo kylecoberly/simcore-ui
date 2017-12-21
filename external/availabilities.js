@@ -950,15 +950,15 @@ const expectedLittleLameDataFlattenedAndIntersected = {
 const expectedBlocksFilteredByTwoHours = {
   '2017-12-19': [
     {
-      start: 9,
-      duration: 3,
+      start: 13,
+      duration: 6,
       user_ids: ['1220', '3726', '4112', '6630', '7475', '7755'],
     },
   ],
   '2017-12-24': [
     {
-      start: 9,
-      duration: 3,
+      start: 12,
+      duration: 5,
       user_ids: ['1220', '3726', '4112', '6630', '7475', '7755'],
     },
   ],
@@ -9769,17 +9769,16 @@ export default {
   availabilities() {
     const instructorAvailabilityBlocksByDate = this.aggregateInstructorAvailabilityKeyedByDateWhereAllIntersect(littleLameData)
 
+    // Filter blocks by duration.
     const instructorAvailabilityBlocksByDateWithinDuration = {}
     _.each(instructorAvailabilityBlocksByDate, (instructorAvailabilityBlocksForDate, date) => {
-      _.each(instructorAvailabilityBlocksByDate, (availabilityBlocks) => {
-        const blocksWithinDuration = _.filter(availabilityBlocks, (block) => {
-          return block.duration > 2
-        })
-
-        if (blocksWithinDuration.length > 0) {
-          instructorAvailabilityBlocksByDateWithinDuration[date] = blocksWithinDuration
-        }
+      const blocksWithinDuration = _.filter(instructorAvailabilityBlocksForDate, (availabilityBlock) => {
+        return availabilityBlock.duration > 10
       })
+
+      if (blocksWithinDuration.length > 0) {
+        instructorAvailabilityBlocksByDateWithinDuration[date] = blocksWithinDuration
+      }
     })
 
     feFiFoUmmm('instructorAvailabilityBlocksByDateWithinDuration', instructorAvailabilityBlocksByDateWithinDuration, expectedBlocksFilteredByTwoHours)
@@ -9795,6 +9794,6 @@ export default {
     // this.aggregateInstructorAvailabilityKeyedByDateAndStartTime(littleLameData)
     // return this.aggregateInstructorAvailabilityKeyedByDateWhereAllIntersect(littleLameData)
 
-    return instructorAvailabilityBlocksByDateWithinDuration
+    return {}
   },
 }
