@@ -9773,7 +9773,7 @@ export default {
     const instructorAvailabilityBlocksByDateWithinDuration = {}
     _.each(instructorAvailabilityBlocksByDate, (instructorAvailabilityBlocksForDate, date) => {
       const blocksWithinDuration = _.filter(instructorAvailabilityBlocksForDate, (availabilityBlock) => {
-        return availabilityBlock.duration > 10
+        return availabilityBlock.duration > 1
       })
 
       if (blocksWithinDuration.length > 0) {
@@ -9794,6 +9794,6 @@ export default {
     // this.aggregateInstructorAvailabilityKeyedByDateAndStartTime(littleLameData)
     // return this.aggregateInstructorAvailabilityKeyedByDateWhereAllIntersect(littleLameData)
 
-    return {}
+    return instructorAvailabilityBlocksByDateWithinDuration
   },
 }
