@@ -106,7 +106,7 @@
       <template v-if="isCoordinatorContext">
         <aside class="sim-calendar--aside sim-calendar--filters" :class="{'sim-calendar--filters--disabled': bubbleIsOpen}">
           <div class="sim-calendar--aside--header">
-            <p><b>Availability &amp; Event Filters</b></p>
+            <span><b>Availability &amp; Event Filters</b></span>
           </div>
           <div class="sim-calendar--aside--body">
             <div class="sim-flex--1">
