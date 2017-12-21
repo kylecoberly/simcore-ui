@@ -9,34 +9,6 @@
       <div class="sim-form sim-form--side-by-side">
         <input type="hidden" v-model="eventFormData.user_id" />
 
-
-        <div class="sim-form--molecule sim-form--molecule--event-title">
-          <div class="sim-form--molecule--label"><label for="event-title">Event Title</label></div>
-          <div class="sim-form--molecule--field"><textarea class="resize--y" id="event-title" v-model="eventFormData.title" placeholder="..." rows="2"></textarea></div>
-        </div>
-
-        <div class="sim-form--molecule sim-form--molecule--event-description">
-          <div class="sim-form--molecule--label"><label>Description</label></div>
-          <div class="sim-form--molecule--field"><textarea class="resize--y" placeholder="..." v-model="eventFormData.description" rows="2"></textarea></div>
-        </div>
-
-        <div class="sim-form--molecule sim-form--molecule--event-notes">
-          <div class="sim-form--molecule--label"><label>Notes</label></div>
-          <div class="sim-form--molecule--field"><textarea class="resize--y" placeholder="..." v-model="eventFormData.notes" rows="2"></textarea></div>
-        </div>
-
-        <div class="sim-form--molecule sim-form--molecule--event-department">
-          <div class="sim-form--molecule--label"><label>Department</label></div>
-          <div class="sim-form--molecule--field">
-            <select v-model="eventFormData.department_id">
-              <option value="">Select a department...</option>
-              <option v-for="department in departments" :value="department.id">
-                {{department.name}}
-              </option>
-            </select>
-          </div>
-        </div>
-
         <div class="sim-form--molecule sim-form--molecule--event-instructors">
           <div class="sim-form--molecule--label"><label>Instructors</label></div>
           <div class="sim-form--molecule--field">
@@ -49,6 +21,61 @@
                 <SimIconText icon="fa-check-circle text--green ghost" :text="`${props.item.first_name} ${props.item.last_name}`"></SimIconText>
               </li>
             </SimDatalist>
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-facility">
+          <div class="sim-form--molecule--label"><label>Facility</label></div>
+          <div class="sim-form--molecule--field">
+            <select v-model="eventFormData.facility_id">
+              <option value="">Select a facility...</option>
+              <option v-for="facility in facilities" :value="facility.id">
+                {{facility.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-room">
+          <div class="sim-form--molecule--label"><label>Room</label></div>
+          <div class="sim-form--molecule--field">
+            TODO: fetch for available rooms, based on facility
+            <!-- <select v-model="eventFormData.room_id">
+              <option>...</option>
+            </select> -->
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-title">
+          <div class="sim-form--molecule--label"><label for="event-title">Event Title</label></div>
+          <div class="sim-form--molecule--field">
+            <textarea class="resize--y" id="event-title" v-model="eventFormData.title" placeholder="..." rows="2"></textarea>
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-description">
+          <div class="sim-form--molecule--label"><label>Description</label></div>
+          <div class="sim-form--molecule--field">
+            <textarea class="resize--y" placeholder="..." v-model="eventFormData.description" rows="2"></textarea>
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-notes">
+          <div class="sim-form--molecule--label"><label>Notes</label></div>
+          <div class="sim-form--molecule--field">
+            <textarea class="resize--y" placeholder="..." v-model="eventFormData.notes" rows="2"></textarea>
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-department">
+          <div class="sim-form--molecule--label"><label>Department</label></div>
+          <div class="sim-form--molecule--field">
+            <select v-model="eventFormData.department_id">
+              <option value="">Select a department...</option>
+              <option v-for="department in departments" :value="department.id">
+                {{department.name}}
+              </option>
+            </select>
           </div>
         </div>
 
@@ -67,9 +94,10 @@
         <div class="sim-form--molecule sim-form--molecule--event-equipment">
           <div class="sim-form--molecule--label"><label>Equipment</label></div>
           <div class="sim-form--molecule--field">
-            <select v-model="eventFormData.equipent_ids">
+            TODO: options depend on scenario, and get fetched, and pre-checked
+            <!-- <select v-model="eventFormData.equipent_ids">
               <option>...</option>
-            </select>
+            </select> -->
           </div>
         </div>
 
@@ -107,10 +135,46 @@
           </div>
         </div>
 
-        <div class="sim-form--molecule sim-form--molecule--event-others">
+        <div class="sim-form--molecule sim-form--molecule--event-learners">
           <div class="sim-form--molecule--label"><label>Others</label></div>
-          <div class="sim-form--molecule--field"><textarea class="resize--y" v-model="eventFormData.others" placeholder="..." rows="3"></textarea></div>
+          <div class="sim-form--molecule--field">
+            <input type="hidden" v-model="eventFormData.other_ids" />
+            <SimDatalist :items="activeOthers" :animate="true">
+              <li slot="static-before" key="static-before" class="text--grey" v-if="!activeOthersCount">
+                <SimIconText icon="fa-info-circle" text="No others added yet..."></SimIconText>
+              </li>
+              <li slot="item" slot-scope="props" :key="props.item.id" :class="`learner-${props.item.id}`">
+                <SimSelection
+                  :item="props.item"
+                  :item-id="props.item.id"
+                  :disabled="props.item.disabled"
+                  :should-be-selected="props.item.selected"
+                  @toggle="toggleItemInSelectedOthers"
+                  >
+                  {{ props.item.first_name }} {{ props.item.last_name }}
+                </SimSelection>
+                <span class="item-remover" @click="removeFromActiveOtherList(props.item)">
+                  <SimIconText icon="fa-times fa-fw"></SimIconText>
+                </span>
+              </li>
+            </SimDatalist>
+            <SimAutocomplete placeholder="find others..."
+              :options="inactiveOthers"
+              @select="addToOtherList"
+              >
+              <div class="item-tag" slot="item" slot-scope="props">
+                {{ props.option.first_name }} {{ props.option.last_name }}
+              </div>
+            </SimAutocomplete>
+          </div>
         </div>
+
+        <!-- <div class="sim-form--molecule sim-form--molecule--event-others">
+          <div class="sim-form--molecule--label"><label>Others</label></div>
+          <div class="sim-form--molecule--field">
+            <textarea class="resize--y" v-model="eventFormData.others" placeholder="..." rows="3"></textarea>
+          </div>
+        </div> -->
 
         <div class="sim-form--molecule sim-form--molecule--event-attachment">
           <div class="sim-form--molecule--label">PDF</div>
@@ -127,14 +191,6 @@
           </div>
         </div>
 
-        <div class="sim-form--molecule sim-form--molecule--event-room">
-          <div class="sim-form--molecule--label"><label>Room</label></div>
-          <div class="sim-form--molecule--field">
-            <select v-model="eventFormData.room_id">
-              <option>...</option>
-            </select>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -174,14 +230,21 @@
         inactiveLearners: [],
         selectedLearners: [],
 
+        others: [],
+        activeOthers: [],
+        inactiveOthers: [],
+        selectedOthers: [],
+
         eventFormData: {
+          facility_id: '',
           department_id: '',
           scenario_id: '',
-          learner_ids: [],
+          otherr_ids: [],
           attachment: null
         },
         attachedFileName: '',
 
+        facilities: currentUser.institutions(),
         departments: currentUser.departments(),
         scenarios: scenarios.scenarios(),
         learners: [],
@@ -223,6 +286,9 @@
       activeLearnersCount() {
         return this.activeLearners.length
       },
+      activeOthersCount() {
+        return this.activeOthers.length
+      },
       currentSelectedDepartment() {
         return this.eventFormData.department_id
       },
@@ -256,6 +322,8 @@
           return (a[property] > b[property]) - (a[property] < b[property])
         })
       },
+
+      // Learners
       addToLearnerList(item) {
         const foundItem = this.activeLearners.find((learner) => learner.id === item.id)
         if (!foundItem) {
@@ -299,6 +367,52 @@
         this.activeLearners.splice(0, this.activeLearners.length)
         this.selectedLearners.splice(0, this.selectedLearners.length)
         this.resetInactiveLearners()
+      },
+
+      // Others
+      addToOtherList(item) {
+        const foundItem = this.activeOthers.find((learner) => learner.id === item.id)
+        if (!foundItem) {
+          this.activeOthers.push(item)
+          this.inactiveOthers.splice(this.inactiveOthers.indexOf(item), 1)
+          this.toggleItemInSelectedOthers(item.id, true)
+          this.sortItemsByProperty(this.activeOthers, 'last_name')
+          this.sortItemsByProperty(this.inactiveOthers, 'last_name')
+        } else {
+          lodestar(this.$el, 'lodestar', `.learner-${item.id}`, 'value')
+        }
+      },
+      removeFromActiveOtherList(item) {
+        const foundItem = this.activeOthers.find((learner) => learner.id === item.id)
+        this.toggleItemInSelectedOthers(item.id, false)
+        this.activeOthers.splice(this.activeOthers.indexOf(item), 1)
+        this.inactiveOthers.push(foundItem)
+        this.sortItemsByProperty(this.activeOthers, 'last_name')
+        this.sortItemsByProperty(this.inactiveOthers, 'last_name')
+      },
+      toggleItemInSelectedOthers(itemId, value) {
+        let selectedItemsWasUpdated = false
+
+        const foundItem = this.activeOthers.find((item) => item.id === itemId)
+
+        if (foundItem) {
+          if (value === true) {
+            foundItem.selected = true
+            this.selectedOthers.push(foundItem)
+          } else if (value === false) {
+            this.selectedOthers.splice(this.selectedOthers.indexOf(foundItem), 1)
+          }
+          selectedItemsWasUpdated = true
+        }
+      },
+      resetInactiveOthers() {
+        this.inactiveOthers = JSON.parse(JSON.stringify(this.learners))
+        this.sortItemsByProperty(this.inactiveOthers, 'last_name')
+      },
+      clearAllactiveOthers() {
+        this.activeOthers.splice(0, this.activeOthers.length)
+        this.selectedOthers.splice(0, this.selectedOthers.length)
+        this.resetInactiveOthers()
       },
 
       // FORM STUFFS
