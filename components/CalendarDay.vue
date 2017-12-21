@@ -228,7 +228,8 @@
         if (this.isInstructorContext) {
           this.createTimeBlock(hour)
         } else {
-          this.createEventBlock(hour, element)
+          // FIXME: This is disabled for now now until week view filters are working - Jase
+          // this.createEventBlock(hour, element)
         }
       },
       createTimeBlock(hour) {

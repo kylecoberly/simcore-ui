@@ -93,7 +93,7 @@
             </div>
 
             <SimBubble v-if="bubbleIsOpen">
-              <SimSlidePresenter></SimSlidePresenter>
+              <SimSlidePresenter shouldHideNavigationControls="false"></SimSlidePresenter>
             </SimBubble>
 
             <div class="sim-loader--shield" v-if="isLoading">
@@ -106,7 +106,7 @@
       <template v-if="isCoordinatorContext">
         <aside class="sim-calendar--aside sim-calendar--filters" :class="{'sim-calendar--filters--disabled': bubbleIsOpen}">
           <div class="sim-calendar--aside--header">
-            <span><b>Availability &amp; Event Filters</b></span>
+            <span><b>Availability Filters</b></span>
           </div>
           <div class="sim-calendar--aside--body">
             <div class="sim-flex--1">

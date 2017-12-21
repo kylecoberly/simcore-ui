@@ -25,7 +25,7 @@
         </div>
 
         <div class="sim-form--molecule sim-form--molecule--event-facility">
-          <div class="sim-form--molecule--label"><label>Event Location</label></div>
+          <div class="sim-form--molecule--label"><label>Location</label></div>
           <div class="sim-form--molecule--field">
             <select v-model="eventFormData.facility_id">
               <option value="">Select a facility...</option>
