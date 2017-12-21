@@ -38,3 +38,60 @@ export default {
     }
   },
 }
+
+
+const proposedEvents = {
+  '2017-12-19': {
+    2: [
+      {
+        start: 2,
+        duration: 3.5,
+        user_ids: [],
+      },
+      {
+        start: 2,
+        duration: 10.5,
+        user_ids: [],
+      },
+    ],
+    15: [
+      {
+        start: 15,
+        duration: 3.5,
+        user_ids: [],
+      },
+    ],
+  },
+  '2017-12-18': {
+    8: [
+      {
+        start: 8,
+        duration: 3.5,
+        user_ids: [],
+      },
+    ],
+    14: [
+      {
+        start: 14,
+        duration: 2.5,
+        user_ids: [],
+      },
+    ],
+  },
+  '2017-12-15': {
+    8.5: [
+      {
+        start: 8.5,
+        duration: 3.5,
+        user_ids: [],
+      },
+    ],
+    13: [
+      {
+        start: 13,
+        duration: 4,
+        user_ids: [],
+      },
+    ],
+  },
+}

@@ -7,10 +7,9 @@ const events = {
   },
   mutations: {
     setAggregateEventBlocks(state, eventBlocks) {
-      this.state.blocks = eventBlocks
+      state.blocks = eventBlocks
     },
     setPendingEventBlocksForDay(state, event) {
-      console.log(event)
       const date = event.date
 
       if (state.last_updated_pending_blocks !== date) {
