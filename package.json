@@ -25,6 +25,7 @@
   },
   "files": [
     "components",
+    "directives",
     "styles",
     "external",
     "modules",
