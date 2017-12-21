@@ -57,6 +57,9 @@
     background: var(--autocomplete-items-bg, var(--lighter));
     border-radius: 0 0 .2rem .2rem;
     box-shadow: 0 0 0 1px var(--fog), 0 .3em 1em -.3em var(--shadow);
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
 
