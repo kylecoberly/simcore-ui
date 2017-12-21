@@ -1,12 +1,11 @@
 // import axios from 'axios'
-
 export default {
   base_url: '',
   // TODO: // Get data from a remote api. - Chad
   users() {
     return {
-      912: {
-        id: 912,
+      1220: {
+        id: 1220,
         title_id: null,
         username: 'igor.aleshinIA@gmail.com',
         first_name: 'IA',
@@ -17,8 +16,8 @@ export default {
         department_id: 304,
         institution_id: 110,
       },
-      705: {
-        id: 705,
+      3726: {
+        id: 3726,
         title_id: null,
         username: 'igor.aleshinMIA@gmail.com',
         first_name: 'Igor2',
@@ -29,8 +28,8 @@ export default {
         department_id: 41,
         institution_id: 110,
       },
-      9873: {
-        id: 9873,
+      4112: {
+        id: 4112,
         title_id: 3,
         username: 'simcore.test+IA@gmail.com',
         first_name: 'Jim',
@@ -41,8 +40,8 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9877: {
-        id: 9877,
+      6630: {
+        id: 6630,
         title_id: 3,
         username: 'simcore.test+Learner@gmail.com',
         first_name: 'Ezra',
@@ -53,8 +52,8 @@ export default {
         department_id: 42,
         institution_id: 110,
       },
-      9909: {
-        id: 9909,
+      7475: {
+        id: 7475,
         title_id: null,
         username: 'jase.da@simcoretech.com',
         first_name: 'Jase',
@@ -65,8 +64,8 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9874: {
-        id: 9874,
+      7755: {
+        id: 7755,
         title_id: 3,
         username: 'simcore.test+MIA@gmail.com',
         first_name: 'Jack',

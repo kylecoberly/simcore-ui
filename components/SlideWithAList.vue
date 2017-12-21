@@ -29,6 +29,8 @@
 </template>
 
 <script>
+  import _ from 'lodash'
+
   import SimDatalist from './Datalist'
   import SimSelection from './Selection'
   import SimSlideHeader from './SlideHeader'
@@ -73,7 +75,7 @@
   // @FIXME should be using common.getListFromIds(...) | jase
   const getListFromIds = (array, source, sortKey) => {
     if (array && array.length) {
-      const list = source.filter((item) => unique(array).find((id) => item.id === id))
+      const list = _.filter(source, (item) => unique(array).find((id) => item.id == id))
       if (sortKey) {
         return sortByKey(list, sortKey)
       }

@@ -489,7 +489,7 @@
         }
       },
       prepareTheBubble(bubbleProperties, bubbleData) {
-        window.console.log(bubbleData)
+
         // window.console.log(bubbleProperties)
         this.$store.commit('resetHistory')
         this.$store.commit('addASlide', this.packageSlideContent(bubbleData))
