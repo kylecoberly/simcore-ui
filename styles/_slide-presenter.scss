@@ -49,7 +49,7 @@
       margin: 0;
       font-size: 1.3em;
       font-weight: 300;
-      color: inherit;
+      color: inherit !important; // @FIXME - fighting platform css
     }
 
     &--subtitle {
