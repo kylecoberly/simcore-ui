@@ -15,7 +15,7 @@
               :item="props.item"
               :item-id="props.item.id"
               :disabled="props.item.disabled"
-              :selected-items="props.item.selectedItems"
+              :should-be-selected="isItemSelected(props.item.id)"
               @toggle="toggleItemInSelectedItems"
             >
               {{ props.item.first_name }} {{ props.item.last_name }}
@@ -101,6 +101,12 @@
       this.$store.watch(this.$store.getters.currentSlide, (currentSlide) => {
         this.$set(this, 'slide', currentSlide)
       })
+
+      // this.bubbleElement = this.$el.closest('.sim-bubble')
+      // this.bubbleElement.style.setProperty('--width-factor', this.slide.meta.slideWidthFactor)
+    },
+    destroyed() {
+      // this.bubbleElement.style.removeProperty('--width-factor')
     },
     computed: {
       items() {
@@ -115,6 +121,9 @@
       },
     },
     methods: {
+      isItemSelected(itemId) {
+        return this.selectedItems.find((item) => item.id === itemId) ? true : false
+      },
       toggleItemInSelectedItems(itemId, value) {
         let selectedItemsWasUpdated = false
 
@@ -138,19 +147,20 @@
           // nextSlide.subtitle = this.slide.subtitle
           nextSlide.start_time = this.slide.content.start_time
           nextSlide.end_time = this.slide.content.end_time
+          nextSlide.meta = this.slide.meta
         }
 
         const currentSlide = this.slide
 
-        currentSlide.selectedItems = this.selectedItems
-        currentSlide.itemSearch = this.itemSearch
-        currentSlide.items = this.items
-        currentSlide.foundItems = this.foundItems
+        currentSlide.content.selectedItems = this.selectedItems
+        currentSlide.content.itemSearch = this.itemSearch
+        currentSlide.content.foundItems = this.foundItems
 
         if (selectedItemsWasUpdated) {
           this.$emit('theSlideHasAnUpdate', {
             currentSlide,
             nextSlide,
+            nextControl: {text: 'Next'},
           })
         }
       },
@@ -159,5 +169,5 @@
 </script>
 
 <style lang="scss">
-  // uses: '../styles/slide';
+  // uses: '../styles/slide-presenter';
 </style>

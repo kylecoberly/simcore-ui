@@ -46,9 +46,9 @@ rules:
 
   # Nesting
   declarations-before-nesting: 1
-  force-attribute-nesting: 1
-  force-element-nesting: 1
-  force-pseudo-nesting: 1
+  force-attribute-nesting: 0
+  force-element-nesting: 0
+  force-pseudo-nesting: 0
 
   # Name Formats
   class-name-format: 1
@@ -59,6 +59,7 @@ rules:
   variable-name-format: 1
 
   # Style Guide
+  allow-element-with-attribute: 1
   attribute-quotes: 1
   bem-depth: 0
   border-zero: 1

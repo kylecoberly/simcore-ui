@@ -2,29 +2,41 @@
 .sim-autocomplete {
   position: relative;
 
-  input {
-    position: relative;
-    font: inherit;
-    color: var(--autocomplete-input-fg, var(--dark));
-    background: var(--autocomplete-input-bg, var(--lighter));
-    border: 0;
-    padding-left: 2em !important;
-    z-index: 1;
-  }
-
-  &--search-icon {
-    position: absolute;
-    pointer-events: none;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 2em;
+  .sim-autocomplete--search {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--autocomplete-icon-fg, var(--dusk));
-    background: var(--autocomplete-icon-bg, transparent);
-    z-index: 2;
+    box-shadow: 0 0 0 1px var(--dusk) inset;
+    color: var(--autocomplete-search-fg, var(--dark));
+    background: var(--autocomplete-search-bg, var(--lighter));
+    border-radius: .2em;
+
+    .sim-autocomplete--search--input {
+      position: relative;
+      font: inherit;
+      color: var(--autocomplete-input-fg, var(--autocomplete-search-fg, var(--dark)));
+      background: var(--autocomplete-input-bg, transparent);
+      border: 0;
+      box-shadow: none;
+      z-index: 1;
+    }
+
+    &--icon {
+      color: var(--autocomplete-count-fg, var(--autocomplete-search-fg, var(--dark)));
+      background: var(--autocomplete-count-bg, transparent);
+    }
+    &--item-count {
+      color: var(--autocomplete-count-fg, var(--dusk));
+      background: var(--autocomplete-count-bg, transparent);
+    }
+
+    &--icon,
+    &--item-count {
+      width: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 1;
+    }
   }
 
   &--options-visible {
@@ -47,20 +59,6 @@
     box-shadow: 0 0 0 1px var(--fog), 0 .3em 1em -.3em var(--shadow);
   }
 
-  &--item-count {
-    position: absolute;
-    pointer-events: none;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 2em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--autocomplete-count-fg, var(--dusk));
-    background: var(--autocomplete-count-bg, transparent);
-    z-index: 1;
-  }
 
   li {
     padding: .5em;

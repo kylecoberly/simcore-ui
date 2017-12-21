@@ -22,7 +22,7 @@
     position: absolute;
     top: 50%;
     pointer-events: none;
-    transition: top 600ms ease-out;
+    transition: top 80ms ease-out;
     border: 1em solid transparent;
     border-width: 1.2em .8em;
   }
@@ -78,4 +78,15 @@
       background: var(--bubble-x-bg-hover, var(--action));
     }
   }
+
+  // transitions
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+  }
+  &-enter-active,
+  &-leave-active {
+    transition: opacity 160ms linear;
+  }
+
 }

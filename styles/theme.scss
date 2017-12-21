@@ -42,6 +42,7 @@
   --dust: rgba(#777, .05);
   --edge: rgba(#777, .15);
   --line: rgba(#777, .5);
+  --ghost: rgba(#808080, .5); // middle grey, middle opacity
   --mist: rgba(#fff, .2);
   --fog: rgba(#fff, .5);
   --frost: rgba(#fff, .8);
@@ -61,4 +62,58 @@
   --medium-gray: var(--medium-grey);
   --light-gray: var(--light-grey);
   --lighter-gray: var(--lighter-grey);
+}
+
+.text {
+  &--red {
+    color: var(--red);
+  }
+
+  &--orange {
+    color: var(--orange);
+  }
+
+  &--yellow {
+    color: var(--yellow);
+  }
+
+  &--green {
+    color: var(--green);
+  }
+
+  &--aqua {
+    color: var(--aqua);
+  }
+
+  &--blue {
+    color: var(--blue);
+  }
+
+  &--purple {
+    color: var(--purple);
+  }
+
+  &--grey {
+    color: var(--grey);
+  }
+
+  &--gray {
+    color: var(--gray);
+  }
+
+  &--light {
+    color: var(--light);
+  }
+
+  &--dark {
+    color: var(--dark);
+  }
+
+  &--ghost {
+    color: var(--ghost);
+  }
+}
+
+.ghost {
+  opacity: .5;
 }

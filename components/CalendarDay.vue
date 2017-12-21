@@ -9,15 +9,16 @@
       <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber }}</div>
 
       <ul v-if="isWeekView" class="sim-calendar--grid--day--timelines">
-        <li v-for="hour in 25" @dblclick="createBlock(hour-1)"
+        <li v-for="hour in 25" @dblclick="createBlock(hour-1, $event.target)"
         :class="setHourClasses(hour-1)"></li>
       </ul>
 
       <template v-if="isInstructorContext">
         <div class="local--day--blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
+            :class="{displayMode}"
             class="sim-timeblock--theme--event"
-            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false}"
+            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
             :key="index"
             :block="block"
             :index="index"
@@ -27,6 +28,7 @@
         </div>
         <div class="local--day--blocks local--day--time-blocks">
           <SimTimeBlock v-for="(block, index) in currentUserAvailabilityBlocks"
+            :class="displayMode"
             class="sim-timeblock--theme--available"
             :key="index"
             :block="block"
@@ -41,6 +43,7 @@
 
         <div v-if="isWeekView" class="local--day--aggregate-blocks">
           <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
+            :class="displayMode"
             class="sim-timeblock--theme--aggregate"
             :key="index"
             :block="block"
@@ -52,8 +55,9 @@
 
         <div class="local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
+            :class="displayMode"
             class="sim-timeblock--theme--event"
-            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false}"
+            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
             :key="index"
             :block="block"
             :index="index"
@@ -64,8 +68,9 @@
 
         <div class="local--day--pending-blocks">
           <SimTimeBlock v-for="(block, index) in pendingEvents"
+            :class="displayMode"
             class="sim-timeblock--theme--pending-event"
-            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: true}"
+            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: true, slideTemplate: 'SimSlideWithAList'}"
             :key="index"
             :block="block"
             :index="index"
@@ -77,8 +82,9 @@
         <div v-if="isMonthView" class="local--day--aggregate-blocks">
           <template v-if="aggregateUserAvailabilityBlocks.length">
             <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
+              :class="displayMode"
               class="sim-timeblock--theme--aggregate"
-              v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false}"
+              v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
               :key="index"
               :block="block"
               :index="index"
@@ -218,11 +224,11 @@
 
         return classes.join(' ')
       },
-      createBlock(hour) {
+      createBlock(hour, element) {
         if (this.isInstructorContext) {
           this.createTimeBlock(hour)
         } else {
-          this.createEventBlock(hour)
+          this.createEventBlock(hour, element)
         }
       },
       createTimeBlock(hour) {
@@ -231,13 +237,31 @@
 
         this.$emit('blocksWereUpdated', { blocks: this.currentUserAvailabilityBlocks, date: this.date })
       },
-      createEventBlock(hour) {
+      createEventBlock(hour, element) {
         this.pendingEvents.push({ start: hour, duration: 1 })
         this.pendingEvents.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
 
         // TODO: Make this an emit like above. - Chad
         this.$store.commit('setPendingEventBlocksForDay', { date: this.date, blocks: this.pendingEvents })
-        // this.$emit('call-bubble', {properties: {}, data: { start: hour, duration: 1 }})
+
+        const properties = {}
+        properties.position = element.getBoundingClientRect()
+        properties.position.dinkY = properties.position.top + properties.position.height / 2
+        properties.position.dinkX = properties.position.left + properties.position.width / 2
+        properties.position.x = this.dayOfWeek+1
+
+        this.$emit('set-bubble-position', properties.position)
+        this.$emit('set-bubble-data', {
+            date: this.date,
+            block: {
+              start: hour,
+              duration: 1
+            },
+            x: this.dayOfWeek+1,
+            followMousemove: true,
+            slideTemplate: 'SimSlideWithAList',
+          }
+        )
       },
       emitLodestar() {
         this.$emit('run-lodestar')

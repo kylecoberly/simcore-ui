@@ -41,7 +41,7 @@
                     @remove-time-block="removeTimeBlock"
                     @is-moving="setMovingState"
                     @is-stretching="setStretchingState"
-                    @block-updated="blockWasUpdated"
+                    @block-was-updated="blockWasUpdated"
         />
     </div>
 
@@ -82,6 +82,10 @@
       timeBlockLimit: {
         type: Number,
         default: 48,
+      },
+      timeBlockDefaultDuration: {
+        type: Number,
+        default: 1,
       },
       initialEventBlocks: {
         type: Array,
@@ -201,13 +205,23 @@
       },
       createTimeBlock(event, hour) {
         if (event.which === 1 && this.currentUserAvailabilityBlocks.length < this.timeBlockLimit) {
-          const useModifier = (hour === Math.floor(this.endTime) || Math.ceil(hour) === this.endTime)
-          const maxDuration = useModifier ? 0.5 : 1
+          let useModifier = false
+          const modifiedDuration = (this.endTime - hour)
+
+          if (
+            hour === Math.floor(this.endTime)
+            || Math.ceil(hour) === this.endTime
+            || hour + this.timeBlockDefaultDuration > this.endTime
+          ) {
+            useModifier = true
+          }
+
+          const maxDuration = useModifier ? modifiedDuration : this.timeBlockDefaultDuration
 
           this.currentUserAvailabilityBlocks.push({ start: hour, duration: maxDuration })
-
           this.updateBlocks()
         }
+
       },
       removeTimeBlock(index) {
         this.currentUserAvailabilityBlocks.splice(index, 1)

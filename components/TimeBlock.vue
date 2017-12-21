@@ -212,6 +212,7 @@
       doneMoving() {
         this.isMoving = false
         this.$emit('is-moving', false)
+        this.$emit('block-was-updated')
         removeEventListener('mousemove', this.move)
         removeEventListener('mouseup', this.doneMoving)
       },
@@ -233,6 +234,7 @@
       doneStretchingRight() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
+        this.$emit('block-was-updated')
         removeEventListener('mousemove', this.stretchRight)
         removeEventListener('mouseup', this.doneStretchingRight)
       },
@@ -254,6 +256,7 @@
       doneStretchingDown() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
+        this.$emit('block-was-updated')
         removeEventListener('mousemove', this.stretchDown)
         removeEventListener('mouseup', this.doneStretchingDown)
       },
@@ -276,6 +279,7 @@
       doneStretchingLeft() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
+        this.$emit('block-was-updated')
         removeEventListener('mousemove', this.stretchLeft)
         removeEventListener('mouseup', this.doneStretchingLeft)
       },
@@ -298,6 +302,7 @@
       doneStretchingUp() {
         this.stretchDirection = null
         this.$emit('is-stretching', false)
+        this.$emit('block-was-updated')
         removeEventListener('mousemove', this.stretchUp)
         removeEventListener('mouseup', this.doneStretchingUp)
       },

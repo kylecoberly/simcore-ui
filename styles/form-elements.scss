@@ -10,8 +10,6 @@ textarea {
 
 // text inputs
 input {
-  // &:not([type='checkbox']):not([type='radio']):not([type='range']) {
-
   &[type='text'],
   &[type='password'],
   &[type='number'],
@@ -20,10 +18,14 @@ input {
   &[type='url'],
   &[type='search'] {
     appearance: none;
-    padding: .4em .7em;
+    padding: .5em;
+    line-height: 1;
+    margin: 0;
     border: 0;
     border-radius: .2em;
     width: 100%;
+    background-color: var(--form-field-bg, var(--lightest));
+    color: var(--form-field-fg, var(--dark));
     box-shadow: 0 0 0 1px var(--dusk) inset;
     transition: all var(--ms) ease-out;
 
@@ -32,7 +34,6 @@ input {
       box-shadow: 0 0 0 1px var(--dusk) inset, 0 0 2px 1px var(--action);
     }
   }
-
 
   &[readonly] {
     background: transparent;
@@ -65,16 +66,72 @@ input {
 select,
 textarea {
   appearance: none;
-  padding: .4em .7em;
+  padding: .5em;
+  margin: 0;
   border: 0;
   border-radius: .2em;
   width: 100%;
+  background-color: var(--form-field-bg, var(--lightest));
+  color: var(--form-field-fg, var(--dark));
   box-shadow: 0 0 0 1px var(--dusk) inset;
-  transition: all var(--ms) ease-out;
+  transition: var(--ms) ease-out;
 
   &:active,
   &:focus {
     box-shadow: 0 0 0 1px var(--dusk) inset, 0 0 2px 1px var(--action);
+  }
+}
+
+select {
+  line-height: 1.4;
+  // min-height: 2.8em;
+}
+
+textarea {
+  line-height: 1.4;
+  min-height: 2.8em;
+
+  &.resize--y {
+    resize: vertical;
+  }
+
+  &.resize--x {
+    resize: horizontal;
+  }
+
+  &.resize--no,
+  &.resize--none {
+    resize: none;
+  }
+}
+
+// file input
+input[type='file'] {
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+
+  + label {
+    font-weight: 600;
+    color: var(--light);
+    background-color: var(--aqua);
+    display: inline-block;
+    cursor: pointer;
+
+    * {
+      pointer-events: none;
+    }
+
+    + .sim-file-input--cancel * {
+      pointer-events: none;
+    }
+  }
+
+  &:focus + label {
+    box-shadow: 0 0 0 1px var(--fog) inset, 0 0 2px 1px var(--action);
   }
 }
 
@@ -84,6 +141,7 @@ input[type='range'] {
   appearance: none;
   outline: none;
   padding: 0;
+  margin: 0;
   border: 0;
   width: 100%;
   height: .5em;
@@ -153,4 +211,84 @@ input[type='range'] {
       box-shadow: none;
     }
   }
+}
+
+// buttons and input
+.sim-button,
+button {
+  font-size: inherit;
+  font-family: inherit;
+  border: 0;
+  padding: .5em 1em;
+  border-radius: .3em;
+  cursor: pointer;
+  transition: 300ms ease-in-out;
+  background: var(--line);
+  color: inherit;
+  opacity: 1;
+  outline: none;
+  box-shadow: none;
+
+  + .sim-button,
+  + button {
+    margin-left: .5em;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &[disabled] {
+    opacity: .3;
+    cursor: not-allowed;
+
+    &.sim-button--cancel {
+      color: inherit;
+    }
+  }
+}
+
+.sim-button {
+  &--primary {
+    background: var(--action);
+    color: var(--light);
+  }
+
+  &--cancel {
+    background: var(--mist);
+  }
+}
+
+// form layouts
+.sim-form--side-by-side {
+  .sim-form--molecule {
+    display: flex;
+    align-items: flex-start;
+    padding: .75em 0;
+    flex-wrap: wrap;
+
+    &--label {
+      flex: 1;
+      text-align: right;
+      padding-top: .5em;
+      margin-right: 1em;
+    }
+
+    &--field {
+      flex: 3;
+      max-width: calc(75% - 1em);
+    }
+  }
+}
+
+.sim-form--atomic-group {
+  display: flex;
+  align-items: center;
+}
+
+.sim-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 100%;
+  text-overflow: ellipsis;
 }

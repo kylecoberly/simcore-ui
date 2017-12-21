@@ -1,125 +1,158 @@
 <template lang="html">
   <div class="sim-slide sim-slide--with-form">
 
-    <SimSlideHeader :title="content.title" :subtitle="content.subtitle" />
+    <SimSlideHeader :title="slide.title" :subtitle="slide.subtitle" />
 
-    <SimSlideIntro :content="content.intro" />
+    <SimSlideIntro :content="slide.intro" />
 
     <div class="sim-slide--content">
+      <div class="sim-form sim-form--side-by-side">
+        <input type="hidden" v-model="eventFormData.user_id" />
 
-      <div class="form-molecule">
-        <p><label for="event-title"><b>Event title</b></label></p>
-        <p><textarea id="event-title" placeholder="..." rows="2"></textarea></p>
-      </div>
 
-      <div class="form-molecule">
-        <p><label><b>Description</b></label></p>
-        <p><textarea placeholder="..." rows="3"></textarea></p>
-      </div>
+        <div class="sim-form--molecule sim-form--molecule--event-title">
+          <div class="sim-form--molecule--label"><label for="event-title">Event Title</label></div>
+          <div class="sim-form--molecule--field"><textarea class="resize--y" id="event-title" v-model="eventFormData.title" placeholder="..." rows="2"></textarea></div>
+        </div>
 
-      <div class="form-molecule">
-        <p><label><b>Notes</b></label></p>
-        <p><textarea placeholder="..." rows="3"></textarea></p>
-      </div>
+        <div class="sim-form--molecule sim-form--molecule--event-description">
+          <div class="sim-form--molecule--label"><label>Description</label></div>
+          <div class="sim-form--molecule--field"><textarea class="resize--y" placeholder="..." v-model="eventFormData.description" rows="2"></textarea></div>
+        </div>
 
-      <div class="form-molecule">
-        <p><label><b>Department</b></label></p>
-        <p>
-          <select>
-            <option>...</option>
-          </select>
-        </p>
-      </div>
+        <div class="sim-form--molecule sim-form--molecule--event-notes">
+          <div class="sim-form--molecule--label"><label>Notes</label></div>
+          <div class="sim-form--molecule--field"><textarea class="resize--y" placeholder="..." v-model="eventFormData.notes" rows="2"></textarea></div>
+        </div>
 
-      <div class="form-molecule">
-        <p><label><b>Instructors</b></label></p>
-        <SimDatalist :items="activeInstructors" :animate="true">
-          <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimSelection
-              :item="props.item"
-              :item-id="props.item.id"
-              :disabled="props.item.disabled"
-              :should-be-selected="props.item.selected"
-              @toggle="toggleItemInSelectedInstructors"
-              >
-              {{ props.item.first_name }} {{ props.item.last_name }}
-            </SimSelection>
-            <span class="item-remover" @click="removeFromActiveInstructorList(props.item)">
-              <SimIconText icon="fa-times fa-fw"></SimIconText>
-            </span>
-          </li>
-        </SimDatalist>
-        <br />
-        <SimAutocomplete
-          :options="inactiveInstructors"
-          placeholder="find instructors..."
-          @select="addToInstructorList"
-          >
-          <div class="item-tag" slot="item" slot-scope="props">
-            {{ props.option.first_name }} {{ props.option.last_name }}
+        <div class="sim-form--molecule sim-form--molecule--event-department">
+          <div class="sim-form--molecule--label"><label>Department</label></div>
+          <div class="sim-form--molecule--field">
+            <select v-model="eventFormData.department_id">
+              <option value="">Select a department...</option>
+              <option v-for="department in departments" :value="department.id">
+                {{department.name}}
+              </option>
+            </select>
           </div>
-        </SimAutocomplete>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-instructors">
+          <div class="sim-form--molecule--label"><label>Instructors</label></div>
+          <div class="sim-form--molecule--field">
+            <input type="hidden" v-model="eventFormData.instructor_ids" />
+            <SimDatalist :items="activeInstructors" :animate="true">
+              <li slot="static-before" key="static-before" class="text--yellow" v-if="!activeInstructorsCount">
+                <SimIconText icon="fa-exclamation-triangle" text="Missing Instructors"></SimIconText>
+              </li>
+              <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
+                <SimIconText icon="fa-check-circle text--green ghost" :text="`${props.item.first_name} ${props.item.last_name}`"></SimIconText>
+              </li>
+            </SimDatalist>
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-scenario">
+          <div class="sim-form--molecule--label"><label>Scenario</label></div>
+          <div class="sim-form--molecule--field">
+            <select v-model="eventFormData.scenario_id">
+              <option value="">Select a scenario...</option>
+              <option v-for="scenario in scenarios" :value="scenario.id">
+                {{scenario.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-equipment">
+          <div class="sim-form--molecule--label"><label>Equipment</label></div>
+          <div class="sim-form--molecule--field">
+            <select v-model="eventFormData.equipent_ids">
+              <option>...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-learners">
+          <div class="sim-form--molecule--label"><label>Learners</label></div>
+          <div class="sim-form--molecule--field">
+            <input type="hidden" v-model="eventFormData.learner_ids" />
+            <SimDatalist :items="activeLearners" :animate="true">
+              <li slot="static-before" key="static-before" class="text--grey" v-if="!activeLearnersCount">
+                <SimIconText icon="fa-info-circle" text="No learners added yet..."></SimIconText>
+              </li>
+              <li slot="item" slot-scope="props" :key="props.item.id" :class="`learner-${props.item.id}`">
+                <SimSelection
+                  :item="props.item"
+                  :item-id="props.item.id"
+                  :disabled="props.item.disabled"
+                  :should-be-selected="props.item.selected"
+                  @toggle="toggleItemInSelectedLearners"
+                  >
+                  {{ props.item.first_name }} {{ props.item.last_name }}
+                </SimSelection>
+                <span class="item-remover" @click="removeFromActiveLearnerList(props.item)">
+                  <SimIconText icon="fa-times fa-fw"></SimIconText>
+                </span>
+              </li>
+            </SimDatalist>
+            <SimAutocomplete placeholder="find learners..."
+              :options="inactiveLearners"
+              @select="addToLearnerList"
+              >
+              <div class="item-tag" slot="item" slot-scope="props">
+                {{ props.option.first_name }} {{ props.option.last_name }}
+              </div>
+            </SimAutocomplete>
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-others">
+          <div class="sim-form--molecule--label"><label>Others</label></div>
+          <div class="sim-form--molecule--field"><textarea class="resize--y" v-model="eventFormData.others" placeholder="..." rows="3"></textarea></div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-attachment">
+          <div class="sim-form--molecule--label">PDF</div>
+          <div class="sim-form--molecule--field">
+            <div class="sim-form--atomic-group">
+              <input @change="onFileChange($event)" type="file" name="attachment" id="attachment" />
+              <label for="attachment" class="sim-button sim-button--primary sim-ellipsis">
+                <span>Choose a file...</span>
+              </label>
+              <span v-if="eventFormData.attachment" class="sim-file-input--cancel sim-button sim-button--cancel" @click="removeFile">
+                <SimIconText icon="fa-times fa-fw"></SimIconText>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sim-form--molecule sim-form--molecule--event-room">
+          <div class="sim-form--molecule--label"><label>Room</label></div>
+          <div class="sim-form--molecule--field">
+            <select v-model="eventFormData.room_id">
+              <option>...</option>
+            </select>
+          </div>
+        </div>
       </div>
-
-      <div class="form-molecule">
-        <p><label><b>Scenario</b></label></p>
-        <p>
-          <select>
-            <option>...</option>
-          </select>
-        </p>
-      </div>
-
-      <div class="form-molecule">
-        <p><label><b>Equipment</b></label></p>
-        <p>
-          <select>
-            <option>...</option>
-          </select>
-        </p>
-      </div>
-
-      <div class="form-molecule">
-        <p><label><b>Learners</b></label></p>
-        <p><textarea placeholder="..." rows="3"></textarea></p>
-      </div>
-
-      <div class="form-molecule">
-        <p><label><b>Others</b></label></p>
-        <p><textarea placeholder="..." rows="3"></textarea></p>
-      </div>
-
-      <div class="form-molecule">
-        <p><label><b>PDF</b></label></p>
-        <p><input type="file" /></p>
-      </div>
-
-      <div class="form-molecule">
-        <p><label><b>Room #</b></label></p>
-        <p>
-          <select>
-            <option>...</option>
-          </select>
-        </p>
-      </div>
-
-      Time period
-
     </div>
-
   </div>
 </template>
 
 <script>
-import SimSlideHeader from './SlideHeader'
-import SimSlideIntro from './SlideIntro'
-import SimDatalist from './Datalist'
-import SimSelection from './Selection'
-import SimIconText from './IconText'
-import SimAutocomplete from './Autocomplete'
+  import currentUser from '../external/currentUser'
+  import scenarios from '../external/scenarios'
+
+  import SimSlideHeader from './SlideHeader'
+  import SimSlideIntro from './SlideIntro'
+  import SimDatalist from './Datalist'
+  import SimSelection from './Selection'
+  import SimIconText from './IconText'
+  import SimAutocomplete from './Autocomplete'
 
   export default {
-    name: 'sim-slide-with-a-form',
+    name: 'sim-slide-with-an-event-form',
     components: {
       SimSlideHeader,
       SimSlideIntro,
@@ -128,86 +161,171 @@ import SimAutocomplete from './Autocomplete'
       SimIconText,
       SimAutocomplete,
     },
-    props: ['content'],
     data() {
       return {
+        slide: this.$store.getters.currentSlide(),
+        allTheThingsAreTrue: false,
+
         instructors: [],
         activeInstructors: [],
-        inactiveInstructors: [],
-        selectedInstructors: [],
+
+        learners: [],
+        activeLearners: [],
+        inactiveLearners: [],
+        selectedLearners: [],
+
+        eventFormData: {
+          department_id: '',
+          scenario_id: '',
+          learner_ids: [],
+          attachment: null
+        },
+        attachedFileName: '',
+
+        departments: currentUser.departments(),
+        scenarios: scenarios.scenarios(),
+        learners: [],
+        departmentLearnerOptions: [],
       }
     },
-    mounted() {
-      this.instructors = this.$store.state.users.all
+    created() {
+      this.$store.commit('setInstructors', currentUser.instructors())
+      this.instructors = this.$store.state.user.instructors
+      // this.learners = [] // @FIXME this.$store.state.user.learners ?? - Jase/Chad
     },
-    watcher: {
-      timeBlock(newBlock) {
-        if (newBlock !== null) {
-          const nextSlide = this.$store.state.slideDeck.slideTemplates.event_form
-          nextSlide.title = this.content.title
-          nextSlide.start_time = this.content.content.start_time
-          nextSlide.end_time = this.content.content.end_time
+    mounted() {
+      // window.console.log(this.scenarios)
 
-          this.$emit('theSlideHasAnUpdate', {
-            nextSlide,
-          })
-        }
+      this.$store.watch(this.$store.getters.currentSlide, (currentSlide) => {
+        this.$set(this, 'slide', currentSlide)
+      })
+
+      this.activeInstructors = this.slide.instructors
+      this.eventFormData.instructor_ids = this.slide.instructors.map((instructor) => instructor.id)
+
+      this.bubbleElement = this.$el.closest('.sim-bubble')
+      this.bubbleElement.style.setProperty('--width-factor', this.slide.meta.slideWidthFactor)
+
+      this.resetInactiveLearners()
+
+      this.$emit('theSlideHasAnUpdate', {
+        nextSlide: null,
+        nextControl: {text: 'Submit Event'},
+      })
+    },
+    destroyed() {
+      this.bubbleElement.style.removeProperty('--width-factor')
+    },
+    computed: {
+      activeInstructorsCount() {
+        return this.activeInstructors.length
+      },
+      activeLearnersCount() {
+        return this.activeLearners.length
+      },
+      currentSelectedDepartment() {
+        return this.eventFormData.department_id
       },
     },
+    watch: {
+      currentSelectedDepartment(value) {
+        this.eventFormData.learner_ids = []
+        // get learners by department
+        this.departmentLearnerOptions = this.learners.filter((learner) => learner.department_id === value)
+      }
+    },
     methods: {
+      manageSlideNavigator() {
+        let nextSlide = null
+
+        if (this.allTheThingsAreTrue) {
+          nextSlide = this.slide
+        }
+
+        this.$emit('theSlideHasAnUpdate', {
+          nextSlide,
+        })
+      },
+
+      //
+      // autocomplete instructor methods
+      // -------------------------------
+      // @TODO move to common utilities or use Lowdash? meh... - Jase
       sortItemsByProperty(items, property) {
         items.sort((a, b) => {
           return (a[property] > b[property]) - (a[property] < b[property])
         })
       },
-      addToInstructorList(item) {
-        const foundItem = this.activeInstructors.find((instructor) => instructor.id === item.id)
+      addToLearnerList(item) {
+        const foundItem = this.activeLearners.find((learner) => learner.id === item.id)
         if (!foundItem) {
-          this.activeInstructors.push(item)
-          this.inactiveInstructors.splice(this.inactiveInstructors.indexOf(item), 1)
-          this.toggleItemInSelectedInstructors(item.id, true)
-          this.sortItemsByProperty(this.activeInstructors, 'last_name')
-          this.sortItemsByProperty(this.inactiveInstructors, 'last_name')
+          this.activeLearners.push(item)
+          this.inactiveLearners.splice(this.inactiveLearners.indexOf(item), 1)
+          this.toggleItemInSelectedLearners(item.id, true)
+          this.sortItemsByProperty(this.activeLearners, 'last_name')
+          this.sortItemsByProperty(this.inactiveLearners, 'last_name')
         } else {
-          lodestar(this.$el, 'lodestar', `.instructor-${item.id}`, 'value')
+          lodestar(this.$el, 'lodestar', `.learner-${item.id}`, 'value')
         }
       },
-      removeFromActiveInstructorList(item) {
-        const foundItem = this.activeInstructors.find((instructor) => instructor.id === item.id)
-        this.toggleItemInSelectedInstructors(item.id, false)
-        this.activeInstructors.splice(this.activeInstructors.indexOf(item), 1)
-        this.inactiveInstructors.push(foundItem)
-        this.sortItemsByProperty(this.activeInstructors, 'last_name')
-        this.sortItemsByProperty(this.inactiveInstructors, 'last_name')
+      removeFromActiveLearnerList(item) {
+        const foundItem = this.activeLearners.find((learner) => learner.id === item.id)
+        this.toggleItemInSelectedLearners(item.id, false)
+        this.activeLearners.splice(this.activeLearners.indexOf(item), 1)
+        this.inactiveLearners.push(foundItem)
+        this.sortItemsByProperty(this.activeLearners, 'last_name')
+        this.sortItemsByProperty(this.inactiveLearners, 'last_name')
       },
-      toggleItemInSelectedInstructors(itemId, value) {
+      toggleItemInSelectedLearners(itemId, value) {
         let selectedItemsWasUpdated = false
 
-        const foundItem = this.activeInstructors.find((item) => item.id === itemId)
+        const foundItem = this.activeLearners.find((item) => item.id === itemId)
 
         if (foundItem) {
           if (value === true) {
             foundItem.selected = true
-            this.selectedInstructors.push(foundItem)
+            this.selectedLearners.push(foundItem)
           } else if (value === false) {
-            this.selectedInstructors.splice(this.selectedInstructors.indexOf(foundItem), 1)
+            this.selectedLearners.splice(this.selectedLearners.indexOf(foundItem), 1)
           }
           selectedItemsWasUpdated = true
         }
       },
-      resetInactiveInstructors() {
-        this.inactiveInstructors = JSON.parse(JSON.stringify(this.instructors))
-        this.sortItemsByProperty(this.inactiveInstructors, 'last_name')
+      resetInactiveLearners() {
+        this.inactiveLearners = JSON.parse(JSON.stringify(this.learners))
+        this.sortItemsByProperty(this.inactiveLearners, 'last_name')
       },
-      clearAllActiveInstructors() {
-        this.activeInstructors.splice(0, this.activeInstructors.length)
-        this.selectedInstructors.splice(0, this.selectedInstructors.length)
-        this.resetInactiveInstructors()
+      clearAllactiveLearners() {
+        this.activeLearners.splice(0, this.activeLearners.length)
+        this.selectedLearners.splice(0, this.selectedLearners.length)
+        this.resetInactiveLearners()
+      },
+
+      // FORM STUFFS
+      onFileChange(event) {
+        const input = event.target
+        const label	 = input.nextElementSibling.querySelector('span')
+
+        let files = input.files || event.dataTransfer.files
+
+        if (files && files.length > 0) {
+          this.eventFormData.attachment = files[0]
+          label.innerHTML = this.eventFormData.attachment.name
+        } else {
+          this.eventFormData.attachment = null
+          label.innerHTML = 'Choose a file...'
+        }
+      },
+      removeFile(event) {
+        this.eventFormData.attachment = null;
+        const trigger = event.target
+        const label	= trigger.previousElementSibling.querySelector('span')
+        label.innerHTML = 'Choose a file...'
       },
     },
   }
 </script>
 
 <style lang="scss">
-  // uses: '../styles/slide';
+  // uses: '../styles/slide-presenter';
 </style>

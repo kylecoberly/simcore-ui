@@ -1,12 +1,14 @@
 <template lang="html">
-  <div v-show="shouldBeOpen" class="sim-bubble" :class="setClasses" :style="setStyles">
-    <div class="sim-bubble--content">
-      <slot></slot>
+  <transition name="sim-bubble" appear>
+    <div v-show="shouldBeOpen" class="sim-bubble" :class="setClasses" :style="setStyles">
+      <div class="sim-bubble--content">
+        <slot></slot>
+      </div>
+      <div class="sim-bubble--dismiss" @click="dismiss">
+        <SimIconText icon="fa-times fa-lg"></SimIconText>
+      </div>
     </div>
-    <div class="sim-bubble--dismiss" @click="dismiss">
-      <SimIconText icon="fa-times fa-lg"></SimIconText>
-    </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -27,20 +29,20 @@
       shouldBeOpen() {
         return this.$store.state.bubble.is_open
       },
-      bubbleProperties() {
-        return this.$store.state.bubble.properties
+      bubblePosition() {
+        return this.$store.state.bubble.position
       },
       setClasses() {
         const classes = []
-        classes.push(`sim-bubble--${this.bubbleProperties.position.orientation}`)
+        classes.push(`sim-bubble--${this.bubblePosition.orientation}`)
 
         return classes.join(' ')
       },
       setStyles() {
         const styles = []
-        styles.push(`--x: ${parseInt(this.bubbleProperties.position.x)}`)
-        styles.push(`--y: ${parseInt(this.bubbleProperties.position.y)}`)
-        styles.push(`--dink-y: ${parseInt(this.bubbleProperties.position.dinkY - this.metrics.top)}`)
+        styles.push(`--x: ${parseInt(this.bubblePosition.x)}`)
+        styles.push(`--y: ${parseInt(this.bubblePosition.y)}`)
+        styles.push(`--dink-y: ${parseInt(this.bubblePosition.dinkY - this.metrics.top)}`)
 
         return styles.join(';')
       },
@@ -53,7 +55,7 @@
       removeEventListener('keyup', this.dismissWithEscapeKey)
     },
     watch: {
-      bubbleProperties () {
+      bubblePosition() {
         this.metrics = this.getMetrics()
       },
     },

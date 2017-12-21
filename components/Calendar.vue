@@ -3,12 +3,12 @@
 
     <div class="sim-calendar--header">
       <div class="sim-calendar--header--title">{{ displayDate }}</div>
-      <div class="sim-calendar--header--context">
-        <SimSwitch v-model="contextSwitch" left-label="Instructor" right-label="Coordinator"/>
+      <div class="sim-calendar--header--context" v-if="canScheduleEvents">
+        <SimSwitch v-model="contextSwitch" left-label="My Availability" right-label="Schedule Events"/>
       </div>
       <div class="sim-calendar--header--modes">
-        <span class="sim-calendar-button" @click="setCalendarDisplayModeToMonth" :class="{active: isMonthView}">Month</span>
-        <span class="sim-calendar-button" @click="setCalendarDisplayModeToWeek" :class="{active: isWeekView}">Week</span>
+        <span class="sim-calendar-button sim-button" @click="setCalendarDisplayModeToMonth" :class="{active: isMonthView}">Month</span>
+        <span class="sim-calendar-button sim-button" @click="setCalendarDisplayModeToWeek" :class="{active: isWeekView}">Week</span>
       </div>
       <div class="sim-calendar--header--controls">
         <span @click="loadPrevDays">
@@ -58,7 +58,8 @@
                              class="sim-calendar--grid--day"
                              @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
                              @run-lodestar="runLodestar"
-                             @call-bubble="prepareTheBubble"
+                             @set-bubble-position="prepareTheBubblePosition"
+                             @set-bubble-data="prepareTheBubbleData"
                              :key="day.date"
                              :displayMode="displayMode"
                              :date="day.date"
@@ -74,7 +75,8 @@
                 <CalendarDay v-for="day in weekDays"
                              class="sim-calendar--grid--day"
                              @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
-                             @call-bubble="prepareTheBubble"
+                             @set-bubble-position="prepareTheBubblePosition"
+                             @set-bubble-data="prepareTheBubbleData"
                              :key="day.date"
                              :displayMode="displayMode"
                              :date="day.date"
@@ -109,10 +111,16 @@
           <div class="sim-calendar--aside--body">
             <div class="sim-flex--1">
 
-              <div v-if="isMonthView" class="filter-molecule">
-                <b>Event Length: {{ halfGlyph(filterEventLength, 'hour', 'hours') }}</b>
+              <div xv-if="isMonthView" class="filter-molecule">
+                Min. Event Length: <b class="text--aqua">{{ halfGlyph(filterEventLength, 'hour', 'hours') }}</b>
                 <br /><br />
                 <input type="range" v-model="filterEventLength" :disabled="bubbleIsOpen" min="0.5" max="6" step="0.5" />
+              </div>
+
+              <div v-if="false && isMonthView" class="filter-molecule">
+                Min. Instructors Needed: <b class="text--aqua">{{ filterInstructorCount }}</b>
+                <br /><br />
+                <input type="range" v-model="filterInstructorCount" :disabled="bubbleIsOpen" min="1" max="20" />
               </div>
 
               <div class="filter-molecule">
@@ -121,9 +129,9 @@
                 <SimFilterBy system-echo="No professional title filters" label="Professional Titles" type="title_id" :list="professionalTitles" @filter="applyFilter"></SimFilterBy>
               </div>
 
-              <div class="filter-molecule">
+              <div class="filter-molecule sim-filter">
                 <p class="sim-flex--row">
-                  <b class="sim-flex--1">Instructors</b>
+                  <span class="sim-flex--1">Instructors</span>
                   <span v-if="thereAreActiveInstructors" @click="clearAllActiveInstructors">
                     <SimIconText icon="fa-times-circle fa-fw"></SimIconText>
                   </span>
@@ -145,10 +153,9 @@
                   </li>
                 </SimDatalist>
                 <br />
-                <SimAutocomplete
+                <SimAutocomplete placeholder="find instructors..."
                   :options="inactiveInstructors"
                   :should-be-disabled="bubbleIsOpen"
-                  placeholder="find instructors..."
                   @select="addToInstructorList"
                   >
                   <div class="item-tag" slot="item" slot-scope="props">
@@ -226,13 +233,19 @@
       SimSwitch,
       SimTimePicker,
     },
-    props: ['selectedClass'],
+    props: {
+      canScheduleEvents: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {
         contextSwitch: true,
         calendarIsUpdating: false,
         isLoading: false,
         filterEventLength: 2,
+        filterInstructorCount: 1,
         date: this.$store.state.activeDate.date,
         institutions: [],
         departments: [],
@@ -273,7 +286,6 @@
     },
     mounted() {
       this.setTheActiveDateToToday()
-      // this.instructors = this.$store.state.users.all
       this.resetInactiveInstructors()
 
       // When the week/month is updated, refresh this day's currentUserAvailabilityBlocks.
@@ -487,35 +499,6 @@
       }
     },
     methods: {
-      packageSlideContent(bubbleData) {
-        return {
-          title: this.formateDateForDisplay(bubbleData.date),
-          subtitle: this.formatTimesForDisplay(bubbleData.block.start, bubbleData.block.duration),
-          componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
-          content: {
-            items: bubbleData.block.user_ids,
-            selectedItems: [],
-            foundItems: [],
-            itemSearch: '',
-            start_time: bubbleData.block.start,
-            end_time: bubbleData.block.start + bubbleData.block.duration,
-          },
-          // title: this.formateDateForDisplay(this.date),
-          // subtitle: this.formatTimesForDisplay(block.start, block.duration),
-          // componentType: 'SimSlideWithAnEventForm', // TODO: Make this dynamic. - Chad/Jase
-          // content: {},
-        }
-      },
-      prepareTheBubble(bubbleProperties, bubbleData) {
-        window.console.log(bubbleData)
-        // window.console.log(bubbleProperties)
-        this.$store.commit('resetHistory')
-        this.$store.commit('addASlide', this.packageSlideContent(bubbleData))
-        bubbleProperties.position.x = bubbleData.x
-
-        this.$store.commit('updateBubbleProperties', { position: bubbleProperties.position, data: bubbleData })
-        this.$store.commit('toggleBubbleVisibility', true)
-      },
       formateDateForDisplay(date) {
         return moment(date).format(this.$store.state.calendar.settings.date_format.display)
       },
@@ -525,6 +508,53 @@
         const endTime = day.add(duration, 'hours').format('h:mma')
         return `${startTime.replace(':00', '')} — ${endTime.replace(':00', '')}`
       },
+      formatBlockHoursForDisplay(duration) {
+        const output = duration.toString()
+          .replace(/\.5/, '½')
+          .replace(/^0/, '') || 0
+
+        return `${output} ${(duration > 0 && duration <= 1 ? 'hour' : 'hours')}`
+      },
+      packageSlideContent(bubbleData) {
+        return {
+          title: this.formateDateForDisplay(bubbleData.date),
+          subtitle: `${this.formatTimesForDisplay(bubbleData.block.start, bubbleData.block.duration)} (${this.formatBlockHoursForDisplay(bubbleData.block.duration)})`,
+          componentType: bubbleData.slideTemplate, // TODO: Make this dynamic. - Chad/Jase
+          content: {
+            items: bubbleData.block.user_ids,
+            selectedItems: [],
+            foundItems: [],
+            itemSearch: '',
+            start_time: bubbleData.block.start,
+            end_time: bubbleData.block.start + bubbleData.block.duration,
+          },
+          meta: bubbleData.meta,
+          // title: this.formateDateForDisplay(this.date),
+          // subtitle: this.formatTimesForDisplay(block.start, block.duration),
+          // componentType: 'SimSlideWithAnEventForm', // TODO: Make this dynamic. - Chad/Jase
+          // content: {},
+        }
+      },
+      prepareTheBubble(bubblePosition, bubbleData) {
+        // bubblePosition.position.x = bubbleData.x
+
+      },
+      prepareTheBubblePosition(bubblePosition) {
+        this.$store.commit('updateBubblePosition', bubblePosition)
+        this.$store.commit('toggleBubbleVisibility', true)
+
+        // window.console.log('prepareTheBubblePosition ** ', bubblePosition)
+      },
+      prepareTheBubbleData(bubbleData) {
+        bubbleData.meta = {}
+        bubbleData.meta.initialEventDuration = parseFloat(this.filterEventLength)
+
+        this.$store.commit('resetHistory')
+        this.$store.commit('addASlide', this.packageSlideContent(bubbleData))
+
+        // window.console.log('prepareTheBubbleData ** ', bubbleData)
+      },
+      // @TODO move to common utilities or use Lowdash? meh... - Jase
       sortItemsByProperty(items, property) {
         items.sort((a, b) => {
           return (a[property] > b[property]) - (a[property] < b[property])
@@ -679,7 +709,8 @@
     // --bubble-bg: var(--light);
     top: -1em;
     bottom: -1em;
-    width: 20em;
+    width: calc(var(--width-factor, 1) * 20em);
+    max-width: 50%;
     &::after {
       top: calc(var(--dink-y) * 1px);
     }

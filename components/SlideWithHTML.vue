@@ -22,5 +22,5 @@
 </script>
 
 <style lang="scss">
-  @import '../styles/slide';
+  // uses: '../styles/slide-presenter';
 </style>

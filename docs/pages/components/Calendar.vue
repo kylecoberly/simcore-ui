@@ -8,7 +8,7 @@
       </template>
       <template slot="view">
 
-        <SimCalendar></SimCalendar>
+        <SimCalendar :can-schedule-events="shouldBeAbleToScheduleEvents"></SimCalendar>
 
       </template>
       <template slot="html">
@@ -35,6 +35,7 @@
     data() {
       return {
         title: 'Calendar',
+        shouldBeAbleToScheduleEvents: true,
       }
     },
   }

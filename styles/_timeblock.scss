@@ -17,8 +17,7 @@
 
   &.is-moving,
   &.is-stretching {
-    opacity: .7;
-    transition: all 60ms linear;
+    transition: 60ms linear;
 
     .sim-timeblock--info--time {
       display: block;
@@ -34,6 +33,12 @@
     &--down {
       --timeblock-cursor: row-resize;
       --handle-cursor: row-resize;
+    }
+
+    &--left,
+    &--right {
+      --timeblock-cursor: col-resize;
+      --handle-cursor: col-resize;
     }
   }
 
@@ -96,8 +101,8 @@
   &--handle {
     position: absolute;
     opacity: 0;
-    transition: all 200ms linear;
-    background: rgba(0, 0, 0, .2);
+    transition: 200ms linear;
+    background: var(--dusk);
     cursor: var(--handle-cursor);
 
     &--x {
@@ -155,9 +160,9 @@
       transform: translateY(calc(-50% - .2em));
     }
 
-    &.is-display-only {
-      // pointer-events: none;
-    }
+    // &.is-display-only {
+    //   pointer-events: none;
+    // }
 
     .sim-timeblock--info {
       // background: var(--picker-bg);
@@ -189,9 +194,9 @@
       transform: translateY(-.1em);
     }
 
-    &.is-display-only {
-      // pointer-events: none;
-    }
+    // &.is-display-only {
+    //   pointer-events: none;
+    // }
 
     .sim-timeblock--info {
       color: var(--picker-bg);
@@ -261,9 +266,9 @@
 }
 
 .is-stretching {
-  --picker-cursor: col-resize;
-  --timeblock-cursor: col-resize;
-  --handle-cursor: col-resize;
+  --picker-cursor: row-resize;
+  --timeblock-cursor: row-resize;
+  --handle-cursor: row-resize;
 
   .sim-timeblock:not(.is-stretching) {
     .sim-timeblock--time {
@@ -275,12 +280,42 @@
 // context overrides
 .sim-timepicker--y {
   .sim-timeblock {
-    --timeblock-color: var(--blue) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
-    box-shadow: 0 .1em 1em -.3em var(--shadow);
+    --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
+    box-shadow: 0 .1em 1em -.3em var(--twilight);
+
+    &.is-moving,
+    &.is-stretching {
+      opacity: .85;
+    }
+
+    .sim-timeblock--info {
+      position: absolute;
+      text-align: left;
+      left: 100%;
+      width: auto;
+      top: 50%;
+      transform: translate(0%, -50%);
+      padding: .5em;
+
+      &--hours {
+        font-weight: bold;
+        font-size: 1.3em;
+      }
+
+      &--time {
+        display: block;
+        position: relative;
+        left: 0;
+        top: 100%;
+        transform: none;
+        padding: 0;
+        background: transparent;
+      }
+    }
   }
 }
 
-.sim-timeblock--y {
+.sim-calendar-day .sim-timeblock--y {
   &.is-moving,
   &.is-stretching {
     .sim-timeblock--info--time {

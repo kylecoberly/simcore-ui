@@ -1,7 +1,7 @@
 .sim-timepicker {
   --picker-cursor: cell;
   --timeblock-cursor: move; // -webkit-grab;
-  --handle-cursor: col-resize;
+  --handle-cursor: row-resize;
   flex: 1;
   display: flex;
   flex-direction: column;

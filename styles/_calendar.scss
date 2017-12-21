@@ -23,7 +23,6 @@
     &--title {
       font-weight: 500;
       font-size: 1.5em;
-      // text-align: center;
     }
 
     &--modes {
@@ -34,9 +33,9 @@
     }
 
     &--context {
+      flex: 2;
       display: flex;
       align-items: center;
-      // justify-content: center;
       font-size: 1.3em;
     }
 
@@ -92,9 +91,11 @@
       display: flex;
       padding: 1em;
       box-shadow: var(--lines);
-      background: linear-gradient(135deg, var(--grey), var(--medium-grey));
+      background-image: linear-gradient(135deg, var(--shade), var(--mist));
+      background-color: var(--darker);
       border-radius: 1px;
       color: var(--lighter);
+      transition: 800ms linear;
     }
   }
 
@@ -103,9 +104,21 @@
     --selection-color: var(--green);
 
     &--disabled {
+
       .filter-molecule {
-        opacity: .3;
+        opacity: .5;
         pointer-events: none;
+      }
+
+      .sim-calendar--aside--body {
+        background-color: var(--cloud);
+        color: var(--grey);
+      }
+
+      .sim-datalist {
+        li {
+          transition: none;
+        }
       }
     }
 
@@ -124,6 +137,7 @@
       li {
         padding: .5em 0 .5em .5em;
         border-radius: 1px;
+        transition-delay: 0ms;
 
         &:hover {
           .item-remover  {
@@ -267,18 +281,6 @@
       align-items: center;
       justify-content: center;
       border-radius: .2em;
-    }
-  }
-
-  .sim-calendar-button {
-    padding: .5em 1em;
-    margin: 0 .5em;
-    border-radius: .3em;
-    cursor: pointer;
-    transition: 300ms ease-in-out;
-
-    &:hover {
-      transform: scale(1.2);
     }
   }
 

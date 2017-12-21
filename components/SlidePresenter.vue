@@ -4,14 +4,14 @@
       <component class="sim-slide-presenter--slide"
         v-for="(slide, index) in slides"
         :key="index"
-        :content="slide"
+        :slide="slide"
         :is="slide.componentType"
         @theSlideHasAnUpdate="receiveTheUpdateFromTheSlide"
         />
     </section>
     <footer v-if="showNavigationControls">
-      <button class="cancel back" @click="previousSlide" :disabled="thePreviousControlShouldBeDisabled">Back</button>
-      <button class="primary next" @click="nextSlide" :disabled="theNextControlShouldBeDisabled">Next</button>
+      <button class="sim-button--cancel back" @click="previousSlide" :disabled="thePreviousControlShouldBeDisabled">Back</button>
+      <button class="sim-button--primary next" @click="nextSlide" :disabled="theNextControlShouldBeDisabled">{{nextControl.text}}</button>
     </footer>
   </article>
 </template>
@@ -21,6 +21,7 @@
   import SimSlideWithAList from './SlideWithAList'
   import SimSlideWithAnEventForm from './SlideWithAnEventForm'
   import SimSlideWithATimePicker from './SlideWithATimePicker'
+  import SimSlideWithEventDetails from './SlideWithEventDetails'
   import SimSlideWithHTML from './SlideWithHTML'
 
   export default {
@@ -30,13 +31,14 @@
       SimSlideWithAList,
       SimSlideWithAnEventForm,
       SimSlideWithATimePicker,
+      SimSlideWithEventDetails,
       SimSlideWithHTML,
     },
     props: ['shouldHideNavigationControls'],
     data() {
       return {
         slideDeck: this.$store.state.slideDeck,
-        nextControl: { slide: null },
+        nextControl: { slide: null, text: 'Next' },
         theNextControlShouldBeDisabled: this.makeTheNextControlDisabledIf,
         thePreviousControlShouldBeDisabled: this.makeThePreviousControlDisabledIf,
       }
@@ -104,6 +106,10 @@
         if (update.nextSlide || update.nextSlide === null) {
           this.nextControl.slide = update.nextSlide
         }
+
+        if (update.nextControl) {
+          this.nextControl.text = update.nextControl.text
+        }
       },
     },
   }
@@ -111,5 +117,4 @@
 
 <style lang="scss">
   @import '../styles/slide-presenter';
-  @import '../styles/slide';
 </style>

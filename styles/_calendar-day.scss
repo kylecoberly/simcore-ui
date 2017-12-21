@@ -66,7 +66,7 @@
 .is-week-view {
   .local--day {
     &--event-blocks {
-      max-width: 1em;
+      min-width: 25%;
     }
 
     &--pending-blocks {
@@ -84,7 +84,7 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      left: 0;
+      left: calc(25% + .5em);
       right: 0;
 
       .sim-timeblock {

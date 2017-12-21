@@ -1,24 +1,24 @@
 <template lang="html">
   <div class="sim-autocomplete" :class="{'sim-autocomplete--options-visible': isOpen}">
-    <div>
-      <div class="sim-autocomplete--search-icon">
+    <div class="sim-autocomplete--search">
+      <span class="sim-autocomplete--search--icon">
         <SimIconText icon="fa-search"></SimIconText>
-      </div>
-      <input v-model="keyword"
-      type="search"
-      :placeholder="placeholder"
-      :disabled="isDisabled"
-      @input="onInput($event.target.value)"
-      @keyup.esc="reset"
-      @focus="focus"
-      @blur="blur"
-      @keydown.down="moveDown"
-      @keydown.up="moveUp"
-      @keydown.enter="select"
-      />
-      <div class="sim-autocomplete--item-count">
+      </span>
+      <input type="search" v-model="keyword"
+        class="sim-autocomplete--search--input"
+        :placeholder="placeholder"
+        :disabled="isDisabled"
+        @input="onInput($event.target.value)"
+        @keyup.esc="reset"
+        @focus="focus"
+        @blur="blur"
+        @keydown.down="moveDown"
+        @keydown.up="moveUp"
+        @keydown.enter="select"
+        />
+      <span class="sim-autocomplete--search--item-count">
         {{ filteredOptionsCount }}
-      </div>
+      </span>
     </div>
     <div class="sim-autocomplete--items" v-show="isOpen">
       <transition-group appear name="list" tag="ul" mode="in-out">
@@ -68,7 +68,9 @@
       filteredOptions() {
         return this.options.filter((option) => {
           return Object.keys(option).some((prop) => {
-            return option[prop].toString().toLowerCase().includes(this.keyword.toLowerCase())
+            if (option[prop] !== null && option[prop] !== undefined) {
+              return option[prop].toString().toLowerCase().includes(this.keyword.toLowerCase())
+            }
           })
         })
       },
