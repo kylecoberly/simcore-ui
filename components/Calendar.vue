@@ -535,15 +535,10 @@
           // content: {},
         }
       },
-      prepareTheBubble(bubblePosition, bubbleData) {
-        // bubblePosition.position.x = bubbleData.x
-
-      },
       prepareTheBubblePosition(bubblePosition) {
         this.$store.commit('updateBubblePosition', bubblePosition)
         this.$store.commit('toggleBubbleVisibility', true)
 
-        // window.console.log('prepareTheBubblePosition ** ', bubblePosition)
       },
       prepareTheBubbleData(bubbleData) {
         bubbleData.meta = {}
