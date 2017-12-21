@@ -7,19 +7,19 @@
     <div class="sim-slide--content">
       <template v-if="items">
         <SimDatalist v-if="items" :items="foundItems" :animate="true">
-          <div slot="static-before" key="before">
+          <!-- <div slot="static-before" key="before">
             <input type="search" v-model="itemSearch" placeholder="find..." />
-          </div>
+          </div> -->
           <li slot="item" slot-scope="props" :key="props.item.id">
-            <sim-selection
+            <!-- <sim-selection
               :item="props.item"
               :item-id="props.item.id"
               :disabled="props.item.disabled"
               :should-be-selected="isItemSelected(props.item.id)"
               @toggle="toggleItemInSelectedItems"
-            >
+            > -->
               {{ props.item.first_name }} {{ props.item.last_name }}
-            </sim-selection>
+            <!-- </sim-selection> -->
           </li>
         </SimDatalist>
       </template>
