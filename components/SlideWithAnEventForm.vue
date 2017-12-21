@@ -56,6 +56,8 @@
         <div class="sim-form--molecule sim-form--molecule--event-description">
           <div class="sim-form--molecule--label"><label>Description</label></div>
           <div class="sim-form--molecule--field">
+            <SimIconText icon="fa-plus-circle" text="Add"></SimIconText>
+            TODO: basically opt in to provviding this data.
             <textarea class="resize--y" placeholder="..." v-model="eventFormData.description" rows="2"></textarea>
           </div>
         </div>
