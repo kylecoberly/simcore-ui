@@ -243,6 +243,7 @@
     data() {
       return {
         lastUpdated: Date.now(), // TODO: Not this. - Chad
+        rawUserData: {},
         contextSwitch: false,
         calendarIsUpdating: false,
         isLoading: false,
@@ -298,6 +299,7 @@
       aggregateAvailabilitiesPromise.then((response) => {
         let transformedAggregateAvailabilities = []
         if (response.data.users) {
+          this.rawUserData = response.data.users
           transformedAggregateAvailabilities = availabilities.transform(response.data.users)
         }
 
@@ -554,7 +556,7 @@
         this.lastUpdated = Date.now()
         this.$store.commit('setAggregateAvailabilityBlocks', {
           blocks: availabilities.transform(
-            this.$store.state.availabilities.blocks,
+            this.rawUserData,
             {
               minimumDuration: this.filterEventLength,
               filteredInstructors: this.activeInstructorIds,
@@ -570,7 +572,7 @@
 
         this.$store.commit('setAggregateAvailabilityBlocks', {
           blocks: availabilities.transform(
-            this.$store.state.availabilities.blocks,
+            this.rawUserData,
             {
               minimumDuration: this.filterEventLength,
               filteredInstructors: this.activeInstructorIds,
