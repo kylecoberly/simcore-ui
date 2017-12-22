@@ -123,12 +123,6 @@
                 <input type="range" v-model="filterInstructorCount" :disabled="bubbleIsOpen" min="1" max="20" />
               </div>
 
-              <div class="filter-molecule">
-                <SimFilterBy xv-if="userTypeIsClient" system-echo="(Filter is not available yet)" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
-                <SimFilterBy system-echo="(Filter is not available yet)" label="Departments" type="department_id" :list="departments" @filter="applyFilter"></SimFilterBy>
-                <SimFilterBy system-echo="(Filter is not available yet)" label="Professional Titles" type="title_id" :list="professionalTitles" @filter="applyFilter"></SimFilterBy>
-              </div>
-
               <div class="filter-molecule sim-filter">
                 <p class="sim-flex--row">
                   <span class="sim-flex--1">Instructors</span>
@@ -162,6 +156,12 @@
                     {{ props.option.first_name }} {{ props.option.last_name }}
                   </div>
                 </SimAutocomplete>
+              </div>
+
+              <div class="filter-molecule ghost">
+                <SimFilterBy xv-if="userTypeIsClient" system-echo="(Filter is not available yet)" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
+                <SimFilterBy system-echo="(Filter is not available yet)" label="Departments" type="department_id" :list="departments" @filter="applyFilter"></SimFilterBy>
+                <SimFilterBy system-echo="(Filter is not available yet)" label="Professional Titles" type="title_id" :list="professionalTitles" @filter="applyFilter"></SimFilterBy>
               </div>
 
             </div>
