@@ -553,7 +553,7 @@
 
         this.lastUpdated = Date.now()
         this.$store.commit('setAggregateAvailabilityBlocks', {
-          blocks: availabilities.filter(
+          blocks: availabilities.transform(
             this.$store.state.availabilities,
             {
               minimumDuration: this.filterEventLength,
@@ -569,7 +569,7 @@
         this.lastUpdated = Date.now()
 
         this.$store.commit('setAggregateAvailabilityBlocks', {
-          blocks: availabilities.filter(
+          blocks: availabilities.transform(
             this.$store.state.availabilities,
             {
               minimumDuration: this.filterEventLength,
