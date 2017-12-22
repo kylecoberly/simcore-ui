@@ -1,5 +1,7 @@
-// TODO: Get data from a remote api. - Chad
-// import axios from 'axios'
+import axios from 'axios'
+const endpoint = 'users'
+const action = 'purview_availabilities'
+
 import _ from 'lodash'
 
 const departmentInstructorsFirstQuarter = [
@@ -9652,7 +9654,8 @@ export default {
       })
     })
 
-    feFiFoUmmm('timeBlocks', blocksByDate, expectedAggregateBlocks)
+    setExpectedTestResponse(blocksByDate)
+    // feFiFoUmmm('timeBlocks', blocksByDate, expectedAggregateBlocks)
 
     // TODO: Refactor for chaining. - Chad
     const onlyTheBlocksWhichContainExactlyAllTheUsers = {}
@@ -9662,7 +9665,7 @@ export default {
       })
     })
 
-    feFiFoUmmm('onlyTheBlocksWhichContainExactlyAllTheUsers', onlyTheBlocksWhichContainExactlyAllTheUsers, expectedAggregateBlocksFilteredWithIntersect)
+    // feFiFoUmmm('onlyTheBlocksWhichContainExactlyAllTheUsers', onlyTheBlocksWhichContainExactlyAllTheUsers, expectedAggregateBlocksFilteredWithIntersect)
 
     // TODO: Refactor for chaining. - Chad
     const onlyTheBlocksWhichContainExactlyAllTheUsersSortedByStart = {}
@@ -9765,6 +9768,45 @@ export default {
     feFiFoUmmm('aggregateInstructorAvailabilityKeyedByDate', someOkData, expectedLittleLameDataFlattened)
 
     return someOkData
+  },
+  getAvailabilities(baseUrl, userId, startDate, endDate) {
+    return axios.get(`${baseUrl}${endpoint}/${userId}/${action}?start_date=${startDate}&end_date=${endDate}&key_by=user_id`)
+  },
+  transform(availabilities, filters) {
+    if (!filters) {
+      filters = {
+        minimumDuration: 2,
+        filteredInstructors: [],
+      }
+    }
+
+    // Reducing availability set.
+    let aggregateInstructorsFromFilter = availabilities
+    if (filters.filteredInstructors.length > 0) {
+      const instructorsFromFilter = _.pickBy(availabilities, (instructor, instructorId) => {
+        return filters.filteredInstructors.includes(parseInt(instructorId))
+      })
+
+      aggregateInstructorsFromFilter = instructorsFromFilter
+    }
+
+    // Transforming availability set.
+    const instructorAvailabilityBlocksByDate = this.aggregateInstructorAvailabilityKeyedByDateWhereAllIntersect(aggregateInstructorsFromFilter)
+
+    console.log(JSON.stringify(aggregateInstructorsFromFilter))
+    // Filter blocks by duration.
+    const instructorAvailabilityBlocksByDateWithinDuration = {}
+    _.each(instructorAvailabilityBlocksByDate, (instructorAvailabilityBlocksForDate, date) => {
+      const blocksWithinDuration = _.filter(instructorAvailabilityBlocksForDate, (availabilityBlock) => {
+        return availabilityBlock.duration >= parseFloat(filters.minimumDuration)
+      })
+
+      if (blocksWithinDuration.length > 0) {
+        instructorAvailabilityBlocksByDateWithinDuration[date] = blocksWithinDuration
+      }
+    })
+
+    return instructorAvailabilityBlocksByDateWithinDuration
   },
   availabilities(filters) {
     if (!filters) {

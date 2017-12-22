@@ -29,6 +29,11 @@ Vue.use(Vuex)
 Vue.use(VueHighlightJS)
 
 const store = new Vuex.Store({
+  state: {
+    shouldBeAbleToScheduleEvents: true,
+    currentUser: { id: 704 },
+    base_url: 'http://local.simcoretech.com/api/v1/',
+  },
   modules: {
     activeDate,
     availabilities,

@@ -1,104 +1,25 @@
-// import axios from 'axios'
+import axios from 'axios'
+axios.defaults.crossDomain = true
+
+const endpoint = 'users'
 
 export default {
-  base_url: '',
-  // TODO: // Get data from a remote api. - Chad
   user() {
-    return {
+    const user = {
       userId: 1996,
       firstName: 'Bob',
       lastName: 'Dole',
-      availabilities: {
-        '2017-12-22': [
-          {
-            start: 8,
-            duration: 3.5,
-          },
-          {
-            start: 14,
-            duration: 2.5,
-          },
-        ],
-        '2017-12-26': [
-          {
-            start: 8.5,
-            duration: 3.5,
-          },
-        ],
-      },
-      events: {
-        '2017-12-14': [
-          {
-            id: 529,
-            parent_id: null,
-            department_id: 75,
-            user_id: 1996,
-            scenario_id: 336,
-            title: 'MLN: ED Nursing Education',
-            description: null,
-            note: null,
-            room_id: 4,
-            url: '/calendar/show/id/529',
-            css_class: 'event-success',
-            started_at: '2017-12-14 08:00:00',
-            ended_at: '2017-12-14 16:30:00',
-            start: 8,
-            duration: 8.5,
-            is_all_day: 1,
-            recurring_type: 0,
-            created_at: '2017-01-03 14:03:12',
-            attachment_path: null,
-            attachment_name: null,
-          },
-        ],
-        '2017-12-05': [
-          {
-            id: 538,
-            parent_id: null,
-            department_id: 75,
-            user_id: 1996,
-            scenario_id: null,
-            title: 'Essential of critical care',
-            description: null,
-            note: null,
-            room_id: 4,
-            url: '/calendar/show/id/538',
-            css_class: 'event-success',
-            started_at: '2017-12-05 08:00:00',
-            ended_at: '2017-12-05 13:00:00',
-            start: 8,
-            duration: 5,
-            is_all_day: 1,
-            recurring_type: 0,
-            created_at: '2017-01-03 20:04:22',
-            attachment_path: null,
-            attachment_name: null,
-          },
-          {
-            id: 667,
-            parent_id: null,
-            department_id: 67,
-            user_id: 1996,
-            scenario_id: null,
-            title: 'Anes: CRNA Simulation',
-            description: 'Anesthesia Simulation',
-            note: null,
-            room_id: 3,
-            url: '/calendar/show/id/667',
-            css_class: 'event-success',
-            started_at: '2017-12-05 17:30:00',
-            ended_at: '2017-12-05 20:30:00',
-            start: 17.5,
-            duration: 3,
-            is_all_day: 1,
-            recurring_type: 0,
-            created_at: '2017-05-17 13:47:38',
-            attachment_path: null,
-            attachment_name: null,
-          },
-        ],
-      },
+      availabilities: {},
+      events: {},
     }
+
+    return user
+  },
+  availabilities(baseUrl, userId, startDate, endDate) {
+    return axios.get(`${baseUrl}${endpoint}/${userId}/availabilities?start_date=${startDate}&end_date=${endDate}`)
+  },
+  saveAvailabilities(availabilities) {
+    return axios.post(`${baseUrl}${endpoint}/${userId}/availabilities`, { dates: { [availabilities.date]: availabilities.blocks } })
   },
   userType() { return 'institution' },
   instructors() {

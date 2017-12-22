@@ -10,6 +10,15 @@ const user = {
       state.availabilities = nextUser.availabilities
       state.events = nextUser.events
     },
+    setCurrentUserAvailabilities(state, availabilities) {
+      const date = availabilities.date
+
+      if (state.last_updated !== date) {
+        state.last_updated = date
+      }
+
+      state.availabilities = availabilities.blocks
+    },
     setUserAvailabilityBlocksForDay(state, availability) {
       const date = availability.date
 

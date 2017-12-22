@@ -237,12 +237,13 @@
       canScheduleEvents: {
         type: Boolean,
         default: false,
+        required: true,
       },
     },
     data() {
       return {
-        lastUpdated: Date.now(),
-        contextSwitch: true,
+        lastUpdated: Date.now(), // TODO: Not this. - Chad
+        contextSwitch: false,
         calendarIsUpdating: false,
         isLoading: false,
         filterEventLength: 2,
@@ -259,7 +260,7 @@
         eventBlocks: [],
         pendingEventBlocks: [],
         currentUserAvailabilityBlocks: [],
-        aggregateUserAvailabilityBlocks: [],
+        aggregateUserAvailabilityBlocks: {},
         monthDays: {},
         weekDays: {},
       }
@@ -268,13 +269,37 @@
       this.$store.commit('setSlideTemplates', eventEditorSlides)
       this.$store.commit('setAllUsers', users.users())
       this.$store.commit('setAggregateEventBlocks', events.events())
-      this.$store.commit('setAggregateAvailabilityBlocks', { blocks: availabilities.availabilities(), date: Date.now() })
 
       this.$store.commit('setCurrentUser', currentUser.user())
       this.$store.commit('setInstitutions', currentUser.institutions())
       this.$store.commit('setDepartments', currentUser.departments())
       this.$store.commit('setProfessionalTitles', currentUser.professionalTitles())
       this.$store.commit('setInstructors', users.users())
+
+      const firstDayOfTheMonth = moment(this.activeMoment).startOf('month').format('YYYY-MM-DD 00:00:00')
+      const lastDayOfTheMonth = moment(this.activeMoment).endOf('month').format('YYYY-MM-DD 23:59:59')
+
+      const userAvailabilitiesPromise = currentUser.availabilities(
+        this.$store.state.base_url,
+        this.$store.state.currentUser.id,
+        firstDayOfTheMonth,
+        lastDayOfTheMonth,
+      )
+      userAvailabilitiesPromise.then((response) => {
+        this.$store.commit('setCurrentUserAvailabilities', { blocks: response.data.dates, date: this.date })
+      })
+
+      const aggregateAvailabilitiesPromise = availabilities.getAvailabilities(
+        this.$store.state.base_url,
+        this.$store.state.currentUser.id,
+        firstDayOfTheMonth,
+        lastDayOfTheMonth,
+      )
+      aggregateAvailabilitiesPromise.then((response) => {
+        const transformedAggregateAvailabilities = availabilities.transform(response.data.users)
+
+        this.$store.commit('setAggregateAvailabilityBlocks', { blocks: transformedAggregateAvailabilities, date: Date.now() })
+      })
 
       this.pendingEventBlocks = this.$store.state.events.pendingBlocks
       this.eventBlocks = this.$store.state.events.blocks
@@ -298,6 +323,8 @@
       // When a time block is added, updated, or deleted, check to see if it belongs to this date.
       // If so, refresh this day's time blocks.
       this.$store.watch(this.$store.getters.getLastUpdatedCurrentUserAvailabilityBlocks, (date) => {
+        this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
+
         if (date === this.date) {
           this.$set(
             this.currentUserAvailabilityBlocks,
@@ -725,6 +752,8 @@
       saveUpdatedBlocksFromACalendarDay(blocksToUpdate) {
         // TODO: Normalize this for setting any type of block. - Chad
         this.$store.commit('setUserAvailabilityBlocksForDay', blocksToUpdate)
+
+        currentUser.saveAvailabilities(blocksToUpdate)
       },
     },
   }
