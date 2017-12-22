@@ -11,7 +11,7 @@
             <SimIconText icon="fa-exclamation-triangle" text="Missing Expected Items"></SimIconText>
           </li>
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText icon="fa-check-circle text--green ghost" :text="`${props.item.first_name} ${props.item.last_name}`"></SimIconText>
+            <SimIconText icon="fa-check-circle text--green ghost" :text="`${props.item.firstname} ${props.item.lastname}`"></SimIconText>
           </li>
         </SimDatalist>
 

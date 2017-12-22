@@ -18,7 +18,7 @@
                 <SimIconText icon="fa-exclamation-triangle" text="Missing Instructors"></SimIconText>
               </li>
               <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-                <SimIconText icon="fa-check-circle text--green ghost" :text="`${props.item.first_name} ${props.item.last_name}`"></SimIconText>
+                <SimIconText icon="fa-check-circle text--green ghost" :text="`${props.item.firstname} ${props.item.lastname}`"></SimIconText>
               </li>
             </SimDatalist>
           </div>
@@ -119,7 +119,7 @@
                   :should-be-selected="props.item.selected"
                   @toggle="toggleItemInSelectedLearners"
                   >
-                  {{ props.item.first_name }} {{ props.item.last_name }}
+                  {{ props.item.firstname }} {{ props.item.lastname }}
                 </SimSelection>
                 <span class="item-remover" @click="removeFromActiveLearnerList(props.item)">
                   <SimIconText icon="fa-times fa-fw"></SimIconText>
@@ -131,7 +131,7 @@
               @select="addToLearnerList"
               >
               <div class="item-tag" slot="item" slot-scope="props">
-                {{ props.option.first_name }} {{ props.option.last_name }}
+                {{ props.option.firstname }} {{ props.option.lastname }}
               </div>
             </SimAutocomplete>
           </div>
@@ -153,7 +153,7 @@
                   :should-be-selected="props.item.selected"
                   @toggle="toggleItemInSelectedOthers"
                   >
-                  {{ props.item.first_name }} {{ props.item.last_name }}
+                  {{ props.item.firstname }} {{ props.item.lastname }}
                 </SimSelection>
                 <span class="item-remover" @click="removeFromActiveOtherList(props.item)">
                   <SimIconText icon="fa-times fa-fw"></SimIconText>
@@ -165,7 +165,7 @@
               @select="addToOtherList"
               >
               <div class="item-tag" slot="item" slot-scope="props">
-                {{ props.option.first_name }} {{ props.option.last_name }}
+                {{ props.option.firstname }} {{ props.option.lastname }}
               </div>
             </SimAutocomplete>
           </div>
@@ -332,8 +332,8 @@
           this.activeLearners.push(item)
           this.inactiveLearners.splice(this.inactiveLearners.indexOf(item), 1)
           this.toggleItemInSelectedLearners(item.id, true)
-          this.sortItemsByProperty(this.activeLearners, 'last_name')
-          this.sortItemsByProperty(this.inactiveLearners, 'last_name')
+          this.sortItemsByProperty(this.activeLearners, 'lastname')
+          this.sortItemsByProperty(this.inactiveLearners, 'lastname')
         } else {
           lodestar(this.$el, 'lodestar', `.learner-${item.id}`, 'value')
         }
@@ -343,8 +343,8 @@
         this.toggleItemInSelectedLearners(item.id, false)
         this.activeLearners.splice(this.activeLearners.indexOf(item), 1)
         this.inactiveLearners.push(foundItem)
-        this.sortItemsByProperty(this.activeLearners, 'last_name')
-        this.sortItemsByProperty(this.inactiveLearners, 'last_name')
+        this.sortItemsByProperty(this.activeLearners, 'lastname')
+        this.sortItemsByProperty(this.inactiveLearners, 'lastname')
       },
       toggleItemInSelectedLearners(itemId, value) {
         let selectedItemsWasUpdated = false
@@ -363,7 +363,7 @@
       },
       resetInactiveLearners() {
         this.inactiveLearners = JSON.parse(JSON.stringify(this.learners))
-        this.sortItemsByProperty(this.inactiveLearners, 'last_name')
+        this.sortItemsByProperty(this.inactiveLearners, 'lastname')
       },
       clearAllactiveLearners() {
         this.activeLearners.splice(0, this.activeLearners.length)
@@ -378,8 +378,8 @@
           this.activeOthers.push(item)
           this.inactiveOthers.splice(this.inactiveOthers.indexOf(item), 1)
           this.toggleItemInSelectedOthers(item.id, true)
-          this.sortItemsByProperty(this.activeOthers, 'last_name')
-          this.sortItemsByProperty(this.inactiveOthers, 'last_name')
+          this.sortItemsByProperty(this.activeOthers, 'lastname')
+          this.sortItemsByProperty(this.inactiveOthers, 'lastname')
         } else {
           lodestar(this.$el, 'lodestar', `.learner-${item.id}`, 'value')
         }
@@ -389,8 +389,8 @@
         this.toggleItemInSelectedOthers(item.id, false)
         this.activeOthers.splice(this.activeOthers.indexOf(item), 1)
         this.inactiveOthers.push(foundItem)
-        this.sortItemsByProperty(this.activeOthers, 'last_name')
-        this.sortItemsByProperty(this.inactiveOthers, 'last_name')
+        this.sortItemsByProperty(this.activeOthers, 'lastname')
+        this.sortItemsByProperty(this.inactiveOthers, 'lastname')
       },
       toggleItemInSelectedOthers(itemId, value) {
         let selectedItemsWasUpdated = false
@@ -409,7 +409,7 @@
       },
       resetInactiveOthers() {
         this.inactiveOthers = JSON.parse(JSON.stringify(this.learners))
-        this.sortItemsByProperty(this.inactiveOthers, 'last_name')
+        this.sortItemsByProperty(this.inactiveOthers, 'lastname')
       },
       clearAllactiveOthers() {
         this.activeOthers.splice(0, this.activeOthers.length)

@@ -1,6 +1,7 @@
 const user = {
   state: {
     last_updated: null,
+    last_updated_instructors: null,
   },
   mutations: {
     setCurrentUser(state, nextUser) {
@@ -42,11 +43,15 @@ const user = {
       state.professionalTitles = professionalTitles
     },
     setInstructors(state, instructors) {
+      state.last_updated_instructors = Date.now()
       state.instructors = instructors
     },
   },
   actions: {},
   getters: {
+    getInstructorsLastUpdated: (state) => () => {
+      return state.last_updated_instructors
+    },
     getLastUpdatedCurrentUserAvailabilityBlocks: (state) => () => {
       return state.last_updated
     },

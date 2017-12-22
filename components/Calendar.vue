@@ -145,7 +145,7 @@
                       :should-be-selected="props.item.selected"
                       @toggle="toggleItemInSelectedInstructors"
                       >
-                      {{ props.item.first_name }} {{ props.item.last_name }}
+                      {{ props.item.firstname }} {{ props.item.lastname }}
                     </SimSelection>
                     <span class="item-remover" @click="removeFromActiveInstructorList(props.item)">
                       <SimIconText icon="fa-times fa-fw"></SimIconText>
@@ -159,7 +159,7 @@
                   @select="addToInstructorList"
                   >
                   <div class="item-tag" slot="item" slot-scope="props">
-                    {{ props.option.first_name }} {{ props.option.last_name }}
+                    {{ props.option.firstname }} {{ props.option.lastname }}
                   </div>
                 </SimAutocomplete>
               </div>
@@ -277,6 +277,14 @@
       this.$store.commit('setProfessionalTitles', currentUser.professionalTitles())
       this.$store.commit('setInstructors', users.users())
 
+      const instructorsPromise = users.getUsers(
+        this.$store.state.base_url,
+        this.$store.state.currentUser.id,
+      )
+      instructorsPromise.then((response) => {
+        this.$store.commit('setInstructors', Object.values(response.data.users))
+      })
+
       const firstDayOfTheMonth = moment(this.activeMoment).startOf('month').format('YYYY-MM-DD 00:00:00')
       const lastDayOfTheMonth = moment(this.activeMoment).endOf('month').format('YYYY-MM-DD 23:59:59')
 
@@ -323,6 +331,11 @@
       // When the week/month is updated, refresh this day's currentUserAvailabilityBlocks.
       this.$store.watch(this.$store.getters.getActiveDate, () => {
         this.date = this.$store.state.activeDate.date
+      })
+
+      this.$store.watch(this.$store.getters.getInstructorsLastUpdated, () => {
+        this.instructors = this.$store.state.user.instructors
+        this.resetInactiveInstructors()
       })
 
       // When a time block is added, updated, or deleted, check to see if it belongs to this date.
@@ -621,7 +634,6 @@
       prepareTheBubblePosition(bubblePosition) {
         this.$store.commit('updateBubblePosition', bubblePosition)
         this.$store.commit('toggleBubbleVisibility', true)
-
       },
       prepareTheBubbleData(bubbleData) {
         bubbleData.meta = {}
@@ -644,8 +656,8 @@
           this.activeInstructors.push(item)
           this.inactiveInstructors.splice(this.inactiveInstructors.indexOf(item), 1)
           this.toggleItemInSelectedInstructors(item.id, true)
-          this.sortItemsByProperty(this.activeInstructors, 'last_name')
-          this.sortItemsByProperty(this.inactiveInstructors, 'last_name')
+          this.sortItemsByProperty(this.activeInstructors, 'lastname')
+          this.sortItemsByProperty(this.inactiveInstructors, 'lastname')
         } else {
           lodestar(this.$el, 'lodestar', `.instructor-${item.id}`, 'value')
         }
@@ -655,8 +667,8 @@
         this.toggleItemInSelectedInstructors(item.id, false)
         this.activeInstructors.splice(this.activeInstructors.indexOf(item), 1)
         this.inactiveInstructors.push(foundItem)
-        this.sortItemsByProperty(this.activeInstructors, 'last_name')
-        this.sortItemsByProperty(this.inactiveInstructors, 'last_name')
+        this.sortItemsByProperty(this.activeInstructors, 'lastname')
+        this.sortItemsByProperty(this.inactiveInstructors, 'lastname')
       },
       toggleItemInSelectedInstructors(itemId, value) {
         let selectedItemsWasUpdated = false
@@ -675,7 +687,7 @@
       },
       resetInactiveInstructors() {
         this.inactiveInstructors = JSON.parse(JSON.stringify(this.instructors))
-        this.sortItemsByProperty(this.inactiveInstructors, 'last_name')
+        this.sortItemsByProperty(this.inactiveInstructors, 'lastname')
       },
       clearAllActiveInstructors() {
         this.activeInstructors.splice(0, this.activeInstructors.length)

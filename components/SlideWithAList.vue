@@ -19,11 +19,11 @@
               :should-be-selected="isItemSelected(props.item.id)"
               @toggle="toggleItemInSelectedItems"
             >
-              {{ props.item.first_name }} {{ props.item.last_name }}
+              {{ props.item.firstname }} {{ props.item.lastname }}
             </sim-selection>
           </li> -->
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText :icon="setItemIcon(props.item.id)" :text="`${props.item.first_name} ${props.item.last_name}`"></SimIconText>
+            <SimIconText :icon="setItemIcon(props.item.id)" :text="`${props.item.firstname} ${props.item.lastname}`"></SimIconText>
           </li>
         </SimDatalist>
       </template>
@@ -119,13 +119,13 @@
     computed: {
       items() {
         return this.slide.content.items
-            ? getListFromIds(this.slide.content.items, this.$store.state.users.all, 'last_name')
+            ? getListFromIds(this.slide.content.items, this.$store.state.user.instructors, 'lastname')
             : null
       },
       foundItems() {
         return sortByKey(this.items.filter(item => {
-          return `${item.first_name} ${item.last_name}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
-        }), 'last_name', 'asc')
+          return `${item.firstname} ${item.lastname}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
+        }), 'lastname', 'asc')
       },
     },
     methods: {

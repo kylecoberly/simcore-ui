@@ -20,7 +20,7 @@
         </div>
         <li slot="item" slot-scope="props" :key="props.item.id">
           <sim-selection :item="props.item" :disabled="props.item.disabled" :selected-items="selectedItems">
-            {{ props.item.last_name }}, {{ props.item.first_name }}
+            {{ props.item.lastname }}, {{ props.item.firstname }}
           </sim-selection>
         </li>
       </SimDatalist>
@@ -99,12 +99,12 @@
         return this.$store.state.slideDeck.slides[this.$store.state.slideDeck.slideHistory.size - 1]
       },
       users() {
-        return this.slideData.content.block.user_ids ? getListFromIds(this.slideData.content.block.user_ids, this.$store.state.users.all, 'last_name') : null
+        return this.slideData.content.block.user_ids ? getListFromIds(this.slideData.content.block.user_ids, this.$store.state.users.all, 'lastname') : null
       },
       foundUsers() {
         return sortByKey(this.users.filter(item => {
-            return `${item.first_name} ${item.last_name}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
-        }), 'last_name', 'asc')
+            return `${item.firstname} ${item.lastname}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
+        }), 'lastname', 'asc')
       },
     },
     methods: {
