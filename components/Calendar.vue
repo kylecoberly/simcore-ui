@@ -753,7 +753,11 @@
         // TODO: Normalize this for setting any type of block. - Chad
         this.$store.commit('setUserAvailabilityBlocksForDay', blocksToUpdate)
 
-        currentUser.saveAvailabilities(blocksToUpdate)
+        currentUser.saveAvailabilities(
+          this.$store.state.base_url,
+          this.$store.state.currentUser.id,
+          blocksToUpdate,
+        )
       },
     },
   }
