@@ -590,68 +590,68 @@ const expectedLittleLameData = {
   },
 }
 
-const littleLameData = {
-  7475: [
-    { '2017-12-20 00:00:00': { duration: 3.5, start: 16 } },
-    { '2017-12-20 00:00:00': { duration: 4, start: 0 } },
-    { '2017-12-21 01:30:00': { duration: 4, start: 8 } },
-    { '2017-12-22 01:30:00': { duration: 4, start: 8 } },
-    { '2017-12-24 00:00:00': { duration: 5, start: 12 } },
-    { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
-    { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
-    { '2017-12-25 00:00:00': { duration: 4, start: 8 } },
-    { '2017-12-25 00:00:00': { duration: 3, start: 14 } },
-  ],
-  4112: [
-    { '2017-12-20 00:00:00': { duration: 3, start: 16 } },
-    { '2017-12-20 00:00:00': { duration: 2, start: 0 } },
-    { '2017-12-20 05:00:00': { duration: 4, start: 14 } },
-    { '2017-12-22 05:00:00': { duration: 4, start: 14 } },
-    { '2017-12-24 00:00:00': { duration: 6, start: 12 } },
-    { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
-    { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
-    { '2017-12-25 00:00:00': { duration: 5, start: 9 } },
-    { '2017-12-25 00:00:00': { duration: 3, start: 14 } },
-  ],
-  6630: [
-    { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
-    { '2017-12-20 00:00:00': { duration: 3, start: 16 } },
-    { '2017-12-24 00:00:00': { duration: 5, start: 12 } },
-    { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
-    { '2017-12-25 00:00:00': { duration: 7, start: 8 } },
-    { '2017-12-25 00:00:00': { duration: 3, start: 14 } },
-  ],
-  1220: [
-    { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
-    { '2017-12-20 00:00:00': { duration: 5, start: 0 } },
-    { '2017-12-21 00:00:00': { duration: 3, start: 16 } },
-    { '2017-12-22 00:00:00': { duration: 2, start: 16 } },
-    { '2017-12-24 00:00:00': { duration: 8, start: 12 } },
-    { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
-    { '2017-12-25 00:00:00': { duration: 5, start: 8 } },
-    { '2017-12-25 00:00:00': { duration: 4, start: 13 } },
-  ],
-  3726: [
-    { '2017-12-20 00:00:00': { duration: 3, start: 16 } },
-    { '2017-12-21 05:00:00': { duration: 4, start: 14 } },
-    { '2017-12-22 05:00:00': { duration: 4, start: 14 } },
-    { '2017-12-24 00:00:00': { duration: 6, start: 12 } },
-    { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
-    { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
-    { '2017-12-25 00:00:00': { duration: 5, start: 8 } },
-    { '2017-12-25 00:00:00': { duration: 5, start: 15 } },
-  ],
-  7755: [
-    { '2017-12-24 00:00:00': { duration: 3, start: 16 } },
-    { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
-    { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
-    { '2017-12-25 00:00:00': { duration: 5, start: 8 } },
-    { '2017-12-25 00:00:00': { duration: 4, start: 13 } },
-    { '2017-12-21 00:00:00': { duration: 3, start: 0 } },
-    { '2017-12-22 05:00:00': { duration: 4, start: 14 } },
-    { '2017-12-24 00:00:00': { duration: 6, start: 12 } },
-  ],
-}
+// const littleLameData = {
+//   7475: [
+//     { '2017-12-20 00:00:00': { duration: 3.5, start: 16 } },
+//     { '2017-12-20 00:00:00': { duration: 4, start: 0 } },
+//     { '2017-12-21 01:30:00': { duration: 4, start: 8 } },
+//     { '2017-12-22 01:30:00': { duration: 4, start: 8 } },
+//     { '2017-12-24 00:00:00': { duration: 5, start: 12 } },
+//     { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
+//     { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
+//     { '2017-12-25 00:00:00': { duration: 4, start: 8 } },
+//     { '2017-12-25 00:00:00': { duration: 3, start: 14 } },
+//   ],
+//   4112: [
+//     { '2017-12-20 00:00:00': { duration: 3, start: 16 } },
+//     { '2017-12-20 00:00:00': { duration: 2, start: 0 } },
+//     { '2017-12-20 05:00:00': { duration: 4, start: 14 } },
+//     { '2017-12-22 05:00:00': { duration: 4, start: 14 } },
+//     { '2017-12-24 00:00:00': { duration: 6, start: 12 } },
+//     { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
+//     { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
+//     { '2017-12-25 00:00:00': { duration: 5, start: 9 } },
+//     { '2017-12-25 00:00:00': { duration: 3, start: 14 } },
+//   ],
+//   6630: [
+//     { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
+//     { '2017-12-20 00:00:00': { duration: 3, start: 16 } },
+//     { '2017-12-24 00:00:00': { duration: 5, start: 12 } },
+//     { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
+//     { '2017-12-25 00:00:00': { duration: 7, start: 8 } },
+//     { '2017-12-25 00:00:00': { duration: 3, start: 14 } },
+//   ],
+//   1220: [
+//     { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
+//     { '2017-12-20 00:00:00': { duration: 5, start: 0 } },
+//     { '2017-12-21 00:00:00': { duration: 3, start: 16 } },
+//     { '2017-12-22 00:00:00': { duration: 2, start: 16 } },
+//     { '2017-12-24 00:00:00': { duration: 8, start: 12 } },
+//     { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
+//     { '2017-12-25 00:00:00': { duration: 5, start: 8 } },
+//     { '2017-12-25 00:00:00': { duration: 4, start: 13 } },
+//   ],
+//   3726: [
+//     { '2017-12-20 00:00:00': { duration: 3, start: 16 } },
+//     { '2017-12-21 05:00:00': { duration: 4, start: 14 } },
+//     { '2017-12-22 05:00:00': { duration: 4, start: 14 } },
+//     { '2017-12-24 00:00:00': { duration: 6, start: 12 } },
+//     { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
+//     { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
+//     { '2017-12-25 00:00:00': { duration: 5, start: 8 } },
+//     { '2017-12-25 00:00:00': { duration: 5, start: 15 } },
+//   ],
+//   7755: [
+//     { '2017-12-24 00:00:00': { duration: 3, start: 16 } },
+//     { '2017-12-19 00:00:00': { duration: 6, start: 13 } },
+//     { '2017-12-25 00:00:00': { duration: 2, start: 3 } },
+//     { '2017-12-25 00:00:00': { duration: 5, start: 8 } },
+//     { '2017-12-25 00:00:00': { duration: 4, start: 13 } },
+//     { '2017-12-21 00:00:00': { duration: 3, start: 0 } },
+//     { '2017-12-22 05:00:00': { duration: 4, start: 14 } },
+//     { '2017-12-24 00:00:00': { duration: 6, start: 12 } },
+//   ],
+// }
 const expectedLittleLameDataFlattened = {
   '2017-12-20': [
     {
@@ -9594,7 +9594,6 @@ const feFiFoUmmm = (caller, lessLameData, expectedLessLameData) => {
 }
 
 export default {
-  base_url: '',
   aggregateInstructorAvailabilityKeyedByDateAndStartTime(instructors) {
     const lessLameData = _.reduce(instructors, (resultSoFar, userDates, userId) => {
       _.each(userDates, (date) => {
@@ -9654,7 +9653,6 @@ export default {
       })
     })
 
-    setExpectedTestResponse(blocksByDate)
     // feFiFoUmmm('timeBlocks', blocksByDate, expectedAggregateBlocks)
 
     // TODO: Refactor for chaining. - Chad
@@ -9793,7 +9791,6 @@ export default {
     // Transforming availability set.
     const instructorAvailabilityBlocksByDate = this.aggregateInstructorAvailabilityKeyedByDateWhereAllIntersect(aggregateInstructorsFromFilter)
 
-    console.log(JSON.stringify(aggregateInstructorsFromFilter))
     // Filter blocks by duration.
     const instructorAvailabilityBlocksByDateWithinDuration = {}
     _.each(instructorAvailabilityBlocksByDate, (instructorAvailabilityBlocksForDate, date) => {

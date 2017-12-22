@@ -296,7 +296,10 @@
         lastDayOfTheMonth,
       )
       aggregateAvailabilitiesPromise.then((response) => {
-        const transformedAggregateAvailabilities = availabilities.transform(response.data.users)
+        let transformedAggregateAvailabilities = []
+        if (response.data.users) {
+          transformedAggregateAvailabilities = availabilities.transform(response.data.users)
+        }
 
         this.$store.commit('setAggregateAvailabilityBlocks', { blocks: transformedAggregateAvailabilities, date: Date.now() })
       })
@@ -550,9 +553,11 @@
 
         this.lastUpdated = Date.now()
         this.$store.commit('setAggregateAvailabilityBlocks', {
-          blocks: availabilities.availabilities({
-            minimumDuration: this.filterEventLength,
-            filteredInstructors: this.activeInstructorIds,
+          blocks: availabilities.filter(
+            this.$store.state.availabilities,
+            {
+              minimumDuration: this.filterEventLength,
+              filteredInstructors: this.activeInstructorIds,
           }),
           date: this.lastUpdated,
         })
@@ -564,9 +569,11 @@
         this.lastUpdated = Date.now()
 
         this.$store.commit('setAggregateAvailabilityBlocks', {
-          blocks: availabilities.availabilities({
-            minimumDuration: this.filterEventLength,
-            filteredInstructors: this.activeInstructorIds,
+          blocks: availabilities.filter(
+            this.$store.state.availabilities,
+            {
+              minimumDuration: this.filterEventLength,
+              filteredInstructors: this.activeInstructorIds,
           }),
           date: this.lastUpdated,
         })
