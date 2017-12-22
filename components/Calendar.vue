@@ -93,7 +93,7 @@
             </div>
 
             <SimBubble v-if="bubbleIsOpen">
-              <SimSlidePresenter shouldHideNavigationControls="false"></SimSlidePresenter>
+              <SimSlidePresenter></SimSlidePresenter>
             </SimBubble>
 
             <div class="sim-loader--shield" v-if="isLoading">
@@ -124,9 +124,9 @@
               </div>
 
               <div class="filter-molecule">
-                <SimFilterBy xv-if="userTypeIsClient" system-echo="No facility filters" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
-                <SimFilterBy system-echo="No department filters" label="Departments" type="department_id" :list="departments" @filter="applyFilter"></SimFilterBy>
-                <SimFilterBy system-echo="No professional title filters" label="Professional Titles" type="title_id" :list="professionalTitles" @filter="applyFilter"></SimFilterBy>
+                <SimFilterBy xv-if="userTypeIsClient" system-echo="(Filter is not available yet)" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
+                <SimFilterBy system-echo="(Filter is not available yet)" label="Departments" type="department_id" :list="departments" @filter="applyFilter"></SimFilterBy>
+                <SimFilterBy system-echo="(Filter is not available yet)" label="Professional Titles" type="title_id" :list="professionalTitles" @filter="applyFilter"></SimFilterBy>
               </div>
 
               <div class="filter-molecule sim-filter">
@@ -279,9 +279,9 @@
       this.aggregateAvailabilityBlocks = this.$store.state.availabilities.blocks
       this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
 
-      this.institutions = this.$store.state.user.institutions
-      this.departments = this.$store.state.user.departments
-      this.professionalTitles = this.$store.state.user.professionalTitles
+      // this.institutions = this.$store.state.user.institutions
+      // this.departments = this.$store.state.user.departments
+      // this.professionalTitles = this.$store.state.user.professionalTitles
       this.instructors = this.$store.state.user.instructors
     },
     mounted() {

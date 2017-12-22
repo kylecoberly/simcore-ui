@@ -45,6 +45,7 @@
           <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
             :class="displayMode"
             class="sim-timeblock--theme--aggregate"
+            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
             :key="index"
             :block="block"
             :index="index"

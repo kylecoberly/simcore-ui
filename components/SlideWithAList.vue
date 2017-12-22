@@ -7,19 +7,23 @@
     <div class="sim-slide--content">
       <template v-if="items">
         <SimDatalist v-if="items" :items="foundItems" :animate="true">
-          <!-- <div slot="static-before" key="before">
+          <div slot="static-before" key="before">
             <input type="search" v-model="itemSearch" placeholder="find..." />
-          </div> -->
-          <li slot="item" slot-scope="props" :key="props.item.id">
-            <!-- <sim-selection
+          </div>
+          <!-- @TODO temporary solution - Jase -->
+          <!-- <li slot="item" slot-scope="props" :key="props.item.id">
+            <sim-selection
               :item="props.item"
               :item-id="props.item.id"
               :disabled="props.item.disabled"
               :should-be-selected="isItemSelected(props.item.id)"
               @toggle="toggleItemInSelectedItems"
-            > -->
+            >
               {{ props.item.first_name }} {{ props.item.last_name }}
-            <!-- </sim-selection> -->
+            </sim-selection>
+          </li> -->
+          <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
+            <SimIconText :icon="setItemIcon(props.item.id)" :text="`${props.item.first_name} ${props.item.last_name}`"></SimIconText>
           </li>
         </SimDatalist>
       </template>
@@ -32,6 +36,7 @@
   import _ from 'lodash'
 
   import SimDatalist from './Datalist'
+  import SimIconText from './IconText'
   import SimSelection from './Selection'
   import SimSlideHeader from './SlideHeader'
   import SimSlideIntro from './SlideIntro'
@@ -88,6 +93,7 @@
     name: 'sim-slide-with-a-list',
     components: {
       SimDatalist,
+      SimIconText,
       SimSelection,
       SimSlideHeader,
       SimSlideIntro,
@@ -123,6 +129,14 @@
       },
     },
     methods: {
+      // @TODO: Temporary solution - Jase
+      setItemIcon(itemId) {
+        let icon = 'fa-circle-thin ghost'
+        if (this.isItemSelected(itemId)) {
+          icon = 'fa-check-circle ghost'
+        }
+        return icon
+      },
       isItemSelected(itemId) {
         return this.selectedItems.find((item) => item.id === itemId) ? true : false
       },
