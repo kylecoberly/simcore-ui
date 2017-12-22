@@ -19,7 +19,7 @@ const availabilities = {
         state.last_updated = date
       }
 
-      state.blocks = availabilityBlocks
+      state.blocks = availabilityBlocks.blocks
     },
   },
   actions: {},

@@ -3,8 +3,8 @@ export default {
   base_url: '',
   // TODO: // Get data from a remote api. - Chad
   users() {
-    return {
-      1220: {
+    return [
+      {
         id: 1220,
         title_id: null,
         username: 'igor.aleshinIA@gmail.com',
@@ -16,7 +16,7 @@ export default {
         department_id: 304,
         institution_id: 110,
       },
-      3726: {
+      {
         id: 3726,
         title_id: null,
         username: 'igor.aleshinMIA@gmail.com',
@@ -28,7 +28,7 @@ export default {
         department_id: 41,
         institution_id: 110,
       },
-      4112: {
+      {
         id: 4112,
         title_id: 3,
         username: 'simcore.test+IA@gmail.com',
@@ -40,7 +40,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      6630: {
+      {
         id: 6630,
         title_id: 3,
         username: 'simcore.test+Learner@gmail.com',
@@ -52,7 +52,7 @@ export default {
         department_id: 42,
         institution_id: 110,
       },
-      7475: {
+      {
         id: 7475,
         title_id: null,
         username: 'jase.da@simcoretech.com',
@@ -64,7 +64,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      7755: {
+      {
         id: 7755,
         title_id: 3,
         username: 'simcore.test+MIA@gmail.com',
@@ -76,7 +76,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9886: {
+      {
         id: 9886,
         title_id: null,
         username: 'lela.dimonte@simnext.com',
@@ -88,7 +88,7 @@ export default {
         department_id: 306,
         institution_id: 110,
       },
-      9879: {
+      {
         id: 9879,
         title_id: 12,
         username: 'Bob.Dole2@simcoretech.com',
@@ -100,7 +100,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9876: {
+      {
         id: 9876,
         title_id: 3,
         username: 'simcore.test+Instructor@gmail.com',
@@ -112,7 +112,7 @@ export default {
         department_id: 42,
         institution_id: 110,
       },
-      264: {
+      {
         id: 264,
         title_id: null,
         username: 'instadmin@fakeemail79878.fake',
@@ -124,7 +124,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9466: {
+      {
         id: 9466,
         title_id: null,
         username: 'dgilevsk+DA@gmail.com',
@@ -136,7 +136,7 @@ export default {
         department_id: 41,
         institution_id: 110,
       },
-      9436: {
+      {
         id: 9436,
         title_id: null,
         username: 'dgilevsk+IA@gmail.com',
@@ -148,7 +148,7 @@ export default {
         department_id: 237,
         institution_id: 110,
       },
-      12: {
+      {
         id: 12,
         title_id: null,
         username: 'bgillett@email.com',
@@ -160,7 +160,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9923: {
+      {
         id: 9923,
         title_id: 13,
         username: 'brian@simcoretech.com',
@@ -172,7 +172,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      265: {
+      {
         id: 265,
         title_id: null,
         username: 'instructor1@fakeemail74027.fake',
@@ -184,7 +184,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9910: {
+      {
         id: 9910,
         title_id: null,
         username: 'jase.instructor@simcoretech.com',
@@ -196,7 +196,7 @@ export default {
         department_id: 319,
         institution_id: 110,
       },
-      271: {
+      {
         id: 271,
         title_id: null,
         username: 'instructor5@fakeemail29892.fake',
@@ -208,7 +208,7 @@ export default {
         department_id: 41,
         institution_id: 110,
       },
-      9908: {
+      {
         id: 9908,
         title_id: null,
         username: 'jase.learner@simcoretech.com',
@@ -220,7 +220,7 @@ export default {
         department_id: 306,
         institution_id: 110,
       },
-      9415: {
+      {
         id: 9415,
         title_id: 1,
         username: 'dgilevsk+1@gmail.com',
@@ -232,7 +232,7 @@ export default {
         department_id: 100,
         institution_id: 110,
       },
-      9922: {
+      {
         id: 9922,
         title_id: null,
         username: 'blewis@mysmartsim.com',
@@ -244,7 +244,7 @@ export default {
         department_id: 325,
         institution_id: 110,
       },
-      9517: {
+      {
         id: 9517,
         title_id: null,
         username: 'dgilevsk+MIA@gmail.com',
@@ -256,7 +256,7 @@ export default {
         department_id: 271,
         institution_id: 110,
       },
-      632: {
+      {
         id: 632,
         title_id: null,
         username: 'rationalplanet@fakeemail75110.fake',
@@ -268,7 +268,7 @@ export default {
         department_id: 57,
         institution_id: 110,
       },
-      9881: {
+      {
         id: 9881,
         title_id: 12,
         username: 'dustin.parham@simcoretech.com',
@@ -280,7 +280,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9888: {
+      {
         id: 9888,
         title_id: null,
         username: 'dustin.parhamDA@simcoretech.com',
@@ -292,7 +292,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      266: {
+      {
         id: 266,
         title_id: null,
         username: 'instructor2@fakeemail46054.fake',
@@ -304,7 +304,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9416: {
+      {
         id: 9416,
         title_id: null,
         username: 'dgilevsk+2@gmail.com',
@@ -316,7 +316,7 @@ export default {
         department_id: 100,
         institution_id: 110,
       },
-      268: {
+      {
         id: 268,
         title_id: null,
         username: 'learner2@fakeemail80606.fake',
@@ -328,7 +328,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9907: {
+      {
         id: 9907,
         title_id: null,
         username: 'rick.skanron@simcoretech.com',
@@ -340,7 +340,7 @@ export default {
         department_id: 313,
         institution_id: 110,
       },
-      9880: {
+      {
         id: 9880,
         title_id: null,
         username: 'jase.smith@simcoretech.com',
@@ -352,7 +352,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9445: {
+      {
         id: 9445,
         title_id: null,
         username: 'test2333@fakeemail32566.fake',
@@ -364,7 +364,7 @@ export default {
         department_id: 272,
         institution_id: 110,
       },
-      9875: {
+      {
         id: 9875,
         title_id: 3,
         username: 'simcore.test+DA@gmail.com',
@@ -376,7 +376,7 @@ export default {
         department_id: 42,
         institution_id: 110,
       },
-      270: {
+      {
         id: 270,
         title_id: null,
         username: 'instructor4@fakeemail12436.fake',
@@ -388,7 +388,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9899: {
+      {
         id: 9899,
         title_id: null,
         username: 'zazadawd@xfweaefw.com',
@@ -400,7 +400,7 @@ export default {
         department_id: 100,
         institution_id: 110,
       },
-      9896: {
+      {
         id: 9896,
         title_id: null,
         username: '123@qweqweqew123.com',
@@ -412,7 +412,7 @@ export default {
         department_id: 42,
         institution_id: 110,
       },
-      9904: {
+      {
         id: 9904,
         title_id: null,
         username: 'zazaza@azza.zz',
@@ -424,7 +424,7 @@ export default {
         department_id: 237,
         institution_id: 110,
       },
-      9913: {
+      {
         id: 9913,
         title_id: null,
         username: 'adwad@awdadwadwadw.da',
@@ -436,7 +436,7 @@ export default {
         department_id: 42,
         institution_id: 110,
       },
-      9915: {
+      {
         id: 9915,
         title_id: null,
         username: 'new@awdawdadwawd.daw',
@@ -448,7 +448,7 @@ export default {
         department_id: 237,
         institution_id: 110,
       },
-      9916: {
+      {
         id: 9916,
         title_id: null,
         username: 'awddaw@daw.com',
@@ -460,7 +460,7 @@ export default {
         department_id: 270,
         institution_id: 110,
       },
-      9917: {
+      {
         id: 9917,
         title_id: null,
         username: 'dgilevsk+IA1@gmail.com',
@@ -472,7 +472,7 @@ export default {
         department_id: 271,
         institution_id: 110,
       },
-      9919: {
+      {
         id: 9919,
         title_id: null,
         username: 'dgilevsk+IA2@gmail.com',
@@ -484,7 +484,7 @@ export default {
         department_id: 270,
         institution_id: 110,
       },
-      9905: {
+      {
         id: 9905,
         title_id: null,
         username: 'testuser@simcoretech.not',
@@ -496,7 +496,7 @@ export default {
         department_id: 313,
         institution_id: 110,
       },
-      1349: {
+      {
         id: 1349,
         title_id: null,
         username: 'igor.aleshin+instructor@gmail.com',
@@ -508,7 +508,7 @@ export default {
         department_id: 100,
         institution_id: 110,
       },
-      9518: {
+      {
         id: 9518,
         title_id: null,
         username: 'termsTest@fakeemail69551.fake',
@@ -520,7 +520,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9918: {
+      {
         id: 9918,
         title_id: null,
         username: 'simcore.test+IA2@gmail.com',
@@ -532,7 +532,7 @@ export default {
         department_id: 40,
         institution_id: 110,
       },
-      9555: {
+      {
         id: 9555,
         title_id: null,
         username: 'd+test@fakeemail89204.fake',
@@ -544,6 +544,6 @@ export default {
         department_id: 271,
         institution_id: 110,
       },
-    }
+    ]
   },
 }

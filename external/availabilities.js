@@ -590,7 +590,7 @@ const expectedLittleLameData = {
 
 const littleLameData = {
   7475: [
-    { '2017-12-20 00:00:00': { duration: 3, start: 16 } },
+    { '2017-12-20 00:00:00': { duration: 3.5, start: 16 } },
     { '2017-12-20 00:00:00': { duration: 4, start: 0 } },
     { '2017-12-21 01:30:00': { duration: 4, start: 8 } },
     { '2017-12-22 01:30:00': { duration: 4, start: 8 } },
@@ -9586,9 +9586,9 @@ const feFiFoUmmm = (caller, lessLameData, expectedLessLameData) => {
   const testDidPass = (JSON.stringify(lessLameData) === JSON.stringify(expectedLessLameData)) ? 'YES! :)' : 'SAD. :('
   const testMessageColor = (testDidPass === 'YES! :)') ? '#00C176' : '#BD5532'
 
-  console.log(`%c${caller}()`, `color: ${testMessageColor}; background: #222; padding: 1em; width: 100%; text-align: center; font-size: 1.3em; letter-spacing: 0.5em`)
-  console.log(`%c${testDidPass}`, `background: ${testMessageColor}; color: #222; padding: 1em; width: 100%; text-align: center; font-weight: bold; letter-spacing: 0.06em`)
-  console.log(lessLameData)
+  // console.log(`%c${caller}()`, `color: ${testMessageColor}; background: #222; padding: 1em; width: 100%; text-align: center; font-size: 1.3em; letter-spacing: 0.5em`)
+  // console.log(`%c${testDidPass}`, `background: ${testMessageColor}; color: #222; padding: 1em; width: 100%; text-align: center; font-weight: bold; letter-spacing: 0.06em`)
+  // console.log(lessLameData)
 }
 
 export default {
@@ -9766,14 +9766,32 @@ export default {
 
     return someOkData
   },
-  availabilities() {
-    const instructorAvailabilityBlocksByDate = this.aggregateInstructorAvailabilityKeyedByDateWhereAllIntersect(littleLameData)
+  availabilities(filters) {
+    if (!filters) {
+      filters = {
+        minimumDuration: 2,
+        filteredInstructors: [],
+      }
+    }
+
+    // Reducing availability set.
+    let aggregateInstructorsFromFilter = littleLameData
+    if (filters.filteredInstructors.length > 0) {
+      const instructorsFromFilter = _.pickBy(littleLameData, (instructor, instructorId) => {
+        return filters.filteredInstructors.includes(parseInt(instructorId))
+      })
+
+      aggregateInstructorsFromFilter = instructorsFromFilter
+    }
+
+    // Transforming availability set.
+    const instructorAvailabilityBlocksByDate = this.aggregateInstructorAvailabilityKeyedByDateWhereAllIntersect(aggregateInstructorsFromFilter)
 
     // Filter blocks by duration.
     const instructorAvailabilityBlocksByDateWithinDuration = {}
     _.each(instructorAvailabilityBlocksByDate, (instructorAvailabilityBlocksForDate, date) => {
       const blocksWithinDuration = _.filter(instructorAvailabilityBlocksForDate, (availabilityBlock) => {
-        return availabilityBlock.duration > 1
+        return availabilityBlock.duration >= parseFloat(filters.minimumDuration)
       })
 
       if (blocksWithinDuration.length > 0) {
@@ -9781,18 +9799,7 @@ export default {
       }
     })
 
-    feFiFoUmmm('instructorAvailabilityBlocksByDateWithinDuration', instructorAvailabilityBlocksByDateWithinDuration, expectedBlocksFilteredByTwoHours)
-
-    // const instructorsInDepartments = _.pickBy(bigLameData, (instructor, instructorId) => {
-    //   return [7475, 5490].includes(parseInt(instructorId))
-    // })
-    //
-    // const instructorsInFacilities = _.pickBy(instructorsInDepartments, (instructor, instructorId) => {
-    //   return facilityInstructors.includes(parseInt(instructorId))
-    // })
-
-    // this.aggregateInstructorAvailabilityKeyedByDateAndStartTime(littleLameData)
-    // return this.aggregateInstructorAvailabilityKeyedByDateWhereAllIntersect(littleLameData)
+    // feFiFoUmmm('instructorAvailabilityBlocksByDateWithinDuration', instructorAvailabilityBlocksByDateWithinDuration, expectedBlocksFilteredByTwoHours)
 
     return instructorAvailabilityBlocksByDateWithinDuration
   },

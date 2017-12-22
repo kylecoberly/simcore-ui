@@ -155,8 +155,8 @@
       initialCurrentUserAvailabilityBlocks() {
         this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
       },
-      initialAggregateUserAvailabilityBlocks() {
-        this.aggregateUserAvailabilityBlocks = this.initialAggregateUserAvailabilityBlocks
+      initialAggregateUserAvailabilityBlocks(newValue) {
+        this.$set(this, 'aggregateUserAvailabilityBlocks', newValue)
       },
     },
     computed: {

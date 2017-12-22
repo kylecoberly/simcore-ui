@@ -117,11 +117,11 @@
                 <input type="range" v-model="filterEventLength" :disabled="bubbleIsOpen" min="0.5" max="6" step="0.5" />
               </div>
 
-              <div v-if="false && isMonthView" class="filter-molecule">
-                Min. Instructors Needed: <b class="text--aqua">{{ filterInstructorCount }}</b>
-                <br /><br />
-                <input type="range" v-model="filterInstructorCount" :disabled="bubbleIsOpen" min="1" max="20" />
-              </div>
+              <!--<div v-if="false && isMonthView" class="filter-molecule">-->
+                <!--Min. Instructors Needed: <b class="text&#45;&#45;aqua">{{ filterInstructorCount }}</b>-->
+                <!--<br /><br />-->
+                <!--<input type="range" v-model="filterInstructorCount" :disabled="bubbleIsOpen" min="1" max="20" />-->
+              <!--</div>-->
 
               <div class="filter-molecule sim-filter">
                 <p class="sim-flex--row">
@@ -236,11 +236,12 @@
     props: {
       canScheduleEvents: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
     data() {
       return {
+        lastUpdated: Date.now(),
         contextSwitch: true,
         calendarIsUpdating: false,
         isLoading: false,
@@ -252,6 +253,7 @@
         professionalTitles: [],
         instructors: [],
         activeInstructors: [],
+        activeInstructorIds: [],
         inactiveInstructors: [],
         selectedInstructors: [],
         eventBlocks: [],
@@ -266,17 +268,17 @@
       this.$store.commit('setSlideTemplates', eventEditorSlides)
       this.$store.commit('setAllUsers', users.users())
       this.$store.commit('setAggregateEventBlocks', events.events())
-      this.$store.commit('setAggregateAvailabilityBlocks', availabilities.availabilities())
+      this.$store.commit('setAggregateAvailabilityBlocks', { blocks: availabilities.availabilities(), date: Date.now() })
 
       this.$store.commit('setCurrentUser', currentUser.user())
       this.$store.commit('setInstitutions', currentUser.institutions())
       this.$store.commit('setDepartments', currentUser.departments())
       this.$store.commit('setProfessionalTitles', currentUser.professionalTitles())
-      this.$store.commit('setInstructors', currentUser.instructors())
+      this.$store.commit('setInstructors', users.users())
 
       this.pendingEventBlocks = this.$store.state.events.pendingBlocks
       this.eventBlocks = this.$store.state.events.blocks
-      this.aggregateAvailabilityBlocks = this.$store.state.availabilities.blocks
+      this.aggregateUserAvailabilityBlocks = this.$store.state.availabilities.blocks
       this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
 
       // this.institutions = this.$store.state.user.institutions
@@ -325,19 +327,10 @@
         }
       })
 
-      this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilityBlocks, (date) => {
-        if (date === this.date) {
-          this.$set(
-            this.aggregateAvailabilityBlocks,
-            [date],
-            this.$store.state.availabilities.blocks[date],
-          )
+      this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilityBlocks, () => {
+        this.$set(this, 'aggregateUserAvailabilityBlocks', this.$store.state.availabilities.blocks)
 
-          if (this.weekDays[date]) {
-            this.$set(this.weekDays[date], 'aggregateAvailabilityBlocks', this.aggregateAvailabilityBlocks[date])
-          }
-          this.$set(this.monthDays[date], 'aggregateAvailabilityBlocks', this.aggregateAvailabilityBlocks[date])
-        }
+        this.$forceUpdate()
       })
     },
     computed: {
@@ -413,7 +406,7 @@
           this.weekDays[day] = {
             date: day,
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[day] || [],
-            aggregateUserAvailabilityBlocks: this.aggregateAvailabilityBlocks[day] || [],
+            aggregateUserAvailabilityBlocks: this.aggregateUserAvailabilityBlocks[day] || [],
             eventBlocks: this.eventBlocks[day] || [],
             pendingEventBlocks: this.pendingEventBlocks[day] || [],
           }
@@ -432,7 +425,7 @@
           this.monthDays[day] = {
             date: day,
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[day] || [],
-            aggregateUserAvailabilityBlocks: this.aggregateAvailabilityBlocks[day] || [],
+            aggregateUserAvailabilityBlocks: this.aggregateUserAvailabilityBlocks[day] || [],
             eventBlocks: this.eventBlocks[day] || [],
             pendingEventBlocks: this.pendingEventBlocks[day] || [],
           }
@@ -481,6 +474,40 @@
       },
     },
     watch: {
+      aggregateUserAvailabilityBlocks() {
+        const startOfWeek = moment(this.activeMoment).startOf('week')
+        const weekLimit = 7
+
+        const newWeekDaysString = this.setDays(startOfWeek, weekLimit)
+
+        // NOT UPDATING... - Chad
+        this.weekDays = {}
+        _.each(newWeekDaysString, (weekDay) => {
+          this.$set(this.weekDays, [weekDay], {
+            date: weekDay,
+            currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[weekDay] || [],
+            aggregateUserAvailabilityBlocks: this.$store.state.availabilities.blocks[weekDay] || [],
+            eventBlocks: this.eventBlocks[weekDay] || [],
+            pendingEventBlocks: this.pendingEventBlocks[weekDay] || [],
+          })
+        })
+
+        const startOfMonth = moment(this.activeMoment).startOf('month')
+        const monthLimit = this.activeMoment.daysInMonth()
+
+        const newMonthDayStrings = this.setDays(startOfMonth, monthLimit)
+
+        this.monthDays = {}
+        _.each(newMonthDayStrings, (monthDay) => {
+          this.$set(this.monthDays, [monthDay], {
+            date: monthDay,
+            currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[monthDay] || [],
+            aggregateUserAvailabilityBlocks: this.$store.state.availabilities.blocks[monthDay] || [],
+            eventBlocks: this.eventBlocks[monthDay] || [],
+            pendingEventBlocks: this.pendingEventBlocks[monthDay] || [],
+          })
+        })
+      },
       contextSwitch() {
         this.closeBubble()
       },
@@ -490,12 +517,33 @@
       calendarIsUpdating(value) {
         this.isLoading = value
       },
+      activeInstructors() {
+        this.activeInstructorIds = _.map(this.activeInstructors, (instructor) => {
+          return instructor.id
+        })
+
+        this.lastUpdated = Date.now()
+        this.$store.commit('setAggregateAvailabilityBlocks', {
+          blocks: availabilities.availabilities({
+            minimumDuration: this.filterEventLength,
+            filteredInstructors: this.activeInstructorIds,
+          }),
+          date: this.lastUpdated,
+        })
+
+        return this.activeInstructors
+      },
       // @FIXME temporay, mocking data update interaction | Jase
       filterEventLength() {
-        this.calendarIsUpdating = true
-        setTimeout(() => {
-          this.calendarIsUpdating = false
-        }, 1500)
+        this.lastUpdated = Date.now()
+
+        this.$store.commit('setAggregateAvailabilityBlocks', {
+          blocks: availabilities.availabilities({
+            minimumDuration: this.filterEventLength,
+            filteredInstructors: this.activeInstructorIds,
+          }),
+          date: this.lastUpdated,
+        })
       }
     },
     methods: {
