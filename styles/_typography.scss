@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,500,700');
+
+:root {
+  --calc-pt25: calc(1vw + .25em);
+  --calc-pt5: calc(1vw + .5em);
+  --calc-pt75: calc(1vw + .75em);
+  --calc-1: calc(1vw + 1em);
+}
+
+.fw300.fw300 {
+  font-weight: 300;
+}
+
+.fw500.fw500 {
+  font-weight: 500;
+}
+
+.fw700.fw700 {
+  font-weight: 700;
+}
