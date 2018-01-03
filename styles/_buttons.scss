@@ -1,0 +1,65 @@
+// buttons and input
+.sim-button,
+button {
+  font-size: inherit;
+  font-family: inherit;
+  border: 0;
+  padding: .5em 1em;
+  border-radius: .3em;
+  cursor: pointer;
+  transition: 300ms ease-in-out;
+  background: var(--line);
+  color: inherit;
+  opacity: 1;
+  outline: none;
+  box-shadow: none;
+
+  + .sim-button,
+  + button {
+    margin-left: .5em;
+  }
+
+  &.active {
+    background: var(--action);
+    color: var(--lighter);
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &[disabled] {
+    opacity: .3;
+    cursor: not-allowed;
+
+    &.sim-button--cancel {
+      color: inherit;
+    }
+    &:hover {
+      transform: none;
+    }
+  }
+
+  &__plain {
+    background-color: transparent;
+    color: var(--action);
+    border-radius: 0;
+  }
+
+
+}
+
+.sim-button {
+  &--primary {
+    background: var(--action);
+    color: var(--light);
+  }
+
+  &--cancel {
+    background: var(--mist);
+  }
+}
+
+.sim-calendar-button {
+  background: var(--light);  
+}
