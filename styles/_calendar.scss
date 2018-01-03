@@ -304,15 +304,6 @@
     }
   }
 
-  .sim-calendar-button {
-    background: var(--light);
-
-    &.active {
-      background: var(--action);
-      color: var(--lighter);
-    }
-  }
-
   &--grid {
     &--day {
       box-shadow: var(--lines);

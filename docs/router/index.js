@@ -30,6 +30,9 @@ import Extras from '../Extras'
 
 // Docs: Styles
 import GuideIntro from '../pages/styles/Intro'
+import GuideColor from '../pages/styles/Color'
+import GuideGrid from '../pages/styles/Grid'
+import GuideTypography from '../pages/styles/Typography'
 import GuideButtons from '../pages/styles/Buttons'
 
 Vue.use(Router)
@@ -223,6 +226,30 @@ export default new Router({
           label: 'Intro',
           components: {
             details: GuideIntro,
+          },
+        },
+        {
+          path: 'color',
+          name: 'color',
+          label: 'Color',
+          components: {
+            details: GuideColor,
+          },
+        },
+        {
+          path: 'grid',
+          name: 'grid',
+          label: 'Grid',
+          components: {
+            details: GuideGrid,
+          },
+        },
+        {
+          path: 'typography',
+          name: 'typography',
+          label: 'Typography',
+          components: {
+            details: GuideTypography,
           },
         },
         {
