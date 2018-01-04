@@ -1,0 +1,22 @@
+// Style Guide modifiers
+
+.library-module {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.library-label {
+  border-bottom: 3px solid var(--light);
+  color: var(--medium-grey);
+  display: inline-block;
+  font-size: .875rem;
+  font-weight: 700;
+  letter-spacing: .1ch;
+  margin-bottom: 2rem;
+  padding-bottom: .25rem;
+  text-transform: uppercase;
+}
+
+.library-page-title {
+  font-size: 1.25rem;
+}
