@@ -46,18 +46,6 @@
         &.active {
           box-shadow: 0 0 0 .2em var(--aqua);
         }
-
-        &::before {
-          content: '';
-          position: absolute;
-          pointer-events: none;
-          background: var(--green);
-          border-radius: .2em;
-          width: calc(300% + 3em);
-          top: 0;
-          bottom: 0;
-          opacity: .35;
-        }
       }
     }
   }
