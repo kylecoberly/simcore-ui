@@ -35,6 +35,7 @@
             :index="index"
             :show-controls="showTimeBlockControls"
             :orientation="timeBlockOrientation"
+            @remove-time-block="removeTimeBlock"
             />
         </div>
       </template>
@@ -225,6 +226,22 @@
 
         return classes.join(' ')
       },
+      // TimeBlock Methods
+      sortBlocks() {
+        this.currentUserAvailabilityBlocks.sort((a, b) => {
+          return parseFloat(a.start) - parseFloat(b.start)
+        })
+      },
+      updateBlocks() {
+        this.sortBlocks()
+
+        this.$emit('blocksWereUpdated', { blocks: this.currentUserAvailabilityBlocks, date: this.date })
+      },
+      removeTimeBlock(index) {
+        this.currentUserAvailabilityBlocks.splice(index, 1)
+
+        this.updateBlocks()
+      },
       createBlock(hour, element) {
         if (this.isInstructorContext) {
           this.createTimeBlock(hour)
@@ -235,9 +252,8 @@
       },
       createTimeBlock(hour) {
         this.currentUserAvailabilityBlocks.push({ start: hour, duration: 1 })
-        this.currentUserAvailabilityBlocks.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
 
-        this.$emit('blocksWereUpdated', { blocks: this.currentUserAvailabilityBlocks, date: this.date })
+        this.updateBlocks()
       },
       createEventBlock(hour, element) {
         this.pendingEvents.push({ start: hour, duration: 1 })
