@@ -12,6 +12,5 @@
 </script>
 
 <style lang="scss">
-  @import '../styles/typography';
+  @import '../../styles/typography';
 </style>
-

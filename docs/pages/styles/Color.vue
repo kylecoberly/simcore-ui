@@ -29,7 +29,7 @@
 <script>
   import Demobox from '../../utility/Demobox'
   import SimIconText from '../../../components/IconText'
-  import SimColor from '../../../components/Color'
+  import SimColor from '../../utility/Color'
   
 export default {
   name: 'guide-color',

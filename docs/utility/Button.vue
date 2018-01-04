@@ -10,6 +10,6 @@
 </script>
 
 <style lang="scss">
-  @import '../styles/buttons';
+  @import '../../styles/buttons';
 </style>
 

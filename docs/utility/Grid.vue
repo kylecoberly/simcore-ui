@@ -1,15 +1,15 @@
 <template lang="html">
-  <div>{{ color }}</div>
+  <div>{{ grid }}</div>
 </template>
 
 <script>
   export default {
-    name: 'sim-color',
-    props: ['color']
+    name: 'sim-grid',
+    props: ['grid']
 }
 </script>
 
 <style lang="scss">
-  @import '../styles/color';
+  @import '../../styles/grid';
 </style>
 

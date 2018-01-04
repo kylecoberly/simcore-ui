@@ -8,13 +8,13 @@
         </template>
 
         <template slot="view">
-          <sim-button :button="SimButton"></sim-button>
-          <sim-button :button="SimButtonActive" class="active"></sim-button>
-          <sim-button :button="SimButtonPrimary" class="sim-button--primary"></sim-button>
-          <sim-button :button="SimButtonSecondary" class="sim-button--secondary"></sim-button>          
-          <sim-button :button="SimCalendarButton" class="sim-calendar-button"></sim-button>
-          <sim-button :button="SimButtonPlain" class="sim-button--link"></sim-button>
-          <sim-button :button="SimButtonDisabled" disabled></sim-button>&nbsp;
+          <SimButton :button="SimButton"></SimButton>
+          <SimButton :button="SimButtonActive" class="active"></SimButton>
+          <SimButton :button="SimButtonPrimary" class="sim-button--primary"></SimButton>
+          <SimButton :button="SimButtonSecondary" class="sim-button--secondary"></SimButton>          
+          <SimButton :button="SimCalendarButton" class="sim-calendar-button"></SimButton>
+          <SimButton :button="SimButtonPlain" class="sim-button--link"></SimButton>
+          <SimButton :button="SimButtonDisabled" disabled></SimButton>&nbsp;
           <SimIconText icon="fa-arrow-circle-right fa-lg"></SimIconText>
         </template>
 
@@ -44,7 +44,7 @@
 <script>
   import Demobox from '../../utility/Demobox'
   import SimIconText from '../../../components/IconText'
-  import SimButton from '../../../components/Button'
+  import SimButton from '../../utility/Button'
   
 export default {
   name: 'guide-buttons',

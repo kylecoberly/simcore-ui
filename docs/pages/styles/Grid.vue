@@ -29,7 +29,7 @@
 <script>
   import Demobox from '../../utility/Demobox'
   import SimIconText from '../../../components/IconText'
-  import SimGrid from '../../../components/Grid'
+  import SimGrid from '../../utility/Grid'
   
 export default {
   name: 'guide-grid',

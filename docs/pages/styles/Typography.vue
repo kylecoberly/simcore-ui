@@ -3,33 +3,79 @@
 
     <h2 class="library-section-title">{{ msg }}</h2>
 
-    <demobox :open="true">
+    <demobox :open="true" class="typeface--demo">
 
         <template slot="intro">
           Normal / Default
         </template>
 
-        <template slot="view">
-          <p class="library-label">Typeface</p>
-          <div class="h3 fw300 mb-sm">Montserrat 300</div>
-          <div class="h3 fw500 mb-sm">Montserrat 500</div>
-          <div class="h3 fw700 mb-sm">Montserrat 700</div>
-          <p class="library-label">Headlines</p>
-          <h1><sim-type :type="h1"></sim-type><div class="demo-info"><p>font-size: 3.25rem</p>
-          <p>font-weight: 700</p><p>line-height: 1.1</p></div></h1>
-          <h2><sim-type :type="h2"></sim-type><div class="demo-info"><p>font-size: 2.5rem</p>
-          <p>font-weight: 700</p><p>line-height: 1.4</p></div></h2>
-          <h3><sim-type :type="h3"></sim-type><div class="demo-info"><p>font-size: 2rem</p>
-          <p>font-weight: 700</p><p>line-height: 1.4</p></div></h3>
-          <h4><sim-type :type="h4"></sim-type><div class="demo-info"><p>font-size: 1.5rem</p>
-          <p>font-weight: 500</p><p>line-height: 1.4</p></div></h4>
-          <h5><sim-type :type="h5"></sim-type><div class="demo-info"><p>font-size: 1.25rem</p>
-          <p>font-weight: 500</p><p>line-height: 1.4</p></div></h5>
-          <h6><sim-type :type="h6"></sim-type><div class="demo-info"><p>font-size: .875rem</p>
-          <p>font-weight: 500</p><p>line-height: 1.4</p></div></h6>
-          <p class="library-label">Text</p>
-          <p>This is a paragraph. Consectetur adipisicing elit <strong>this is emphasized</strong>. Laboriosam enim saepe a, vitae rerum sapiente velit, <a href="#">this is a link</a> incidunt at eligendi illo blanditiis quasi. Amet sint eveniet alias quasi <u>this is underlined</u> nulla ad optio, quod necessitatibus numquam pariatur eaque, vitae <em>this is italicized</em> illum illo molestiae qui corrupti eum tenetur voluptas. Ex voluptate velit dolor eligendi.</p>
-          <p>Veritatis ad ea sint cum facilis, laborum quo ex impedit. <span class="text-highlight">Laborum sint velit dolores provident obcaecati doloribus natus officiis, repellendus aliquid nobis</span>, eum aperiam fugiat in incidunt itaque. Illo perferendis qui maxime exercitationem, dolore iusto. Odio ex nobis totam cupiditate adipisci, voluptas iusto maxime quas, eaque omnis enim temporibus.</p>
+        <template slot="view">          
+          <div class="library-module typeface--intro">
+            <p class="library-label">Typeface</p>
+            <h2>Montserrat 300</h2>
+            <h2>Montserrat 500</h2>
+            <h2>Montserrat 700</h2>
+          </div>          
+          <div class="library-module typeface--headlines">
+            <p class="library-label">Headlines</p>
+            <h1>
+              <SimType :type="h1"></SimType>
+              <span class="demo-info">
+                <p>font-size: 3.25rem</p>
+                <p>font-weight: 700</p>
+                <p>line-height: 1.1</p>
+              </span>
+            </h1>
+            <h2>
+              <SimType :type="h2"></SimType>
+              <span class="demo-info">
+                <p>font-size: 2.5rem</p>
+                <p>font-weight: 700</p>
+                <p>line-height: 1.4</p>
+              </span>
+            </h2>
+            <h3>
+              <SimType :type="h3"></SimType>
+              <span class="demo-info">
+                <p>font-size: 2rem</p>
+                <p>font-weight: 700</p>
+                <p>line-height: 1.4</p>
+              </span>
+            </h3>
+            <h4>
+              <SimType :type="h4"></SimType>
+              <span class="demo-info">
+                <p>font-size: 1.5rem</p>
+                <p>font-weight: 500</p>
+                <p>line-height: 1.4</p>
+              </span>
+            </h4>
+            <h5>
+              <SimType :type="h5"></SimType>
+              <span class="demo-info">
+                <p>font-size: 1.25rem</p>
+                <p>font-weight: 500</p>
+                <p>line-height: 1.4</p>
+              </span>
+            </h5>
+            <h6>
+              <SimType :type="h6"></SimType>
+              <span class="demo-info">
+                <p>font-size: .875rem</p>          
+                <p>font-weight: 500</p>
+                <p>line-height: 1.4</p>
+              </span>
+            </h6>
+          </div>
+          <div class="library-module typeface-text">
+            <p class="library-label">Text</p>
+            <p>This is a paragraph. Dignissimos adipisci consequatur architecto fugit perferendis sint assumenda vitae impedit ipsa. Repellendus perferendis in, repellat consectetur similique sunt officiis quasi doloribus autem sint. Impedit earum ullam labore nulla.</p>
+            <p><a href="#0">This is a link</a></p>
+            <p><strong>This line is bold</strong>.</p>
+            <p><u>This line is underlined</u>.</p>
+            <p><em>This is italicized to show emphasis</em>.</p>
+            <p>This is a text highlight example. <span class="text-highlight">Look out honey, 'cause I'm using technology!</span> It can make things more readable and suggest the content is of importance to the reader.</p>
+          </div>
         </template>
 
         <template slot="html">
@@ -50,7 +96,7 @@
 <script>
   import Demobox from '../../utility/Demobox'
   import SimIconText from '../../../components/IconText'
-  import SimType from '../../../components/Typography'
+  import SimType from '../../utility/Typography'
   
 export default {
   name: 'guide-typography',
