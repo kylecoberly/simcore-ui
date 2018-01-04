@@ -36,6 +36,7 @@
             :show-controls="showTimeBlockControls"
             :orientation="timeBlockOrientation"
             @remove-time-block="removeTimeBlock"
+            @block-was-updated="blockWasUpdated"
             />
         </div>
       </template>
@@ -240,6 +241,9 @@
       removeTimeBlock(index) {
         this.currentUserAvailabilityBlocks.splice(index, 1)
 
+        this.updateBlocks()
+      },
+      blockWasUpdated() {
         this.updateBlocks()
       },
       createBlock(hour, element) {
