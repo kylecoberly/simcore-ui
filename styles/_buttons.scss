@@ -16,12 +16,12 @@ button {
 
   + .sim-button,
   + button {
-    margin-bottom: .5em;
+    //margin-bottom: .5em;
     margin-left: .5em;
   }
 
   &.active {
-    background: var(--action);
+    background: var(--active);
     color: var(--lighter);
   }
 
@@ -30,6 +30,7 @@ button {
   }
 
   &[disabled] {
+    background: var(--light-grey);
     opacity: .3;
     cursor: not-allowed;
 
@@ -41,19 +42,23 @@ button {
     }
   }
 
-  &__plain {
+  &--primary {
+    background: var(--action);
+    color: var(--lighter);
+  }
+
+  &--secondary {
+    background: var(--light);
+    color: var(--action);
+    &:hover {
+      background: var(--edge);
+    }
+  }
+
+  &--link {
     background-color: transparent;
     color: var(--action);
     border-radius: 0;
-  }
-
-
-}
-
-.sim-button {
-  &--primary {
-    background: var(--action);
-    color: var(--light);
   }
 
   &--cancel {
