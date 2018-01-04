@@ -17,7 +17,7 @@
         <div class="local--day--blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             :class="{displayMode}"
-            class="sim-timeblock--theme--event"
+            theme="event"
             v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
             :key="index"
             :block="block"
@@ -29,7 +29,7 @@
         <div class="local--day--blocks local--day--time-blocks">
           <SimTimeBlock v-for="(block, index) in currentUserAvailabilityBlocks"
             :class="displayMode"
-            class="sim-timeblock--theme--available"
+            theme="available"
             :key="index"
             :block="block"
             :index="index"
@@ -46,7 +46,7 @@
         <div v-if="isWeekView" class="local--day--aggregate-blocks">
           <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
             :class="displayMode"
-            class="sim-timeblock--theme--aggregate"
+            theme="aggregate"
             v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
             :key="index"
             :block="block"
@@ -59,7 +59,7 @@
         <div class="local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             :class="displayMode"
-            class="sim-timeblock--theme--event"
+            theme="event"
             v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
             :key="index"
             :block="block"
@@ -72,7 +72,7 @@
         <div class="local--day--pending-blocks">
           <SimTimeBlock v-for="(block, index) in pendingEvents"
             :class="displayMode"
-            class="sim-timeblock--theme--pending-event"
+            theme="pending-event"
             v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: true, slideTemplate: 'SimSlideWithAList'}"
             :key="index"
             :block="block"
@@ -83,10 +83,10 @@
         </div>
 
         <div v-if="isMonthView" class="local--day--aggregate-blocks">
-          <template v-if="aggregateUserAvailabilityBlocks.length">
+          <template v-if="aggregateUserAvailabilityBlocks.length > 0">
             <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
               :class="displayMode"
-              class="sim-timeblock--theme--aggregate"
+              theme="aggregate"
               v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
               :key="index"
               :block="block"
