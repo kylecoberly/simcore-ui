@@ -7,6 +7,15 @@
   --calc-1: calc(1vw + 1em);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.4;
+}
+
 p {
   font-size: 1em;
   line-height: 1.658;
@@ -17,5 +26,18 @@ p {
     &:last-of-type {
       margin-bottom: 0;
     }
+  }
+}
+
+.drop-caps {
+  &:first-letter {
+    color: #903;
+    float: left;
+    //font-family: Georgia;
+    font-size: 4rem;
+    line-height: .875;
+    padding-top: 0;
+    padding-right: .5rem;
+    padding-left: .125rem;
   }
 }

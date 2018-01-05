@@ -1,11 +1,14 @@
 // Style Guide modifiers
+.library-page-title {
+  font-size: 1.25rem;
+}
 
-.library-module {
+.module-section {
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
 
-.library-label {
+h3.module-label {
   border-bottom: 3px solid var(--light);
   color: var(--medium-grey);
   display: inline-block;
@@ -13,10 +16,60 @@
   font-weight: 700;
   letter-spacing: .1ch;
   margin-bottom: 2rem;
-  padding-bottom: .25rem;
+  margin-left: 1rem;
+  position: relative;
+  padding-bottom: .125rem;
   text-transform: uppercase;
+  
+  &::before {
+    color: var(--action);
+    content: "#";
+    display: block;
+    grid-column: span 1;
+    position: absolute;
+    top: 0;
+    left: -1rem;
+    height: 100%;
+    width: 1rem;
+  }
 }
 
-.library-page-title {
-  font-size: 1.25rem;
+.module {
+
+  &--demo {
+
+    & + .module--demo {
+      margin-top: 2rem;
+    }
+
+    &--item {
+      flex-grow: 1;
+      
+    }
+    
+    &--info {
+      flex-grow: 0;
+    }
+    
+    &--info {
+      border-top: 1px solid var(--light-grey);
+      display: flex;
+      // using pixles here to avoid sizing issues
+      // caused by parent font-size
+      margin-top: 5px;
+      padding-top: 5px;
+      p:nth-child(2) {
+        padding-right: 1rem;
+        padding-left: 1rem;
+      }
+      p {
+        color: var(--grey);
+        //font-family: var(--base-font-family);
+        font-family: monospace;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: .125rem;
+      }
+    }
+  }
 }
