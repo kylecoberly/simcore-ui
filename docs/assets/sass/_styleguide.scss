@@ -12,10 +12,11 @@ h3.module-label {
   border-bottom: 3px solid var(--light);
   color: var(--medium-grey);
   display: inline-block;
+  //font-family: var(--base-font-family);
   font-size: .875rem;
   font-weight: 700;
   letter-spacing: .1ch;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   margin-left: 1rem;
   position: relative;
   padding-bottom: .125rem;
@@ -52,15 +53,17 @@ h3.module-label {
     }
     
     &--info {
-      border-top: 1px solid var(--light-grey);
+      background: var(--snow);
       display: flex;
-      // using pixles here to avoid sizing issues
-      // caused by parent font-size
-      margin-top: 5px;
-      padding-top: 5px;
-      p:nth-child(2) {
-        padding-right: 1rem;
-        padding-left: 1rem;
+      flex-direction: column;
+      margin-top: 1rem;
+      padding: .5em 3.5em .5em .5em;
+      > * {
+        margin: 0;
+        padding: .125rem;
+        & + * {
+          margin-top: 1rem;
+        }
       }
       p {
         color: var(--grey);
@@ -68,8 +71,17 @@ h3.module-label {
         font-family: monospace;
         font-size: 1rem;
         font-weight: 500;
-        margin-bottom: .125rem;
+        margin-top: 0;
       }
     }
   }
+}
+
+
+.border-top--lighy-grey {
+  border-top: 1px solid var(--light-grey);
+}
+
+.border-bottom--lighy-grey {
+  border-bottom: 1px solid var(--light-grey);
 }
