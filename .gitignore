@@ -17,3 +17,5 @@ selenium-debug.log
 *.sln
 
 \.vscode/settings\.json
+
+docs/assets/sass/_temp\.scss
