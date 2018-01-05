@@ -19,11 +19,11 @@
               :should-be-selected="isItemSelected(props.item.id)"
               @toggle="toggleItemInSelectedItems"
             >
-              {{ props.item.firstname }} {{ props.item.lastname }}
+              {{ props.item.lastname }}, {{ props.item.firstname }}
             </sim-selection>
           </li> -->
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText :icon="setItemIcon(props.item.id)" :text="`${props.item.firstname} ${props.item.lastname}`"></SimIconText>
+            <SimIconText :icon="setItemIcon(props.item.id)" :text="`${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
           </li>
         </SimDatalist>
       </template>
@@ -124,7 +124,7 @@
       },
       foundItems() {
         return sortByKey(this.items.filter(item => {
-          return `${item.firstname} ${item.lastname}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
+          return `${item.lastname}, ${item.firstname}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
         }), 'lastname', 'asc')
       },
     },

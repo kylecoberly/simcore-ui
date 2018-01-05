@@ -238,6 +238,18 @@
     --timeblock-color: var(--green)  radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--green) 90%);
     opacity: .5;
     cursor: pointer;
+
+    &::before {
+      content: '';
+      position: absolute;
+      pointer-events: none;
+      background: var(--green);
+      border-radius: .2em;
+      width: calc(300% + 3em);
+      top: 0;
+      bottom: 0;
+      opacity: .35;
+    }
   }
 
   &--empty {
