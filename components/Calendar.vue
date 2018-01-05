@@ -145,7 +145,7 @@
                       :should-be-selected="props.item.selected"
                       @toggle="toggleItemInSelectedInstructors"
                       >
-                      {{ props.item.firstname }} {{ props.item.lastname }}
+                      {{ props.item.lastname }}, {{ props.item.firstname }}
                     </SimSelection>
                     <span class="item-remover" @click="removeFromActiveInstructorList(props.item)">
                       <SimIconText icon="fa-times fa-fw"></SimIconText>
@@ -159,7 +159,7 @@
                   @select="addToInstructorList"
                   >
                   <div class="item-tag" slot="item" slot-scope="props">
-                    {{ props.option.firstname }} {{ props.option.lastname }}
+                    {{ props.option.lastname }}, {{ props.option.firstname }}
                   </div>
                 </SimAutocomplete>
               </div>
