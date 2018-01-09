@@ -326,6 +326,6 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../../../styles/typography';
+  @import '../../../docs/assets/sass/typography';
 </style>
 
