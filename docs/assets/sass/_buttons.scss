@@ -40,3 +40,75 @@ button,
     // background: var(--danger);
   }
 }
+
+// buttons and input
+.sim-button,
+button {
+  font-size: inherit;
+  font-family: inherit;
+  border: 0;
+  padding: .5em 1em;
+  border-radius: .3em;
+  cursor: pointer;
+  transition: 300ms ease-in-out;
+  background: var(--line);
+  color: inherit;
+  opacity: 1;
+  outline: none;
+  box-shadow: none;
+
+  + .sim-button,
+  + button {
+    //margin-bottom: .5em;
+    margin-left: .5em;
+  }
+
+  &.active {
+    background: var(--active);
+    color: var(--lighter);
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &[disabled] {
+    background: var(--light-grey);
+    opacity: .3;
+    cursor: not-allowed;
+
+    &.sim-button--cancel {
+      color: inherit;
+    }
+    &:hover {
+      transform: none;
+    }
+  }
+
+  &--primary {
+    background: var(--action);
+    color: var(--lighter);
+  }
+
+  &--secondary {
+    background: var(--light);
+    color: var(--action);
+    &:hover {
+      background: var(--edge);
+    }
+  }
+
+  &--link {
+    background-color: transparent;
+    color: var(--action);
+    border-radius: 0;
+  }
+
+  &--cancel {
+    background: var(--mist);
+  }
+}
+
+.sim-calendar-button {
+  background: var(--light);  
+}
