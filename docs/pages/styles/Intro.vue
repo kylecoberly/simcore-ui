@@ -1,7 +1,29 @@
 <template lang="html">
   <article>
-      <h2 class="library-section-title">{{ msg }}</h2>
-      <p>CSS Rules.</p>
+      <h2 id="development-principles" class="library-section-title">{{ msg }}</h2>
+      <div class="styleguide-intro">
+<p>HealthScholars has a <em>huge</em> codebase and this ultimately dictates many of the decisions we make around the front end architecture and day-to-day feature development. </p>
+
+<ul>
+<li>Leave code in a better state than you found it</li>
+<li>Reuse as much as possible: technologies and components</li>
+<li>The entire code base should look like one person wrote it</li>
+<li>Keep it simple</li>
+<li>Ensure we can pivot away from a dependency/pattern</li>
+</ul>
+<h2 id="reuse-as-much-as-possible">Reuse as much as possible</h2>
+<p>More than anything, please try to follow existing patterns as much as possible. Inconsistency soon manifests as complexity and then technical debt. What we are aiming to build is a maintainable platform where developers can move between applications with very little up-front learning required. <a href="https://medium.com/@bentlegen/the-best-tool-for-the-job-isnt-always-6ed364f3f775">The best tool for the job, isn’t always</a> by Ben Vinegar covers this concept perfectly.</p>
+
+<p>Sometimes reusing code will take more initial work but it shouldn't be avoided. When building new features, try to identify reusable parts which can be abstracted into this style guide to help other developers. Features not in this style guide are inherently harder to find and thus reuse.</p>
+<h2 id="keep-it-simple.">Keep it simple.</h2>
+<p>Our codebase is too large to hold in your head and there is no return in trying to do so. We can't build a lonelyplanet.com app and understand the implications of changes, there are just too many variants. Instead, we have to break down the functionality of dotcom into simple modules which we compose into a robust application.</p>
+
+<p>"Simplicity is a prerequisite for reliability". <a href="http://www.infoq.com/presentations/Simple-Made-Easy">Simple made easy</a> is a fantastic talk by Rich Hickey which discusses these principles in depth.</p>
+<h2 id="ensure-we-can-pivot">Ensure we can pivot</h2>
+<p>When making broad decisions about lonelyplanet.com trust that your expertise means you're right now, but realise that things will change and we may possibly need to pivot away from what you decide on. There is a cost to removing something from the codebase which far outweighs the cost of adding it.</p>
+
+<p>Everything is up for discussion, but pivoting on such a huge code base is a slow process so it's always worth spending the extra time to consider how deeply we would be tied into the decision and how quickly we could change course.</p>
+</div>
   </article>
 </template>
 
@@ -10,7 +32,7 @@ export default {
   name: 'guide-intro',
   data() {
     return {
-      msg: 'Intro',
+      msg: 'Development Principles',
     }
   },
 }

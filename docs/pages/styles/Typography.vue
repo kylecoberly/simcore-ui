@@ -44,7 +44,8 @@
             </div>
           </section>          
           <section class="module-section module-section--headings">
-            <h3 class="module-label" id="type-headings">Headings</h3>
+            <span id="type-headings"></span>
+            <h3 class="module-label">Headings</h3>
             <div class="module module--demo">
               <div class="module--demo--item">
                 <h1>Heading h1</h1>
