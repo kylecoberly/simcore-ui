@@ -1,5 +1,8 @@
 .demobox {
   position: relative;
+  &__intro {
+    font-family: var(--base-font-family);
+  }
   &__content {
     border: 1px solid var(--cloud);
     background: var(--lightest);

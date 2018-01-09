@@ -1,10 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,500,700');
+
+:root {
+  --theme-font-family: 'Montserrat', var(--base-font-family);
+}
+
 .typography {
 
-  &-demo {
-    body & {
-      @import url('https://fonts.googleapis.com/css?family=Montserrat:300,500,700');
-      font-family: var(--theme-font-family);
-    }
+  &-demo {      
+    font-family: var(--theme-font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
     h1,.h1,
     h2,.h2,
