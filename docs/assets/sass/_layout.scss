@@ -50,9 +50,11 @@ body {
     transition: all calc(var(--ms) / 2) ease-out;
   }
   .app-menu {
+    position: sticky;
+    top: 5.5em;
     header {
-      position: sticky;
-      top: 3.2em;
+      // position: sticky;
+      // top: 3.2em;
     }
   }
   .library {

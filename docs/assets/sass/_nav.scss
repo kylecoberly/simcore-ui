@@ -22,3 +22,32 @@ nav {
     list-style: none;
   }
 }
+
+// app menu
+
+.app-menu {
+  font-size: .875em;
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      list-style: none;
+      padding: .5em 0;
+    }
+  }
+  a {
+    color: var(--action);
+    &.router-link-exact-active {
+      color: var(--medium-grey);
+    }
+  }
+  header {
+    padding: .5em 1em;
+    color: var(--light);
+    background: var(--medium-grey);
+    margin: 0 -1em;
+  }
+  section li {
+    padding: .25em 0 .25em 1.8em;
+  }
+}

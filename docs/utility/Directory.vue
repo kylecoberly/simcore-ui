@@ -35,31 +35,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-.app-menu {
-  ul {
-    margin: 0;
-    padding: 0;
-    li {
-      list-style: none;
-      padding: .5em 0;
-    }
-  }
-  a {
-    color: var(--action);
-    &.router-link-exact-active {
-      color: var(--medium-grey);
-    }
-  }
-  header {
-    padding: .5em 1em;
-    color: var(--light);
-    background: var(--medium-grey);
-    margin: 0 -1em;
-  }
-  section li {
-    padding: .5em 0 .5em 1.8em;
-  }
-}
-</style>
