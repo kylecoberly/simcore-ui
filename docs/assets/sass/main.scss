@@ -1,15 +1,27 @@
-// @import url('https://fonts.googleapis.com/css?family=Montserrat');
-
+// base
 @import 'vars';
-@import 'layout';
+@import 'base';
 @import 'transitions';
-@import 'common';
-@import 'header';
-@import 'nav';
-@import 'buttons';
+@import 'demobox';
+
+// elements
 // @import 'input';
 @import '../../../styles/form-elements';
+
+// layout
+@import 'layout';
+@import 'header';
+@import 'nav';
+
+// modules
+@import 'module';
+
+// theme styles
+@import 'intro';
+@import 'color';
+@import 'grid';
 @import 'typography';
-@import 'demobox';
-@import 'styleguide';
+@import 'buttons';
+
+// ovverides
 @import 'overrides';

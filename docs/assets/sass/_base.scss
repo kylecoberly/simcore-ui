@@ -1,0 +1,135 @@
+// base styles
+
+:root {
+  box-sizing: border-box;
+  
+  --calc-pt25: calc(1vw + .25em);
+  --calc-pt5: calc(1vw + .5em);
+  --calc-pt75: calc(1vw + .75em);
+  --calc-1: calc(1vw + 1em);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  background: var(--base-bg);
+color: var(--base-color);
+font-family: var(--base-font-family);
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+
+h1,.h1,
+h2,.h2,
+h3,.h3,
+h4,.h4,
+h5,.h5,
+h6,.h6 {
+  line-height: 1.4;
+  margin-top: 0;
+}
+
+p {
+  line-height: 1.6;
+  margin-top: 0;
+  margin-bottom: 0;   
+  & + * {
+    margin-top: 1.5rem;
+  }
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--action);
+
+  &.router-link-exact-active {
+    color: var(--medium-grey);
+  }
+
+  svg {
+    line-height: 0;
+  }
+}
+
+.accent {
+  color: var(--accent);
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: .5em 0;
+
+    li {
+      padding: .5em 0 .5em 1em;
+    }
+  }
+}
+
+pre {
+  -moz-osx-font-smoothing: initial;
+  -webkit-font-smoothing: initial;
+}
+
+// buttons
+
+button,
+.button {
+  --color: var(--action);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 0 1px rgba(#777, .5) inset;
+  padding: .4em .7em;
+  border-radius: .2em;
+  color: inherit;
+  font-family: inherit;
+  font-size: 1rem;
+  background: var(--color);
+  color: #fff;
+  outline: none;
+  will-change: transform;
+  transition: transform .15s ease-out;
+  &:active {
+    transform: scale(.95);
+  }
+  &:active,
+  &:focus {
+    box-shadow: 0 0 0 1px rgba(#777, .5) inset, 0 0 2px 1px var(--action);
+  }
+  &.secondary {
+    color: var(--action);
+    background: rgba(#777, .1);
+    &:hover {
+      background: rgba(#777, .05);
+    }
+  }
+  &.link {
+    color: var(--action);
+    background: transparent;
+    &:not(:focus):not(:active) {
+      box-shadow: none;
+    }
+  }
+  &.danger {
+    --color: var(--danger);
+    // background: var(--danger);
+  }
+}
+
+// modifiers
+
+.border-top--lighy-grey {
+  border-top: 1px solid var(--light-grey);
+}
+
+.border-bottom--lighy-grey {
+  border-bottom: 1px solid var(--light-grey);
+}

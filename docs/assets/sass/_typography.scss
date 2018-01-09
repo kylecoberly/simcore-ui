@@ -1,35 +1,3 @@
-:root {
-  --calc-pt25: calc(1vw + .25em);
-  --calc-pt5: calc(1vw + .5em);
-  --calc-pt75: calc(1vw + .75em);
-  --calc-1: calc(1vw + 1em);
-}
-
-h1,.h1,
-h2,.h2,
-h3,.h3,
-h4,.h4,
-h5,.h5,
-h6,.h6 {
-  line-height: 1.4;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-p {
-  line-height: 1.6;
-  margin-top: 0;
-  margin-bottom: 0;   
-  & + p {
-    margin-top: 1.5rem;
-  }
-}
-
-pre {
-  -moz-osx-font-smoothing: initial;
-  -webkit-font-smoothing: initial;
-}
-
 .typography {
 
   &-demo {
@@ -37,7 +5,16 @@ pre {
       @import url('https://fonts.googleapis.com/css?family=Montserrat:300,500,700');
       font-family: var(--theme-font-family);
     }
-    
+
+    h1,.h1,
+    h2,.h2,
+    h3,.h3,
+    h4,.h4,
+    h5,.h5,
+    h6,.h6 {
+      margin-bottom: 0;
+    }
+        
 
     h1,.h1 {
       font-size: 3.25em;

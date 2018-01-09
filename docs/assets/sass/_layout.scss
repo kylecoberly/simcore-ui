@@ -1,17 +1,7 @@
 body {
-  background: var(--base-bg);
-  color: var(--base-color);
-  font-family: var(--base-font-family);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
   min-height: 150vh;
   margin: 0;
   display: flex;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
 }
 
 #app {
