@@ -10,6 +10,6 @@
 </script>
 
 <style lang="scss">
-  @import '../../docs/assets/sass/grid';
+  @import '../../styles/grid';
 </style>
 

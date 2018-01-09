@@ -10,19 +10,7 @@
         </template>
 
         <template slot="view">
-          <section class="module-section module-section--">
-            <h3 class="module-label" id=""></h3>
-            <div class="module module--demo">
-              <div class="module--demo--item">
 
-              </div>
-              <div class="module--demo--info">
-                <p>label: value</p>
-                <p>label: value</p>
-                <p>label: value</p>
-              </div>
-            </div>
-          </section>
         </template>
 
         <template slot="html">

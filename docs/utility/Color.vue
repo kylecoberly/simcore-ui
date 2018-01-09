@@ -10,6 +10,6 @@
 </script>
 
 <style lang="scss">
-  @import '../../docs/assets/sass/color';
+  @import '../../styles/color';
 </style>
 
