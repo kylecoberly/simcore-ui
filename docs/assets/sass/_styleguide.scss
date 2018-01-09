@@ -8,7 +8,7 @@
   padding-bottom: 2rem;
 }
 
-h3.module-label {
+.module-label.module-label { // I know. I will fix later
   border-bottom: 3px solid var(--light);
   color: var(--medium-grey);
   display: inline-block;
