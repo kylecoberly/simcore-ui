@@ -213,52 +213,6 @@ input[type='range'] {
   }
 }
 
-// buttons and input
-.sim-button,
-button {
-  font-size: inherit;
-  font-family: inherit;
-  border: 0;
-  padding: .5em 1em;
-  border-radius: .3em;
-  cursor: pointer;
-  transition: 300ms ease-in-out;
-  background: var(--line);
-  color: inherit;
-  opacity: 1;
-  outline: none;
-  box-shadow: none;
-
-  + .sim-button,
-  + button {
-    margin-left: .5em;
-  }
-
-  &:hover {
-    transform: scale(1.1);
-  }
-
-  &[disabled] {
-    opacity: .3;
-    cursor: not-allowed;
-
-    &.sim-button--cancel {
-      color: inherit;
-    }
-  }
-}
-
-.sim-button {
-  &--primary {
-    background: var(--action);
-    color: var(--light);
-  }
-
-  &--cancel {
-    background: var(--mist);
-  }
-}
-
 // form layouts
 .sim-form--side-by-side {
   .sim-form--molecule {

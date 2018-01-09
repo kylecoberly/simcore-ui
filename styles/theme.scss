@@ -24,10 +24,12 @@
   --aqua-film: rgba(#00c1d9, .5);
   --blue: #4A93B9;
   --blue-film: rgba(#4A93B9, .5);
+  --blue-film-heavy: rgba(14, 103, 150, .9);
   --purple: #ab47bd;
   --purple-film: rgba(#ab47bd, .5);
   --accent: var(--medium-grey);
   --action: var(--blue);
+  --active: var(--blue-film-heavy);
   --focus: var(--aqua);
   --success: var(--green);
   --danger: var(--red);
@@ -62,6 +64,10 @@
   --medium-gray: var(--medium-grey);
   --light-gray: var(--light-grey);
   --lighter-gray: var(--lighter-grey);
+
+  --base-font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --serif-font-family: 'Garamond', 'Cambria', Georgia, serif;
+  
 }
 
 .text {
