@@ -1,11 +1,11 @@
 <template lang="html">
-  <div>{{ color }}</div>
+  <span class="swatch">{{ hexCode }}</span>    
 </template>
 
 <script>
   export default {
-    name: 'sim-color',
-    props: ['color']
+    name: 'guide-color-swatch',
+    props: ['hexCode']
 }
 </script>
 
