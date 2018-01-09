@@ -77,6 +77,10 @@
       .sim-timeblock {
         // @NOTE: keep this. Temporary supression - Jase
         // pointer-events: none;
+
+        &::before {
+          display: none;
+        }
       }
     }
   }
