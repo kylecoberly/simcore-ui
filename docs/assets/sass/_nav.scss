@@ -1,7 +1,27 @@
 .app-nav {
   display: flex;
-  align-items: center;
+  flex-grow: 1;
+  nav {
+    display: flex;
+    flex-grow: 1;
+  }
+  ul {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    @media (min-width: 872px) {
+      justify-content: flex-end;
+    }
+  }
+  li {
+    display: flex;
+    padding: 0;
+    @media (max-width: 872px) {
+      flex-grow: 1;
+    }
+  }
   a {
+    display: flex;
     padding: 1em;
     transition: calc(var(--ms)/2) linear;
     color: var(--action);
@@ -14,10 +34,15 @@
     }
   }
 }
+
 nav {
   margin: 0;
   padding: 0;
-  display: flex;
+  ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
   li {
     list-style: none;
   }

@@ -4,15 +4,21 @@
   font-size: 1em;
   a {
     color: var(--light);
+    //padding: 1em .5em 1em 1em;
   }
   .greeting {
+    display: block;
     opacity: .6;
+    padding-top: .25em;
   }
+}
+
+.app-logo {
+  padding: 1em;
 }
 
 .logo {
   line-height: 0;
-  padding: 1em;
   svg {
     width: 9.5em;
     height: 2em;

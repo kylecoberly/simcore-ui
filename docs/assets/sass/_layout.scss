@@ -1,7 +1,8 @@
 body {
-  min-height: 150vh;
-  margin: 0;
   display: flex;
+  flex-direction: column;
+  height: 100vh;
+  
 }
 
 #app {
@@ -19,13 +20,15 @@ body {
     }
   }
 }
+
 .app-header {
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+  flex-wrap: wrap;
   position: sticky;
   z-index: 1;
   top: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .app-content {
@@ -33,17 +36,16 @@ body {
   z-index: 0;
   transition: all calc(var(--ms) / 2) ease-out;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row-reverse;
   > main,
   > aside {
+    flex-grow: 1;
     padding: 1em;
     position: relative;
   }
-  > main {
-    flex: 1;
-  }
   > aside {
-    flex: .2;
+    flex-basis: 15rem;
     color: var(--menu-fg);
     background: var(--menu-bg);
     border-right: 1px solid var(--cloud);

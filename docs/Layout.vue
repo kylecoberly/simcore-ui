@@ -5,16 +5,18 @@
     </SimOverlay>
     <SimPanel :should-show-dismiss="true" :dismiss-to="panelDismissTo" class="animator parallax in-from-left" :should-be-open="shouldPanelBeOpen"></SimPanel>
     <header class="app-header animatable">
-      <div>
+      <div class="app-logo">
         <router-link to="/" class="logo"><span>SIM <b>UI</b></span></router-link>
         <span class="greeting">The SimCore Interface Library</span>
       </div>
       <div class="app-nav">
         <nav>
-          <li><router-link to="/getting-started"><SimIconText circle icon="fa-star" text="Getting Started"></SimIconText></router-link></li>
-          <li><router-link to="/components"><SimIconText circle icon="fa-cubes" text="Components"></SimIconText></router-link></li>
-          <li><router-link to="/styles"><SimIconText circle icon="fa-paint-brush" text="Styles"></SimIconText></router-link></li>
-          <li><router-link to="/extras"><SimIconText circle icon="fa-code" text="Other Things"></SimIconText></router-link></li>
+          <ul>
+            <li><router-link to="/getting-started"><SimIconText circle icon="fa-star" text="Getting Started"></SimIconText></router-link></li>
+            <li><router-link to="/components"><SimIconText circle icon="fa-cubes" text="Components"></SimIconText></router-link></li>
+            <li><router-link to="/styles"><SimIconText circle icon="fa-paint-brush" text="Styles"></SimIconText></router-link></li>
+            <li><router-link to="/extras"><SimIconText circle icon="fa-code" text="Other Things"></SimIconText></router-link></li>
+          </ul>
         </nav>
       </div>
     </header>
