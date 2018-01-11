@@ -39,13 +39,13 @@ body {
   flex-wrap: wrap;
   flex-direction: row-reverse;
   > main,
-  > aside {
-    flex-grow: 1;
+  > aside {    
     padding: 1em;
     position: relative;
   }
   main {
-    flex-basis: 50em;
+    flex-basis: 50rem;
+    flex-grow: 1;
   }
   > aside {
     flex-basis: 15rem;

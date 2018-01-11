@@ -54,6 +54,10 @@
     color: var(--grey);
   }
 
+  &--light-grey {
+    color: var(--light-grey);
+  }
+
   &--gray {
     color: var(--gray);
   }
@@ -166,7 +170,7 @@
   }
 
   &--blue-film {
-    background: var(--blue-film);
+    background: #A7C8DB;
   }
 
   &--blue-film-heavy {
