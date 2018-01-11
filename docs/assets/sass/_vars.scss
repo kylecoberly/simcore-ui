@@ -72,24 +72,93 @@
 }
 
 .bg {
+
+  &--darkest {
+    background: var(--darkest);
+  }
+
+  &--darker {
+    background: var(--darker);
+  }
+
+  &--dark {
+    background: var(--dark);
+  }
+
+  &--dark-grey {
+    background: var(--dark-grey);
+  }
+
+  &--grey {
+    background: var(--grey);
+  }
+
+  &--medium-grey {
+    background: var(--medium-grey);
+  }
+
+  &--light-grey {
+    background: var(--light-grey);
+  }
+
+  &--lighter-grey {
+    background: var(--lighter-grey);
+  }
+
+  &--light {
+    background: var(--light);
+  }
+
+  &--lighter {
+    background: var(--lighter);
+  }
+
+  &--lightest {
+    background: var(--lightest);
+  }
+
+  &--gray {
+    background: var(--gray);
+  }
+
   &--red {
     background: var(--red);
+  }
+
+  &--red-film {
+    background: var(--red-film);
   }
 
   &--orange {
     background: var(--orange);
   }
 
+  &--orange-film {
+    background: var(--orange-film);
+  }
+
   &--yellow {
     background: var(--yellow);
+  }
+
+  &--yellow-film {
+    background: var(--yellow-film);
   }
 
   &--green {
     background: var(--green);
   }
 
+  &--green-film {
+    background: var(--green-film);
+  }
+
   &--aqua {
     background: var(--aqua);
+  }
+
+  &--aqua-film {
+    background: var(--aqua-film);
   }
 
   &--blue {
@@ -100,27 +169,56 @@
     background: var(--blue-film);
   }
 
+  &--blue-film-heavy {
+    background: var(--blue-film-heavy);
+  }
+
   &--purple {
     background: var(--purple);
   }
 
-  &--grey {
-    background: var(--grey);
+  &--purple-film {
+    background: var(--purple-film);
   }
 
-  &--gray {
-    background: var(--gray);
+  &--accent {
+    background: var(--accent);
   }
 
-  &--light {
-    background: var(--light);
+  &--action {
+    background: var(--action);
   }
 
-  &--dark {
-    background: var(--dark);
+  &--active {
+    background: var(--active);
   }
+
+  &--focus {
+    background: var(--focus);
+  }
+
+  &--success {
+    background: var(--success);
+  }
+
+  &--danger {
+    background: var(--danger);
+  }
+
+  &--warning {
+    background: var(--warning);
+  }
+
+  &--alert {
+    background: var(--alert);
+  }
+
+  &--royal {
+    background: var(--royal);
+  }  
 
   &--ghost {
     background: var(--ghost);
   }
+
 }
