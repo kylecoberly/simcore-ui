@@ -44,6 +44,9 @@ body {
     padding: 1em;
     position: relative;
   }
+  main {
+    flex-basis: 50em;
+  }
   > aside {
     flex-basis: 15rem;
     color: var(--menu-fg);
