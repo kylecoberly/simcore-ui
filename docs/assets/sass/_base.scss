@@ -1,20 +1,5 @@
 // base styles
 
-:root {
-  box-sizing: border-box;
-
-  --calc-pt25: calc(1vw + .25em);
-  --calc-pt5: calc(1vw + .5em);
-  --calc-pt75: calc(1vw + .75em);
-  --calc-1: calc(1vw + 1em);
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
 body {
   background: var(--base-bg);
   color: var(--base-color);

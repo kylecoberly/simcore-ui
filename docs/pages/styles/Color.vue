@@ -38,7 +38,7 @@
                 <ColorSwatch :hexCode="lighterGreyHex" :color-variable="lighterGrey"></ColorSwatch>
               </div>
               <div class="module--demo--item">
-                <ColorSwatch :hexCode="light" :color-variable="light"></ColorSwatch>
+                <ColorSwatch :hexCode="lightHex" :color-variable="light"></ColorSwatch>
               </div>
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="lighterHex" :color-variable="lighter"></ColorSwatch>

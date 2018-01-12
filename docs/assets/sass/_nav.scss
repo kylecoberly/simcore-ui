@@ -3,22 +3,17 @@
   flex-grow: 1;
   nav {
     display: flex;
+    justify-content: flex-end;
     flex-grow: 1;
   }
   ul {
     display: flex;
-    flex-grow: 1;
+    //flex-grow: 1;
     flex-wrap: wrap;
-    @media (min-width: 872px) {
-      justify-content: flex-end;
-    }
   }
   li {
     display: flex;
     padding: 0;
-    @media (max-width: 872px) {
-      flex-grow: 1;
-    }
   }
   a {
     display: flex;
@@ -26,7 +21,7 @@
     transition: calc(var(--ms)/2) linear;
     color: var(--action);
     &:hover {
-      box-shadow: 0 -.1em 0 0 var(--lighter) inset;
+      box-shadow: 0 -.25em 0 0 var(--hover, var(--action)) inset;
     }
     &.router-link-active {
       color: var(--light);
