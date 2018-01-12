@@ -1,5 +1,8 @@
 <template lang="html">
-  <div class="color-swatch">
+  <div class="color-swatch" tabindex="0">
+    <button class="sim-button sim-button--link">
+      <span class="fa fa-info-circle fa-lg"></span>
+    </button>
     <span class="color-swatch--example" :class="textColorClass" :style="{'background': colorCode }"></span>
     <span class="color-swatch--name bg--lightest text--dark">
       <b>{{ colorVariable }}</b>

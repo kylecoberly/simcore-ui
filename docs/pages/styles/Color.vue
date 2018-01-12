@@ -11,8 +11,7 @@
 
         <template slot="view">  
           <section class="module-section module-section--base-colors">
-            <span id="base-colors"></span>
-            <h3 class="module-label">Base Colors</h3>
+            <h3 id="base-colors" class="module-label">Base Colors</h3>
             <div class="module module--demo module--demo--colors">
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="darkestHex" :color-variable="darkest"></ColorSwatch>
@@ -50,7 +49,6 @@
             </div>
           </section>
           <section class="module-section module-section--brand-colors">
-            <span id="brand-colors"></span>
             <h3 class="module-label">Brand Colors</h3>
             <div class="module module--demo module--demo--colors">
               <div class="module--demo--item">
@@ -60,7 +58,7 @@
                 <ColorSwatch :hexCode="blueFilmHex" :color-variable="blueFilm" :opacity="blueFilmHexAlpha"></ColorSwatch>
               </div>
               <div class="module--demo--item">
-                <ColorSwatch :hexCode="blueFilmHeavyHex" :color-variable="blueFilmHeavy"></ColorSwatch>
+                <ColorSwatch :hexCode="blueFilmHeavyHex" :color-variable="blueFilmHeavy" :opacity="blueFilmHeavyHexAlpha"></ColorSwatch>
               </div>
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="redHex" :color-variable="red"></ColorSwatch>
@@ -100,11 +98,23 @@
               </div>
             </div>
           </section>
-          <!-- <section class="module-section module-section--brand-colors">
+          <section class="module-section module-section--accent-colors">
+            <h3 id="state-colors" class="module-label">State Colors</h3>
             <div class="module module--demo module--demo--colors">
-              
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="accentHex" :color-variable="accent"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="actionHex" :color-variable="action"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="activeHex" :color-variable="active" :opacity="activeHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="focusHex" :color-variable="focus"></ColorSwatch>
+              </div>
             </div>
-          </section> -->
+          </section>
         </template>
 
         <template slot="js">
@@ -191,7 +201,16 @@ export default {
       purpleFilm: 'var(--purple-film)',
       purpleFilmHex: '#AB47BD',
       purpleFilmHexAlpha: 0.5,
-
+      accent: 'var(--accent)',
+      accentHex: '#777777',
+      action: 'var(--blue)',
+      actionHex: '#4A93B9',
+      active: 'var(--blue-film-heavy)',
+      activeHex: '#0E6796',
+      activeHexAlpha: 0.9,
+      focus: 'var(--aqua)',
+      focusHex: '#00C1D9',
+      
     }
   },
 }
