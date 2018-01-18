@@ -1,0 +1,37 @@
+.module-section--brand-logo {
+
+  .grid {
+    grid-gap: 5rem;
+    .module--demo {
+      margin-top: 1rem;
+      & + .module--demo {
+        //margin: 0;
+      }
+    }
+  }
+  
+}
+
+
+.module--demo--logo {
+  padding: 0 1em;
+}
+
+
+.brand-logo {
+  margin: 0 auto;
+  padding: 2em;
+
+  &--icon {
+    max-width: 10em;
+  }
+
+  &--light {
+    background: var(--brand-purple, var(--dark));
+  }
+
+}
+
+.brand-gradient {
+  background: linear-gradient(to right, var(--brand-green) 20%, var(--brand-teal), 40%, var(--brand-purple) 60%, var(--brand-grey) 80%);
+}
