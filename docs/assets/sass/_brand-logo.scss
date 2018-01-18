@@ -1,15 +1,37 @@
 .module-section--brand-logo {
 
   .grid {
-    grid-gap: 5rem;
+    grid-gap: 4rem;
     .module--demo {
-      margin-top: 1rem;
+      margin-top: 3rem;
       & + .module--demo {
         //margin: 0;
       }
     }
   }
-  
+
+  .module--demo {
+    display: grid;
+    align-content: end;
+
+    &--info {
+      pre {
+        font-size: .875em;
+      }
+    }
+    
+  }
+
+  .alt-logos {
+
+    .module--demo {
+      
+    }
+    .brand-logo:not(.brand-logo--icon) {
+      max-width: 15em;
+    }
+  }
+
 }
 
 
@@ -20,7 +42,8 @@
 
 .brand-logo {
   margin: 0 auto;
-  padding: 2em;
+  max-width: 80em;
+  padding: .75em;
 
   &--icon {
     max-width: 10em;
