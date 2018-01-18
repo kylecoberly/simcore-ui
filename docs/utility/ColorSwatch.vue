@@ -61,5 +61,6 @@
 
 <style lang="scss">
   @import '../../docs/assets/sass/color-swatch';
+  @import '../../docs/assets/sass/brand-logo';
 </style>
 

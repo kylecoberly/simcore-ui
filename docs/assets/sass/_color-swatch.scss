@@ -1,15 +1,19 @@
-.module-section--brand-colors {
-  .module--demo {
-    
-  }
-}
-
-
 .module--demo--colors {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   //grid-gap: 1em;
   padding: 0 1em;
+
+  &--branding {
+
+    grid-template-columns: initial;
+
+    .brand-gradient > .color-swatch--example {
+      padding: 1.5em;
+    }
+
+  }
+
 }
     
     
@@ -48,8 +52,8 @@
     color: currentColor;
     flex-basis: 50%;
     padding: 6rem;
-    position: relative;
-    z-index: 1;
+    //position: relative;
+    //z-index: 1;
   }
   
   &--name {
@@ -60,7 +64,7 @@
     flex-basis: 50%;
     //padding: 1em 1em 3.5em;    
     padding: 1.25em 1em;
-    position: relative;
+    //position: relative;
     //transition: var(--default-ms) ease;
     b {
       color: var(--grey);
@@ -68,7 +72,7 @@
       letter-spacing: -.05ch;
       position: relative;
       transition: color var(--default-ms) ease,
-                  font-size var(--default-ms) ease-out;
+                  font-size var(--default-ms) ease;
     }
     small {
       color: var(--medium-grey);
@@ -76,11 +80,16 @@
       opacity: 0;
       max-height: 0;
       padding-top: 0;
+      //position: relative;
       top: -1.5em;
       right: 15%;
       text-align: right;
-      transition: var(--default-ms) .1s ease-out;
-      //will-change: top, right, max-height;
+      transition: opacity var(--default-ms) ease,
+                  max-height var(--default-ms) ease,
+                  padding var(--default-ms) ease,
+                  top var(--default-ms) .15s ease-in-out,
+                  right var(--default-ms) .15s ease-in-out;
+      will-change: top, right, max-height;
     }
   }
 

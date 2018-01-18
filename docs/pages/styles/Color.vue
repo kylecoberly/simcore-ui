@@ -49,7 +49,27 @@
             </div>
           </section>
           <section class="module-section module-section--brand-colors">
-            <h3 class="module-label">Brand Colors</h3>
+            <h3 id="brand-colors" class="module-label">Brand Colors</h3>
+            <div class="module module--demo module--demo--colors module--demo--colors--branding">
+              <div class="module--demo--item">
+                <div class="color-swatch brand-gradient" tabindex="0">
+                  <span class="color-swatch--example"></span>
+                  <span class="color-swatch--name bg--lightest text--dark">
+                    <b>{{ brandGradient }}</b>
+                    <small>{{ brandGradientValue }}</small>
+                  </span>
+                </div>
+              </div>
+              <div class="module--demo--item grid grid--no-gap grid--four-col">                
+                <ColorSwatch :hexCode="brandGreenHex" :color-variable="brandGreen"></ColorSwatch>
+                <ColorSwatch :hexCode="brandTealHex" :color-variable="brandTeal"></ColorSwatch>
+                <ColorSwatch :hexCode="brandPurpleHex" :color-variable="brandPurple"></ColorSwatch>
+                <ColorSwatch :hexCode="brandGreyHex" :color-variable="brandGrey"></ColorSwatch>
+              </div>
+            </div>
+          </section>
+          <section class="module-section module-section--app-colors">
+            <h3 id="app-colors" class="module-label">Application Colors</h3>
             <div class="module module--demo module--demo--colors">
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="blueHex" :color-variable="blue"></ColorSwatch>
@@ -141,6 +161,8 @@ export default {
   data() {
     return {
       msg: 'Color',
+
+      // Base Colors
       darkest: 'var(--darkest)',
       darkestHex: '#000000',
       darker: 'var(--darker)',
@@ -163,46 +185,48 @@ export default {
       lighterHex: '#FAFAFA',
       lightest: 'var(--lightest)',
       lightestHex: '#FFFFFF',
+
+      // Application Colors
       blue: 'var(--blue)',
-      blueHex: '#4A93B9',
+      blueHex: '#4A93B9',      
+      red: 'var(--red)',
+      redHex: '#CA1E34',      
+      orange: 'var(--orange)',
+      orangeHex: '#FF7042',      
+      yellow: 'var(--yellow)',
+      yellowHex: '#FFC929',    
+      green: 'var(--green)',
+      greenHex: '#9CCC66',      
+      aqua: 'var(--aqua)',
+      aquaHex: '#00C1D9',      
+      purple: 'var(--purple)',
+      purpleHex: '#AB47BD',
       blueFilm: 'var(--blue-film)',
       blueFilmHex: '#4A93B9',
       blueFilmHexAlpha: 0.5,
       blueFilmHeavy: 'var(--blue-film-heavy)',
       blueFilmHeavyHex: '#0E6796',
       blueFilmHeavyHexAlpha: 0.9,
-      red: 'var(--red)',
-      redHex: '#CA1E34',
       redFilm: 'var(--red)',
       redFilmHex: '#CA1E34',
       redFilmHexAlpha: 0.5,
-      orange: 'var(--orange)',
-      orangeHex: '#FF7042',
       orangeFilm: 'var(--orange-film)',
       orangeFilmHex: '#FF7042',
       orangeFilmHexAlpha: 0.5,
-      yellow: 'var(--yellow)',
-      yellowHex: '#FFC929',
       yellowFilm: 'var(--yellow-film)',
       yellowFilmHex: '#FFC929',
       yellowFilmHexAlpha: 0.5,
-      green: 'var(--green)',
-      greenHex: '#9CCC66',
       greenFilm: 'var(--green-film)',
       greenFilmHex: '#9CCC66',
       greenFilmHexAlpha: 0.5,
-      aqua: 'var(--aqua)',
-      aquaHex: '#00C1D9',
       aquaFilm: 'var(--aqua-film)',
       aquaFilmHex: '#00C1D9',
       aquaFilmHexAlpha: 0.5,
-      purple: 'var(--purple)',
-      purpleHex: '#AB47BD',
       purpleFilm: 'var(--purple-film)',
       purpleFilmHex: '#AB47BD',
       purpleFilmHexAlpha: 0.5,
-      accent: 'var(--accent)',
-      accentHex: '#777777',
+
+      // State Colors
       action: 'var(--blue)',
       actionHex: '#4A93B9',
       active: 'var(--blue-film-heavy)',
@@ -210,8 +234,71 @@ export default {
       activeHexAlpha: 0.9,
       focus: 'var(--aqua)',
       focusHex: '#00C1D9',
-      
+
+      // Feedback Colors
+      success: 'var(--green)',
+      successHex: '#9CCC66',
+      danger: 'var(--red)',
+      dangerHex: '#CA1E34',
+      warning: 'var(--orange)',
+      warningHex: '#FF7042',
+      alert: 'var(--yellow)',
+      alertHex: '#FFC929',
+
+      // Accent Colors
+      accent: 'var(--accent)',
+      accentHex: '#777777',
+      royal: 'var(--purple)',
+      royalHex: '#AB47BD',
+
+      // Greyscale Colors
+      shadow: 'var(--shadow)',
+      shadowHex: '#000000',
+      shadowHexAlpha: 0.5,
+      twilight: 'var(--twilight)',
+      twilightHex: '#000000',
+      twilightAlpha: 0.5,
+      dusk: 'var(--dusk)',
+      duskHex: '#000000',
+      duskAlpha: 0.3,
+      shade: 'var(--shade)',
+      shadeHex: '#000000',
+      shadeAlpha: 0.05,
+      dust: 'var(--dust)',
+      dustHex: '#777777',
+      dustAlpha: 0.05,
+      edge: 'var(--edge)',
+      edgeHex: '#777777',
+      edgeAlpha: 0.15,
+      line: 'var(--line)',
+      lineHex: '#777777',
+      lineAlpha: 0.5,
+      ghost: 'var(--ghost)',
+      ghosHex: '#808080',
+      ghostAlpha: 0.5,
+      mist: 'var(--mist)',
+      mistHex: '#FFFFFF',
+      mistAlpha: 0.2,
+      fog: 'var(--fog)',
+      fogHex: '#FFFFFF',
+      fogAlpha: 0.5,
+      frost: 'var(--frost)',
+      frostHex: '#FFFFFF',
+      frostAlpha: 0.8,
+
+      // Brand Colors
+      brandPurple: 'var(--brand-purple)',
+      brandPurpleHex: '#553C98',
+      brandTeal: 'var(--brand-teal)',
+      brandTealHex: '#57B185',
+      brandGreen: 'var(--brand-green)',
+      brandGreenHex: '#7AC943',
+      brandGrey: 'var(--brand-grey)',
+      brandGreyHex: '#929497',
+      brandGradient: 'var(--brand-gradient)',
+      brandGradientValue: 'linear-gradient(to right, var(--brand-green) 33%, var(--brand-teal), 77%, var(--brand-purple) 100%)',
     }
   },
 }
 </script>
+
