@@ -11,7 +11,7 @@
 
         <template slot="view">
           <section class="module-section module-section--">
-            <h3 class="module-label" id=""></h3>
+            <h3 id="" class="module-label"></h3>
             <div class="module module--demo">
               <div class="module--demo--item">
 

@@ -30,6 +30,7 @@ import Extras from '../Extras'
 
 // Docs: Styles
 import GuideIntro from '../pages/styles/Intro'
+import GuideLogo from '../pages/styles/Logo'
 import GuideColor from '../pages/styles/Color'
 import GuideGrid from '../pages/styles/Grid'
 import GuideTypography from '../pages/styles/Typography'
@@ -226,6 +227,14 @@ export default new Router({
           label: 'Intro',
           components: {
             details: GuideIntro,
+          },
+        },
+        {
+          path: 'logo',
+          name: 'logo',
+          label: 'Brand Logo',
+          components: {
+            details: GuideLogo,
           },
         },
         {

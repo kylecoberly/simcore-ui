@@ -9,7 +9,8 @@
         <router-link to="/" class="logo"><span>SIM <b>UI</b></span></router-link>
         <span class="greeting">The SimCore Interface Library</span>
       </div>
-      <div class="app-nav">
+      <!-- <button @click="toggleNav"><SimIconText circle icon="fa-bars" text="Menu"></SimIconText></button> -->
+      <div class="app-nav">        
         <nav>
           <ul>
             <li><router-link to="/getting-started"><SimIconText circle icon="fa-star" text="Getting Started"></SimIconText></router-link></li>

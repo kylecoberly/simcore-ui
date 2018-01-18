@@ -114,6 +114,29 @@ body {
   justify-content: space-around;
 }
 
+.grid {
+
+  display: grid;
+  align-content: center;
+  grid-gap: 1rem;
+
+  &--no-gap {
+    grid-gap: initial;
+  }
+
+  &--two-col {
+    grid-template-columns: repeat(auto-fit, minmax(25em, 1fr));
+  }
+
+  &--three-col {
+    grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
+  }
+
+  &--four-col {
+    grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
+  }
+
+}
 
 .sim-overlay {
   section {
