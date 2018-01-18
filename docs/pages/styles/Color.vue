@@ -9,8 +9,36 @@
           Normal / Default
         </template>
 
-        <template slot="view">  
-          <section class="module-section module-section--base-colors">
+        <template slot="view">          
+          <section class="module-section">
+            <h3 id="brand-colors" class="module-label">Brand Colors</h3>
+            <div class="module module--demo module--demo--colors">
+              <div class="module--demo--item">                
+                <ColorSwatch :hexCode="brandGreenHex" :color-variable="brandGreen"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="brandTealHex" :color-variable="brandTeal"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="brandPurpleHex" :color-variable="brandPurple"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="brandGreyHex" :color-variable="brandGrey"></ColorSwatch>
+              </div>              
+            </div>
+            <div class="module module--demo module--demo--branding">
+              <div class="module--demo--item">
+                <div class="color-swatch brand-gradient" tabindex="0">
+                  <span class="color-swatch--example"></span>
+                  <span class="color-swatch--name bg--lightest text--dark">
+                    <b>{{ brandGradient }}</b>
+                    <small>{{ brandGradientValue }}</small>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="module-section">
             <h3 id="base-colors" class="module-label">Base Colors</h3>
             <div class="module module--demo module--demo--colors">
               <div class="module--demo--item">
@@ -48,31 +76,29 @@
               </div>
             </div>
           </section>
-          <section class="module-section module-section--brand-colors">
-            <h3 id="brand-colors" class="module-label">Brand Colors</h3>
-            <div class="module module--demo module--demo--colors module--demo--colors--branding">
-              <div class="module--demo--item">
-                <div class="color-swatch brand-gradient" tabindex="0">
-                  <span class="color-swatch--example"></span>
-                  <span class="color-swatch--name bg--lightest text--dark">
-                    <b>{{ brandGradient }}</b>
-                    <small>{{ brandGradientValue }}</small>
-                  </span>
-                </div>
-              </div>
-              <div class="module--demo--item grid grid--no-gap grid--four-col">                
-                <ColorSwatch :hexCode="brandGreenHex" :color-variable="brandGreen"></ColorSwatch>
-                <ColorSwatch :hexCode="brandTealHex" :color-variable="brandTeal"></ColorSwatch>
-                <ColorSwatch :hexCode="brandPurpleHex" :color-variable="brandPurple"></ColorSwatch>
-                <ColorSwatch :hexCode="brandGreyHex" :color-variable="brandGrey"></ColorSwatch>
-              </div>
-            </div>
-          </section>
-          <section class="module-section module-section--app-colors">
+          <section class="module-section">
             <h3 id="app-colors" class="module-label">Application Colors</h3>
             <div class="module module--demo module--demo--colors">
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="blueHex" :color-variable="blue"></ColorSwatch>
+              </div>              
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="redHex" :color-variable="red"></ColorSwatch>
+              </div>                           
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="orangeHex" :color-variable="orange"></ColorSwatch>
+              </div>              
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="yellowHex" :color-variable="yellow"></ColorSwatch>
+              </div>              
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="greenHex" :color-variable="green"></ColorSwatch>
+              </div>              
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="aquaHex" :color-variable="aqua"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="purpleHex" :color-variable="purple"></ColorSwatch>
               </div>
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="blueFilmHex" :color-variable="blueFilm" :opacity="blueFilmHexAlpha"></ColorSwatch>
@@ -81,49 +107,28 @@
                 <ColorSwatch :hexCode="blueFilmHeavyHex" :color-variable="blueFilmHeavy" :opacity="blueFilmHeavyHexAlpha"></ColorSwatch>
               </div>
               <div class="module--demo--item">
-                <ColorSwatch :hexCode="redHex" :color-variable="red"></ColorSwatch>
-              </div>
-              <div class="module--demo--item">
                 <ColorSwatch :hexCode="redFilmHex" :color-variable="redFilm"  :opacity="redFilmHexAlpha"></ColorSwatch>
-              </div>              
-              <div class="module--demo--item">
-                <ColorSwatch :hexCode="orangeHex" :color-variable="orange"></ColorSwatch>
-              </div>
+              </div> 
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="orangeFilmHex" :color-variable="orangeFilm"  :opacity="orangeFilmHexAlpha"></ColorSwatch>
-              </div>
-              <div class="module--demo--item">
-                <ColorSwatch :hexCode="yellowHex" :color-variable="yellow"></ColorSwatch>
               </div>
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="yellowFilmHex" :color-variable="yellowFilm"  :opacity="yellowFilmHexAlpha"></ColorSwatch>
               </div>
               <div class="module--demo--item">
-                <ColorSwatch :hexCode="greenHex" :color-variable="green"></ColorSwatch>
-              </div>
-              <div class="module--demo--item">
                 <ColorSwatch :hexCode="greenFilmHex" :color-variable="greenFilm"  :opacity="greenFilmHexAlpha"></ColorSwatch>
               </div>
               <div class="module--demo--item">
-                <ColorSwatch :hexCode="aquaHex" :color-variable="aqua"></ColorSwatch>
-              </div>
-              <div class="module--demo--item">
                 <ColorSwatch :hexCode="aquaFilmHex" :color-variable="aquaFilm"  :opacity="aquaFilmHexAlpha"></ColorSwatch>
-              </div>
-              <div class="module--demo--item">
-                <ColorSwatch :hexCode="purpleHex" :color-variable="purple"></ColorSwatch>
               </div>
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="purpleFilmHex" :color-variable="purpleFilm"  :opacity="purpleFilmHexAlpha"></ColorSwatch>
               </div>
             </div>
           </section>
-          <section class="module-section module-section--accent-colors">
+          <section class="module-section">
             <h3 id="state-colors" class="module-label">State Colors</h3>
             <div class="module module--demo module--demo--colors">
-              <div class="module--demo--item">
-                <ColorSwatch :hexCode="accentHex" :color-variable="accent"></ColorSwatch>
-              </div>
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="actionHex" :color-variable="action"></ColorSwatch>
               </div>
@@ -132,6 +137,81 @@
               </div>
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="focusHex" :color-variable="focus"></ColorSwatch>
+              </div>
+            </div>
+          </section>
+          <section class="module-section">
+            <h3 id="feedback-colors" class="module-label">Feedback Colors</h3>
+            <div class="module module--demo module--demo--colors">
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="successHex" :color-variable="success"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="dangerHex" :color-variable="danger"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="warningHex" :color-variable="warning"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="alertHex" :color-variable="alert"></ColorSwatch>
+              </div>
+            </div>
+          </section>
+          <section class="module-section">
+            <h3 id="accent-colors" class="module-label">Accent Colors</h3>
+            <div class="module module--demo module--demo--colors">
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="accentHex" :color-variable="accent"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="royalHex" :color-variable="royal"></ColorSwatch>
+              </div>
+            </div>
+          </section>
+          <section class="module-section">
+            <h3 id="utility-colors" class="module-label">Utility Colors</h3>
+            <div class="module module--demo module--demo--colors">
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="shadowHex" :color-variable="shadow" :opacity="shadowHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="twilightHex" :color-variable="twilight" :opacity="twilightHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="shadowHex" :color-variable="shadow" :opacity="shadowHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="twilightHex" :color-variable="twilight" :opacity="twilightHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="duskHex" :color-variable="dusk" :opacity="duskHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="shadowHex" :color-variable="shadow" :opacity="shadowHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="shadeHex" :color-variable="shade" :opacity="shadeHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="dustHex" :color-variable="dust" :opacity="dustHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="edgeHex" :color-variable="edge" :opacity="edgeHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="lineHex" :color-variable="line" :opacity="lineHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="ghostHex" :color-variable="ghost" :opacity="ghostHexAlpha"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="frostHex" :color-variable="frost" :opacity="frostHexAlpha"  class="bg--lightest"></ColorSwatch>
+              </div>
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="fogHex" :color-variable="fog" :opacity="fogHexAlpha"  class="bg--lightest"></ColorSwatch>
+              </div>              
+              <div class="module--demo--item">
+                <ColorSwatch :hexCode="mistHex" :color-variable="mist" :opacity="mistHexAlpha"  class="bg--lightest"></ColorSwatch>
               </div>
             </div>
           </section>
@@ -207,7 +287,7 @@ export default {
       blueFilmHeavy: 'var(--blue-film-heavy)',
       blueFilmHeavyHex: '#0E6796',
       blueFilmHeavyHexAlpha: 0.9,
-      redFilm: 'var(--red)',
+      redFilm: 'var(--red-film)',
       redFilmHex: '#CA1E34',
       redFilmHexAlpha: 0.5,
       orangeFilm: 'var(--orange-film)',
@@ -227,64 +307,64 @@ export default {
       purpleFilmHexAlpha: 0.5,
 
       // State Colors
-      action: 'var(--blue)',
+      action: 'var(--action)',
       actionHex: '#4A93B9',
-      active: 'var(--blue-film-heavy)',
+      active: 'var(--active)',
       activeHex: '#0E6796',
       activeHexAlpha: 0.9,
-      focus: 'var(--aqua)',
+      focus: 'var(--focus)',
       focusHex: '#00C1D9',
 
       // Feedback Colors
-      success: 'var(--green)',
+      success: 'var(--success)',
       successHex: '#9CCC66',
-      danger: 'var(--red)',
+      danger: 'var(--danger)',
       dangerHex: '#CA1E34',
-      warning: 'var(--orange)',
+      warning: 'var(--warning)',
       warningHex: '#FF7042',
-      alert: 'var(--yellow)',
+      alert: 'var(--alert)',
       alertHex: '#FFC929',
 
       // Accent Colors
       accent: 'var(--accent)',
       accentHex: '#777777',
-      royal: 'var(--purple)',
+      royal: 'var(--royal)',
       royalHex: '#AB47BD',
 
-      // Greyscale Colors
+      // Utility Colors
       shadow: 'var(--shadow)',
       shadowHex: '#000000',
-      shadowHexAlpha: 0.5,
+      shadowHexAlpha: 0.8,
       twilight: 'var(--twilight)',
       twilightHex: '#000000',
-      twilightAlpha: 0.5,
+      twilightHexAlpha: 0.5,
       dusk: 'var(--dusk)',
       duskHex: '#000000',
-      duskAlpha: 0.3,
+      duskHexAlpha: 0.3,
       shade: 'var(--shade)',
       shadeHex: '#000000',
-      shadeAlpha: 0.05,
+      shadeHexAlpha: 0.05,
       dust: 'var(--dust)',
       dustHex: '#777777',
-      dustAlpha: 0.05,
+      dustHexAlpha: 0.05,
       edge: 'var(--edge)',
       edgeHex: '#777777',
-      edgeAlpha: 0.15,
+      edgeHexAlpha: 0.15,
       line: 'var(--line)',
       lineHex: '#777777',
-      lineAlpha: 0.5,
+      lineHexAlpha: 0.5,
       ghost: 'var(--ghost)',
-      ghosHex: '#808080',
-      ghostAlpha: 0.5,
+      ghostHex: '#808080',
+      ghostHexAlpha: 0.5,
       mist: 'var(--mist)',
       mistHex: '#FFFFFF',
-      mistAlpha: 0.2,
+      mistHexAlpha: 0.2,
       fog: 'var(--fog)',
       fogHex: '#FFFFFF',
-      fogAlpha: 0.5,
+      fogHexAlpha: 0.5,
       frost: 'var(--frost)',
       frostHex: '#FFFFFF',
-      frostAlpha: 0.8,
+      frostHexAlpha: 0.8,
 
       // Brand Colors
       brandPurple: 'var(--brand-purple)',
@@ -296,7 +376,7 @@ export default {
       brandGrey: 'var(--brand-grey)',
       brandGreyHex: '#929497',
       brandGradient: 'var(--brand-gradient)',
-      brandGradientValue: 'linear-gradient(to right, var(--brand-green) 33%, var(--brand-teal), 77%, var(--brand-purple) 100%)',
+      brandGradientValue: 'linear-gradient(to right, var(--brand-green) 20%, var(--brand-teal), 50%, var(--brand-purple) 68%, var(--brand-grey) 85%)',
     }
   },
 }

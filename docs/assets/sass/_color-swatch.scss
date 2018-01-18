@@ -1,21 +1,20 @@
-.module--demo--colors {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  //grid-gap: 1em;
-  padding: 0 1em;
+.module--demo {
+
+  &--colors {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    //grid-gap: 1em;
+    //padding: 0 1em;
+  }
 
   &--branding {
-
-    grid-template-columns: initial;
-
+    grid-template-columns: 1fr;
     .brand-gradient > .color-swatch--example {
       padding: 1.5em;
     }
-
   }
 
 }
-    
     
 .color-swatch {
   background: var(--lightest);
@@ -94,32 +93,48 @@
   }
 
   &.bg--lightest {
+    background: var(--light-grey);
     .color-swatch--example {
       box-shadow: inset 0 0 0 1px var(--edge);
     }
   }
+  &:not(.brand-gradient) {
+    &:hover,
+    &:focus {
+      background: transparent;
+      box-shadow: 0 0 4rem 0 var(--dusk);
+      outline: none;
+      transform: scale(1.1);
+      z-index: 1;
+      button {
+        opacity: 1;
+      }
+      b {
+        color: var(--dark);
+        font-size: 1.25em;
+      }
+      small {
+        top: 0;
+        right: 0;
+        max-height: 2rem;
+        opacity: 1;
+        padding-top: .5em;
+      }
+    }
+  }
 
-  &:hover,
-  &:focus {
-    background: transparent;
-    box-shadow: 0 0 4rem 0 var(--dusk);
-    outline: none;
-    transform: scale(1.1);
-    z-index: 1;
-    button {
-      opacity: 1;
-    }
-    b {
-      color: var(--dark);
-      font-size: 1.25em;
-    }
+  &.brand-gradient {
+    margin-top: 1rem;
+
     small {
-      top: 0;
-      right: 0;
-      max-height: 2rem;
+      color: var(--medium-grey);
+      font-size: 90%;
       opacity: 1;
-      padding-top: .5em;
+      max-height: initial;
+      padding-top: 1em;
+      text-align: left;
     }
+
   }
 
   &.active {
