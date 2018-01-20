@@ -68,6 +68,11 @@ pre {
   -webkit-font-smoothing: initial;
 }
 
+::selection {
+  background: var(--dark);
+  color: var(--light);
+}
+
 // buttons
 
 button,

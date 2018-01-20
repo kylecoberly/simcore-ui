@@ -70,7 +70,6 @@
 [pre-label] {
   overflow: visible;
   position: relative;
-  
   &::after {
     background: var(--light-grey);
     color: var(--grey);
@@ -81,15 +80,23 @@
     font-family: monospace;
     line-height: .8;
     letter-spacing: .05em;
+    height: 2.25rem;
+    width: auto;
+    opacity: .5;
     padding: .25rem .5rem .35rem;
     position: absolute;    
     top: 0;
     right: 0;
-    height: 2.25rem;
-    width: auto;
     text-transform: uppercase;
+    transition: opacity .35s ease;
     -moz-osx-font-smoothing: initial;
     -webkit-font-smoothing: initial;
+  }
+  &:hover,
+  &:focus {
+    &::after {
+      opacity: 1;
+    }
   }
 }
 

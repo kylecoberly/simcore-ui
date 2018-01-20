@@ -9,7 +9,7 @@
 
 .module-label.module-label { // I know. I will fix later
   border-bottom: 3px solid var(--light);
-  color: var(--medium-grey);
+  color: var(--grey);
   display: inline-block;
   font-family: var(--base-font-family);
   font-size: .875rem;
@@ -57,6 +57,9 @@
       flex-direction: column;
       margin-top: 1rem;
       padding: .5em;
+      &[pre-label] {
+        padding-right: 3.5em;
+      }
       > * {
         margin: 0;
         padding: .125rem;

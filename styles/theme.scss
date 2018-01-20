@@ -13,6 +13,7 @@
 
   // colors
   --blue: #4A93B9;
+  --blue-light: #76BADF;
   --blue-film: rgba(#4A93B9, .5);
   --blue-film-heavy: rgba(#0E6796, .9);
   --red: #CA1E34;
@@ -30,6 +31,7 @@
 
   --accent: var(--medium-grey);
   --action: var(--blue);
+  --action-light: var(--blue-light);
   --active: var(--blue-film-heavy);
   --focus: var(--aqua);
   

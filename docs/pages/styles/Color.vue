@@ -100,6 +100,8 @@
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="purpleHex" :color-variable="purple"></ColorSwatch>
               </div>
+            </div>
+            <div class="module module--demo module--demo--colors">
               <div class="module--demo--item">
                 <ColorSwatch :hexCode="blueFilmHex" :color-variable="blueFilm" :opacity="blueFilmHexAlpha"></ColorSwatch>
               </div>
