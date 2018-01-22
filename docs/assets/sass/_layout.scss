@@ -27,7 +27,6 @@ body {
 .app-header {
   display: flex;
   justify-content: space-between;
-  // align-items: center;
   flex-wrap: wrap;
   position: sticky;
   z-index: 1;
@@ -61,24 +60,26 @@ body {
 }
 
 .app-sidebar {
-  //flex-basis: 15rem;
-  flex-grow: 1;
-  color: var(--menu-fg);
   background: var(--menu-bg);
   border-right: 1px solid var(--cloud);
+  flex-grow: 1;
+  color: var(--menu-fg);  
   transition: all calc(var(--ms) / 2) ease-out;
   .app-menu {
     position: sticky;
     top: 4.5em;
-    header {
-      // position: sticky;
-      // top: 3.2em;
-    }
   }
-  // &.is-open {
-  //   border-right: 1px solid var(--cloud);
-  //   max-width: 18.75em;
-  // }
+  // transitions
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    font-size: 0;
+    transform: translateY(2em);
+  }
+  &-enter-active,
+  &-leave-active {
+    position: relative;
+  }
 }
 
 .library {

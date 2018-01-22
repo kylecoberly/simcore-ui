@@ -61,10 +61,9 @@
                 @click="toggleAppSidebarVisibility"
                 >
                 <SimIconText
-                  icon="fa-caret-down"
-                  text="Menu"
+                  icon="fa-angle-down"
                   ></SimIconText>
-                <span class="sr-only">Menu</span>
+                <span class="sr-only">Sidebar</span>
               </button>
             </li>
           </ul>
@@ -72,15 +71,17 @@
       </div>
     </header>
     <div class="app-content animatable">
-      <aside
-        v-if="appSidebarIsOpen"
-        class="app-sidebar"
-        :class="{'is-open': appSidebarIsOpen}"
-        role="complementary">
-        <Directory
-          :model="menu"
-          ></Directory>
-      </aside>
+      <transition name="slide">
+        <aside
+          v-if="appSidebarIsOpen"
+          class="app-sidebar"
+          :class="{'is-open': appSidebarIsOpen}"
+          role="complementary">
+          <Directory
+            :model="menu"
+            ></Directory>
+        </aside>
+      </transition>
       <router-view />
     </div>
   </div>
@@ -106,7 +107,7 @@
       return {
         menu: [],
         shouldAppNavBeOpen: false,
-        shouldAppSidebarBeOpen: false,
+        shouldAppSidebarBeOpen: true,
         shouldPanelBeOpen: false,
         shouldOverlayBeOpen: false,
         overlayDismissTo: '',
