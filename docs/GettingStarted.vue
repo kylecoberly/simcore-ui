@@ -1,15 +1,20 @@
 <template lang="html">
-  <main>
+  <main
+    id="main-content"
+    class="app-main library library-gui"
+    role="main"
+    >
     <h1>SimCore UI Components</h1>
     <p>Component Library for SimCore apps</p>
 
     <h2>To Use In Your Project</h2>
     <p># in your package.json</p>
+    <div class="code-wrap">  
     <pre v-highlightjs><code class="html" v-pre>
 "dependencies": {
   "simcore-ui": "git+ssh@github.com:SimCoreTechnology/simcore-ui.git#master"
 }</code></pre>
-
+    </div>
     <h2>Documentation / Work on Library Directly</h2>
     <div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> install dependencies</span>
     npm install
@@ -51,6 +56,9 @@
         {{ n }}
       </p>
     </article>
+    <div class="app-footer">
+      <p>&copy; 2014-2018 SimCore.</p>
+    </div>
   </main>
 </template>
 

@@ -1,5 +1,8 @@
 <template lang="html">
-  <main>
+  <main 
+    id="main-content"
+    class="app-main library library-gui"
+    role="main">
     <h1>{{ msg }}</h1>
     <hr />
     <h2>Essential Links</h2>

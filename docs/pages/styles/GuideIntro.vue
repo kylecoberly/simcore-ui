@@ -1,6 +1,6 @@
 <template lang="html">
   <article>
-      <h2 id="development-principles" class="library-section-title">{{ msg }}</h2>
+      <h2 id="development-principles" class="library--section-title">{{ msg }}</h2>
       <div class="styleguide-intro">
 <p>HealthScholars has a <em>huge</em> codebase and this ultimately dictates many of the decisions we make around the front end architecture and day-to-day feature development. </p>
 

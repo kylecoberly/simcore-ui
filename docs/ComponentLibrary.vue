@@ -1,10 +1,17 @@
 <template lang="html">
-  <main class="library library-ui">
-    <h1 class="library-page-title">{{ msg }}</h1>
+  <main 
+    id="main-content"
+    class="app-main library library-gui"
+    role="main"
+    >
+    <h1 class="library--page-title">{{ msg }}</h1>
     <hr />
     <transition appear name="slide-left" mode="out-in">
       <router-view name="details" />
     </transition>
+    <div class="app-footer">
+      <p>&copy; 2014-2018 SimCore.</p>
+    </div>
   </main>
 </template>
 

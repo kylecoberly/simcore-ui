@@ -1,8 +1,14 @@
 <template lang="html">
   <div class="app-layout">
-    <SimOverlay :should-show-dismiss="true" :dismiss-to="overlayDismissTo" class="animator parallax in-from-top" :should-be-open="shouldOverlayBeOpen">
+    <a href="#main-content" class="skip-link">skip to main content</a>
+    <SimOverlay
+      class="animator parallax in-from-top"
+      :should-show-dismiss="true"
+      :dismiss-to="overlayDismissTo"      
+      :should-be-open="shouldOverlayBeOpen"
+      >
       <button @click="$root.togglePanel">panelize</button>
-    </SimOverlay>
+      </SimOverlay>
     <SimPanel 
       class="animator parallax in-from-right" 
       :should-be-open="shouldPanelBeOpen"
@@ -14,7 +20,11 @@
         <router-link to="/" class="logo"><span>SIM <b>UI</b></span></router-link>
         <span class="greeting">The SimCore Interface Library</span>
       </div>
-      <button class="toggle-button toggle-button--main-menu" toggle-button="main-menu" @click="toggleAppNavVisibility">        
+      <button
+        @click="toggleAppNavVisibility"
+        class="toggle-button toggle-button--main-menu"
+        toggle-button="main-menu"
+        >
         <SimIconText
           icon="fa-bars"
           ></SimIconText>
@@ -62,8 +72,9 @@
                 >
                 <SimIconText
                   icon="fa-angle-down"
+                  text="Menu"
                   ></SimIconText>
-                <span class="sr-only">Sidebar</span>
+                <span class="sr-only">Sidebar Menu</span>
               </button>
             </li>
           </ul>
@@ -71,17 +82,15 @@
       </div>
     </header>
     <div class="app-content animatable">
-      <transition name="slide">
-        <aside
-          v-if="appSidebarIsOpen"
-          class="app-sidebar"
-          :class="{'is-open': appSidebarIsOpen}"
-          role="complementary">
-          <Directory
-            :model="menu"
-            ></Directory>
-        </aside>
-      </transition>
+      <aside
+        v-if="appSidebarIsOpen"
+        class="app-sidebar"
+        :class="{'is-open': appSidebarIsOpen}"
+        role="complementary">
+        <Directory
+          :model="menu"
+          ></Directory>
+      </aside>
       <router-view />
     </div>
   </div>
