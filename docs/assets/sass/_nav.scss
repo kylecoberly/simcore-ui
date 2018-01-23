@@ -67,10 +67,10 @@ nav {
       flex-grow: 1;
     }
   }
-  @media (min-width: 41.25em) {
+  @media (min-width: 100em) {
     li {
       &:last-child {
-        margin-left: auto;
+        //margin-left: auto;
       }
     }
   }
@@ -80,7 +80,10 @@ nav {
 
 .app-menu {
   margin: 0;
-  padding: 0;
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 1.5em;
+  padding-left: 0;
   li {
     list-style: none;
     padding: .5em .5em .5em 1em;
@@ -131,17 +134,12 @@ nav {
   &--sidebar {
     background: transparent;
     color: var(--action-light);
-    .fa {
-      font-size: 1.25rem;
-    }
-    span:not(.fa) {
-      font-size: .9em;
-    }
     &:hover,
     &:focus,
     &.target-is-visible {
-      background: var(--menu-bg);    
-      color: var(--active);
+      background: var(--light);
+      background: transparent;
+      color: var(--light);
       outline: 0;
       transform: none;
     }
@@ -151,5 +149,30 @@ nav {
       }
     }
 
+  }
+}
+
+.skip-link {
+  background: var(--action);
+  color: var(--light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  line-height: 1;
+  max-height: 0;
+  outline: none;
+  overflow: hidden;
+  position: sticky;
+  text-align: center;
+  transition: .35s ease;
+  width: 100%;
+  z-index: 1001;
+  &:focus {
+    box-shadow: none;
+    color: #FFF;
+    max-height: 100px;
+    padding-top: .5em;
+    padding-bottom: .5em;
   }
 }

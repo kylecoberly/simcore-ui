@@ -40,45 +40,39 @@ body {
   display: flex;
   flex-direction: row-reverse;
   flex-wrap: wrap;
-  > main,
-  > aside {    
-    //padding: 1em;
-    position: relative;
+  @media (min-width: 100em) {
+    //flex-direction: row-reverse;
   }
-  main {
-    flex-basis: 78%;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    display: grid;
-    grid-template-rows: repeat(2, auto) 1fr fit-content(1em);
-    padding: 1em;
-    hr {
-      width: 100%;
-    }
+}
+
+.app-main {
+  flex-grow: 1;
+  flex-basis: 76%;
+  //box-shadow: 1px 0 0 0 var(--edge);
+  display: flex;
+  flex-direction: column;
+  display: grid;
+  grid-template-rows: repeat(2, auto) 1fr fit-content(1em);
+  padding: 1em;
+  position: relative;
+  hr {
+    width: 100%;
   }
 }
 
 .app-sidebar {
   background: var(--menu-bg);
-  border-right: 1px solid var(--cloud);
   flex-grow: 1;
-  color: var(--menu-fg);  
+  flex-basis: 24%;
+  color: var(--menu-fg);
+  position: relative;
   transition: all calc(var(--ms) / 2) ease-out;
   .app-menu {
     position: sticky;
     top: 4.5em;
   }
-  // transitions
-  &-enter,
-  &-leave-to {
-    opacity: 0;
-    font-size: 0;
-    transform: translateY(2em);
-  }
-  &-enter-active,
-  &-leave-active {
-    position: relative;
+  @media(min-width: 62.125em) {
+    max-width: 18em;
   }
 }
 
@@ -94,7 +88,7 @@ body {
   align-items: center;
   justify-content: flex-end;
   margin-top: auto;
-  padding: 1em;
+  padding: 1em 0;
   p {
     margin-bottom: 0;
   }

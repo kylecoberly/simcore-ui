@@ -69,8 +69,13 @@ pre {
 }
 
 ::selection {
-  background: var(--dark);
-  color: var(--light);
+  background: var(--blue-film-heavy);
+  color: var(--lightest);
+}
+
+::-moz-selection {
+  background: var(--blue-film-heavy);
+  color: var(--lightest);
 }
 
 // buttons
