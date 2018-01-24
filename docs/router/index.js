@@ -276,8 +276,8 @@ export default new Router({
     },
     {
       path: '/extras',
-      icon: 'fa-code fa-fw',
       label: 'Other Things',
+      icon: 'fa-code fa-fw',      
       component: Extras,
       children: [
         {

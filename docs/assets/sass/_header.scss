@@ -10,9 +10,18 @@
     opacity: .6;
     padding-top: .25em;
     padding-left: .25em;
-    // @media (max-width: 60.688em) {
-    //   display: none;
-    // }
+    @media (max-width: 24em) {
+      display: none;
+    }
+  }
+}
+
+.app-logo--wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @media (max-width: 62.75em) {
+    flex: 1 0 100%;
   }
 }
 

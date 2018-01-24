@@ -13,6 +13,7 @@ nav {
 
 .app-nav {
   flex-grow: 1;
+  display: flex;
   nav {
     flex-grow: 1;
     display: flex;
@@ -58,14 +59,13 @@ nav {
       }
     }
   }
-  @media (max-width: 62.09em) {
-    display: none;
-    &.is--visible {
-      display: flex;
-    }
+  @media (max-width: 62.75em) {
     ul  {
       flex-grow: 1;
     }
+  }
+  @media (min-width: 62.75em) {
+    display: flex !important;
   }
   @media (min-width: 100em) {
     li {
@@ -126,29 +126,52 @@ nav {
       background: var(--ghost);
       color: var(--light-grey);
     }
-    @media (min-width: 62.125em) {
+    @media (min-width: 62.75em) {
       display: none;
     }
   }
 
   &--sidebar {
-    background: transparent;
-    color: var(--action-light);
+    background: var(--lighter);
+    box-shadow: 0 -1px 0 var(--edge) inset;
+    color: var(--grey);
+    flex: 1 0 100%;
+    grid-column: span 3;
+    grid-row: 1 / 1;
+    display: flex;
+    justify-content: space-between;
+    text-align: right;
+    text-transform: uppercase;
     &:hover,
     &:focus,
     &.target-is-visible {
-      background: var(--light);
-      background: transparent;
-      color: var(--light);
-      outline: 0;
+      //background: var(--light);
+      //background: transparent;
+      //color: var(--light);
+      box-shadow: 0 -1px 0 var(--edge) inset;
       transform: none;
     }
+    .fa {
+      font-size: 2em;
+      line-height: 0.55;
+    }
+    span:not(.fa) {
+      font-size: .9em;
+      font-weight: 600;
+    }
     &.target-is-visible {
+      //justify-content: center;
+      //grid-column: initial;
       .fa {
         transform: rotate(180deg);
       }
     }
-
+    @media (min-width: 18.75em) {
+      //justify-content: flex-end;
+    }
+    @media (min-width: 50em) {
+      display: none;
+    }
   }
 }
 

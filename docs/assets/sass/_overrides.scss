@@ -4,3 +4,16 @@
   padding: 0;
   color: var(--dark);
 }
+
+.fa-events-icons-failed {
+  .fa {
+    display: none;
+  }
+  .sr-only {
+    position: relative;
+    height: auto;
+    width: auto;
+    margin: initial;
+    padding: initial;
+  }
+}

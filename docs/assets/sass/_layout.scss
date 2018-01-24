@@ -40,20 +40,25 @@ body {
   display: flex;
   flex-direction: row-reverse;
   flex-wrap: wrap;
-  @media (min-width: 100em) {
-    //flex-direction: row-reverse;
+  
+  @media (min-width: 50em) {
+    display: grid;
+    grid-template-columns: fit-content(18em) 1fr;
+    grid-template-rows: auto 1fr;
   }
 }
 
 .app-main {
   flex-grow: 1;
-  flex-basis: 76%;
+  flex-basis: 75%;
   //box-shadow: 1px 0 0 0 var(--edge);
   display: flex;
   flex-direction: column;
+  grid-column: span 2;
+  grid-row: 2 / 2;
   display: grid;
   grid-template-rows: repeat(2, auto) 1fr fit-content(1em);
-  padding: 1em;
+  padding: 2em;
   position: relative;
   hr {
     width: 100%;
@@ -63,16 +68,27 @@ body {
 .app-sidebar {
   background: var(--menu-bg);
   flex-grow: 1;
-  flex-basis: 24%;
+  flex-basis: 25%;
+  grid-row: 2 / 2;
   color: var(--menu-fg);
+  //opacity: 0;
   position: relative;
-  transition: all calc(var(--ms) / 2) ease-out;
+  transition: all .3s calc(var(--ms) / 2) ease-out;
   .app-menu {
     position: sticky;
     top: 4.5em;
   }
-  @media(min-width: 62.125em) {
-    max-width: 18em;
+  &.is-visible {
+    //opacity: 1;
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // width: 100%;
+    // z-index: 1000;
+  }
+  @media (min-width: 50em) {
+    display: block !important;
+    //max-width: 18em;
   }
 }
 

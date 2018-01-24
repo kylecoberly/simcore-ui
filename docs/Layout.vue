@@ -16,21 +16,28 @@
       :dismiss-to="panelDismissTo"
       ></SimPanel>
     <header class="app-header animatable" role="banner">
-      <div class="app-logo">
-        <router-link to="/" class="logo"><span>SIM <b>UI</b></span></router-link>
-        <span class="greeting">The SimCore Interface Library</span>
+      <div class="app-logo--wrap">
+        <div class="app-logo">
+          <router-link to="/" class="logo"><span>SIM <b>UI</b></span></router-link>
+          <span class="greeting">The SimCore Interface Library</span>
+        </div>
+        <button
+          @click="toggleAppNavVisibility"
+          class="toggle-button toggle-button--main-menu"
+          toggle-button="main-menu"
+          >
+          <SimIconText
+            icon="fa-bars"
+            ></SimIconText>
+            <span class="sr-only">Menu</span>
+        </button>
       </div>
-      <button
-        @click="toggleAppNavVisibility"
-        class="toggle-button toggle-button--main-menu"
-        toggle-button="main-menu"
-        >
-        <SimIconText
-          icon="fa-bars"
-          ></SimIconText>
-          <span class="sr-only">Menu</span>
-      </button>
-      <div class="app-nav" app-menu="main-menu">        
+      <div
+        v-show="appNavIsOpen"
+        class="app-nav"
+        :class="{'is-visible': appNavIsOpen}"
+        app-menu="main-menu"
+        >        
         <nav>
           <ul>
             <li>
@@ -63,30 +70,28 @@
                   ></SimIconText>
               </router-link>
             </li>
-            <li>
-              <button 
-                toggle-button="sidebar"
-                class="toggle-button toggle-button--sidebar"
-                :class="{'target-is-visible': appSidebarIsOpen}"
-                @click="toggleAppSidebarVisibility"
-                >
-                <SimIconText
-                  icon="fa-angle-down"
-                  text="Menu"
-                  ></SimIconText>
-                <span class="sr-only">Sidebar Menu</span>
-              </button>
-            </li>
           </ul>
         </nav>
       </div>
     </header>
     <div class="app-content animatable">
+      <button 
+        toggle-button="sidebar"
+        class="toggle-button toggle-button--sidebar"
+        :class="{'target-is-visible': appSidebarIsOpen}"
+        @click="toggleAppSidebarVisibility"
+        >
+        <span>Sidebar Menu</span>
+        <SimIconText
+          icon="fa-angle-down"
+          ></SimIconText>
+      </button>
       <aside
-        v-if="appSidebarIsOpen"
+        v-show="appSidebarIsOpen"
         class="app-sidebar"
-        :class="{'is-open': appSidebarIsOpen}"
-        role="complementary">
+        :class="{'is-visible': appSidebarIsOpen}"
+        role="complementary"
+        >
         <Directory
           :model="menu"
           ></Directory>
@@ -116,7 +121,7 @@
       return {
         menu: [],
         shouldAppNavBeOpen: false,
-        shouldAppSidebarBeOpen: true,
+        shouldAppSidebarBeOpen: false,
         shouldPanelBeOpen: false,
         shouldOverlayBeOpen: false,
         overlayDismissTo: '',
@@ -206,17 +211,17 @@
         // })();
       },
       toggleAppNavVisibility() {
-        //this.shouldAppNavBeOpen = !this.shouldAppNavBeOpen
-        (function() {
-          var toggleButton = document.querySelector('[toggle-button="main-menu"]')
-          var appNav = document.querySelector('[app-menu="main-menu"]')
-          var hidden = appNav.getAttribute('aria-hidden') === 'true'
-          var expanded = toggleButton.getAttribute('aria-expanded') === 'true'
-          appNav.setAttribute('aria-hidden', String(!hidden))
-          appNav.classList.toggle('is--visible')          
-          toggleButton.setAttribute('aria-expanded', String(!expanded))
-          toggleButton.classList.toggle('is--active')            
-        })();
+        this.shouldAppNavBeOpen = !this.shouldAppNavBeOpen
+        // (function() {
+        //   var toggleButton = document.querySelector('[toggle-button="main-menu"]')
+        //   var appNav = document.querySelector('[app-menu="main-menu"]')
+        //   var hidden = appNav.getAttribute('aria-hidden') === 'true'
+        //   var expanded = toggleButton.getAttribute('aria-expanded') === 'true'
+        //   appNav.setAttribute('aria-hidden', String(!hidden))
+        //   appNav.classList.toggle('is--visible')          
+        //   toggleButton.setAttribute('aria-expanded', String(!expanded))
+        //   toggleButton.classList.toggle('is--active')            
+        // })();
       }
     },
   }
