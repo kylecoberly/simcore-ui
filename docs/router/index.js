@@ -216,7 +216,7 @@ export default new Router({
     },
     {
       path: '/styles',
-      label: 'Style Guide',
+      label: 'Guidelines',
       icon: 'fa-paint-brush fa-fw',
       component: StyleLibrary,
       children: [

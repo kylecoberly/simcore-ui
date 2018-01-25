@@ -140,8 +140,10 @@ nav {
     grid-row: 1 / 1;
     display: flex;
     justify-content: space-between;
-    text-align: right;
     text-transform: uppercase;
+    // position: sticky;
+    // top: 3.125em;
+    // z-index: 1;
     &:hover,
     &:focus,
     &.target-is-visible {
