@@ -10,10 +10,34 @@
           <p><SimBulkCheck :items="items" @toggle="setSelectedItems"></SimBulkCheck> {{ selectedItems}} selected items</p>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+          <pre v-highlightjs><code class="html">
+&lt;button class="sim-bulkcheck" :class="{active: checkAll}" @click="toggleState">
+    &lt;SimIconText :icon="`${icon} fa-fw`">&lt;/SimIconText>
+    &lt;SimIconText :icon="`${icon} fa-fw`">&lt;/SimIconText>
+    &lt;SimIconText :icon="`${icon} fa-fw`" :text="text">&lt;/SimIconText>
+  &lt;/button>
+</code></pre>
         </template>
         <template slot="js">
-          <pre><code class="javascript"></code></pre>
+          <pre v-highlightjs><code class="javascript">
+data() {
+  return {
+    msg: 'Bulk Check',
+    items: [{id:1},{id:2},{id:3},{id:4},{id:5}],
+    selectedItems: [],
+  }
+},
+computed: {
+  badge() {
+    return this.example
+  },
+},
+methods: {
+  setSelectedItems (items) {
+    this.selectedItems = items
+  }
+},
+</code></pre>
         </template>
       </demobox>
 
