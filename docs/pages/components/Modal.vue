@@ -7,13 +7,34 @@
           Normal / Default
         </template>
         <template slot="view">
-          <p>Modal component</p>
+          <button @click="toggleModalVisibility">Modal</button>
+          <SimModal
+            :class="{active: shouldBeOpen}"
+            >
+            <p>Modal Content</p>
+            </SimModal>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+          <pre v-highlightjs><code class="html" v-pre>
+&lt;SimModal :class="{active: shouldBeOpen}">&lt;/SimModal>
+            </code></pre>
         </template>
         <template slot="js">
-          <pre><code class="javascript"></code></pre>
+          <pre v-highlightjs><code class="javascript">data() {
+  return {
+    shouldBeOpen: false,
+  }
+},
+computed: {
+  modalIsOpen() {
+    return this.shouldBeOpen
+  },
+},
+methods: {
+  toggleModalVisibility() {
+    this.shouldBeOpen = true
+  }
+},</code></pre>
         </template>
       </demobox>
 
@@ -33,9 +54,18 @@
     data() {
       return {
         msg: 'Modal',
+        shouldBeOpen: false,
       }
     },
     computed: {
+      modalIsOpen() {
+        return this.shouldBeOpen
+      },
+    },
+    methods: {
+      toggleModalVisibility() {
+        this.shouldBeOpen = true
+      }
     },
   }
 </script>
