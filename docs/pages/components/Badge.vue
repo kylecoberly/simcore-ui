@@ -11,10 +11,29 @@
           <input type="text" v-model="example" />
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+<pre v-highlightjs><code class="html">
+&lt;span class="sim-badge">
+  &lt;span class="sim-badge__text">&lt;slot>&lt;/slot>&lt;/span>
+  &lt;transition name="sim-badge" appear v-if="Madge">
+    &lt;span class="sim-badge__content">{{ badge }}&lt;/span>
+  &lt;/transition>
+&lt;/span>
+          </code></pre>
         </template>
         <template slot="js">
-          <pre><code class="javascript"></code></pre>
+          <pre v-highlightjs><code class="javascript">
+data() {
+  return {
+    msg: 'Badge',
+    example: 9
+  }
+},
+computed: {
+  badge() {
+    return this.example
+  },
+},
+            </code></pre>
         </template>
       </demobox>
 
