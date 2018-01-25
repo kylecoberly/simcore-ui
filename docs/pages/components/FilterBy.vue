@@ -10,7 +10,8 @@
           <p>FilterBy component</p>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+          <pre v-highlightjs><code class="html">
+            </code></pre>
         </template>
         <template slot="js">
           <pre><code class="javascript"></code></pre>

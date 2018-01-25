@@ -9,11 +9,14 @@
         <template slot="view">
           <SimDatepicker required></SimDatepicker>
         </template>
-        <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+        <template slot="html"><pre v-highlightjs><code class="html">&lt;SimDatepicker required>&lt;/SimDatepicker></code></pre>
         </template>
         <template slot="js">
-          <pre><code class="javascript"></code></pre>
+          <pre v-highlightjs><code class="javascript">
+// https://github.com/charliekassel/vuejs-datepicker
+
+import Datepicker from 'vuejs-datepicker'
+  </code></pre>
         </template>
       </demobox>
 
@@ -25,7 +28,7 @@
   import SimDatepicker from '../../../components/Datepicker'
 
   export default {
-    name: 'filter-by-doc',
+    name: 'datepicker-doc',
     components: {
       Demobox,
       SimDatepicker,
@@ -39,3 +42,9 @@
     },
   }
 </script>
+
+<style lang="scss">
+  .vdp-datepicker input[readonly] {
+    border: 1px solid var(--light-grey);
+  }
+</style>

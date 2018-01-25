@@ -26,7 +26,7 @@
           <p><sim-icontext icon="fa-star" text="Getting Started" circle /></p>
         </template>
         <template slot="html">
-          <pre><code class="html"><span class="de-emphasize">&lt;sim-icontext icon="fa-star" text="Getting Started"</span> <span class="emphasize">circle</span> <span class="de-emphasize">/></span></code></pre>
+          <pre v-highlightjs><code class="html"><span class="de-emphasize">&lt;sim-icontext icon="fa-star" text="Getting Started"</span> <span class="emphasize">circle</span> <span class="de-emphasize">/></span></code></pre>
         </template>
       </demobox>
 
@@ -38,7 +38,7 @@
           <p><sim-icontext icon="fa-star" text="Getting Started" round /></p>
         </template>
         <template slot="html">
-          <pre><code class="html"><span class="de-emphasize">&lt;sim-icontext icon="fa-star" text="Getting Started"</span> <span class="emphasize">round</span> <span class="de-emphasize">/></span></code></pre>
+          <pre v-highlightjs><code class="html"><span class="de-emphasize">&lt;sim-icontext icon="fa-star" text="Getting Started"</span> <span class="emphasize">round</span> <span class="de-emphasize">/></span></code></pre>
         </template>
       </demobox>
 
@@ -50,7 +50,7 @@
           <p><sim-icontext icon="fa-star" text="Getting Started" square /></p>
         </template>
         <template slot="html">
-          <pre><code class="html"><span class="de-emphasize">&lt;sim-icontext icon="fa-star" text="Getting Started"</span> <span class="emphasize">square</span> <span class="de-emphasize">/></span></code></pre>
+          <pre v-highlightjs><code class="html"><span class="de-emphasize">&lt;sim-icontext icon="fa-star" text="Getting Started"</span> <span class="emphasize">square</span> <span class="de-emphasize">/></span></code></pre>
         </template>
       </demobox>
 

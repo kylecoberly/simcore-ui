@@ -47,7 +47,7 @@ methods: {
   import SimBulkCheck from '../../../components/BulkCheck'
 
   export default {
-    name: 'badge-doc',
+    name: 'bulkcheck-doc',
     components: {
       Demobox,
       SimBulkCheck,
