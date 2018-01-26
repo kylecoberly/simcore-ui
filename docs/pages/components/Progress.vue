@@ -1,37 +1,24 @@
 <template lang="html">
   <article>
       <h2>{{ msg }}</h2>
-      <demobox>
+      <demobox :open="true">
         <template slot="intro">
           Normal / Default
         </template>
         <template slot="view">
-          <div v-if="progressLoading">
-            <SimProgress
-              :style="stylePercentComplete" :tooltip="bubbleText"
-              :progress-loading="true"
-              ></SimProgress>
-            </div>
+          <SimProgress :percent="percent"></SimProgress>
         </template>
         <template slot="html">
-        <pre v-highlightjs><code class="html">&lt;SimProgress 
-  :style="stylePercentComplete" 
-  :tooltip="bubbleText" 
-  :progress-loading="true"
-  >&lt;/SimProgress></code></pre>
+        <pre v-highlightjs><code class="html">&lt;SimProgress :percent="myPercentValue">&lt;/SimProgress></code></pre>
         </template>
         <template slot="js">
-          <pre v-highlightjs><code class="javascript">computed: {
-  percentComplete () {
-    return this.percent || 50
-  },
-  stylePercentComplete () {
-    return `--percent:${this.percentComplete}%`
-  },
-  bubbleText () {
-    return `${this.percentComplete}% Complete`
-  },
-},</code></pre>
+          <div class="flex-center-between">
+            <pre>
+              <code class="javascript">let myPercentValue = {{ percent }}</code>
+            </pre>
+            <button @click="randomizePercent">randomize</button>
+          </div>
+
         </template>
       </demobox>
 
@@ -51,18 +38,12 @@
     data() {
       return {
         msg: 'Progress',
-        progressLoading: true,
+        percent: 29,
       }
     },
-    computed: {
-      percentComplete () {
-        return this.percent || 50
-      },
-      stylePercentComplete () {
-        return `--percent:${this.percentComplete}%`
-      },
-      bubbleText () {
-        return `${this.percentComplete}% Complete`
+    methods: {
+      randomizePercent() {
+        this.percent = Math.round(Math.random() * 100)
       },
     },
   }
