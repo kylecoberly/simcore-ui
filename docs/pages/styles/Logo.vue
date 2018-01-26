@@ -51,7 +51,7 @@
                 <pre v-highlightjs><code class="html">&lt;img src="HealthScholars-logo-color.svg" alt="Health Scholars"></code></pre>
               </div>
             </div>
-            <div class="grid grid--two-col">
+            <div class="grid grid--two-columns">
               <div class="module module--demo module--demo--logo">
                 <div class="module--demo--item">
                   <div class="brand-logo"><img src="../../assets/images/HealthScholars/logo/HealthScholars-logo-color.svg" alt=""></div>
@@ -74,7 +74,7 @@
           </section>
           <section class="module-section module-section--brand-logo">
             <h3 id="alternative-logos" class="module-label">Alternative Logos</h3>
-            <div class="grid grid--three-col">
+            <div class="grid grid--three-columns">
               <div class="module module--demo">
                 <div class="module--demo--item">
                   <div class="brand-logo"><img src="../../assets/images/HealthScholars/logo/HealthScholars-VR-logo.svg" alt="Health Scholars Virtual Reality"></div>
@@ -103,7 +103,7 @@
                 </div>
               </div>              
             </div>
-            <div class="grid grid--two-col alt-logos">
+            <div class="grid grid--two-columns alt-logos">
               <div class="module module--demo">
                 <div class="module--demo--item">
                   <div class="brand-logo"><img src="../../assets/images/HealthScholars/logo/HealthScholars-logo-compact.svg" alt="Health Scholars"></div>
@@ -126,7 +126,7 @@
           </section>
           <section class="module-section module-section--brand-logo">
             <h3 id="brand-logo" class="module-label">Logo Icon</h3>
-            <div class="grid grid--three-col">
+            <div class="grid grid--three-columns">
               <div class="module module--demo">
                 <div class="module--demo--item">
                   <div class="brand-logo brand-logo--icon"><img src="../../assets/images/HealthScholars/logo/HealthScholars-icon-color.svg" alt="Health Scholars"></div>
