@@ -10,7 +10,7 @@
       <router-view name="details" />
     </transition>
     <div class="app-footer">
-      <p>&copy; 2014-2018 SimCore.</p>
+      <p>&copy; 2014-2018 SimCore</p>
     </div>
   </main>
 </template>

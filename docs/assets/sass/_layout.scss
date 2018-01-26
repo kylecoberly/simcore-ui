@@ -40,11 +40,13 @@ body {
   display: flex;
   flex-direction: row-reverse;
   flex-wrap: wrap;
-  
+  display: grid;
+  grid-template-columns: fit-content(18em) 1fr;
+  grid-template-rows: auto 1fr;
   @media (min-width: 50em) {
-    display: grid;
-    grid-template-columns: fit-content(18em) 1fr;
-    grid-template-rows: auto 1fr;
+    // display: grid;
+    // grid-template-columns: fit-content(18em) 1fr;
+    // grid-template-rows: auto 1fr;
   }
 }
 
