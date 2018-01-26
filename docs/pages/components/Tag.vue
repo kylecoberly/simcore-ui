@@ -7,10 +7,15 @@
           Normal / Default
         </template>
         <template slot="view">
-          <p>Tag component</p>
+          <div v-if="tagVisible">
+            <SimTag>
+
+            </SimTag>
+          </div>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+          <pre v-highlightjs><code class="html">
+&lt;SimTag>&lt;/SimTag></code></pre>
         </template>
         <template slot="js">
           <pre><code class="javascript"></code></pre>
@@ -33,9 +38,18 @@
     data() {
       return {
         msg: 'Tag',
+        tagVisible: true,
+        icon: 'fa-bars',
+        text: 'Vuejs',
       }
     },
     computed: {
-    },
+      tagIcon () {
+        return this.icon
+      },
+      tagText () {
+        return this.text
+      },
+    }
   }
 </script>
