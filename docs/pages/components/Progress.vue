@@ -1,19 +1,35 @@
 <template lang="html">
   <article>
       <h2>{{ msg }}</h2>
-
       <demobox>
         <template slot="intro">
           Normal / Default
         </template>
         <template slot="view">
-          <p>Progress component</p>
+          <div v-if="progressLoading">
+            <SimProgress :style="stylePercentComplete" :tooltip="bubbleText" :progress-loading="true"
+              ></SimProgress>
+            </div>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+          <pre v-highlightjs><code class="html">&lt;SimProgress 
+    :style="stylePercentComplete" 
+    :tooltip="bubbleText" 
+    :progress-loading="true"
+    >&lt;/SimProgress></code></pre>
         </template>
         <template slot="js">
-          <pre><code class="javascript"></code></pre>
+          <pre v-highlightjs><code class="javascript">computed: {
+  percentComplete () {
+    return this.percent || 50
+  },
+  stylePercentComplete () {
+    return `--percent:${this.percentComplete}%`
+  },
+  bubbleText () {
+    return `${this.percentComplete}% Complete`
+  },
+},</code></pre>
         </template>
       </demobox>
 
@@ -33,9 +49,19 @@
     data() {
       return {
         msg: 'Progress',
+        progressLoading: true,
       }
     },
     computed: {
+      percentComplete () {
+        return this.percent || 50
+      },
+      stylePercentComplete () {
+        return `--percent:${this.percentComplete}%`
+      },
+      bubbleText () {
+        return `${this.percentComplete}% Complete`
+      },
     },
   }
 </script>
