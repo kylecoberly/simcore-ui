@@ -7,16 +7,18 @@
         </template>
         <template slot="view">
           <div v-if="progressLoading">
-            <SimProgress :style="stylePercentComplete" :tooltip="bubbleText" :progress-loading="true"
+            <SimProgress
+              :style="stylePercentComplete" :tooltip="bubbleText"
+              :progress-loading="true"
               ></SimProgress>
             </div>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html">&lt;SimProgress 
-    :style="stylePercentComplete" 
-    :tooltip="bubbleText" 
-    :progress-loading="true"
-    >&lt;/SimProgress></code></pre>
+        <pre v-highlightjs><code class="html">&lt;SimProgress 
+  :style="stylePercentComplete" 
+  :tooltip="bubbleText" 
+  :progress-loading="true"
+  >&lt;/SimProgress></code></pre>
         </template>
         <template slot="js">
           <pre v-highlightjs><code class="javascript">computed: {
