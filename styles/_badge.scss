@@ -1,10 +1,11 @@
 .sim-badge {
   display: inline-block;
   position: relative;
+
   &__content {
     position: relative;
     transform: translate(-1ex, -1em);
-    font-size: 0.85em;
+    font-size: .85em;
     height: 1.5em;
     min-width: 1.5em;
     margin: -.5em 0;
@@ -19,16 +20,17 @@
   // transitions
   &-enter-active,
   &-leave-active {
-    transition: all var(--ms, var(--default-ms)) cubic-bezier(.6,-0.4,.6,1.4);
+    transition: all var(--ms, var(--default-ms)) cubic-bezier(.6, -.4, .6, 1.4);
   }
+
   &-enter,
   &-leave-to {
-    font-size: 0em;
+    font-size: 0;
   }
 }
 
 //opinions
-.sim-badge__content {
+.sim-badge--content {
   background: var(--badge-bg, var(--dark-grey));
   color: var(--badge-fg, var(--lightest));
 }

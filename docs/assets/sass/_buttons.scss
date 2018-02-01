@@ -50,6 +50,7 @@ button {
   &--secondary {
     background: var(--light);
     color: var(--action);
+
     &:hover {
       background: var(--edge);
     }
@@ -67,5 +68,5 @@ button {
 }
 
 .sim-calendar-button {
-  background: var(--light);  
+  background: var(--light);
 }
