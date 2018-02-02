@@ -21,11 +21,14 @@ import DocTag from '../pages/components/Tag'
 import DocTimePicker from '../pages/components/TimePicker'
 import DocTooltip from '../pages/components/Tooltip'
 
+import Tests from '../../tests/unit/components/Beanstalker'
+
 // Nav
 import Hello from '../Hello'
 import GettingStarted from '../GettingStarted'
 import ComponentLibrary from '../ComponentLibrary'
 import StyleLibrary from '../StyleLibrary'
+import TestLibrary from '../TestLibrary'
 import Extras from '../Extras'
 
 // Docs: Styles
@@ -241,6 +244,26 @@ export default new Router({
       icon: 'fa-code fa-fw',
       label: 'Other Things',
       component: Extras,
+    },
+    {
+      path: '/tests',
+      label: 'Tests',
+      icon: 'fa-code fa-fw',
+      component: TestLibrary,
+      children: [
+        {
+          path: '',
+          redirect: 'beanstalker',
+        },
+        {
+          path: 'beanstalker',
+          name: 'the tests',
+          label: 'The Tests',
+          components: {
+            details: Tests,
+          },
+        },
+      ],
     },
   ],
   scrollBehavior(to, from, savedPosition) {

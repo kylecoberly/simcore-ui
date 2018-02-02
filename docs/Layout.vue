@@ -43,7 +43,7 @@
       SimIconText,
       Directory,
     },
-    data () {
+    data() {
       return {
         menu: [],
         shouldOverlayBeOpen: false,
