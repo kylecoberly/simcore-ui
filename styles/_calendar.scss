@@ -78,9 +78,9 @@
     flex: none;
     display: flex;
     flex-direction: column;
-    width: 18em;
     position: relative;
     z-index: 1;
+    transition: width 200ms ease-in-out;
 
     &--header {
       padding: 1em 0;
@@ -96,6 +96,9 @@
       border-radius: 1px;
       color: var(--lighter);
       transition: 200ms linear;
+
+      > div {
+      }
     }
   }
 
@@ -230,11 +233,13 @@
       position: relative;
       flex: 0 0 14.285%;
       // height: 7vmax;
-      min-height: 7em;
+      // min-height: 7em;
+      min-height: 10vmin;
       padding: .5em;
       cursor: pointer;
       display: flex;
       flex-direction: column;
+      transition: min-height 200ms ease-out;
 
       &--timelines {
         position: absolute;
@@ -405,4 +410,14 @@
       }
     }
   }
+
+  // &.is-expanded {
+  //   .sim-calendar--grid--day {
+  //     min-height: 4vmin;
+  //     &.is-selected {
+  //       min-height: 48vmin;
+  //       max-height: 48em;
+  //     }
+  //   }
+  // }
 }

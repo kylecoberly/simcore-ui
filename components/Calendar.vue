@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div class="sim-calendar--body" :style="{'--start-offset': startOffset}">
+    <div class="sim-calendar--body">
 
       <main class="sim-calendar--main">
         <div class="sim-calendar--grid">
@@ -64,6 +64,7 @@
                              :displayMode="displayMode"
                              :date="day.date"
                              :user-context="contextLabel"
+                             :initialEventLength="filterEventLength"
                              :initialEventBlocks="day.eventBlocks"
                              :initialPendingEventBlocks="day.pendingEventBlocks"
                              :initialCurrentUserAvailabilityBlocks="day.currentUserAvailabilityBlocks"
@@ -81,6 +82,7 @@
                              :displayMode="displayMode"
                              :date="day.date"
                              :user-context="contextLabel"
+                             :initialEventLength="filterEventLength"
                              :initialEventBlocks="day.eventBlocks"
                              :initialPendingEventBlocks="day.pendingEventBlocks"
                              :initialCurrentUserAvailabilityBlocks="day.currentUserAvailabilityBlocks"
@@ -93,7 +95,7 @@
             </div>
 
             <SimBubble v-if="bubbleIsOpen">
-              <SimSlidePresenter></SimSlidePresenter>
+              <SimSlidePresenter :should-hide-navigation-controls="hideSlideNavigationControls"></SimSlidePresenter>
             </SimBubble>
 
             <div class="sim-loader--shield" v-if="isLoading">
@@ -103,39 +105,45 @@
         </div>
       </main>
 
-      <template v-if="isCoordinatorContext">
-        <aside class="sim-calendar--aside sim-calendar--filters" :class="{'sim-calendar--filters--disabled': bubbleIsOpen}">
+      <aside class="sim-calendar--aside" :class="filterContainerClasses">
+        <template v-if="isCoordinatorContext">
           <div class="sim-calendar--aside--header">
-            <span><b>Availability Filters</b></span>
+            <span><b>Filters</b></span>
           </div>
           <div class="sim-calendar--aside--body">
-            <div class="sim-flex--1">
+            <div class="sim-flex--1 sim-flex--column filter-molecule filter--duration">
+              <SimIconText icon="fa-clock-o fa-fw" text="Duration"></SimIconText>
+              <SimTimePicker orientation="y"
+                            timeline-mode="numbers"
+                            block-theme="pending-event"
+                            :show-block-time="false"
+                            :time-block-limit="1"
+                            :time-block-default-duration="1"
+                            :start-time="0"
+                            :end-time="6"
+                            :block-settings="durationFilterBlockSettings"
+                            :duration-filter-blocks="durationFilterBlocks"
+                            :date="date"
+                            />
+              <!-- <input type="range" v-model="filterEventLength" x:disabled="bubbleIsOpen" min="0.5" max="6" step="0.5" /> -->
+            </div>
 
-              <div xv-if="isMonthView" class="filter-molecule">
-                Min. Event Length: <b class="text--aqua">{{ halfGlyph(filterEventLength, 'hour', 'hours') }}</b>
-                <br /><br />
-                <input type="range" v-model="filterEventLength" :disabled="bubbleIsOpen" min="0.5" max="6" step="0.5" />
-              </div>
-
+            <div class="sim-flex--2">
               <!--<div v-if="false && isMonthView" class="filter-molecule">-->
                 <!--Min. Instructors Needed: <b class="text&#45;&#45;aqua">{{ filterInstructorCount }}</b>-->
                 <!--<br /><br />-->
                 <!--<input type="range" v-model="filterInstructorCount" :disabled="bubbleIsOpen" min="1" max="20" />-->
               <!--</div>-->
 
-              <div class="filter-molecule ghost">
-                <SimFilterBy xv-if="userTypeIsClient" system-echo="(Filter is not available yet)" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
-                <SimFilterBy system-echo="(Filter is not available yet)" label="Departments" type="department_id" :list="departments" @filter="applyFilter"></SimFilterBy>
-                <SimFilterBy system-echo="(Filter is not available yet)" label="Professional Titles" type="title_id" :list="professionalTitles" @filter="applyFilter"></SimFilterBy>
-              </div>
-
-              <div class="filter-molecule sim-filter">
-                <p class="sim-flex--row">
-                  <span class="sim-flex--1">Instructors</span>
+              <div class="filter-molecule filter--instructors sim-filter">
+                <SimIconText icon="fa-user-plus fa-fw" text="Instructors"></SimIconText>
+                <!-- <p class="sim-flex--row">
+                  <span class="sim-flex--1">
+                  </span>
                   <span v-if="thereAreActiveInstructors" @click="clearAllActiveInstructors">
                     <SimIconText icon="fa-times-circle fa-fw"></SimIconText>
                   </span>
-                </p>
+                </p> -->
                 <SimDatalist :items="activeInstructors" :animate="true">
                   <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
                     <SimSelection
@@ -155,7 +163,7 @@
                 <br />
                 <SimAutocomplete placeholder="find instructors..."
                   :options="inactiveInstructors"
-                  :should-be-disabled="bubbleIsOpen"
+                  x:should-be-disabled="bubbleIsOpen"
                   @select="addToInstructorList"
                   >
                   <div class="item-tag" slot="item" slot-scope="props">
@@ -164,30 +172,36 @@
                 </SimAutocomplete>
               </div>
 
+              <div class="filter-molecule filter--categories ghost">
+                <SimIconText icon="fa-users fa-fw" text="Filters"></SimIconText>
+                <SimFilterBy xv-if="userTypeIsClient" system-echo="(Filter is not available yet)" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
+                <SimFilterBy system-echo="(Filter is not available yet)" label="Departments" type="department_id" :list="departments" @filter="applyFilter"></SimFilterBy>
+                <SimFilterBy system-echo="(Filter is not available yet)" label="Professional Titles" type="title_id" :list="professionalTitles" @filter="applyFilter"></SimFilterBy>
+              </div>
+
+
             </div>
           </div>
-        </aside>
-      </template>
+        </template>
 
-      <template v-if="isInstructorContext && isMonthView">
-        <aside class="sim-calendar--aside sim-calendar--day-control-panel">
+        <template v-if="isInstructorContext && isMonthView">
           <div class="sim-calendar--aside--header">
             <b>My Availability</b>
           </div>
           <div class="sim-calendar--aside--body">
             <SimTimePicker orientation="y"
-              @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
-              :blocks="currentUserAvailabilityBlocksForCurrentDate"
-              :date="date"
-              :should-show-date="true"
-              :initialEventBlocks="currentDay.eventBlocks"
-              :initialPendingEventBlocks="currentDay.pendingEventBlocks"
-              :initialCurrentUserAvailabilityBlocks="currentDay.currentUserAvailabilityBlocks"
-              :initialAggregateUserAvailabilityBlocks="currentDay.aggregateUserAvailabilityBlocks"
-              />
+                          :blocks="currentUserAvailabilityBlocksForCurrentDate"
+                          :date="date"
+                          :should-show-date="true"
+                          :initialEventBlocks="currentDay.eventBlocks"
+                          :initialPendingEventBlocks="currentDay.pendingEventBlocks"
+                          :initial-current-user-availability-blocks="currentDay.currentUserAvailabilityBlocks"
+                          :initialAggregateUserAvailabilityBlocks="currentDay.aggregateUserAvailabilityBlocks"
+                          @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
+                          />
           </div>
-        </aside>
-      </template>
+        </template>
+      </aside>
 
     </div>
 
@@ -244,10 +258,10 @@
       return {
         lastUpdated: Date.now(), // TODO: Not this. - Chad
         rawUserData: {},
-        contextSwitch: false,
+        contextSwitch: true,
         calendarIsUpdating: false,
         isLoading: false,
-        filterEventLength: 2,
+        hideSlideNavigationControls: false,
         filterInstructorCount: 1,
         date: this.$store.state.activeDate.date,
         institutions: [],
@@ -261,7 +275,21 @@
         eventBlocks: [],
         pendingEventBlocks: [],
         currentUserAvailabilityBlocks: [],
-        aggregateUserAvailabilityBlocks: {},
+        durationFilterBlocks: [
+          {
+            start:0,
+            duration: 1,
+          }
+        ],
+        durationFilterBlockSettings: {
+          showBlockHours: true,
+          showBlockTime: false,
+          canRemoveBlock: false,
+          canResizeBlockStart: false,
+          canResizeBlockEnd: true,
+          canMoveBlock: false,
+        },
+        aggregateUserAvailabilityBlocks: [],
         monthDays: {},
         weekDays: {},
       }
@@ -413,6 +441,27 @@
           classes.push('is-month-view')
         }
 
+        if (this.bubbleIsOpen) {
+          classes.push('is-expanded')
+        }
+
+        return classes.join(' ')
+      },
+      filterContainerClasses() {
+        const classes = []
+
+        if (this.isCoordinatorContext) {
+          classes.push('sim-calendar--filters')
+
+          if (this.bubbleIsOpen) {
+            classes.push('x-sim-calendar--filters--disabled')
+          }
+        }
+
+        if (this.isInstructorContext && this.isMonthView) {
+          classes.push('sim-calendar--day-control-panel')
+        }
+
         return classes.join(' ')
       },
       activeMoment() {
@@ -516,6 +565,9 @@
       },
       currentUserAvailabilityBlocksForCurrentDate() {
         return this.currentUserAvailabilityBlocks[this.date]
+      },
+      filterEventLength() {
+        return this.durationFilterBlocks[0].duration
       },
     },
     watch: {
@@ -638,6 +690,7 @@
       prepareTheBubbleData(bubbleData) {
         bubbleData.meta = {}
         bubbleData.meta.initialEventDuration = parseFloat(this.filterEventLength)
+        this.hideSlideNavigationControls = bubbleData.hideSlideNavigationControls || false
 
         this.$store.commit('resetHistory')
         this.$store.commit('addASlide', this.packageSlideContent(bubbleData))
@@ -795,9 +848,25 @@
   .sim-flex--1 {
     flex: 1;
   }
+  .sim-flex--2 {
+    flex: 2;
+  }
+  .sim-flex--3 {
+    flex: 3;
+  }
+  .sim-flex--4 {
+    flex: 4;
+  }
+  .sim-flex--5 {
+    flex: 5;
+  }
   .sim-flex--row {
     display: flex;
     flex-direction: row;
+  }
+  .sim-flex--column {
+    display: flex;
+    flex-direction: column;
   }
 
   .sim-calendar .sim-bubble {
@@ -824,6 +893,7 @@
     --switch-color-active: var(--lighter-grey);
     --switch-handle-color: var(--action);
     --timeblock-color: var(--green);
+
     .sim-switch input {
       box-shadow: 0 0 0 1px var(--light-grey);
       &::before {
@@ -831,18 +901,54 @@
         color: var(--lightest);
       }
     }
+
+    &.is-instructor-context {
+      .sim-calendar--aside {
+        width: 18em;
+      }
+    }
+
+    &.is-coordinator-context {
+      .sim-calendar--aside {
+        width: 25em;
+      }
+    }
+
     &.is-week-view {
       .day-control-panel {
         display: none;
       }
+
       .sim-calendar--grid--day {
         display: flex;
       }
     }
+
     .is-before-today {
       .sim-calendar--grid--date {
         color: #ddd;
       }
+    }
+  }
+
+  .filter-molecule {
+    .sim-timepicker--y {
+      .sim-timepicker--inner {
+        width: auto;
+      }
+
+      .sim-timeblock .sim-timeblock--info {
+        left: 50%;
+        transform: translate(-50%, -50%);
+        white-space: normal;
+        text-align: center;
+      }
+    }
+
+    &.filter--duration {
+      background: #444;
+      margin: -1em 1em -1em -1em;
+      padding: 1em 0 1em 1em;
     }
   }
 </style>

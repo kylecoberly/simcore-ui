@@ -1,9 +1,19 @@
 <template lang="html">
   <div class="app-layout">
-    <SimOverlay :should-show-dismiss="true" :dismiss-to="overlayDismissTo" class="animator parallax in-from-top" :should-be-open="shouldOverlayBeOpen">
+    <SimOverlay
+      class="animator parallax in-from-top"
+      :should-be-open="shouldOverlayBeOpen"
+      :should-show-dismiss="true"
+      :dismiss-to="overlayDismissTo"
+      >
       <button @click="$root.togglePanel">panelize</button>
     </SimOverlay>
-    <SimPanel :should-show-dismiss="true" :dismiss-to="panelDismissTo" class="animator parallax in-from-left" :should-be-open="shouldPanelBeOpen"></SimPanel>
+    <SimPanel
+      class="animator parallax in-from-right"
+      :should-be-open="shouldPanelBeOpen"
+      :should-show-dismiss="true"
+      :dismiss-to="panelDismissTo"
+      ></SimPanel>
     <header class="app-header animatable">
       <div>
         <router-link to="/" class="logo"><span>SIM <b>UI</b></span></router-link>

@@ -8,9 +8,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: var(--timeblock-cursor, move);
+  cursor: var(--timeblock-cursor, default);
 
   // states
+  &.is-moveable {
+    --timeblock-cursor: move;
+  }
+
   &.is-display-only {
     cursor: inherit;
   }
@@ -240,21 +244,22 @@
     cursor: pointer;
 
     &::before {
-      content: '';
-      position: absolute;
-      pointer-events: none;
-      background: var(--green);
-      border-radius: .2em;
-      width: calc(300% + 3em);
-      top: 0;
-      bottom: 0;
-      opacity: .35;
+      // content: '';
+      // position: absolute;
+      // pointer-events: none;
+      // background: var(--green);
+      // border-radius: .2em;
+      // width: calc(300% + 3em);
+      // top: 0;
+      // bottom: 0;
+      // opacity: .35;
+      display: none;
     }
   }
 
   &--empty {
-    --timeblock-color: var(--shade);
-
+    --timeblock-color: var(--mist) repeating-linear-gradient(45deg, transparent 0px, transparent 5px, var(--shade) 5px, var(--shade) 7px);
+    box-shadow: 0 0 0 1px var(--shade) inset;
     &::before {
       display: none;
     }
@@ -292,7 +297,7 @@
 // context overrides
 .sim-timepicker--y {
   .sim-timeblock {
-    --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
+    // --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
     box-shadow: 0 .1em 1em -.3em var(--twilight);
 
     &.is-moving,

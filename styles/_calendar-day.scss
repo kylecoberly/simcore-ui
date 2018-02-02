@@ -29,7 +29,7 @@
 
 .is-month-view {
   .local--day {
-    > * + * {
+    > .local--day--blocks + .local--day--blocks {
       margin: 0 0 0 .5em;
     }
 
@@ -76,7 +76,7 @@
 
       .sim-timeblock {
         // @NOTE: keep this. Temporary supression - Jase
-        // pointer-events: none;
+        pointer-events: none;
 
         &::before {
           display: none;

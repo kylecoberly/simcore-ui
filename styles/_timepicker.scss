@@ -1,6 +1,5 @@
 .sim-timepicker {
   --picker-cursor: cell;
-  --timeblock-cursor: move; // -webkit-grab;
   --handle-cursor: row-resize;
   flex: 1;
   display: flex;
@@ -61,6 +60,14 @@
     flex: 1;
     position: relative;
     display: flex;
+
+    &.is-moveable {
+      --timeblock-cursor: move; // -webkit-grab;
+    }
+
+    &.is-at-block-limit {
+      --picker-cursor: default;
+    }
   }
 
   // &--time {}

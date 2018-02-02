@@ -9,8 +9,8 @@
       <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber }}</div>
 
       <ul v-if="isWeekView" class="sim-calendar--grid--day--timelines">
-        <li v-for="hour in 25" @dblclick="createBlock(hour-1, $event.target)"
-        :class="setHourClasses(hour-1)"></li>
+         <!-- || (isSelected && bubbleIsOpen) -->
+        <li v-for="hour in 25" @dblclick="createBlock(hour-1, $event.target)" :class="setHourClasses(hour-1)"></li>
       </ul>
 
       <template v-if="isInstructorContext">
@@ -43,10 +43,10 @@
 
       <template v-if="isCoordinatorContext">
 
-        <div v-if="isWeekView" class="local--day--aggregate-blocks">
+        <div v-if="isWeekView" class="local--day--blocks local--day--aggregate-blocks">
           <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
             theme="aggregate"
-            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
+            xv-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
             :class="displayMode"
             :key="index"
             :block="block"
@@ -56,7 +56,7 @@
             />
         </div>
 
-        <div class="local--day--event-blocks">
+        <div class="local--day--time-blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             theme="event"
             v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
@@ -69,7 +69,7 @@
             />
         </div>
 
-        <div class="local--day--pending-blocks">
+        <div class="local--day--blocks local--day--pending-blocks">
           <SimTimeBlock v-for="(block, index) in pendingEvents"
             theme="pending-event"
             v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: true, slideTemplate: 'SimSlideWithAList'}"
@@ -82,7 +82,7 @@
             />
         </div>
 
-        <div v-if="isMonthView" class="local--day--aggregate-blocks">
+        <div v-if="isMonthView" class="local--day--blocks local--day--aggregate-blocks">
           <template v-if="aggregateUserAvailabilityBlocks.length">
             <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
               theme="aggregate"
@@ -96,9 +96,10 @@
               />
           </template>
           <template v-else-if="!aggregateUserAvailabilityBlocks.length">
-            <div @click="emitLodestar" class="sim-timeblock--manual-clickable-wrapper">
+            <!-- <div @click.stop="emitLodestar" class="sim-timeblock--manual-clickable-wrapper"> -->
               <SimTimeBlock
                 theme="empty"
+                v-bubble-trigger="{date: date, block: {start: 0, duration: 24}, x: dayOfWeek+1, hideSlideNavigationControls: true, followMousemove: false, slideTemplate: 'SimSlideWithFilterMessage'}"
                 :class="displayMode"
                 :key="0"
                 :block="{start: 0, duration: 24}"
@@ -106,7 +107,7 @@
                 :show-controls="false"
                 :orientation="timeBlockOrientation"
                 />
-            </div>
+            <!-- </div> -->
           </template>
         </div>
 
@@ -129,6 +130,7 @@
       'index',
       'displayMode',
       'userContext',
+      'initialEventLength',
       'initialEventBlocks',
       'initialPendingEventBlocks',
       'initialCurrentUserAvailabilityBlocks',
@@ -178,6 +180,18 @@
       isWeekView() {
         return this.displayMode === 'week'
       },
+      isSelected() {
+        return moment(this.$store.state.activeDate.date).isSame(this.date, 'day')
+      },
+      isBeforeToday() {
+        return moment().isAfter(this.date, 'day')
+      },
+      isToday() {
+        return moment().isSame(this.date, 'day')
+      },
+      isWeekendDay() {
+        return this.$store.state.calendar.settings.weekend_days.includes(this.dayOfWeek)
+      },
       showDayNumber() {
         return parseInt(this.date.split('-')[2])
       },
@@ -187,20 +201,20 @@
       dayClasses() {
         const classes = [`day-${this.dayOfWeek}`]
 
-        if (moment().isSame(this.date, 'day')) {
+        if (this.isToday) {
           classes.push('is-today')
-        } else if (moment().isAfter(this.date, 'day')) {
+        } else if (this.isBeforeToday) {
           classes.push('is-before-today')
         } else {
           classes.push('is-after-today')
         }
 
-        if (this.$store.state.calendar.settings.weekend_days.includes(this.dayOfWeek)) {
+        if (this.isWeekendDay) {
           classes.push('is-weekend')
         } else {
           classes.push('is-weekday')
         }
-        if (moment(this.$store.state.activeDate.date).isSame(this.date, 'day')) {
+        if (this.isSelected) {
           classes.push(this.selectedClass || 'is-selected')
         }
 
@@ -217,6 +231,9 @@
       },
       showTimeBlockControls() {
         return (this.isMonthView ? false : true)
+      },
+      bubbleIsOpen() {
+        return this.$store.state.bubble.is_open
       },
     },
     methods: {
@@ -261,7 +278,7 @@
           this.createTimeBlock(hour)
         } else {
           // FIXME: This is disabled for now now until week view filters are working - Jase
-          // this.createEventBlock(hour, element)
+          this.createEventBlock(hour, element)
         }
       },
       createTimeBlock(hour) {
@@ -270,7 +287,7 @@
         this.updateBlocks()
       },
       createEventBlock(hour, element) {
-        this.pendingEvents.push({ start: hour, duration: 1 })
+        this.pendingEvents.push({ start: hour, duration: this.initialEventLength })
         this.pendingEvents.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
 
         // TODO: Make this an emit like above. - Chad
@@ -287,7 +304,7 @@
             date: this.date,
             block: {
               start: hour,
-              duration: 1
+              duration: this.initialEventLength
             },
             x: this.dayOfWeek+1,
             followMousemove: true,

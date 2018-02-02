@@ -6,7 +6,7 @@ const action = 'purview_users'
 
 export default {
   getUsers(baseUrl, userId) {
-    return axios.get(`${baseUrl}${endpoint}/${userId}/${action}`)
+    return axios.get(`${baseUrl}${endpoint}/${userId}/${action}?scope=canInstruct`)
   },
   users() {
     return []

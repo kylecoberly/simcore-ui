@@ -3,30 +3,28 @@
 
     <template v-if="showControls">
 
-      <div class="sim-timeblock--remover" @click="removeTimeBlock">
+      <div v-if="canRemoveBlock" class="sim-timeblock--remover" @click="removeTimeBlock">
         <SimIconText icon="fa-times"></SimIconText>
       </div>
 
       <template v-if="orientationIsX">
-        <div class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--left"
-          @mousedown="startStretchLeft"></div>
-        <div class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--right"
-          @mousedown="startStretchRight"></div>
+        <div v-if="canResizeBlockStart" class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--left" @mousedown="startStretchLeft"></div>
+        <div v-if="canResizeBlockEnd" class="sim-timeblock--handle sim-timeblock--handle--x sim-timeblock--handle--right" @mousedown="startStretchRight"></div>
       </template>
 
-      <template v-if="orientationIsY">
-        <div class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--up"
-          @mousedown="startStretchUp"></div>
-        <div class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--down"
-          @mousedown="startStretchDown"></div>
+      <template v-else-if="orientationIsY">
+        <div v-if="canResizeBlockStart" class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--up" @mousedown="startStretchUp"></div>
+        <div v-if="canResizeBlockEnd" class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--down" @mousedown="startStretchDown"></div>
       </template>
 
-      <div class="sim-timeblock--mover" @mousedown="startMove"></div>
+      <div v-if="canMoveBlock" class="sim-timeblock--mover" @mousedown="startMove"></div>
 
-      <div class="sim-timeblock--info">
-        <div class="sim-timeblock--info--hours">{{ displayBlockHours }}</div>
-        <div class="sim-timeblock--info--time">{{ displayBlockTime }}</div>
-      </div>
+      <template v-if="showBlockInfo">
+        <div class="sim-timeblock--info">
+          <div v-if="showBlockHours" class="sim-timeblock--info--hours">{{ displayBlockHours }}</div>
+          <div v-if="showBlockTime" class="sim-timeblock--info--time">{{ displayBlockTime }}</div>
+        </div>
+      </template>
 
     </template>
 
@@ -110,6 +108,19 @@
           }
         },
       },
+      settings: {
+        type: Object,
+        default() {
+          return {
+            showBlockHours: true,
+            showBlockTime: true,
+            canRemoveBlock: true,
+            canResizeBlockStart: true,
+            canResizeBlockEnd: true,
+            canMoveBlock: true,
+          }
+        },
+      },
     },
     data() {
       return {
@@ -146,10 +157,34 @@
 
         return `${output} ${(total > 0 && total <= 1 ? 'hour' : 'hours')}`
       },
+      showBlockHours() {
+        return this.settings.showBlockHours
+      },
+      showBlockTime() {
+        return this.settings.showBlockTime
+      },
+      canRemoveBlock() {
+        return this.settings.canRemoveBlock
+      },
+      canResizeBlockStart() {
+        return this.settings.canResizeBlockStart
+      },
+      canResizeBlockEnd() {
+        return this.settings.canResizeBlockEnd
+      },
+      canMoveBlock() {
+        return this.settings.canMoveBlock
+      },
+      showBlockInfo() {
+        return this.showBlockHours || this.showBlockTime
+      },
       blockClasses() {
         const classes = [`sim-timeblock sim-timeblock--theme--${this.theme} sim-timeblock--${this.index} sim-timeblock--${this.orientation}`]
         if (!this.showControls) {
           classes.push('is-display-only')
+        }
+        if (this.canMoveBlock) {
+          classes.push('is-moveable')
         }
         if (this.isMoving) {
           classes.push('is-moving')
