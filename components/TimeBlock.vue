@@ -28,6 +28,19 @@
 
     </template>
 
+    <div v-if="hasTooltip" class="sim-timeblock--tooltip">
+      <span v-if="tooltipIcon" class="sim-timeblock--icon sim-timeblock--tooltip--icon">
+        <svg><use :xlink:href="tooltipIcon" /></svg>
+      </span>
+      <span v-if="tooltipText">
+        {{ tooltipText }}
+      </span>
+    </div>
+
+    <div v-if="hasBlockIcon" class="sim-timeblock--icon">
+      <svg><use :xlink:href="blockIcon" /></svg>
+    </div>
+
   </div>
 </template>
 
@@ -99,6 +112,11 @@
         type: String,
         default: 'default'
       },
+      tooltip: {
+        icon: null,
+        text: null,
+      },
+      blockIcon: null,
       variables: {
         type: Object,
         default() {
@@ -129,6 +147,18 @@
       }
     },
     computed: {
+      tooltipIcon() {
+        return this.tooltip && this.tooltip.icon ? this.tooltip.icon : null
+      },
+      tooltipText() {
+        return this.tooltip && this.tooltip.text ? this.tooltip.text : null
+      },
+      hasTooltip() {
+        return (this.tooltipIcon || this.tooltipText)
+      },
+      hasBlockIcon() {
+        return (this.blockIcon !== null || this.blockIcon != undefined)
+      },
       orientationIsX() {
         return this.orientation === 'x'
       },

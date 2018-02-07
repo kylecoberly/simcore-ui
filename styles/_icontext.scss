@@ -19,9 +19,17 @@
   }
   .sim-icon {
     flex: 0 0 auto;
+    &.svg {
+      line-height: 0;
+    }
   }
   * + span {
     margin-left: .5em;
+  }
+
+  svg {
+    width: 1.3em;
+    height: 1.3em;
   }
 }
 

@@ -46,7 +46,6 @@
         <div v-if="isWeekView" class="local--day--blocks local--day--aggregate-blocks">
           <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
             theme="aggregate"
-            xv-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
             :class="displayMode"
             :key="index"
             :block="block"
@@ -87,6 +86,7 @@
             <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
               theme="aggregate"
               v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
+              :tooltip="{icon: '#icon--instructors-exist', text: '0 Instructors'}"
               :class="displayMode"
               :key="index"
               :block="block"
@@ -99,7 +99,8 @@
             <!-- <div @click.stop="emitLodestar" class="sim-timeblock--manual-clickable-wrapper"> -->
               <SimTimeBlock
                 theme="empty"
-                v-bubble-trigger="{date: date, block: {start: 0, duration: 24}, x: dayOfWeek+1, hideSlideNavigationControls: true, followMousemove: false, slideTemplate: 'SimSlideWithFilterMessage'}"
+                block-icon="#icon--instructors-none"
+                :tooltip="{icon: '#icon--instructors-none', text: '0 Instructors'}"
                 :class="displayMode"
                 :key="0"
                 :block="{start: 0, duration: 24}"
@@ -121,10 +122,11 @@
   import moment from 'moment'
 
   import SimTimeBlock from './TimeBlock'
+  import SimTooltip from './Tooltip'
 
   export default {
     name: 'sim-calendar-day',
-    components: { SimTimeBlock },
+    components: { SimTimeBlock, SimTooltip },
     props: [
       'date',
       'index',

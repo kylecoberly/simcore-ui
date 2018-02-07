@@ -234,10 +234,12 @@
       setHourClasses(hour) {
         const classes = []
 
-        if (hour >= 6 && hour <= 17.5) {
-          classes.push('is-daytime')
-        } else {
-          classes.push('is-nighttime')
+        if (this.timelineMode === 'hours') {
+          if (hour >= 6 && hour <= 17.5) {
+            classes.push('is-daytime')
+          } else {
+            classes.push('is-nighttime')
+          }
         }
 
         if (this.isWholeNumber(hour)) {

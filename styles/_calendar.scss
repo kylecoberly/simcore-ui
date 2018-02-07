@@ -4,7 +4,8 @@
 .sim-calendar {
   --edge-color: var(--medium-grey);
   --edge: 1px 1px 0 0 var(--edge-color);
-  --lines: 0 0 0 1px var(--edge-color);
+  // --lines: 0 0 0 1px var(--edge-color);
+  --lines: -1px -1px 0px 0px var(--edge-color), -1px -1px 0px 0px var(--edge-color) inset;
   --picker-bg: var(--lighter);
   --picker-fg: var(--dark);
   font-family: sans-serif;
@@ -126,6 +127,11 @@
     }
 
     .filter-molecule {
+      &--heading {
+        font-weight: normal;
+        margin: 0 0 .5em 0;
+      }
+
       + .filter-molecule {
         margin-top: 1.5em;
         // padding-top: 1.5em;
@@ -232,10 +238,8 @@
     &--day {
       position: relative;
       flex: 0 0 14.285%;
-      // height: 7vmax;
-      // min-height: 7em;
       min-height: 10vmin;
-      padding: .5em;
+      padding: 4px 5px 5px 4px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -313,6 +317,10 @@
     &--day {
       box-shadow: var(--lines);
 
+      &:hover {
+        z-index: 2;
+      }
+
       &--timelines li {
         &.is-nighttime {
           background: rgba(0,0,0, .2);
@@ -351,7 +359,7 @@
     .is-weekday {
       background-color: #fff;
 
-      &:hover {
+      &:hover:not(.is-selected) {
         background-color: #fcf9e9;
       }
     }
@@ -376,15 +384,16 @@
     .is-weekend {
       background-color: var(--light); //#e9f9fc;
 
-      &:hover {
+      &:hover:not(.is-selected) {
         background-color: #f3f0e1; //#e7f3e7;
       }
     }
 
     .is-selected {
       z-index: 2;
-      box-shadow: 0 0 0 3px var(--action), 0 0 1em -.3em;
-      border-radius: .2em;
+      background-color: var(--blue-film-light);
+      // box-shadow: 0 0 0 3px var(--action), 0 0 1em -.3em;
+      // border-radius: .2em;
     }
   }
 

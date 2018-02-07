@@ -14,6 +14,8 @@
   // colors
   --red: #ca1e34;
   --red-film: rgba(#ca1e34, .5);
+  --red-film-light: rgba(#ca1e34, .15);
+  --red-film-lighter: rgba(#ca1e34, .05);
   --orange: #ff7042;
   --orange-film: rgba(#ff7042, .5);
   --yellow: #ffc929;
@@ -24,6 +26,7 @@
   --aqua-film: rgba(#00c1d9, .5);
   --blue: #4A93B9;
   --blue-film: rgba(#4A93B9, .5);
+  --blue-film-light: rgba(#4A93B9, .15);
   --blue-film-heavy: rgba(14, 103, 150, .9);
   --purple: #ab47bd;
   --purple-film: rgba(#ab47bd, .5);
@@ -67,7 +70,7 @@
 
   --base-font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --serif-font-family: 'Garamond', 'Cambria', Georgia, serif;
-  
+
 }
 
 .text {
