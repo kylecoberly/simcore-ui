@@ -86,7 +86,7 @@
             <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
               theme="aggregate"
               v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
-              :tooltip="{icon: '#icon--instructors-exist', text: '0 Instructors'}"
+              :tooltip="{icon: '#icon--instructors-exist', text: pluralize(1, 'Instructor Found', 'Instructors Found')}"
               :class="displayMode"
               :key="index"
               :block="block"
@@ -100,7 +100,7 @@
               <SimTimeBlock
                 theme="empty"
                 block-icon="#icon--instructors-none"
-                :tooltip="{icon: '#icon--instructors-none', text: '0 Instructors'}"
+                :tooltip="{icon: '#icon--instructors-none', text: pluralize(0, 'Instructor Found', 'Instructors Found')}"
                 :class="displayMode"
                 :key="0"
                 :block="{start: 0, duration: 24}"
@@ -239,6 +239,9 @@
       },
     },
     methods: {
+      pluralize(count, single, other) {
+        return (count === 1 ? `${count} ${single}` : `${count} ${other}`)
+      },
       setActiveDateToToday() {
         this.$store.commit('setActiveDate', this.date)
       },

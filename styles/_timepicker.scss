@@ -90,9 +90,9 @@
     padding: 0;
     opacity: .5;
 
-    &:hover {
-      background: var(--action);
-    }
+    // &:hover {
+    //   background: var(--action);
+    // }
 
     &.is-daytime {
       background: rgba(255, 255, 255, .15);
