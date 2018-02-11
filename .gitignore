@@ -19,3 +19,5 @@ selenium-debug.log
 \.vscode/settings\.json
 
 docs/assets/sass/_temp\.scss
+
+coverage/
