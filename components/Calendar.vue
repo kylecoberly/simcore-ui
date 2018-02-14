@@ -606,8 +606,11 @@
       inactiveInstructorCount() {
         return this.inactiveInstructors.length
       },
+      specificInstructorIds() {
+        return this.activeInstructorIds.filter((id) => id !== undefined)
+      },
       specificInstructorCount() {
-        return this.activeInstructorIds.filter((id) => id !== undefined).length
+        return this.specificInstructorIds.length
       },
       thereAreSpecificInstructors() {
         return (this.specificInstructorCount > 0)

@@ -8,10 +8,11 @@
             :placeholder="placeholder"
             :disabled="isDisabled"
             @blur="blur"
-            @focus="focus($event.target.value)"
+            @focus="focus"
             @keydown.down="moveDown"
             @keydown.up="moveUp"
             @keydown.enter="select"
+            @keydown.tab="select"
             @keyup.esc="blur"
             @input="onInput($event.target.value)"
             />
@@ -147,17 +148,14 @@
         this.$emit('remove', (this.foundItem ? this.foundItem : this.item))
       },
       blur() {
-        if (this.foundOptions.length) {
-          this.select()
-        }
         if (!this.foundItem) {
           this.search = ''
         }
 
         this.isOpen = false
       },
-      focus(value) {
-        this.isOpen = (!this.foundItem && this.foundOptions.length && value && value.length > 2 ? true : false)
+      focus() {
+        this.isOpen = (!this.foundItem && this.foundOptions.length && this.search.length > 2 ? true : false)
         this.previousValueLength = this.search.length
       },
     },
