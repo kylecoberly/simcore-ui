@@ -368,9 +368,10 @@
       this.aggregateUserAvailabilityBlocks = this.$store.state.availabilities.blocks
       this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
 
-      this.institutions = this.$store.state.user.institutions
-      this.departments = this.$store.state.user.departments
-      this.professionalTitles = this.$store.state.user.professionalTitles
+      // TODO: activate these when we need to build them out - Jase
+      // this.institutions = this.$store.state.user.institutions || []
+      // this.departments = this.$store.state.user.departments || []
+      // this.professionalTitles = this.$store.state.user.professionalTitles || []
 
       this.instructors = this.$store.state.user.instructors
     },
