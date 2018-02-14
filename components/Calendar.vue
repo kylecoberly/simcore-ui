@@ -179,7 +179,6 @@
                                      @clear="clearItemFromActiveInstructorsList"
                                      @remove="removeFromActiveInstructorsList"
                                      >
-                                     <!-- :item="props.item" -->
                         <template slot="option" slot-scope="props">
                           {{ props.option.lastname }}, {{ props.option.firstname }}
                         </template>
@@ -191,17 +190,6 @@
                       </span>
                     </li>
                   </SimDatalist>
-
-                  <!-- <br />
-                  <SimAutocomplete placeholder="find instructors..."
-                    :options="inactiveInstructors"
-                    x:should-be-disabled="bubbleIsOpen"
-                    @select="addToInstructorList"
-                    >
-                    <div class="item-tag" slot="item" slot-scope="props">
-                      {{ props.option.lastname }}, {{ props.option.firstname }}
-                    </div>
-                  </SimAutocomplete> -->
                 </div>
               </div>
               <div class="filter-molecule filter--categories">
@@ -380,9 +368,10 @@
       this.aggregateUserAvailabilityBlocks = this.$store.state.availabilities.blocks
       this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
 
-      // this.institutions = this.$store.state.user.institutions
-      // this.departments = this.$store.state.user.departments
-      // this.professionalTitles = this.$store.state.user.professionalTitles
+      this.institutions = this.$store.state.user.institutions
+      this.departments = this.$store.state.user.departments
+      this.professionalTitles = this.$store.state.user.professionalTitles
+
       this.instructors = this.$store.state.user.instructors
     },
     mounted() {
@@ -746,8 +735,6 @@
 
         this.$store.commit('resetHistory')
         this.$store.commit('addASlide', this.packageSlideContent(bubbleData))
-
-        // window.console.log('prepareTheBubbleData ** ', bubbleData)
       },
       // @TODO move to common utilities or use Lowdash? - Jase
       sortItemsByProperty(items, property) {
@@ -799,8 +786,7 @@
         }
       },
       resetInactiveInstructors() {
-        // cheap cologne :) - Jase
-        this.inactiveInstructors = JSON.parse(JSON.stringify(this.instructors))
+        this.inactiveInstructors = JSON.parse(JSON.stringify(this.instructors)) // cheap cologne :) - Jase
         this.sortItemsByProperty(this.inactiveInstructors, 'lastname')
       },
       runLodestar() {
@@ -870,9 +856,10 @@
           this.filteredUsers = this.users.filter((item) => {
             // @FIXME ew this.filters[n]...
             // return this.filters.forEach(filter => filter.items.length ? filter.items.includes(item[filter.type]) : true)
-            // filters[0] = institutions
-            // filters[1] = departments
-            // filters[2] = professionalTitles
+
+            // legend:  filters[0] = institutions
+            //          filters[1] = departments
+            //          filters[2] = professionalTitles
             return (this.userTypeIsClient && this.filters[0].items.length ? this.filters[0].items.includes(item[this.filters[0].type]) : true)
                 && (this.filters[1].items.length ? this.filters[1].items.includes(item[this.filters[1].type]) : true)
                 && (this.filters[2].items.length ? this.filters[2].items.includes(item[this.filters[2].type]) : true)
@@ -921,8 +908,6 @@
   }
 
   .sim-calendar .sim-bubble {
-    // --bubble-fg: var(--dark);
-    // --bubble-bg: var(--light);
     top: -1em;
     bottom: -1em;
     width: calc(var(--width-factor, 1) * 20em);
@@ -1007,19 +992,6 @@
       &--seat {
         display: flex;
       }
-
-      // input {
-      //   flex: 1;
-      //   background: transparent;
-      //   color: var(--light);
-      //   box-shadow: 0 1px 0 0 var(--mist);
-      //   border-radius: 0;
-      //   padding: 0;
-      //   margin: 0 .3em;
-      //   &::placeholder {
-      //     font-style: italic;
-      //   }
-      // }
     }
   }
 </style>
