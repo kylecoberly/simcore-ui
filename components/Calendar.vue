@@ -165,7 +165,7 @@
             <div class="sim-flex--2">
               <div class="filter-molecule filter--instructors sim-filter">
                 <h3 class="filter-molecule--heading">
-                  <SimIconText icon="#icon--instructors-checked" icon-type="svg" :text="`Instructors: ${activeInstructorCount}/${inactiveInstructorCount}`"></SimIconText>
+                  <SimIconText icon="#icon--instructors-checked" icon-type="svg" :text="`Instructors: ${activeInstructorCount}`"></SimIconText>
                 </h3>
                 <div class="filter-molecule--options">
                   <SimDatalist :items="activeInstructors" :animate="true">
@@ -296,7 +296,6 @@
         calendarIsUpdating: false,
         isLoading: false,
         hideSlideNavigationControls: false,
-        filterInstructorCount: 1,
         date: this.$store.state.activeDate.date,
         institutions: [],
         departments: [],
