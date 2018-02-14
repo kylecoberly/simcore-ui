@@ -80,7 +80,7 @@ const allInstructorAvailability = {
   ],
 }
 
-const allInstructorAvailabilityBlocksGroupedByDate = {
+const allInstructorAvailabilitySegmentsGroupedByDate = {
   '2017-12-19': {
     '26': { 'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'], 'start': 26 },
     '27': { 'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'], 'start': 27 },
@@ -235,7 +235,7 @@ const allUserAvailabilitiesForADate = {
 }
 
 test('onlyInstructorsInTheFilterShouldReturnAvailabilityTimes', () => {
-  const instructorIdsToFilter = [7475, 4112, 7755]
+  const instructorIdsToFilter = [7475, 4112, 7755, 'any', 'any']
 
   // NOTE: The response will be sorted by the key. (eg: In this case, 4112 comes before 7475.)
   const expectedFilteredInstructorAvailability = {
@@ -279,10 +279,7 @@ test('onlyInstructorsInTheFilterShouldReturnAvailabilityTimes', () => {
       instructorIdsToFilter,
     )
 
-  expect(
-    filteredInstructorAvailability).toEqual(
-    expectedFilteredInstructorAvailability)
-
+  expect(filteredInstructorAvailability).toEqual(expectedFilteredInstructorAvailability)
 })
 
 // TODO: REFACTOR - Isolate the actual filter. Currently this works as a loop. - Chad
@@ -425,11 +422,10 @@ test('groupInstructorAvailabilitiesKeyedByDateAndStartTime', () => {
       allInstructorAvailability
     )
 
-  expect(
-    actualGroupedInstructorAvailability).toEqual(
-    expectedGroupedInstructorAvailability)
+  expect(actualGroupedInstructorAvailability).toEqual(expectedGroupedInstructorAvailability)
 })
 
+// Specific User Filtering
 // TODO: Rename for what's being tested, not the function being called. - Chad
 test('getOnlyTheBlocksWhichContainAllTheUsers', () => {
   const totalInstructorCount = ['3726', '4112', '6630', '7475'].length
@@ -450,10 +446,7 @@ test('getOnlyTheBlocksWhichContainAllTheUsers', () => {
       totalInstructorCount
     )
 
-  expect(
-    actualInstructorAvailabilityBlocks).toEqual(
-    expectedInstructorAvailabilityBlocks)
-
+  expect(actualInstructorAvailabilityBlocks).toEqual(expectedInstructorAvailabilityBlocks)
 })
 
 // TODO: Rename for what's being tested, not the function being called. - Chad
@@ -516,10 +509,7 @@ test('getOnlyTheBlocksWhichContainAllTheUsersAcrossMultipleDays', () => {
       availabilities.getOnlyTheBlocksWhichContainAllTheUsers(blocksForDay, totalInstructorCount)
   })
 
-  expect(
-    actualInstructorAvailabilityBlocks).toEqual(
-    expectedInstructorAvailabilityBlocks)
-
+  expect(actualInstructorAvailabilityBlocks).toEqual(expectedInstructorAvailabilityBlocks)
 })
 
 // TODO: REFACTOR - Isolate the actual filter. Currently this works as a loop. - Chad
@@ -771,11 +761,186 @@ test('getOnlyTheBlocksWhichContainExactlyAllTheUsersSortedByStart', () => {
 
   const actualInstructorAvailabilityBlocks =
     availabilities.getOnlyTheBlocksWhichContainExactlyAllTheUsersSortedByStart(
-      allInstructorAvailabilityBlocksGroupedByDate
+      allInstructorAvailabilitySegmentsGroupedByDate
     )
 
   expect(expectedInstructorAvailabilityBlocks)
     .toEqual(actualInstructorAvailabilityBlocks)
+})
+
+test('getOnlyTheBlocksWithAMinimumNumberOfInstructors', () => {
+  const startingContiguousTimeBlocks = {
+    '0.5': {
+      startTime: 0.5,
+      endTime: 5,
+      duration: 4.5,
+      startSegment: 1,
+      endSegment: 9,
+      numberOfSegments: 9,
+      uniqueInstructorIds: ['1220', '4112', '7475'],
+      numberOfInstructors: 3,
+      segments: {
+        '1': { 'user_ids': ['1220', '4112', '7475'], 'start': 1 },
+        '2': { 'user_ids': ['1220', '4112', '7475'], 'start': 2 },
+        '3': { 'user_ids': ['1220', '4112', '7475'], 'start': 3 },
+        '4': { 'user_ids': ['1220', '7475'], 'start': 4 },
+        '5': { 'user_ids': ['1220', '7475'], 'start': 5 },
+        '6': { 'user_ids': ['1220', '7475'], 'start': 6 },
+        '7': { 'user_ids': ['1220', '7475'], 'start': 7 },
+        '8': { 'user_ids': ['1220'], 'start': 8 },
+        '9': { 'user_ids': ['1220'], 'start': 9 },
+      }
+    },
+    '14': {
+      startTime: 14,
+      endTime: 19,
+      duration: 5,
+      startSegment: 28,
+      endSegment: 37,
+      numberOfSegments: 10,
+      uniqueInstructorIds: ['4112', '3726', '6630', '7475'],
+      numberOfInstructors: 4,
+      segments: {
+        '28': { 'user_ids': ['4112'], 'start': 28 },
+        '29': { 'user_ids': ['4112'], 'start': 29 },
+        '30': { 'user_ids': ['4112'], 'start': 30 },
+        '31': { 'user_ids': ['4112'], 'start': 31 },
+        '32': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 32 },
+        '33': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 33 },
+        '34': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 34 },
+        '35': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 35 },
+        '36': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 36 },
+        '37': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 37 },
+      },
+    }
+  }
+
+  const expectedContiguousTimeBlocks = {
+    '14': {
+      startTime: 14,
+      endTime: 19,
+      duration: 5,
+      startSegment: 28,
+      endSegment: 37,
+      numberOfSegments: 10,
+      uniqueInstructorIds: ['4112', '3726', '6630', '7475'],
+      numberOfInstructors: 4,
+      segments: {
+        '28': { 'user_ids': ['4112'], 'start': 28 },
+        '29': { 'user_ids': ['4112'], 'start': 29 },
+        '30': { 'user_ids': ['4112'], 'start': 30 },
+        '31': { 'user_ids': ['4112'], 'start': 31 },
+        '32': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 32 },
+        '33': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 33 },
+        '34': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 34 },
+        '35': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 35 },
+        '36': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 36 },
+        '37': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 37 },
+      },
+    }
+  }
+
+  const actualAvailabilityBlocks =
+    availabilities.getInstructorAvailabilityBlocksWithAMinimumNumberOfInstructors(
+      startingContiguousTimeBlocks,
+      4
+    )
+
+  expect(actualAvailabilityBlocks).toEqual(expectedContiguousTimeBlocks)
+})
+
+test('getOnlyTheBlocksAtLeastAllTheUsers', () => {
+  const specificUserIds = [4112, 7475]
+
+  const startingContiguousTimeBlocks = {
+    '0.5': {
+      startTime: 0.5,
+      endTime: 5,
+      duration: 4.5,
+      startSegment: 1,
+      endSegment: 9,
+      numberOfSegments: 9,
+      uniqueInstructorIds: ['1220', '4112', '7475'],
+      numberOfInstructors: 3,
+      segments: {
+        '1': { 'user_ids': ['1220', '4112', '7475'], 'start': 1 },
+        '2': { 'user_ids': ['1220', '4112', '7475'], 'start': 2 },
+        '3': { 'user_ids': ['1220', '4112', '7475'], 'start': 3 },
+        '4': { 'user_ids': ['1220', '7475'], 'start': 4 },
+        '5': { 'user_ids': ['1220', '7475'], 'start': 5 },
+        '6': { 'user_ids': ['1220', '7475'], 'start': 6 },
+        '7': { 'user_ids': ['1220', '7475'], 'start': 7 },
+        '8': { 'user_ids': ['1220'], 'start': 8 },
+        '9': { 'user_ids': ['1220'], 'start': 9 },
+      }
+    },
+    '14': {
+      startTime: 14,
+      endTime: 19,
+      duration: 5,
+      startSegment: 28,
+      endSegment: 37,
+      numberOfSegments: 10,
+      uniqueInstructorIds: ['4112', '3726', '6630', '7475'],
+      numberOfInstructors: 4,
+      segments: {
+        '28': { 'user_ids': ['4112'], 'start': 28 },
+        '29': { 'user_ids': ['4112'], 'start': 29 },
+        '30': { 'user_ids': ['4112'], 'start': 30 },
+        '31': { 'user_ids': ['4112'], 'start': 31 },
+        '32': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 32 },
+        '33': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 33 },
+        '34': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 34 },
+        '35': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 35 },
+        '36': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 36 },
+        '37': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 37 },
+      },
+    }
+  }
+
+  const expectedContiguousTimeBlocks = {
+    '0.5': {
+      startTime: 0.5,
+      endTime: 5,
+      duration: 4.5,
+      startSegment: 1,
+      endSegment: 9,
+      numberOfSegments: 9,
+      uniqueInstructorIds: ['1220', '4112', '7475'],
+      numberOfInstructors: 3,
+      segments: {
+        '1': { 'user_ids': ['1220', '4112', '7475'], 'start': 1 },
+        '2': { 'user_ids': ['1220', '4112', '7475'], 'start': 2 },
+        '3': { 'user_ids': ['1220', '4112', '7475'], 'start': 3 },
+      }
+    },
+    '14': {
+      startTime: 14,
+      endTime: 19,
+      duration: 5,
+      startSegment: 28,
+      endSegment: 37,
+      numberOfSegments: 10,
+      uniqueInstructorIds: ['4112', '3726', '6630', '7475'],
+      numberOfInstructors: 4,
+      segments: {
+        '32': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 32 },
+        '33': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 33 },
+        '34': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 34 },
+        '35': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 35 },
+        '36': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 36 },
+        '37': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 37 },
+      },
+    }
+  }
+
+  const actualAvailabilityBlocks =
+    availabilities.getSpecificInstructorAvailabilityBlocksFromAListOfInstructorIds(
+      startingContiguousTimeBlocks,
+      specificUserIds,
+    )
+
+  expect(actualAvailabilityBlocks).toEqual(expectedContiguousTimeBlocks)
 })
 
 // TODO: REFACTOR - Isolate the actual filter. Currently this works as a loop. - Chad
@@ -822,13 +987,10 @@ test('getBlocksClusteredForStartAndDuration', () => {
 
   const actualAvailabilityBlocks =
     availabilities.getBlocksClusteredForStartAndDuration(
-      allInstructorAvailabilityBlocksGroupedByDate
+      allInstructorAvailabilitySegmentsGroupedByDate
     )
 
-  expect(
-    actualAvailabilityBlocks).toEqual(
-    expectedAvailabilityBlocks)
-
+  expect(actualAvailabilityBlocks).toEqual(expectedAvailabilityBlocks)
 })
 
 // TODO: REFACTOR - Isolate the actual filter. Currently this works as a loop. - Chad
@@ -1109,13 +1271,10 @@ test('getBlocksClusteredForStartAndDurationAndKeyedByDate', () => {
 
   const actualAvailabilityBlocks =
     availabilities.getBlocksClusteredForStartAndDurationAndKeyedByDate(
-      allInstructorAvailabilityBlocksGroupedByDate
+      allInstructorAvailabilitySegmentsGroupedByDate
     )
 
-  expect(
-    actualAvailabilityBlocks).toEqual(
-    expectedAvailabiltyBlocks)
-
+  expect(actualAvailabilityBlocks).toEqual(expectedAvailabiltyBlocks)
 })
 
 test('onlyUserAvailabilitiesForASingleDateShouldBeReturned', () => {
@@ -1146,12 +1305,23 @@ test('onlyUserAvailabilitiesForASingleDateShouldBeReturned', () => {
 
   const actualUserAvailabilitiesForADate =
     availabilities.getAllInstructorAvailabilitiesForADate(
-      allInstructorAvailabilityBlocksGroupedByDate,
+      allInstructorAvailabilitySegmentsGroupedByDate,
       '2017-12-20',
     )
 
   expect(actualUserAvailabilitiesForADate)
     .toEqual(expectedUserAvailabilitiesForADate)
+})
+
+test('noUsersAvailableBetweenAStartTimeAndDurationShouldReturnAnEmptySet', () => {
+  const expectedUserAvailabilitiesWithinARange = {}
+
+  const actualUserAvailabilitiesWithinARange =
+    availabilities.filterBlocksWithinATimeRange(allUserAvailabilitiesForADate, 0, 1)
+
+  expect(
+    actualUserAvailabilitiesWithinARange)
+    .toEqual(expectedUserAvailabilitiesWithinARange)
 })
 
 test('onlyUsersAvailableBetweenAStartTimeAndDurationShouldReturnAvailabilityTimes', () => {
@@ -1215,10 +1385,7 @@ test('returnAnyUsersIfTheFilterStartsInsideTheTimeRange', () => {
       1,
     )
 
-  expect(
-    actualState).toEqual(
-    expectedState)
-
+  expect(actualState).toEqual(expectedState)
 })
 
 test('returnAnyUsersIfTheFilterEndsInsideTheTimeRange', () => {
@@ -1232,10 +1399,7 @@ test('returnAnyUsersIfTheFilterEndsInsideTheTimeRange', () => {
       36,
     )
 
-  expect(
-    actualState).toEqual(
-    expectedState)
-
+  expect(actualState).toEqual(expectedState)
 })
 
 test('doNotReturnAnyUsersIfTheFilterIsGreaterThanTheTimeRange', () => {
@@ -1249,10 +1413,7 @@ test('doNotReturnAnyUsersIfTheFilterIsGreaterThanTheTimeRange', () => {
       39,
     )
 
-  expect(
-    actualState).toEqual(
-    expectedState)
-
+  expect(actualState).toEqual(expectedState)
 })
 
 test('doNotReturnAnyUsersIfTheFilterIsLessThanTheStartTime', () => {
@@ -1266,10 +1427,7 @@ test('doNotReturnAnyUsersIfTheFilterIsLessThanTheStartTime', () => {
       31,
     )
 
-  expect(
-    actualState).toEqual(
-    expectedState)
-
+  expect(actualState).toEqual(expectedState)
 })
 
 test('returnContiguousTimeBlocksForUsersInADay', () => {
@@ -1294,15 +1452,19 @@ test('returnContiguousTimeBlocksForUsersInADay', () => {
       '35': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 35 },
       '36': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 36 },
       '37': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 37 },
-      '38': { 'user_ids': ['7475'], 'start': 38 }
     }
 
   const expectedContiguousTimeBlocks = {
-    '1': {
-      start: 1,
-      end: 9,
-      duration: 9,
-      timeBlocks: {
+    '0.5': {
+      startTime: 0.5,
+      endTime: 5,
+      duration: 4.5,
+      startSegment: 1,
+      endSegment: 9,
+      numberOfSegments: 9,
+      uniqueInstructorIds: ['1220', '4112', '7475'],
+      numberOfInstructors: 3,
+      segments: {
         '1': { 'user_ids': ['1220', '4112', '7475'], 'start': 1 },
         '2': { 'user_ids': ['1220', '4112', '7475'], 'start': 2 },
         '3': { 'user_ids': ['1220', '4112', '7475'], 'start': 3 },
@@ -1314,11 +1476,16 @@ test('returnContiguousTimeBlocksForUsersInADay', () => {
         '9': { 'user_ids': ['1220'], 'start': 9 },
       }
     },
-    '28': {
-      start: 28,
-      end: 38,
-      duration: 11,
-      timeBlocks: {
+    '14': {
+      startTime: 14,
+      endTime: 19,
+      duration: 5,
+      startSegment: 28,
+      endSegment: 37,
+      numberOfSegments: 10,
+      uniqueInstructorIds: ['4112', '3726', '6630', '7475'],
+      numberOfInstructors: 4,
+      segments: {
         '28': { 'user_ids': ['4112'], 'start': 28 },
         '29': { 'user_ids': ['4112'], 'start': 29 },
         '30': { 'user_ids': ['4112'], 'start': 30 },
@@ -1329,17 +1496,826 @@ test('returnContiguousTimeBlocksForUsersInADay', () => {
         '35': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 35 },
         '36': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 36 },
         '37': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 37 },
-        '38': { 'user_ids': ['7475'], 'start': 38 },
       },
     }
   }
 
-  const actualContiguousTimeBlocks = filters.groupInstructorsForADayByContiguousTime(
+  const actualContiguousTimeBlocks = filters.groupInstructorSegmentsForADayByContiguousTime(
     userAvailabilitiesForADate
   )
 
-  expect(
-    actualContiguousTimeBlocks).toEqual(
-    expectedContiguousTimeBlocks)
+  expect(actualContiguousTimeBlocks).toEqual(expectedContiguousTimeBlocks)
+})
 
+test('groupingUserSegmentsStartingAtZeroShouldReturnAContiguousBlock', () => {
+  const userAvailabilitiesForADate =
+    {
+      '0': { 'user_ids': ['1220', '4112', '7475'], 'start': 0 },
+      '1': { 'user_ids': ['1220', '4112', '7475'], 'start': 1 },
+      '2': { 'user_ids': ['1220', '4112', '7475'], 'start': 2 },
+      '3': { 'user_ids': ['1220', '4112', '7475'], 'start': 3 },
+      '4': { 'user_ids': ['1220', '7475'], 'start': 4 },
+      '5': { 'user_ids': ['1220', '7475'], 'start': 5 },
+      '6': { 'user_ids': ['1220', '7475'], 'start': 6 },
+      '7': { 'user_ids': ['1220', '7475'], 'start': 7 },
+      '8': { 'user_ids': ['1220'], 'start': 8 },
+      '9': { 'user_ids': ['1220'], 'start': 9 },
+    }
+
+  const expectedContiguousTimeBlocks = {
+    '0': {
+      startTime: 0,
+      endTime: 5,
+      duration: 5,
+      startSegment: 0,
+      endSegment: 9,
+      numberOfSegments: 10,
+      uniqueInstructorIds: ['1220', '4112', '7475'],
+      numberOfInstructors: 3,
+      segments: {
+        '0': { 'user_ids': ['1220', '4112', '7475'], 'start': 0 },
+        '1': { 'user_ids': ['1220', '4112', '7475'], 'start': 1 },
+        '2': { 'user_ids': ['1220', '4112', '7475'], 'start': 2 },
+        '3': { 'user_ids': ['1220', '4112', '7475'], 'start': 3 },
+        '4': { 'user_ids': ['1220', '7475'], 'start': 4 },
+        '5': { 'user_ids': ['1220', '7475'], 'start': 5 },
+        '6': { 'user_ids': ['1220', '7475'], 'start': 6 },
+        '7': { 'user_ids': ['1220', '7475'], 'start': 7 },
+        '8': { 'user_ids': ['1220'], 'start': 8 },
+        '9': { 'user_ids': ['1220'], 'start': 9 },
+      }
+    },
+  }
+
+  const actualContiguousTimeBlocks = filters.groupInstructorSegmentsForADayByContiguousTime(
+    userAvailabilitiesForADate
+  )
+
+  expect(actualContiguousTimeBlocks).toEqual(expectedContiguousTimeBlocks)
+})
+
+test('contiguousTimeBlocksForASingleUserSegmentStartingAtZeroShouldReturnASingleSet', () => {
+  const userAvailabilitiesForADate =
+    {
+      '0': { 'user_ids': ['1220', '4112', '7475'], 'start': 0 },
+    }
+
+  const expectedContiguousTimeBlocks = {
+    '0': {
+      startTime: 0,
+      endTime: 0.5,
+      duration: 0.5,
+      startSegment: 0,
+      endSegment: 0,
+      numberOfSegments: 1,
+      uniqueInstructorIds: ['1220', '4112', '7475'],
+      numberOfInstructors: 3,
+      segments: {
+        '0': { 'user_ids': ['1220', '4112', '7475'], 'start': 0 },
+      }
+    },
+  }
+
+  const actualContiguousTimeBlocks = filters.groupInstructorSegmentsForADayByContiguousTime(
+    userAvailabilitiesForADate
+  )
+
+  expect(actualContiguousTimeBlocks).toEqual(expectedContiguousTimeBlocks)
+})
+
+test('returnAllContiguousTimeBlocksForUsersAcrossMultipleDays', () => {
+  const expectedContiguousTimeBlocksAcrossMultipleDays = {
+    '2017-12-19': {
+      '13': {
+        'startSegment': 26,
+        'endSegment': 37,
+        'startTime': 13,
+        'endTime': 19,
+        'numberOfSegments': 12,
+        'duration': 6,
+        'uniqueInstructorIds': ['1220', '3726', '4112', '6630', '7475', '7755'],
+        'numberOfInstructors': 6,
+        'segments': {
+          '26': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 26
+          },
+          '27': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 27
+          },
+          '28': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 28
+          },
+          '29': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 29
+          },
+          '30': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 30
+          },
+          '31': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 31
+          },
+          '32': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 32
+          },
+          '33': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 33
+          },
+          '34': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 34
+          },
+          '35': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 35
+          },
+          '36': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 36
+          },
+          '37': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 37
+          }
+        }
+      }
+    },
+    '2017-12-20': {
+      '0': {
+        'startSegment': 0,
+        'endSegment': 9,
+        'startTime': 0,
+        'endTime': 5,
+        'numberOfSegments': 10,
+        'duration': 5,
+        'uniqueInstructorIds': ['1220', '4112', '7475'],
+        'numberOfInstructors': 3,
+        'segments': {
+          '0': {
+            'user_ids': ['1220', '4112', '7475'],
+            'start': 0
+          },
+          '1': {
+            'user_ids': ['1220', '4112', '7475'],
+            'start': 1
+          },
+          '2': {
+            'user_ids': ['1220', '4112', '7475'],
+            'start': 2
+          },
+          '3': {
+            'user_ids': ['1220', '4112', '7475'],
+            'start': 3
+          },
+          '4': {
+            'user_ids': ['1220', '7475'],
+            'start': 4
+          },
+          '5': {
+            'user_ids': ['1220', '7475'],
+            'start': 5
+          },
+          '6': {
+            'user_ids': ['1220', '7475'],
+            'start': 6
+          },
+          '7': {
+            'user_ids': ['1220', '7475'],
+            'start': 7
+          },
+          '8': {
+            'user_ids': ['1220'],
+            'start': 8
+          },
+          '9': {
+            'user_ids': ['1220'],
+            'start': 9
+          }
+        }
+      },
+      '14': {
+        'startSegment': 28,
+        'endSegment': 38,
+        'startTime': 14,
+        'endTime': 19.5,
+        'numberOfSegments': 11,
+        'duration': 5.5,
+        'uniqueInstructorIds': ['4112', '3726', '6630', '7475'],
+        'numberOfInstructors': 4,
+        'segments': {
+          '28': {
+            'user_ids': ['4112'],
+            'start': 28
+          },
+          '29': {
+            'user_ids': ['4112'],
+            'start': 29
+          },
+          '30': {
+            'user_ids': ['4112'],
+            'start': 30
+          },
+          '31': {
+            'user_ids': ['4112'],
+            'start': 31
+          },
+          '32': {
+            'user_ids': ['3726', '4112', '6630', '7475'],
+            'start': 32
+          },
+          '33': {
+            'user_ids': ['3726', '4112', '6630', '7475'],
+            'start': 33
+          },
+          '34': {
+            'user_ids': ['3726', '4112', '6630', '7475'],
+            'start': 34
+          },
+          '35': {
+            'user_ids': ['3726', '4112', '6630', '7475'],
+            'start': 35
+          },
+          '36': {
+            'user_ids': ['3726', '4112', '6630', '7475'],
+            'start': 36
+          },
+          '37': {
+            'user_ids': ['3726', '4112', '6630', '7475'],
+            'start': 37
+          },
+          '38': {
+            'user_ids': ['7475'],
+            'start': 38
+          }
+        }
+      }
+    },
+    '2017-12-21': {
+      '0': {
+        'startSegment': 0,
+        'endSegment': 5,
+        'startTime': 0,
+        'endTime': 3,
+        'numberOfSegments': 6,
+        'duration': 3,
+        'uniqueInstructorIds': ['7755'],
+        'numberOfInstructors': 1,
+        'segments': {
+          '0': {
+            'user_ids': ['7755'],
+            'start': 0
+          },
+          '1': {
+            'user_ids': ['7755'],
+            'start': 1
+          },
+          '2': {
+            'user_ids': ['7755'],
+            'start': 2
+          },
+          '3': {
+            'user_ids': ['7755'],
+            'start': 3
+          },
+          '4': {
+            'user_ids': ['7755'],
+            'start': 4
+          },
+          '5': {
+            'user_ids': ['7755'],
+            'start': 5
+          }
+        }
+      },
+      '8': {
+        'startSegment': 16,
+        'endSegment': 23,
+        'startTime': 8,
+        'endTime': 12,
+        'numberOfSegments': 8,
+        'duration': 4,
+        'uniqueInstructorIds': ['7475'],
+        'numberOfInstructors': 1,
+        'segments': {
+          '16': {
+            'user_ids': ['7475'],
+            'start': 16
+          },
+          '17': {
+            'user_ids': ['7475'],
+            'start': 17
+          },
+          '18': {
+            'user_ids': ['7475'],
+            'start': 18
+          },
+          '19': {
+            'user_ids': ['7475'],
+            'start': 19
+          },
+          '20': {
+            'user_ids': ['7475'],
+            'start': 20
+          },
+          '21': {
+            'user_ids': ['7475'],
+            'start': 21
+          },
+          '22': {
+            'user_ids': ['7475'],
+            'start': 22
+          },
+          '23': {
+            'user_ids': ['7475'],
+            'start': 23
+          }
+        }
+      },
+      '14': {
+        'startSegment': 28,
+        'endSegment': 37,
+        'startTime': 14,
+        'endTime': 19,
+        'numberOfSegments': 10,
+        'duration': 5,
+        'uniqueInstructorIds': ['3726', '1220'],
+        'numberOfInstructors': 2,
+        'segments': {
+          '28': {
+            'user_ids': ['3726'],
+            'start': 28
+          },
+          '29': {
+            'user_ids': ['3726'],
+            'start': 29
+          },
+          '30': {
+            'user_ids': ['3726'],
+            'start': 30
+          },
+          '31': {
+            'user_ids': ['3726'],
+            'start': 31
+          },
+          '32': {
+            'user_ids': ['1220', '3726'],
+            'start': 32
+          },
+          '33': {
+            'user_ids': ['1220', '3726'],
+            'start': 33
+          },
+          '34': {
+            'user_ids': ['1220', '3726'],
+            'start': 34
+          },
+          '35': {
+            'user_ids': ['1220', '3726'],
+            'start': 35
+          },
+          '36': {
+            'user_ids': ['1220'],
+            'start': 36
+          },
+          '37': {
+            'user_ids': ['1220'],
+            'start': 37
+          }
+        }
+      }
+    },
+    '2017-12-22': {
+      '8': {
+        'startSegment': 16,
+        'endSegment': 23,
+        'startTime': 8,
+        'endTime': 12,
+        'numberOfSegments': 8,
+        'duration': 4,
+        'uniqueInstructorIds': ['7475'],
+        'numberOfInstructors': 1,
+        'segments': {
+          '16': {
+            'user_ids': ['7475'],
+            'start': 16
+          },
+          '17': {
+            'user_ids': ['7475'],
+            'start': 17
+          },
+          '18': {
+            'user_ids': ['7475'],
+            'start': 18
+          },
+          '19': {
+            'user_ids': ['7475'],
+            'start': 19
+          },
+          '20': {
+            'user_ids': ['7475'],
+            'start': 20
+          },
+          '21': {
+            'user_ids': ['7475'],
+            'start': 21
+          },
+          '22': {
+            'user_ids': ['7475'],
+            'start': 22
+          },
+          '23': {
+            'user_ids': ['7475'],
+            'start': 23
+          }
+        }
+      },
+      '14': {
+        'startSegment': 28,
+        'endSegment': 35,
+        'startTime': 14,
+        'endTime': 18,
+        'numberOfSegments': 8,
+        'duration': 4,
+        'uniqueInstructorIds': ['3726', '4112', '7755', '1220'],
+        'numberOfInstructors': 4,
+        'segments': {
+          '28': {
+            'user_ids': ['3726', '4112', '7755'],
+            'start': 28
+          },
+          '29': {
+            'user_ids': ['3726', '4112', '7755'],
+            'start': 29
+          },
+          '30': {
+            'user_ids': ['3726', '4112', '7755'],
+            'start': 30
+          },
+          '31': {
+            'user_ids': ['3726', '4112', '7755'],
+            'start': 31
+          },
+          '32': {
+            'user_ids': ['1220', '3726', '4112', '7755'],
+            'start': 32
+          },
+          '33': {
+            'user_ids': ['1220', '3726', '4112', '7755'],
+            'start': 33
+          },
+          '34': {
+            'user_ids': ['1220', '3726', '4112', '7755'],
+            'start': 34
+          },
+          '35': {
+            'user_ids': ['1220', '3726', '4112', '7755'],
+            'start': 35
+          }
+        }
+      }
+    },
+    '2017-12-24': {
+      '12': {
+        'startSegment': 24,
+        'endSegment': 39,
+        'startTime': 12,
+        'endTime': 20,
+        'numberOfSegments': 16,
+        'duration': 8,
+        'uniqueInstructorIds': ['1220', '3726', '4112', '6630', '7475', '7755'],
+        'numberOfInstructors': 6,
+        'segments': {
+          '24': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 24
+          },
+          '25': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 25
+          },
+          '26': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 26
+          },
+          '27': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 27
+          },
+          '28': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 28
+          },
+          '29': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 29
+          },
+          '30': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 30
+          },
+          '31': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 31
+          },
+          '32': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 32
+          },
+          '33': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 33
+          },
+          '34': {
+            'user_ids': ['1220', '3726', '4112', '7755'],
+            'start': 34
+          },
+          '35': {
+            'user_ids': ['1220', '3726', '4112', '7755'],
+            'start': 35
+          },
+          '36': {
+            'user_ids': ['1220', '7755'],
+            'start': 36
+          },
+          '37': {
+            'user_ids': ['1220', '7755'],
+            'start': 37
+          },
+          '38': {
+            'user_ids': ['1220'],
+            'start': 38
+          },
+          '39': {
+            'user_ids': ['1220'],
+            'start': 39
+          }
+        }
+      }
+    },
+    '2017-12-25': {
+      '3': {
+        'startSegment': 6,
+        'endSegment': 9,
+        'startTime': 3,
+        'endTime': 5,
+        'numberOfSegments': 4,
+        'duration': 2,
+        'uniqueInstructorIds': ['1220', '3726', '4112', '6630', '7475', '7755'],
+        'numberOfInstructors': 6,
+        'segments': {
+          '6': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 6
+          },
+          '7': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 7
+          },
+          '8': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 8
+          },
+          '9': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 9
+          }
+        }
+      },
+      '8': {
+        'startSegment': 16,
+        'endSegment': 39,
+        'startTime': 8,
+        'endTime': 20,
+        'numberOfSegments': 24,
+        'duration': 12,
+        'uniqueInstructorIds': ['1220', '3726', '6630', '7475', '7755', '4112'],
+        'numberOfInstructors': 6,
+        'segments': {
+          '16': {
+            'user_ids': ['1220', '3726', '6630', '7475', '7755'],
+            'start': 16
+          },
+          '17': {
+            'user_ids': ['1220', '3726', '6630', '7475', '7755'],
+            'start': 17
+          },
+          '18': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 18
+          },
+          '19': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 19
+          },
+          '20': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 20
+          },
+          '21': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 21
+          },
+          '22': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 22
+          },
+          '23': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 23
+          },
+          '24': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7755'],
+            'start': 24
+          },
+          '25': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7755'],
+            'start': 25
+          },
+          '26': {
+            'user_ids': ['1220', '4112', '6630', '7755'],
+            'start': 26
+          },
+          '27': {
+            'user_ids': ['1220', '4112', '6630', '7755'],
+            'start': 27
+          },
+          '28': {
+            'user_ids': ['1220', '4112', '6630', '7475', '7755'],
+            'start': 28
+          },
+          '29': {
+            'user_ids': ['1220', '4112', '6630', '7475', '7755'],
+            'start': 29
+          },
+          '30': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 30
+          },
+          '31': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 31
+          },
+          '32': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 32
+          },
+          '33': {
+            'user_ids': ['1220', '3726', '4112', '6630', '7475', '7755'],
+            'start': 33
+          },
+          '34': {
+            'user_ids': ['3726'],
+            'start': 34
+          },
+          '35': {
+            'user_ids': ['3726'],
+            'start': 35
+          },
+          '36': {
+            'user_ids': ['3726'],
+            'start': 36
+          },
+          '37': {
+            'user_ids': ['3726'],
+            'start': 37
+          },
+          '38': {
+            'user_ids': ['3726'],
+            'start': 38
+          },
+          '39': {
+            'user_ids': ['3726'],
+            'start': 39
+          }
+        }
+      }
+    }
+  }
+
+  const actualContiguousTimeBlocksAcrossMultipleDays =
+    filters.groupAllInstructorAvailabilityBlocksByDate(
+      allInstructorAvailabilitySegmentsGroupedByDate
+    )
+
+  expect(actualContiguousTimeBlocksAcrossMultipleDays)
+    .toEqual(expectedContiguousTimeBlocksAcrossMultipleDays)
+})
+
+// ---- DURATION/SEGMENT CONVERSIONS ----
+test('convertingAnEvenWholeNumberToDecimalReturnsHalfTheOriginalWholeNumber', () => {
+  const wholeNumber     = 6
+
+  const expectedDecimal = 3
+  const actualDecimal = availabilities.convertToDecimal(wholeNumber)
+
+  expect(actualDecimal).toEqual(expectedDecimal)
+})
+
+test('convertingAnOddWholeNumberToDecimalReturnsHalfTheOriginalWholeNumber', () => {
+  const wholeNumber     = 7
+
+  const expectedDecimal = 3.5
+  const actualDecimal = availabilities.convertToDecimal(wholeNumber)
+
+  expect(actualDecimal).toEqual(expectedDecimal)
+})
+
+// --- DURATIONS ---
+test('convertingADurationFromAWholeToADecimal-', () => {
+  const startTime = 3
+  const endTime   = 8
+
+  const expectedSegments = 6 // 3 (decimal version
+
+  const actualDuration = (endTime - startTime)
+
+  expect(actualDuration).toEqual(expectedSegments)
+})
+
+test('convertingADurationFromAWholeToADecimal--', () => {
+  const startTime = 13.5
+  const endTime   = 14
+
+  const expectedSegments = 0.5 // 1 (decimal version)
+
+  const actualDuration = (endTime - startTime)
+
+  expect(actualDuration).toEqual(expectedSegments)
+})
+
+// --- DURATIONS TO SEGMENTS ---
+test('convertingADurationOfZeroToANumberOfSegmentsShouldBeZero', () => {
+  const duration = 0
+
+  const expectedNumberOfSegments = 0
+
+  const actualNumberOfSegments = (duration * 2)
+
+  expect(actualNumberOfSegments).toEqual(expectedNumberOfSegments)
+})
+
+test('convertingADurationOfOneHalfToANumberOfSegmentsShouldBeOne', () => {
+  const duration = 0.5
+
+  const expectedNumberOfSegments = 1
+
+  const actualNumberOfSegments = (duration * 2)
+
+  expect(actualNumberOfSegments).toEqual(expectedNumberOfSegments)
+})
+
+test('convertingADurationGreaterThanOneToANumberOfSegmentsShouldBeTwiceTheDuration', () => {
+  const duration = 1.5
+
+  const expectedNumberOfSegments = 3
+
+  const actualNumberOfSegments = (duration * 2)
+
+  expect(actualNumberOfSegments).toEqual(expectedNumberOfSegments)
+})
+
+// --- SEGMENTS TO DURATIONS (DONE, JUST NEED NAMING) ---
+test('convertingZeroSegmentsToADurationShouldBeZero', () => {
+  const numberOfSegments = 0
+
+  const expectedDuration = 0
+
+  const actualDuration = (numberOfSegments / 2)
+
+  expect(actualDuration).toEqual(expectedDuration)
+})
+
+test('convertingAnOddNumberOfSegmentsToADurationShouldResultInADecimal', () => {
+  const numberOfSegments = 3
+
+  const expectedDuration = 1.5
+
+  const actualDuration = (numberOfSegments / 2)
+
+  expect(actualDuration).toEqual(expectedDuration)
+})
+
+test('convertingASegmentStartTimeOfZeroToADurationStartTimeShouldBeZero', () => {
+  const startTimeWhole = 0
+  const expectedStartTimeDecimal = 0
+
+  const actualStartTimeDecimal = (startTimeWhole / 2)
+
+  expect(actualStartTimeDecimal).toEqual(expectedStartTimeDecimal)
+})
+
+test('convertingASegmentStartTimeGreaterThanZeroToADurationStartTimeShouldBeHalfTheSegmentStartTime', () => {
+  const startTimeWhole = 1
+  const expectedStartTimeDecimal = 0.5
+
+  const actualStartTimeDecimal = (startTimeWhole / 2)
+
+  expect(actualStartTimeDecimal).toEqual(expectedStartTimeDecimal)
 })

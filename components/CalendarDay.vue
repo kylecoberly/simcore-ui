@@ -82,6 +82,7 @@
         </div>
 
         <div v-if="isMonthView" class="local--day--blocks local--day--aggregate-blocks">
+          <template v-if="hasAvailability">
           <template v-if="thereIsNoDataForThisDay">
             <SimTimeBlock
               theme="null"
@@ -130,6 +131,7 @@
 </template>
  
 <script>
+  import _ from 'lodash'
   import moment from 'moment'
 
   import SimTimeBlock from './TimeBlock'
@@ -206,7 +208,7 @@
         return this.$store.state.calendar.settings.weekend_days.includes(this.dayOfWeek)
       },
       showDayNumber() {
-        return parseInt(this.date.split('-')[2])
+        return parseInt(this.date.split('-')[2], 10)
       },
       dayOfWeek() {
         return moment(this.date).day()

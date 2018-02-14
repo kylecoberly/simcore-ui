@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import availabilities from '../external/availabilities'
 
 export const sortBlocks =
   (blocks, key) => {
@@ -22,42 +23,89 @@ export const getAvailableInstructorsWithinATimeRange =
     return duration
   }
 
-export const groupInstructorsForADayByContiguousTime =
-  (blocks) => {
-    const actualContiguousTimeBlocks = {}
+function createADefaultTimeBlockWithStartSegmentAndStartTime(startSegment, startTime) {
+  return {
+    startSegment,
+    endSegment: startSegment,
+    startTime,
+    endTime: startTime,
+    numberOfSegments: 0,
+    duration: 0,
+    segments: {},
+  }
+}
 
-    let currentContiguousBlockStartTime = null
-    let mostRecentStartTime = null
-    _.each(blocks, (userAvailabilities, userAvailabilitiesStartTime) => {
-      const startTime = parseInt(userAvailabilitiesStartTime, 10)
+export const groupInstructorSegmentsForADayByContiguousTime =
+  (segments) => {
+    const timeBlocks = {}
+
+    let currentBlockStartTime     = null
+    let currentBlockStartSegment  = null
+    let previousSegment           = null
+    _.each(segments, (instructorAvailabilitySegments, instructorAvailabilitySegmentsStart) => {
+      const segment   = parseInt(instructorAvailabilitySegmentsStart, 10)
+      const startTime = availabilities.convertToDecimal(segment)
 
       if (
-        (!currentContiguousBlockStartTime && !mostRecentStartTime)
-        ||
-        ((mostRecentStartTime + 1) !== startTime)
+        currentBlockStartTime === null
+        || previousSegment === null
+        || (previousSegment + 1) !== segment
       ) {
-        currentContiguousBlockStartTime = startTime
+        currentBlockStartTime     = parseFloat(startTime)
+        currentBlockStartSegment  = segment
       }
 
-      mostRecentStartTime = startTime
-
-      if (!actualContiguousTimeBlocks[currentContiguousBlockStartTime]) {
-        actualContiguousTimeBlocks[currentContiguousBlockStartTime] = {
-          start: currentContiguousBlockStartTime,
-          end: currentContiguousBlockStartTime,
-          duration: 1,
-          timeBlocks: {},
-        }
+      if (!timeBlocks[currentBlockStartTime]) {
+        timeBlocks[currentBlockStartTime] =
+          createADefaultTimeBlockWithStartSegmentAndStartTime(segment, startTime)
       }
 
-      actualContiguousTimeBlocks[currentContiguousBlockStartTime].start =
-        currentContiguousBlockStartTime
-      actualContiguousTimeBlocks[currentContiguousBlockStartTime].end = startTime
-      actualContiguousTimeBlocks[currentContiguousBlockStartTime].timeBlocks[startTime] =
-        userAvailabilities
-      actualContiguousTimeBlocks[currentContiguousBlockStartTime].duration =
-       Object.keys(actualContiguousTimeBlocks[currentContiguousBlockStartTime].timeBlocks).length
+      timeBlocks[currentBlockStartTime].segments[segment] = instructorAvailabilitySegments
+
+      const uniqueInstructorIds = (timeBlocks[currentBlockStartTime].uniqueInstructorIds)
+        ? timeBlocks[currentBlockStartTime].uniqueInstructorIds
+        : []
+
+      _.each(instructorAvailabilitySegments, (availabilitySegment) => {
+        _.each(availabilitySegment, (userId) => {
+          if (!uniqueInstructorIds.includes(userId)) {
+            uniqueInstructorIds.push(userId)
+          }
+        })
+      })
+
+      const numberOfSegments  = Object.keys(timeBlocks[currentBlockStartTime].segments).length
+      const endSegment        = segment
+
+      timeBlocks[currentBlockStartTime].numberOfSegments    = numberOfSegments
+      timeBlocks[currentBlockStartTime].startSegment        = currentBlockStartSegment
+      timeBlocks[currentBlockStartTime].endSegment          = endSegment
+
+      timeBlocks[currentBlockStartTime].startTime =
+        availabilities.convertToDecimal(currentBlockStartSegment)
+      timeBlocks[currentBlockStartTime].endTime   =
+        availabilities.convertToDecimal(currentBlockStartSegment + numberOfSegments)
+      timeBlocks[currentBlockStartTime].duration  =
+        availabilities.convertToDecimal(numberOfSegments)
+
+      timeBlocks[currentBlockStartTime].uniqueInstructorIds = uniqueInstructorIds
+      timeBlocks[currentBlockStartTime].numberOfInstructors = uniqueInstructorIds.length
+
+      previousSegment = segment
     })
 
-    return actualContiguousTimeBlocks
+    return timeBlocks
   }
+
+export const groupAllInstructorAvailabilityBlocksByDate =
+  (segments) => {
+    const allBlocksFromInstructorAvailabilitySegments = {}
+    _.each(segments,
+      (availabilitySegment, date) => {
+        allBlocksFromInstructorAvailabilitySegments[date] =
+          groupInstructorSegmentsForADayByContiguousTime(availabilitySegment)
+      })
+
+    return allBlocksFromInstructorAvailabilitySegments
+  }
+

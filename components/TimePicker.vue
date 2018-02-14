@@ -80,7 +80,7 @@
       },
       timelineMode: {
         type: String,
-        default: "hours",
+        default: 'hours',
       },
       blockTheme: {
         type: String,
@@ -120,7 +120,7 @@
         default: 1,
       },
       durationFilterBlocks: {
-        type: Array
+        type: Array,
       },
       initialEventBlocks: {
         type: Array,

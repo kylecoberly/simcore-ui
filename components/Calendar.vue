@@ -298,9 +298,9 @@
         currentUserAvailabilityBlocks: [],
         durationFilterBlocks: [
           {
-            start:0,
+            start: 0,
             duration: 1,
-          }
+          },
         ],
         durationFilterBlockSettings: {
           showBlockHours: true,
@@ -337,6 +337,16 @@
       const firstDayOfTheMonth = moment(this.activeMoment).startOf('month').format('YYYY-MM-DD 00:00:00')
       const lastDayOfTheMonth = moment(this.activeMoment).endOf('month').format('YYYY-MM-DD 23:59:59')
 
+      this.$store.dispatch(
+        'getInstructorAvailabilitySegments',
+        {
+          baseUrl: this.$store.state.base_url,
+          userId: this.$store.state.currentUser.id,
+          startDate: firstDayOfTheMonth,
+          endDate: lastDayOfTheMonth,
+        },
+      )
+
       const userAvailabilitiesPromise = currentUser.availabilities(
         this.$store.state.base_url,
         this.$store.state.currentUser.id,
@@ -346,27 +356,27 @@
       userAvailabilitiesPromise.then((response) => {
         this.$store.commit('setCurrentUserAvailabilities', { blocks: response.data.dates, date: this.date })
       })
+      //
+      // const aggregateAvailabilitiesPromise = availabilities.getAvailabilities(
+      //   this.$store.state.base_url,
+      //   this.$store.state.currentUser.id,
+      //   firstDayOfTheMonth,
+      //   lastDayOfTheMonth,
+      // )
+      // aggregateAvailabilitiesPromise.then((response) => {
+      //   let transformedAggregateAvailabilities = []
+      //   if (response.data.users) {
+      //     this.rawUserData = response.data.users
+      //     transformedAggregateAvailabilities = availabilities.transform(response.data.users)
+      //   }
+      //
+      //   this.$store.commit('setAggregateAvailabilityBlocks', { blocks: transformedAggregateAvailabilities, date: Date.now() })
+      // })
 
-      const aggregateAvailabilitiesPromise = availabilities.getAvailabilities(
-        this.$store.state.base_url,
-        this.$store.state.currentUser.id,
-        firstDayOfTheMonth,
-        lastDayOfTheMonth,
-      )
-      aggregateAvailabilitiesPromise.then((response) => {
-        let transformedAggregateAvailabilities = []
-        if (response.data.users) {
-          this.rawUserData = response.data.users
-          transformedAggregateAvailabilities = availabilities.transform(response.data.users)
-        }
-
-        this.$store.commit('setAggregateAvailabilityBlocks', { blocks: transformedAggregateAvailabilities, date: Date.now() })
-      })
-
-      this.pendingEventBlocks = this.$store.state.events.pendingBlocks
       this.eventBlocks = this.$store.state.events.blocks
-      this.aggregateUserAvailabilityBlocks = this.$store.state.availabilities.blocks
+      this.pendingEventBlocks = this.$store.state.events.pendingBlocks
       this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
+      this.aggregateUserAvailabilityBlocks = this.$store.state.availabilities.filteredBlocks
 
       // TODO: activate these when we need to build them out - Jase
       // this.institutions = this.$store.state.user.institutions || []
@@ -425,7 +435,7 @@
       })
 
       this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilityBlocks, () => {
-        this.$set(this, 'aggregateUserAvailabilityBlocks', this.$store.state.availabilities.blocks)
+        this.$set(this, 'aggregateUserAvailabilityBlocks', this.$store.state.availabilities.filteredBlocks)
 
         this.$forceUpdate()
       })
@@ -588,6 +598,7 @@
         return this.currentUserAvailabilityBlocks[this.date]
       },
       filterEventLength() {
+        // TODO: Update Vuex available instructors here. - Chad
         return this.durationFilterBlocks[0].duration
       },
       activeInstructorCount() {
@@ -618,7 +629,7 @@
           this.$set(this.weekDays, [weekDay], {
             date: weekDay,
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[weekDay] || [],
-            aggregateUserAvailabilityBlocks: this.$store.state.availabilities.blocks[weekDay] || [],
+            aggregateUserAvailabilityBlocks: this.$store.state.availabilities.filteredBlocks[weekDay] || {},
             eventBlocks: this.eventBlocks[weekDay] || [],
             pendingEventBlocks: this.pendingEventBlocks[weekDay] || [],
           })
@@ -634,7 +645,7 @@
           this.$set(this.monthDays, [monthDay], {
             date: monthDay,
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[monthDay] || [],
-            aggregateUserAvailabilityBlocks: this.$store.state.availabilities.blocks[monthDay] || [],
+            aggregateUserAvailabilityBlocks: this.$store.state.availabilities.filteredBlocks[monthDay] || {},
             eventBlocks: this.eventBlocks[monthDay] || [],
             pendingEventBlocks: this.pendingEventBlocks[monthDay] || [],
           })
@@ -665,20 +676,25 @@
 
         return this.activeInstructors
       },
-      // @FIXME temporay, mocking data update interaction | Jase
       filterEventLength() {
         this.lastUpdated = Date.now()
 
-        this.$store.commit('setAggregateAvailabilityBlocks', {
-          blocks: availabilities.transform(
-            this.rawUserData,
-            {
-              minimumDuration: this.filterEventLength,
-              filteredInstructors: this.activeInstructorIds,
-          }),
-          date: this.lastUpdated,
-        })
-      }
+        this.$store.dispatch(
+          'filterInstructorAvailabilityBlocks', {
+            eventLength: this.filterEventLength,
+            date: this.lastUpdated,
+          })
+        // this.$store.commit('setAggregateAvailabilityBlocks', {
+        //   blocks: availabilities.transform(
+        //     this.rawUserData,
+        //     {
+        //       minimumDuration: this.filterEventLength,
+        //       filteredInstructors: this.activeInstructorIds,
+        //     },
+        //   ),
+        //   date: this.lastUpdated,
+        // })
+      },
     },
     methods: {
       instructorFilterItem(item) {
