@@ -82,7 +82,33 @@
         </div>
 
         <div v-if="isMonthView" class="local--day--blocks local--day--aggregate-blocks">
-          <template v-if="aggregateUserAvailabilityBlocks.length">
+          <template v-if="thereIsNoDataForThisDay">
+            <SimTimeBlock
+              theme="null"
+              block-icon="#icon--instructors-null"
+              :tooltip="{icon: '#icon--instructors-null', text: 'No Data'}"
+              :class="displayMode"
+              :key="0"
+              :block="{start: 0, duration: 24}"
+              :index="0"
+              :show-controls="false"
+              :orientation="timeBlockOrientation"
+              />
+          </template>
+          <template v-else-if="thereAreNoFilteredResultsForThisDay">
+            <SimTimeBlock
+              theme="empty"
+              block-icon="#icon--instructors-none"
+              :tooltip="{icon: '#icon--instructors-none', text: pluralize(0, 'Instructor Found', 'Instructors Found')}"
+              :class="displayMode"
+              :key="0"
+              :block="{start: 0, duration: 24}"
+              :index="0"
+              :show-controls="false"
+              :orientation="timeBlockOrientation"
+              />
+          </template>
+          <template v-else="thereIsDataForThisDay">
             <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
               theme="aggregate"
               v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
@@ -94,21 +120,6 @@
               :show-controls="false"
               :orientation="timeBlockOrientation"
               />
-          </template>
-          <template v-else-if="!aggregateUserAvailabilityBlocks.length">
-            <!-- <div @click.stop="emitLodestar" class="sim-timeblock--manual-clickable-wrapper"> -->
-              <SimTimeBlock
-                theme="empty"
-                block-icon="#icon--instructors-none"
-                :tooltip="{icon: '#icon--instructors-none', text: pluralize(0, 'Instructor Found', 'Instructors Found')}"
-                :class="displayMode"
-                :key="0"
-                :block="{start: 0, duration: 24}"
-                :index="0"
-                :show-controls="false"
-                :orientation="timeBlockOrientation"
-                />
-            <!-- </div> -->
           </template>
         </div>
 
@@ -236,6 +247,15 @@
       },
       bubbleIsOpen() {
         return this.$store.state.bubble.is_open
+      },
+      thereIsNoDataForThisDay() {
+        return (this.aggregateUserAvailabilityBlocks[this.date] === undefined)
+      },
+      thereIsDataForThisDay() {
+        return (this.aggregateUserAvailabilityBlocks[this.date].length > 0)
+      },
+      thereAreNoFilteredResultsForThisDay() {
+        return (this.aggregateUserAvailabilityBlocks[this.date].length === 0)
       },
     },
     methods: {
