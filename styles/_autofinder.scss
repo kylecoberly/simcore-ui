@@ -1,0 +1,67 @@
+.sim-autofinder {
+  flex: 1;
+  position: relative;
+
+  .sim-autofinder--search {
+    display: flex;
+    &--input {
+      flex: 1;
+      background: transparent;
+      color: var(--light);
+      box-shadow: none;
+      border-radius: 0;
+      padding: .2em;
+      margin: -.2em .2em;
+
+      &::placeholder {
+        font-style: italic;
+      }
+    }
+  }
+
+  &--remove-item {
+    cursor: pointer;
+    line-height: 0;
+
+    .sim-icontext {
+      opacity: 0;
+    }
+  }
+
+  &:hover {
+    .sim-autofinder--remove-item  {
+      .sim-icontext {
+        opacity: 1;
+      }
+    }
+  }
+
+  &--visible-options {
+  }
+
+  &--options {
+    position: absolute;
+    z-index: 1;
+    top: calc(100% + 1px);
+    left: 1em;
+    right: 1em;
+    max-height: 15em;
+    overflow: auto;
+    color: var(--autofinder-items-fg, var(--dark));
+    background: var(--autofinder-items-bg, var(--lighter));
+    border-radius: .2rem;
+    box-shadow: 0 0 0 1px var(--fog), 0 .3em 1em -.3em var(--shadow);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      padding: .5em;
+
+      &.highlighted {
+        color: var(--autofinder-highlight-fg, var(--blue));
+        background: var(--autofinder-highlight-bg, var(--shade));
+      }
+    }
+  }
+}

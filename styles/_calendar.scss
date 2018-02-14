@@ -130,6 +130,9 @@
       &--heading {
         font-weight: normal;
         margin: 0 0 .5em 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
       }
 
       + .filter-molecule {
@@ -144,9 +147,10 @@
       }
 
       li {
-        padding: .5em 0 .5em .5em;
+        padding: .35em 0 .35em .5em;
         border-radius: 1px;
         transition-delay: 0ms;
+        align-items: center;
 
         &:hover {
           .item-remover  {
