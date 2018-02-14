@@ -306,7 +306,6 @@
         activeInstructors: [],
         activeInstructorIds: [],
         inactiveInstructors: [],
-        selectedInstructors: [],
         eventBlocks: [],
         pendingEventBlocks: [],
         currentUserAvailabilityBlocks: [],
