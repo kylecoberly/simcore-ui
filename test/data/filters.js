@@ -1357,7 +1357,7 @@ export default class Filters {
       }
     }
 
-    const actualContiguousTimeBlocks = filters.groupInstructorsForADayByContiguousTime(
+    const actualContiguousTimeBlocks = filters.groupInstructorSegmentsForADayByContiguousTime(
       userAvailabilitiesForADate
     )
 

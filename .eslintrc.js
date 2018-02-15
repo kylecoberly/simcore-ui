@@ -58,6 +58,7 @@ module.exports = {
     "no-param-reassign":0,
     "no-var":0,
     "no-mixed-operators": 0,
-    "no-lonely-if": 0
+    "no-lonely-if": 0,
+    "no-multi-spaces": 0,
   }
 }
