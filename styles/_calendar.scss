@@ -252,7 +252,7 @@
       &--timelines {
         position: absolute;
         top: 0;
-        left: 0;
+        left: 50%;
         right: 0;
         bottom: 0;
         display: flex;
@@ -278,6 +278,21 @@
           &.is-noon {
             box-shadow: 0 -1px 0 0, 0 1px 0 0 inset;
           }
+        }
+
+        .sim-timepicker--time {
+          position: absolute;
+          top: 0;
+          left: 0;
+          transform: translate(-100%, -50%);
+          // background: var(--darkest);
+          // color: var(--light);
+          width: 1.5em;
+          height: 1.5em;
+          // border-radius: .3em;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
       }
     }
@@ -424,13 +439,13 @@
     }
   }
 
-  // &.is-expanded {
-  //   .sim-calendar--grid--day {
-  //     min-height: 4vmin;
-  //     &.is-selected {
-  //       min-height: 48vmin;
-  //       max-height: 48em;
-  //     }
-  //   }
-  // }
+  &.is-expanded {
+    .sim-calendar--grid--day {
+      min-height: 4vmin;
+      &.is-selected {
+        min-height: 48vmin;
+        max-height: 48em;
+      }
+    }
+  }
 }

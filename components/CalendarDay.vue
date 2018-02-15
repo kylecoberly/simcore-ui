@@ -6,12 +6,22 @@
       >
     <div class="local--day">
 
-      <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber }}</div>
-
-      <ul v-if="isWeekView" class="sim-calendar--grid--day--timelines">
-         <!-- || (isSelected && bubbleIsOpen) -->
-        <li v-for="hour in 25" @dblclick="createBlock(hour-1, $event.target)" :class="setHourClasses(hour-1)"></li>
+      <!-- isWeekView || (isSelected && bubbleIsOpen) -->
+      <ul v-if="isSelected" class="sim-calendar--grid--day--timelines">
+        <li v-for="segment in 25" @dblclick="createBlock(segment-1, $event.target)" :class="setHourClasses(segment-1)">
+          <div v-if="segment === 13" class="sim-timepicker--time sim-timepicker--noon">
+            <SimIconText icon="fa-sun-o"></SimIconText>
+          </div>
+          <div v-else-if="segment === 1 || segment === 25" class="sim-timepicker--time sim-timepicker--midnight">
+            <SimIconText icon="fa-moon-o"></SimIconText>
+          </div>
+          <div v-else-if="isWholeNumber(segment)" class="sim-timepicker--time">
+            {{ displayHour(segment-1) }}
+          </div>
+        </li>
       </ul>
+
+      <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber }}</div>
 
       <template v-if="isInstructorContext">
         <div class="local--day--blocks local--day--event-blocks">
@@ -33,6 +43,7 @@
             :key="index"
             :block="block"
             :index="index"
+            :block-icon="null"
             :show-controls="showTimeBlockControls"
             :orientation="timeBlockOrientation"
             @remove-time-block="removeTimeBlock"
@@ -134,10 +145,15 @@
 
   import SimTimeBlock from './TimeBlock'
   import SimTooltip from './Tooltip'
+  import SimIconText from './IconText'
 
   export default {
     name: 'sim-calendar-day',
-    components: { SimTimeBlock, SimTooltip },
+    components: {
+      SimTimeBlock,
+      SimTooltip,
+      SimIconText,
+    },
     props: [
       'date',
       'index',
@@ -243,7 +259,7 @@
         return (this.isMonthView ? 'y' : 'y')
       },
       showTimeBlockControls() {
-        return (this.isMonthView ? false : true)
+        return (this.isMonthView ? true : true)
       },
       bubbleIsOpen() {
         return this.$store.state.bubble.is_open
@@ -259,6 +275,9 @@
       },
     },
     methods: {
+      isWholeNumber(value) {
+        return Math.ceil(parseFloat(value)) === parseInt(value)
+      },
       pluralize(count, single, other) {
         return (count === 1 ? `${count} ${single}` : `${count} ${other}`)
       },
@@ -278,6 +297,11 @@
         classes.push((hour === 0 || hour === 24 ? 'is-midnight' : (hour === 12 ? 'is-noon' : '')))
 
         return classes.join(' ')
+      },
+      displayHour(hour) {
+        hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour)
+
+        return hour > 12 ? `${hour - 12}` : (parseInt(hour) ? `${hour}` : hour)
       },
       // TimeBlock Methods
       sortBlocks() {

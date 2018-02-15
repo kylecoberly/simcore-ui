@@ -157,7 +157,7 @@
         return (this.tooltipIcon || this.tooltipText)
       },
       hasBlockIcon() {
-        return (this.blockIcon !== null || this.blockIcon != undefined)
+        return (!!this.blockIcon)
       },
       orientationIsX() {
         return this.orientation === 'x'

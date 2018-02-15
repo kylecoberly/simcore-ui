@@ -204,7 +204,7 @@
           </div>
         </template>
 
-        <template v-if="isInstructorContext && isMonthView">
+        <template v-if="isInstructorContext && isMonthView && false">
           <div class="sim-calendar--aside--header">
             <b>My Availability</b>
           </div>
@@ -465,7 +465,7 @@
           classes.push('is-month-view')
         }
 
-        if (this.bubbleIsOpen) {
+        if (this.bubbleIsOpen || this.isInstructorContext) {
           classes.push('is-expanded')
         }
 
@@ -940,9 +940,15 @@
     }
 
     &.is-instructor-context {
-      .sim-calendar--aside {
-        width: 18em;
-      }
+      // .sim-calendar--aside {
+      //   width: 18em;
+      // }
+      //
+      // &.is-week-view {
+        .sim-calendar--aside {
+          width: 0;
+        }
+      // }
     }
 
     &.is-coordinator-context {
