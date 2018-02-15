@@ -44,7 +44,7 @@
       <template v-if="isCoordinatorContext">
 
         <div v-if="isWeekView" class="local--day--blocks local--day--aggregate-blocks">
-          <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
+          <SimTimeBlock v-for="(block, index) in filteredBlocks"
             theme="aggregate"
             :class="displayMode"
             :key="index"
@@ -82,21 +82,7 @@
         </div>
 
         <div v-if="isMonthView" class="local--day--blocks local--day--aggregate-blocks">
-          <template v-if="hasAvailability">
-          <template v-if="thereIsNoDataForThisDay">
-            <SimTimeBlock
-              theme="null"
-              block-icon="#icon--instructors-null"
-              :tooltip="{icon: '#icon--instructors-null', text: 'No Data'}"
-              :class="displayMode"
-              :key="0"
-              :block="{start: 0, duration: 24}"
-              :index="0"
-              :show-controls="false"
-              :orientation="timeBlockOrientation"
-              />
-          </template>
-          <template v-else-if="thereAreNoFilteredResultsForThisDay">
+          <template v-if="thereAreNoFilteredResultsForThisDay">
             <SimTimeBlock
               theme="empty"
               block-icon="#icon--instructors-none"
@@ -109,8 +95,8 @@
               :orientation="timeBlockOrientation"
               />
           </template>
-          <template v-else="thereIsDataForThisDay">
-            <SimTimeBlock v-for="(block, index) in aggregateUserAvailabilityBlocks"
+          <template v-else-if="thereIsDataForThisDay">
+            <SimTimeBlock v-for="(block, index) in filteredBlocks"
               theme="aggregate"
               v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
               :tooltip="{icon: '#icon--instructors-exist', text: pluralize(1, 'Instructor Found', 'Instructors Found')}"
@@ -121,6 +107,19 @@
               :show-controls="false"
               :orientation="timeBlockOrientation"
               />
+          </template>
+          <template v-else-if="thereIsNoDataForThisDay">
+            <SimTimeBlock
+              theme="null"
+              block-icon="#icon--instructors-null"
+              :tooltip="{icon: '#icon--instructors-null', text: 'No Data'}"
+              :class="displayMode"
+              :key="0"
+              :block="{start: 0, duration: 24}"
+              :index="0"
+              :show-controls="false"
+              :orientation="timeBlockOrientation"
+            />
           </template>
         </div>
 
@@ -150,6 +149,7 @@
       'initialPendingEventBlocks',
       'initialCurrentUserAvailabilityBlocks',
       'initialAggregateUserAvailabilityBlocks',
+      'initialAllBlocks',
     ],
     data() {
       return {
@@ -157,7 +157,8 @@
         events: [],
         pendingEvents: [],
         currentUserAvailabilityBlocks: [],
-        aggregateUserAvailabilityBlocks: [],
+        filteredBlocks: [],
+        allBlocks: [],
       }
     },
     mounted() {
@@ -171,7 +172,10 @@
         this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
       }
       if (this.initialAggregateUserAvailabilityBlocks) {
-        this.aggregateUserAvailabilityBlocks = this.initialAggregateUserAvailabilityBlocks
+        this.filteredBlocks = this.initialAggregateUserAvailabilityBlocks
+      }
+      if (this.initialAllBlocks) {
+        this.allBlocks = this.initialAllBlocks
       }
     },
     watch: {
@@ -185,7 +189,10 @@
         this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
       },
       initialAggregateUserAvailabilityBlocks(newValue) {
-        this.$set(this, 'aggregateUserAvailabilityBlocks', newValue)
+        this.$set(this, 'filteredBlocks', newValue)
+      },
+      initialAllBlocks(newValue) {
+        this.$set(this, 'allBlocks', newValue)
       },
     },
     computed: {
@@ -251,13 +258,13 @@
         return this.$store.state.bubble.is_open
       },
       thereIsNoDataForThisDay() {
-        return (this.aggregateUserAvailabilityBlocks[this.date] === undefined)
+        return _.isEmpty(this.allBlocks)
       },
       thereIsDataForThisDay() {
-        return (this.aggregateUserAvailabilityBlocks[this.date].length > 0)
+        return (this.filteredBlocks.length > 0)
       },
       thereAreNoFilteredResultsForThisDay() {
-        return (this.aggregateUserAvailabilityBlocks[this.date].length === 0)
+        return (!_.isEmpty(this.allBlocks) && this.filteredBlocks.length === 0)
       },
     },
     methods: {

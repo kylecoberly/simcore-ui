@@ -102,6 +102,7 @@
                              :initialPendingEventBlocks="day.pendingEventBlocks"
                              :initialCurrentUserAvailabilityBlocks="day.currentUserAvailabilityBlocks"
                              :initialAggregateUserAvailabilityBlocks="day.aggregateUserAvailabilityBlocks"
+                             :initialAllBlocks="day.allBlocks"
                   />
               </template>
 
@@ -120,6 +121,7 @@
                              :initialPendingEventBlocks="day.pendingEventBlocks"
                              :initialCurrentUserAvailabilityBlocks="day.currentUserAvailabilityBlocks"
                              :initialAggregateUserAvailabilityBlocks="day.aggregateUserAvailabilityBlocks"
+                             :initialAllBlocks="day.allBlocks"
                   />
               </template>
 
@@ -311,6 +313,7 @@
           canMoveBlock: false,
         },
         aggregateUserAvailabilityBlocks: [],
+        allBlocks: [],
         monthDays: {},
         weekDays: {},
       }
@@ -377,6 +380,7 @@
       this.pendingEventBlocks = this.$store.state.events.pendingBlocks
       this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
       this.aggregateUserAvailabilityBlocks = this.$store.state.availabilities.filteredBlocks
+      this.allBlocks = this.$store.state.availabilities.allInstructorAvailabilityBlocks
 
       // TODO: activate these when we need to build them out - Jase
       // this.institutions = this.$store.state.user.institutions || []
@@ -436,6 +440,7 @@
 
       this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilityBlocks, () => {
         this.$set(this, 'aggregateUserAvailabilityBlocks', this.$store.state.availabilities.filteredBlocks)
+        this.$set(this, 'allBlocks', this.$store.state.availabilities.allInstructorAvailabilityBlocks)
 
         this.$forceUpdate()
       })
@@ -447,6 +452,7 @@
           pendingEventBlocks: [],
           currentUserAvailabilityBlocks: [],
           aggregateUserAvailabilityBlocks: [],
+          allBlocks: [],
         }
 
         let currentDay = (this.isMonthView) ? this.monthDays[this.date] : this.weekDays[this.date]
@@ -535,6 +541,7 @@
             date: day,
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[day] || [],
             aggregateUserAvailabilityBlocks: this.aggregateUserAvailabilityBlocks[day] || [],
+            allBlocks: this.allBlocks[day] || [],
             eventBlocks: this.eventBlocks[day] || [],
             pendingEventBlocks: this.pendingEventBlocks[day] || [],
           }
@@ -554,6 +561,7 @@
             date: day,
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[day] || [],
             aggregateUserAvailabilityBlocks: this.aggregateUserAvailabilityBlocks[day] || [],
+            allBlocks: this.allBlocks[day] || [],
             eventBlocks: this.eventBlocks[day] || [],
             pendingEventBlocks: this.pendingEventBlocks[day] || [],
           }
@@ -630,6 +638,7 @@
             date: weekDay,
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[weekDay] || [],
             aggregateUserAvailabilityBlocks: this.$store.state.availabilities.filteredBlocks[weekDay] || {},
+            allBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks[weekDay] || {},
             eventBlocks: this.eventBlocks[weekDay] || [],
             pendingEventBlocks: this.pendingEventBlocks[weekDay] || [],
           })
@@ -646,6 +655,7 @@
             date: monthDay,
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[monthDay] || [],
             aggregateUserAvailabilityBlocks: this.$store.state.availabilities.filteredBlocks[monthDay] || {},
+            allBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks[monthDay] || {},
             eventBlocks: this.eventBlocks[monthDay] || [],
             pendingEventBlocks: this.pendingEventBlocks[monthDay] || [],
           })
