@@ -105,7 +105,7 @@ const availabilities = {
               response.data.users,
               allBlocksFromInstructorAvailabilitySegments,
             {
-              eventLength: 8,
+              eventLength: 1,
               instructorSlots: {
                 totalCount: specificInstructorIds.length,
                 specificInstructorIds,
