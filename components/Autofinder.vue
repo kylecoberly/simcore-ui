@@ -16,7 +16,7 @@
             @keyup.esc="blur"
             @input="onInput($event.target.value)"
             />
-      <div class="sim-autofinder--remove-item" @click="removeItem" v-if="!isAlone">
+      <div class="sim-autofinder--remove-item" @click="removeItem">
         <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
       </div>
     </label>
@@ -145,7 +145,11 @@
         this.select()
       },
       removeItem() {
-        this.$emit('remove', (this.foundItem ? this.foundItem : this.item))
+        if (this.isAlone) {
+          this.onInput('')
+        } else {
+          this.$emit('remove', (this.foundItem ? this.foundItem : this.item))
+        }
       },
       blur() {
         if (!this.foundItem) {
