@@ -16,7 +16,7 @@
             @keyup.esc="blur"
             @input="onInput($event.target.value)"
             />
-      <div class="sim-autofinder--remove-item" @click="removeItem" v-if="!isAlone || search.length || foundItem">
+      <div class="sim-autofinder--remove-item" @click="removeItem" v-if="shouldShowRemoveItemCue">
         <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
       </div>
     </label>
@@ -93,6 +93,9 @@
       },
       isDisabled() {
         return this.shouldBeDisabled
+      },
+      shouldShowRemoveItemCue() {
+        return !this.isAlone || this.search.length || this.foundItem
       },
     },
     mounted() {
