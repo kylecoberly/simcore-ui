@@ -206,7 +206,7 @@
           </div>
         </template>
 
-        <template v-if="isInstructorContext && isMonthView && false">
+        <template v-if="isInstructorContext && isMonthView">
           <div class="sim-calendar--aside--header">
             <b>My Availability</b>
           </div>
@@ -966,15 +966,15 @@
     }
 
     &.is-instructor-context {
-      // .sim-calendar--aside {
-      //   width: 18em;
-      // }
-      //
-      // &.is-week-view {
+      .sim-calendar--aside {
+        width: 18em;
+      }
+
+      &.is-week-view {
         .sim-calendar--aside {
           width: 0;
         }
-      // }
+      }
     }
 
     &.is-coordinator-context {

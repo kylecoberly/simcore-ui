@@ -46,10 +46,8 @@
       return {
         msg: 'TimePicker',
         dateFormat: 'YYYY-MM-DD',
-        date: moment()
-          .format('YYYY-MM-DD'),
-        displayDate: moment()
-          .format('dddd, MMMM Do'),
+        date: moment().format('YYYY-MM-DD'),
+        displayDate: moment().format('dddd, MMMM Do'),
         user_dates: {},
         blocks: [],
         block: {},

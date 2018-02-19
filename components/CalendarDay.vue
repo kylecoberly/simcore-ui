@@ -6,8 +6,13 @@
       >
     <div class="local--day">
 
-      <!-- isWeekView || (isSelected && bubbleIsOpen) -->
-      <ul v-if="isSelected" class="sim-calendar--grid--day--timelines">
+      <!-- <SimTimeLines v-if="isWeekView || (isSelected && bubbleIsOpen)"
+                    class="sim-calendar--grid--day--timelines"
+                    mode="hours"
+                    :start="0"
+                    :end="24"
+                    /> -->
+      <ul v-if="isWeekView || (isSelected && bubbleIsOpen)" class="sim-calendar--grid--day--timelines">
         <li v-for="segment in 25" @dblclick="createBlock(segment-1, $event.target)" :class="setHourClasses(segment-1)">
           <div v-if="segment === 13" class="sim-timepicker--time sim-timepicker--noon">
             <SimIconText icon="fa-sun-o"></SimIconText>
@@ -122,7 +127,7 @@
           <template v-else-if="thereIsNoDataForThisDay">
             <SimTimeBlock
               theme="null"
-              block-icon="#icon--instructors-null"
+              xblock-icon="#icon--instructors-null"
               :tooltip="{icon: '#icon--instructors-null', text: 'No Data'}"
               :class="displayMode"
               :key="0"
@@ -144,16 +149,18 @@
   import _ from 'lodash'
   import moment from 'moment'
 
-  import SimTimeBlock from './TimeBlock'
-  import SimTooltip from './Tooltip'
   import SimIconText from './IconText'
+  import SimTimeBlock from './TimeBlock'
+  import SimTimeLines from './TimeLines'
+  import SimTooltip from './Tooltip'
 
   export default {
     name: 'sim-calendar-day',
     components: {
-      SimTimeBlock,
-      SimTooltip,
       SimIconText,
+      SimTimeBlock,
+      SimTimeLines,
+      SimTooltip,
     },
     props: [
       'date',

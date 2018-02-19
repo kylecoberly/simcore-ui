@@ -308,7 +308,7 @@
   &--aggregate,
   &--green {
     --timeblock-color: var(--green) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--green) 90%);
-    opacity: .5;
+    // opacity: .5;
     cursor: pointer;
   }
 

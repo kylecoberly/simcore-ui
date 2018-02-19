@@ -17,7 +17,10 @@
     </div>
 
     <div class="sim-timepicker--inner" :class="timelineClasses">
-      <ul>
+
+      <SimTimeLines :mode="timelineMode" :start="startTime" :end="endTime" />
+
+      <!-- <ul>
         <template v-if="timelineMode === 'hours'">
           <li v-for="segment in totalSegments" @mousedown="createTimeBlock($event, segment-1)" :class="setHourClasses(segment-1)">
             <div v-if="segment === 13" class="sim-timepicker--time sim-timepicker--noon">
@@ -38,7 +41,7 @@
             </div>
           </li>
         </template>
-      </ul>
+      </ul> -->
 
       <SimTimeBlock v-for="(block, index) in currentBlocks"
                     :key="index"
@@ -63,12 +66,14 @@
   import moment from 'moment'
   import SimIconText from './IconText'
   import SimTimeBlock from './TimeBlock'
+  import SimTimeLines from './TimeLines'
 
   export default {
     name: 'sim-timepicker',
     components: {
       SimIconText,
       SimTimeBlock,
+      SimTimeLines,
     },
     props: {
       date: {
@@ -252,7 +257,7 @@
       },
 
       // Time Block Methods.
-      updateBlocks() {
+      emitUpdateBlocks() {
         this.sortBlocks()
 
         // this.$emit('blocksWereUpdated', { blocks: this.currentUserAvailabilityBlocks, date: this.date })
@@ -282,7 +287,7 @@
 
           // this.currentUserAvailabilityBlocks.push({ start: hour, duration: maxDuration })
           this.currentBlocks.push({ start: hour, duration: maxDuration })
-          this.updateBlocks()
+          this.emitUpdateBlocks()
         }
 
       },
@@ -290,16 +295,16 @@
         // this.currentUserAvailabilityBlocks.splice(index, 1)
         this.currentBlocks.splice(index, 1)
 
-        this.updateBlocks()
+        this.emitUpdateBlocks()
       },
       removeAllTimeBlocks() {
         // this.currentUserAvailabilityBlocks.splice(0, this.currentUserAvailabilityBlocks.length)
         this.currentBlocks.splice(0, this.currentBlocks.length)
 
-        this.updateBlocks()
+        this.emitUpdateBlocks()
       },
       blockWasUpdated() {
-        this.updateBlocks()
+        this.emitUpdateBlocks()
       },
       // Date Management Methods.
       nextDay() {

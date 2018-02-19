@@ -3,7 +3,7 @@
 
     <template v-if="showControls">
 
-      <div v-if="canRemoveBlock" class="sim-timeblock--remover" @click="removeTimeBlock">
+      <div v-if="canRemoveBlock" class="sim-timeblock--remover" @click="emitRemoveTimeBlock">
         <SimIconText icon="fa-times"></SimIconText>
       </div>
 
@@ -226,7 +226,7 @@
       },
       blockStyles() {
         const styles = []
-        styles.push(`--start: ${this.block.startTime - this.timeShiftOffset}`)
+        styles.push(`--start: ${this.block.start - this.timeShiftOffset}`)
         styles.push(`--duration: ${this.block.duration}`)
         styles.push(`--segment-size: ${this.segmentSize}`)
 
@@ -234,7 +234,7 @@
       },
     },
     methods: {
-      removeTimeBlock(event) {
+      emitRemoveTimeBlock(event) {
         event.stopPropagation()
         event.preventDefault()
         this.$emit('remove-time-block', this.index)
@@ -246,14 +246,14 @@
         const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
         const currentStart = _cap(calc, this.metrics.axis[this.orientation], 0, this.metrics.max[this.orientation])
 
-        this.block.startTime = (Math.round((currentStart) / this.metrics.segment[this.orientation]) / 2) + this.timeShiftOffset
+        this.block.start = (Math.round((currentStart) / this.metrics.segment[this.orientation]) / 2) + this.timeShiftOffset
       },
 
       // ---------- For stretching up or left ----------
       setStretchingStart(event, mouseCoordinate) {
         const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
         const currentStart = Math.floor(calc / this.metrics.segment[this.orientation]) / 2
-        this.block.startTime = _cap((currentStart), 0, 0, (this.metrics.startValue + this.metrics.durationValue - 0.5)) + this.timeShiftOffset
+        this.block.start = _cap((currentStart), 0, 0, (this.metrics.startValue + this.metrics.durationValue - 0.5)) + this.timeShiftOffset
 
         return currentStart
       },
@@ -266,7 +266,7 @@
       setDurationFromEnd(event, mouseCoordinate) {
         const currentDuration = Math.round((this.metrics.axis[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation]) / this.metrics.segment[this.orientation]) / 2
 
-        this.block.duration = _cap(currentDuration, 0, 0.5, this.variables.maximumDuration - this.block.startTime + this.timeShiftOffset)
+        this.block.duration = _cap(currentDuration, 0, 0.5, this.variables.maximumDuration - this.block.start + this.timeShiftOffset)
       },
 
       // ---------- Move ----------

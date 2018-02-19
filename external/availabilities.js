@@ -274,7 +274,8 @@ export default {
         filteredBlock.startSegment  = startSegment
         filteredBlock.endSegment    = endSegment
 
-        filteredBlock.startTime = this.convertToDecimal(startSegment)
+        // filteredBlock.startTime = this.convertToDecimal(startSegment)
+        filteredBlock.start     = this.convertToDecimal(startSegment)
         filteredBlock.endTime   = this.convertToDecimal(startSegment + numberOfSegments)
         filteredBlock.duration  = this.convertToDecimal(numberOfSegments)
 

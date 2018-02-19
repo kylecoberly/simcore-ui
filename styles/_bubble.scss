@@ -1,7 +1,7 @@
 .sim-bubble {
   position: absolute;
   top: calc(var(--y) * 1px);
-  z-index: 2;
+  z-index: 3;
   transition: 600ms ease-out;
   display: flex;
   flex-direction: column;
