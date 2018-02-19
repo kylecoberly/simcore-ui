@@ -16,7 +16,7 @@
             @keyup.esc="blur"
             @input="onInput($event.target.value)"
             />
-      <div class="sim-autofinder--remove-item" @click="removeItem">
+      <div class="sim-autofinder--remove-item" @click="removeItem" v-if="!isAlone || search.length || foundItem">
         <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
       </div>
     </label>
@@ -102,7 +102,7 @@
       }
     },
     methods: {
-      onInput(value) {
+      onInput() {
         this.isOpen = (this.search.length > 2)
         this.position = 0
 
@@ -110,7 +110,7 @@
         if (this.foundItem && this.search.length <= this.previousValueLength) {
           this.$emit('clear', this.foundItem)
           this.search = '';
-          this.previousValueLength = this.search.legth
+          this.previousValueLength = this.search.length
           this.foundItem = null
           this.isOpen = false
         }
@@ -146,7 +146,7 @@
       },
       removeItem() {
         if (this.isAlone) {
-          this.onInput('')
+          this.onInput()
         } else {
           this.$emit('remove', (this.foundItem ? this.foundItem : this.item))
         }
