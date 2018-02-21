@@ -1,9 +1,9 @@
 <template lang="html">
   <div class="sim-switch">
     <label>
-      <span>{{ leftLabel }}</span>
+      <span v-if="leftLabel">{{ leftLabel }}</span>
       <input type="checkbox" :value="true" :checked="checked" @change="change" />
-      <span>{{ rightLabel }}</span>
+      <span v-if="rightLabel">{{ rightLabel }}</span>
     </label>
   </div>
 </template>
