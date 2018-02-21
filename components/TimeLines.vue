@@ -1,11 +1,11 @@
 <template lang="html">
   <ul class="sim-timelines">
-    <li v-for="segment in totalSegments" @mousedown="emitCreateTimeBlock($event, segment-1)" :class="setHourClasses(segment-1)">
+    <li v-for="segment in totalSegments" @dblclick="dblClickCreateTimeBlock($event, segment-1)" @mousedown="mousedownCreateTimeBlock($event, segment-1)" :class="setHourClasses(segment-1)">
       <template v-if="showLineNumbersAsTime">
-        <div v-if="segment === 13" class="sim-timeline--icon sim-timeline--icon--noon">
+        <div v-if="segment === 13" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--noon">
           <SimIconText icon="fa-sun-o"></SimIconText>
         </div>
-        <div v-else-if="segment === 1 || segment === 25" class="sim-timeline--icon sim-timeline--icon--midnight">
+        <div v-else-if="segment === 1 || segment === 25" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--midnight">
           <SimIconText icon="fa-moon-o"></SimIconText>
         </div>
         <div v-else-if="isWholeNumber(segment)" class="sim-timeline--time">
@@ -13,7 +13,7 @@
         </div>
       </template>
       <template v-else-if="showLineNumbersAsNumbers">
-        <div v-if="isWholeNumber(segment)" class="sim-timepicker--time">
+        <div v-if="isWholeNumber(segment)" class="sim-timeline--time">
           {{ segment-1 }}
         </div>
       </template>
@@ -35,6 +35,14 @@
         type: String,
         default: 'hours',
       },
+      action: {
+        type: String,
+        default: 'mousedown'
+      },
+      showHalfHourTicks: {
+        type: Boolean,
+        default: false,
+      },
       start: {
         type: Number,
         default: 0,
@@ -51,9 +59,12 @@
       showLineNumbersAsNumbers() {
         return this.mode === 'numbers'
       },
+      segmentQuotient() {
+        return this.showHalfHourTicks ? 0.5 : 1
+      },
       totalSegments() {
         const segments = []
-        for (let index = this.start + 1; index <= this.end + 1; index += 0.5) {
+        for (let index = this.start + 1; index <= this.end + 1; index += this.segmentQuotient) {
           segments.push(index)
         }
         return segments
@@ -71,13 +82,11 @@
       setHourClasses(hour) {
         const classes = []
 
-        if (this.timelineMode === 'hours') {
-          if (hour >= 6 && hour <= 17.5) {
-            classes.push('is-daytime')
-          } else {
-            classes.push('is-nighttime')
-          }
+        if (this.mode === 'hours') {
+          classes.push((hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'))
         }
+
+        classes.push((hour === 0 || hour === 24 ? 'is-midnight' : (hour === 12 ? 'is-noon' : '')))
 
         if (this.isWholeNumber(hour)) {
           classes.push(`is-hour is-hour-${hour}`)
@@ -87,8 +96,13 @@
 
         return classes
       },
-      emitCreateTimeBlock(event, hour) {
-        if (event.which === 1) {
+      dblClickCreateTimeBlock(event, hour) {
+        if (event.which === 1 && this.action === 'dblClick') {
+          this.$emit('create-time-block', hour)
+        }
+      },
+      mousedownCreateTimeBlock(event, hour) {
+        if (event.which === 1 && this.action === 'mousedown') {
           this.$emit('create-time-block', hour)
         }
       },
@@ -97,5 +111,5 @@
 </script>
 
 <style lang="scss">
-  // @import '../styles/timepicker';
+  // @import '../styles/timelines';
 </style>

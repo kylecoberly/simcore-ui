@@ -35,7 +35,8 @@
 }
 
 .sim-slide {
-  background: var(--dark);
+  background: var(--slide-bg, var(--dark));
+  color: var(--slide-fg, var(--lighter));
 
   &--header {
     position: sticky;
@@ -43,7 +44,7 @@
     z-index: 1;
     padding: 1em;
     line-height: 1.4;
-    background: var(--dark);
+    background: var(--slide-bg, var(--dark));
 
     &--title {
       margin: 0;

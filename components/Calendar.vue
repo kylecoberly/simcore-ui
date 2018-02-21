@@ -30,7 +30,7 @@
         <path class="icon--control--add" fill="#B8E986" d="M7.5,1 C11.0898509,1 14,3.91014913 14,7.5 C14,11.0898509 11.0898509,14 7.5,14 C3.91014913,14 1,11.0898509 1,7.5 C1,3.91014913 3.91014913,1 7.5,1 Z M8.14285714,6.85714286 L8.14285714,3.64285714 C8.14285714,3.28781695 7.8550402,3 7.5,3 C7.1449598,3 6.85714286,3.28781695 6.85714286,3.64285714 L6.85714286,6.85714286 L3.64285714,6.85714286 C3.28781695,6.85714286 3,7.1449598 3,7.5 C3,7.8550402 3.28781695,8.14285714 3.64285714,8.14285714 L6.85714286,8.14285714 L6.85714286,11.3571429 C6.85714286,11.7121831 7.1449598,12 7.5,12 C7.8550402,12 8.14285714,11.7121831 8.14285714,11.3571429 L8.14285714,8.14285714 L11.3571429,8.14285714 C11.7121831,8.14285714 12,7.8550402 12,7.5 C12,7.1449598 11.7121831,6.85714286 11.3571429,6.85714286 L8.14285714,6.85714286 Z"></path>
       </symbol>
       <symbol id="icon--control--x" viewBox="0 0 15 15">
-        <path class="icon--control--x" opacity="0.4" fill="#EEEEEE" d="M8.57900857,7.5 L11.27653,10.1975214 C11.57449,10.4954814 11.57449,10.97857 11.27653,11.27653 C10.97857,11.57449 10.4954814,11.57449 10.1975214,11.27653 L7.5,8.57900857 L4.80247857,11.27653 C4.50451858,11.57449 4.02142998,11.57449 3.72346999,11.27653 C3.42551,10.97857 3.42551,10.4954814 3.72346999,10.1975214 L6.42099143,7.5 L3.72346999,4.80247857 C3.42551,4.50451858 3.42551,4.02142998 3.72346999,3.72346999 C4.02142998,3.42551 4.50451858,3.42551 4.80247857,3.72346999 L7.5,6.42099143 L10.1975214,3.72346999 C10.4954814,3.42551 10.97857,3.42551 11.27653,3.72346999 C11.57449,4.02142998 11.57449,4.50451858 11.27653,4.80247857 L8.57900857,7.5 Z"></path>
+        <path class="icon--control--x" fill="#EEEEEE" d="M8.57900857,7.5 L11.27653,10.1975214 C11.57449,10.4954814 11.57449,10.97857 11.27653,11.27653 C10.97857,11.57449 10.4954814,11.57449 10.1975214,11.27653 L7.5,8.57900857 L4.80247857,11.27653 C4.50451858,11.57449 4.02142998,11.57449 3.72346999,11.27653 C3.42551,10.97857 3.42551,10.4954814 3.72346999,10.1975214 L6.42099143,7.5 L3.72346999,4.80247857 C3.42551,4.50451858 3.42551,4.02142998 3.72346999,3.72346999 C4.02142998,3.42551 4.50451858,3.42551 4.80247857,3.72346999 L7.5,6.42099143 L10.1975214,3.72346999 C10.4954814,3.42551 10.97857,3.42551 11.27653,3.72346999 C11.57449,4.02142998 11.57449,4.50451858 11.27653,4.80247857 L8.57900857,7.5 Z"></path>
       </symbol>
     </svg>
 
@@ -40,8 +40,10 @@
         <SimSwitch v-model="contextSwitch" left-label="My Availability" right-label="Schedule Events"/>
       </div>
       <div class="sim-calendar--header--modes">
-        <span class="sim-calendar-button sim-button" @click="setCalendarDisplayModeToMonth" :class="{active: isMonthView}">Month</span>
-        <span class="sim-calendar-button sim-button" @click="setCalendarDisplayModeToWeek" :class="{active: isWeekView}">Week</span>
+        <SimSwitch v-model="showExpandedWeek" left-label="" right-label="Expand Week"/>
+      </div>
+      <div class="sim-calendar--header--modes">
+        <SimSwitch v-model="showHistoricalData" left-label="" right-label="Show Historical Data"/>
       </div>
       <div class="sim-calendar--header--controls">
         <span @click="loadPrevDays">
@@ -87,7 +89,7 @@
               <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
 
               <template v-if="isMonthView">
-                <CalendarDay v-for="day in monthDays"
+                <CalendarDay v-for="(day, index) in monthDays"
                              class="sim-calendar--grid--day"
                              @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
                              @run-lodestar="runLodestar"
@@ -96,6 +98,9 @@
                              :key="day.date"
                              :displayMode="displayMode"
                              :date="day.date"
+                             :is-in-active-week="day.isInActiveWeek"
+                             :show-expanded-week="showExpandedWeek"
+                             :show-historical-data="showHistoricalData"
                              :user-context="contextLabel"
                              :initialEventLength="filterEventLength"
                              :initialEventBlocks="day.eventBlocks"
@@ -286,6 +291,8 @@
         calendarIsUpdating: false,
         isLoading: false,
         hideSlideNavigationControls: false,
+        showExpandedWeek: false,
+        showHistoricalData: false,
         date: this.$store.state.activeDate.date,
         institutions: [],
         departments: [],
@@ -481,7 +488,8 @@
           classes.push('is-month-view')
         }
 
-        if (this.bubbleIsOpen || this.isInstructorContext) {
+        if (this.showExpandedWeek || this.bubbleIsOpen) {
+          // this.bubbleIsOpen || this.isInstructorContext || true) {
           classes.push('is-expanded')
         }
 
@@ -552,13 +560,15 @@
       currentMonthDays() {
         const start = moment(this.activeMoment).startOf('month')
         const limit = this.activeMoment.daysInMonth()
+        const newMonthDayStrings = this.setDays(moment(this.activeMoment).startOf('month'), limit)
 
-        const newMonthDayStrings = this.setDays(start, limit)
+        const activeWeekDays = this.setDays(moment(this.activeMoment).startOf('week'), 7)
 
         this.monthDays = {}
         _.each(newMonthDayStrings, (day) => {
           this.monthDays[day] = {
             date: day,
+            isInActiveWeek: activeWeekDays.includes(day),
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[day] || [],
             aggregateUserAvailabilityBlocks: this.aggregateUserAvailabilityBlocks[day] || [],
             allBlocks: this.allBlocks[day] || [],
@@ -939,6 +949,7 @@
     bottom: -1em;
     width: calc(var(--width-factor, 1) * 20em);
     max-width: 50%;
+    &::before,
     &::after {
       top: calc(var(--dink-y) * 1px);
     }
@@ -956,6 +967,10 @@
     --switch-color-active: var(--lighter-grey);
     --switch-handle-color: var(--action);
     --timeblock-color: var(--green);
+    --bubble-fg: var(--dark);
+    --bubble-bg: #fcf9e9; //var(--lightest);
+    --slide-fg: var(--bubble-fg);
+    --slide-bg: var(--bubble-bg);
 
     .sim-switch input {
       box-shadow: 0 0 0 1px var(--light-grey);
@@ -1016,7 +1031,7 @@
     }
 
     &.filter--duration {
-      background: #444;
+      background: var(--shade);
       margin: -1em 1em -1em -1em;
       padding: 1em 0 1em 1em;
     }

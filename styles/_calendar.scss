@@ -31,13 +31,15 @@
       align-items: center;
       justify-content: center;
       font-size: .9em;
+      flex: 1;
+      font-size: 1.3em;
     }
 
     &--context {
       flex: 2;
       display: flex;
-      align-items: center;
       font-size: 1.3em;
+      align-items: center;
     }
 
     &--controls {
@@ -93,9 +95,9 @@
       padding: 1em;
       box-shadow: var(--lines);
       background-image: linear-gradient(135deg, var(--shade), var(--mist));
-      background-color: var(--darker);
+      background-color: var(--dark);
       border-radius: 1px;
-      color: var(--lighter);
+      color: var(--lightest);
       transition: 200ms linear;
 
       > div {
@@ -243,7 +245,7 @@
       position: relative;
       flex: 0 0 14.285%;
       min-height: 10vmin;
-      padding: 4px 5px 5px 4px;
+      padding: 9px 10px 10px 9px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -252,7 +254,7 @@
       &--timelines {
         position: absolute;
         top: 0;
-        left: 0;
+        left: 60%;
         right: 0;
         bottom: 0;
         display: flex;
@@ -280,7 +282,7 @@
           }
         }
 
-        .sim-timepicker--time {
+        .sim-timeline--time {
           position: absolute;
           top: 0;
           left: 0;
@@ -411,8 +413,6 @@
     .is-selected {
       z-index: 2;
       background-color: var(--blue-film-light);
-      // box-shadow: 0 0 0 3px var(--action), 0 0 1em -.3em;
-      // border-radius: .2em;
     }
   }
 
@@ -442,9 +442,9 @@
   &.is-expanded {
     .sim-calendar--grid--day {
       min-height: 4vmin;
-      &.is-selected {
-        min-height: 48vmin;
-        max-height: 48em;
+      &.is-in-active-week {
+        min-height: 45vmin;
+        max-height: 45em;
       }
     }
   }

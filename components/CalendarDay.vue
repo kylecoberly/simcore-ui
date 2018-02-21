@@ -6,30 +6,19 @@
       >
     <div class="local--day">
 
-      <!-- <SimTimeLines v-if="isWeekView || (isSelected && bubbleIsOpen)"
+      <SimTimeLines v-if="shouldShowTimelines"
                     class="sim-calendar--grid--day--timelines"
                     mode="hours"
+                    action="dblClick"
                     :start="0"
                     :end="24"
-                    /> -->
-      <ul v-if="isWeekView || (isSelected && bubbleIsOpen)" class="sim-calendar--grid--day--timelines">
-        <li v-for="segment in 25" @dblclick="createBlock(segment-1, $event.target)" :class="setHourClasses(segment-1)">
-          <div v-if="segment === 13" class="sim-timepicker--time sim-timepicker--noon">
-            <SimIconText icon="fa-sun-o"></SimIconText>
-          </div>
-          <div v-else-if="segment === 1 || segment === 25" class="sim-timepicker--time sim-timepicker--midnight">
-            <SimIconText icon="fa-moon-o"></SimIconText>
-          </div>
-          <div v-else-if="isWholeNumber(segment)" class="sim-timepicker--time">
-            {{ displayHour(segment-1) }}
-          </div>
-        </li>
-      </ul>
+                    @create-time-block="createTimeBlock"
+                    />
 
       <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber }}</div>
 
       <template v-if="isInstructorContext">
-        <div class="local--day--blocks local--day--event-blocks">
+        <div v-if="showHistoricalData" class="local--day--blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             theme="event"
             v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
@@ -41,7 +30,7 @@
             :orientation="timeBlockOrientation"
             />
         </div>
-        <div class="local--day--blocks local--day--time-blocks">
+        <div v-if="showHistoricalData" class="local--day--blocks local--day--time-blocks">
           <SimTimeBlock v-for="(block, index) in currentUserAvailabilityBlocks"
             theme="available"
             :class="displayMode"
@@ -59,7 +48,7 @@
 
       <template v-if="isCoordinatorContext">
 
-        <div v-if="isWeekView" class="local--day--blocks local--day--aggregate-blocks">
+        <div v-if="(showHistoricalData || !isBeforeToday) && isWeekView" class="local--day--blocks local--day--aggregate-blocks">
           <SimTimeBlock v-for="(block, index) in filteredBlocks"
             theme="aggregate"
             :class="displayMode"
@@ -97,7 +86,7 @@
             />
         </div>
 
-        <div v-if="isMonthView" class="local--day--blocks local--day--aggregate-blocks">
+        <div v-if="(showHistoricalData || !isBeforeToday) && isMonthView" class="local--day--blocks local--day--aggregate-blocks">
           <template v-if="thereAreNoFilteredResultsForThisDay">
             <SimTimeBlock
               theme="empty"
@@ -165,6 +154,9 @@
     props: [
       'date',
       'index',
+      'isInActiveWeek',
+      'showExpandedWeek',
+      'showHistoricalData',
       'displayMode',
       'userContext',
       'initialEventLength',
@@ -234,6 +226,9 @@
       isToday() {
         return moment().isSame(this.date, 'day')
       },
+      isAfterToday() {
+        return moment().isBefore(this.date, 'day')
+      },
       isWeekendDay() {
         return this.$store.state.calendar.settings.weekend_days.includes(this.dayOfWeek)
       },
@@ -250,7 +245,7 @@
           classes.push('is-today')
         } else if (this.isBeforeToday) {
           classes.push('is-before-today')
-        } else {
+        } else if (this.isAfterToday){
           classes.push('is-after-today')
         }
 
@@ -259,6 +254,11 @@
         } else {
           classes.push('is-weekday')
         }
+
+        if (this.isInActiveWeek) {
+          classes.push('is-in-active-week')
+        }
+
         if (this.isSelected) {
           classes.push(this.selectedClass || 'is-selected')
         }
@@ -289,11 +289,36 @@
       thereAreNoFilteredResultsForThisDay() {
         return (!_.isEmpty(this.allBlocks) && this.filteredBlocks.length === 0)
       },
+      shouldShowTimelines() {
+        let show = false
+        if (this.isInstructorContext) {
+          if (this.isSelected && this.showExpandedWeek) {
+            show = true
+          }
+        } else if (this.isCoordinatorContext) {
+          if (this.isSelected && (this.showExpandedWeek || this.bubbleIsOpen) && this.thereIsDataForThisDay) {
+            show = true
+          }
+        }
+        return show
+      }
     },
     methods: {
-      isWholeNumber(value) {
-        return Math.ceil(parseFloat(value)) === parseInt(value)
+
+      eventHandler(event) {
+        var items = document.querySelectorAll('.dock .item');
+
+        if(items.length) {
+          for (var i = 0, len = items.length; i < len; i++) {
+            items[i].classList.remove('is-in-row');
+          }
+        }
+
+        if (event.target.tagName === 'SPAN' && e.srcElement.previousElementSibling) {
+          e.srcElement.previousElementSibling.classList.add('is-in-row');
+        }
       },
+
       pluralize(count, single, other) {
         return (count === 1 ? `${count} ${single}` : `${count} ${other}`)
       },
@@ -306,6 +331,9 @@
         } else {
           this.$store.commit('setCalendarDisplayModeToMonth')
         }
+      },
+      isWholeNumber(value) {
+        return Math.ceil(parseFloat(value)) === parseInt(value)
       },
       setHourClasses(hour) {
         const classes = []
@@ -338,12 +366,12 @@
       blockWasUpdated() {
         this.updateBlocks()
       },
-      createBlock(hour, element) {
+      createBlock(event, hour) {
         if (this.isInstructorContext) {
           this.createTimeBlock(hour)
         } else {
           // FIXME: This is disabled for now now until week view filters are working - Jase
-          this.createEventBlock(hour, element)
+          this.createEventBlock(event.target, hour)
         }
       },
       createTimeBlock(hour) {
@@ -351,7 +379,7 @@
 
         this.updateBlocks()
       },
-      createEventBlock(hour, element) {
+      createEventBlock(element, hour) {
         this.pendingEvents.push({ start: hour, duration: this.initialEventLength })
         this.pendingEvents.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
 
@@ -386,6 +414,4 @@
 
 <style lang="scss">
   @import '../styles/calendar-day';
-
-
 </style>

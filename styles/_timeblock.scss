@@ -327,7 +327,7 @@
   &--null,
   &--red {
     --timeblock-color: var(--red-film-lighter) repeating-linear-gradient(45deg, transparent 0px, transparent 5px, var(--red-film-light) 5px, var(--red-film-light) 7px);
-    box-shadow: 0 0 0 1px var(--red-film) inset;
+    box-shadow: 0 0 0 1px var(--red-film-light) inset;
 
     .sim-timeblock--icon {
       opacity: 1;
