@@ -94,7 +94,7 @@
                 </div>
               </li>
             </ul>
-            <div class="sim-calendar--grid--days">
+            <div class="sim-calendar--grid--days" @click.meta="toggleExpandedWeek" @dblclick="toggleExpandedWeek">
 
               <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
 
@@ -727,6 +727,9 @@
       },
     },
     methods: {
+      toggleExpandedWeek() {
+        this.showExpandedWeek = !this.showExpandedWeek
+      },
       instructorFilterItem(item) {
         let output = ''
         if (item.firstname && item.lastname) {

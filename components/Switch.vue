@@ -23,6 +23,11 @@
         this.$emit('input', this.checked)
       },
     },
+    watch: {
+      value(value) {
+        this.checked = value
+      }
+    },
   }
 </script>
 

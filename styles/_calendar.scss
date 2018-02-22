@@ -246,7 +246,7 @@
       position: relative;
       flex: 0 0 14.285%;
       min-height: 10vmin;
-      padding: calc(.2em - 1px) .2em .2em calc(.2em - 1px);
+      padding: 0 1px 1px 0;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -445,10 +445,19 @@
   &.is-expanded {
     .sim-calendar--grid--day {
       min-height: 4vmin;
+
       &.is-in-active-week {
         min-height: 45vmin;
         max-height: 45em;
+
+        .sim-timeblock--info {
+          opacity: 1;
+        }
       }
     }
+  }
+
+  .sim-calendar--grid--day .sim-timeblock--info {
+    opacity: 0;
   }
 }

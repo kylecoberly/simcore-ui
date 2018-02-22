@@ -1,7 +1,6 @@
 <template lang="html">
   <div class="sim-calendar-day"
       @mousedown="setActiveDateToToday"
-      @click.meta="toggleCalendarDisplayMode"
       :class="dayClasses"
       >
     <div class="local--day">
@@ -275,7 +274,7 @@
         return (this.isMonthView ? 'y' : 'y')
       },
       showTimeBlockControls() {
-        return (this.isMonthView ? true : true)
+        return this.showExpandedWeek && this.isInActiveWeek
       },
       bubbleIsOpen() {
         return this.$store.state.bubble.is_open
@@ -326,13 +325,6 @@
       },
       setActiveDateToToday() {
         this.$store.commit('setActiveDate', this.date)
-      },
-      toggleCalendarDisplayMode() {
-        if (this.isMonthView) {
-          this.$store.commit('setCalendarDisplayModeToWeek')
-        } else {
-          this.$store.commit('setCalendarDisplayModeToMonth')
-        }
       },
       isWholeNumber(value) {
         return Math.ceil(parseFloat(value)) === parseInt(value)
