@@ -498,7 +498,7 @@
           classes.push('is-month-view')
         }
 
-        if (this.showExpandedWeek || this.bubbleIsOpen) {
+        if (this.showExpandedWeek) { // || this.bubbleIsOpen) {
           // this.bubbleIsOpen || this.isInstructorContext || true) {
           classes.push('is-expanded')
         }

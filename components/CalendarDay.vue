@@ -296,7 +296,8 @@
               show = true
             }
           } else if (this.isCoordinatorContext) {
-            if (this.isSelected && (this.showExpandedWeek || this.bubbleIsOpen) && this.thereIsDataForThisDay) {
+            // if (this.isSelected && (this.showExpandedWeek || this.bubbleIsOpen) && this.thereIsDataForThisDay) {
+            if (this.isSelected && this.showExpandedWeek && this.thereIsDataForThisDay) {
               show = true
             }
           }
