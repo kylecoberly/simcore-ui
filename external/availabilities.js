@@ -4,16 +4,6 @@ import * as filters from '../data/filters'
 
 // TODO: Refactor formatting from filtering. - Chad
 export default {
-  getSegmentsBetweenStartAndEnd(start, end) {
-    return 0
-  },
-  getDurationFromStartAndEnd(start, end) {
-    if (end > start) {
-      return (end - start)
-    }
-
-    return 'Error: The end must come after the start.'
-  },
   convertToDecimal(whole) {
     return (whole / 2)
   },
@@ -22,7 +12,7 @@ export default {
     const lessLameData = _.reduce(instructors, (resultSoFar, userDates, userId) => {
       _.each(userDates, (date) => {
         const key = Object.keys(date)
-        const dateOnlyKey = key[0].slice(0, -9)
+        const dateOnlyKey = key[0].slice(0, -9) // TODO: Replace this with simpler timestamps when Rick's update is done. - Chad
 
         if (!resultSoFar[dateOnlyKey]) {
           resultSoFar[dateOnlyKey] = []
@@ -35,8 +25,6 @@ export default {
       return resultSoFar
     }, {})
 
-    feFiFoUmmm('aggregateInstructorAvailabilityKeyedByDateAndStartTime', lessLameData, expectedLittleLameData)
-
     return lessLameData
   },
   groupInstructorAvailabilitiesKeyedByDateAndStartTime(instructors) {
@@ -45,7 +33,7 @@ export default {
     _.each(instructors, (userDates, userId) => {
       _.each(userDates, (date) => {
         const key = Object.keys(date)
-        const dateOnlyKey = key[0].slice(0, -9)
+        const dateOnlyKey = key[0].slice(0, -9) // TODO: Replace this with simpler timestamps when Rick's update is done. - Chad
 
         const startOffset = date[key[0]].start * 2
 
@@ -239,7 +227,7 @@ export default {
 
       // Unfortunately, the spread operator isn't working so... here's this.
       if (!_.isEmpty(segmentsIncludingAllRequiredInstructors)) {
-        const filteredBlock     = availabilityBlock
+        const filteredBlock     = Object.assign({}, availabilityBlock)
         filteredBlock.segments  = segmentsIncludingAllRequiredInstructors
 
         const uniqueInstructorIds = []
@@ -253,36 +241,12 @@ export default {
           })
         })
 
-        const numberOfSegments  = _.size(segmentsIncludingAllRequiredInstructors)
+        const groupedBlocks =
+          filters.groupInstructorSegmentsForADayByContiguousTime(segmentsIncludingAllRequiredInstructors)
 
-        filteredBlock.numberOfSegments = numberOfSegments
-
-        let startSegment
-        let endSegment    = 0
-        _.each(segmentsIncludingAllRequiredInstructors, (availabilitySegment) => {
-          if (!startSegment) {
-            startSegment = availabilitySegment.start
-          } else if (availabilitySegment.start < startSegment) {
-            startSegment = availabilitySegment.start
-          }
-
-          if (availabilitySegment.start > endSegment) {
-            endSegment = availabilitySegment.start
-          }
+        _.each(groupedBlocks, (block, blockKey) => {
+          filteredInstructorAvailabilityBlocks[blockKey] = groupedBlocks[blockKey]
         })
-
-        filteredBlock.startSegment  = startSegment
-        filteredBlock.endSegment    = endSegment
-
-        // filteredBlock.startTime = this.convertToDecimal(startSegment)
-        filteredBlock.start     = this.convertToDecimal(startSegment)
-        filteredBlock.endTime   = this.convertToDecimal(startSegment + numberOfSegments)
-        filteredBlock.duration  = this.convertToDecimal(numberOfSegments)
-
-        filteredBlock.uniqueInstructorIds = uniqueInstructorIds
-        filteredBlock.numberOfInstructors = uniqueInstructorIds.length
-
-        filteredInstructorAvailabilityBlocks[key] = filteredBlock
       }
     })
 
@@ -360,11 +324,11 @@ export default {
   ) {
     // 1. specificInstructors = Reduce all instructors to 'specific instructors' list
     // (only if 'specific instructors' has 0 'any available' slots)
-
-    // where in (filter.facilities)
-    // where in (filter.departments)
-    // where in (filter.professionalTitles
+    // TODO: where in (filter.facilities)
+    // TODO: where in (filter.departments)
+    // TODO: where in (filter.professionalTitles)
     let instructorAvailabilityBlocks
+
     if (filtersToApply.instructorSlots.totalCount > 0) {
       if (
         filtersToApply.instructorSlots.specificInstructorIds.length
@@ -404,8 +368,7 @@ export default {
         //     allInstructorAvailabilityBlocks,
         //     filtersToApply.instructorSlots.totalCount,
         //   )
-
-        const instructorAvailabilityBlocksWithAMinimumNumberOfInstructors = {}
+        const blocksWithAMinimumNumberOfInstructors = {}
         _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
           const onlyBlocksWithAllInstructors =
             this.getInstructorAvailabilityBlocksWithAMinimumNumberOfInstructors(
@@ -413,15 +376,35 @@ export default {
               filtersToApply.instructorSlots.totalCount,
             )
 
-          instructorAvailabilityBlocksWithAMinimumNumberOfInstructors[key] =
-            onlyBlocksWithAllInstructors
+          if (_.size(onlyBlocksWithAllInstructors) > 0) {
+            blocksWithAMinimumNumberOfInstructors[key] =
+              onlyBlocksWithAllInstructors
+          }
         })
 
-        instructorAvailabilityBlocks =
-          this.getSpecificInstructorAvailabilityBlocksFromAListOfInstructorIds(
-            instructorAvailabilityBlocksWithAMinimumNumberOfInstructors,
-            filtersToApply.instructorSlots.specificInstructorIds,
-          )
+        const blocksReducedBySegmentsWithAMinimumNumberOfInstructors = {}
+        _.each(blocksWithAMinimumNumberOfInstructors, (instructorBlocks, key) => {
+          _.each(instructorBlocks, (instructorBlock) => {
+            const segmentsWithAMinimumNumberOfInstructors = _.pickBy(instructorBlock.segments, (segment) => {
+              return segment.user_ids.length >= filtersToApply.instructorSlots.totalCount
+            })
+
+            const groupedBlocks =
+              filters.groupInstructorSegmentsForADayByContiguousTime(segmentsWithAMinimumNumberOfInstructors)
+
+            const blocksWithAllInstructors = this.getSpecificInstructorAvailabilityBlocksFromAListOfInstructorIds(
+              groupedBlocks,
+              filtersToApply.instructorSlots.specificInstructorIds,
+            )
+
+            blocksReducedBySegmentsWithAMinimumNumberOfInstructors[key] = Object.assign(
+              blocksReducedBySegmentsWithAMinimumNumberOfInstructors[key] || {},
+              blocksWithAllInstructors,
+            )
+          })
+        })
+
+        instructorAvailabilityBlocks = blocksReducedBySegmentsWithAMinimumNumberOfInstructors
       } else {
         const instructorAvailabilityBlocksWithAMinimumNumberOfInstructors = {}
         _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
@@ -431,11 +414,30 @@ export default {
               filtersToApply.instructorSlots.totalCount,
             )
 
-          instructorAvailabilityBlocksWithAMinimumNumberOfInstructors[key] =
-            onlyBlocksWithAllInstructors
+          if (_.size(onlyBlocksWithAllInstructors) > 0) {
+            instructorAvailabilityBlocksWithAMinimumNumberOfInstructors[key] =
+              onlyBlocksWithAllInstructors
+          }
         })
 
-        instructorAvailabilityBlocks = instructorAvailabilityBlocksWithAMinimumNumberOfInstructors
+        const instructorBlocksReducedToSegmentsWithAMinimumNumberOfInstructors = {}
+        _.each(instructorAvailabilityBlocksWithAMinimumNumberOfInstructors, (instructorBlocks, key) => {
+          _.each(instructorBlocks, (instructorBlock) => {
+            const segmentsWithAMinimumNumberOfInstructors = _.pickBy(instructorBlock.segments, (segment) => {
+              return segment.user_ids.length >= filtersToApply.instructorSlots.totalCount
+            })
+
+            const groupedBlocks =
+              filters.groupInstructorSegmentsForADayByContiguousTime(segmentsWithAMinimumNumberOfInstructors)
+
+            instructorBlocksReducedToSegmentsWithAMinimumNumberOfInstructors[key] = Object.assign(
+              instructorBlocksReducedToSegmentsWithAMinimumNumberOfInstructors[key] || {},
+              groupedBlocks,
+            )
+          })
+        })
+
+        instructorAvailabilityBlocks = instructorBlocksReducedToSegmentsWithAMinimumNumberOfInstructors
       }
     } else {
       instructorAvailabilityBlocks = allInstructorAvailabilityBlocks

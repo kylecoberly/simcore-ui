@@ -694,15 +694,13 @@
         this.activeInstructorIds = _.map(this.activeInstructors, (instructor) => instructor.id)
 
         this.lastUpdated = Date.now()
-        this.$store.commit('setAggregateAvailabilityBlocks', {
-          blocks: availabilities.transform(
-            this.rawUserData,
-            {
-              minimumDuration: this.filterEventLength,
-              filteredInstructors: this.activeInstructorIds,
-          }),
-          date: this.lastUpdated,
-        })
+
+        this.$store.dispatch(
+          'filterInstructorAvailabilityBlocks', {
+            eventLength: this.filterEventLength,
+            date: this.lastUpdated,
+            specificInstructorIds: this.activeInstructorIds,
+          })
 
         return this.activeInstructors
       },
@@ -713,17 +711,8 @@
           'filterInstructorAvailabilityBlocks', {
             eventLength: this.filterEventLength,
             date: this.lastUpdated,
+            specificInstructorIds: this.activeInstructorIds,
           })
-        // this.$store.commit('setAggregateAvailabilityBlocks', {
-        //   blocks: availabilities.transform(
-        //     this.rawUserData,
-        //     {
-        //       minimumDuration: this.filterEventLength,
-        //       filteredInstructors: this.activeInstructorIds,
-        //     },
-        //   ),
-        //   date: this.lastUpdated,
-        // })
       },
     },
     methods: {
@@ -738,7 +727,7 @@
 
         return output
       },
-      formateDateForDisplay(date) {
+      formatDateForDisplay(date) {
         return moment(date).format(this.$store.state.calendar.settings.date_format.display)
       },
       formatTimesForDisplay(start, duration) {
@@ -756,7 +745,7 @@
       },
       packageSlideContent(bubbleData) {
         return {
-          title: this.formateDateForDisplay(bubbleData.date),
+          title: this.formatDateForDisplay(bubbleData.date),
           subtitle: `${this.formatTimesForDisplay(bubbleData.block.start, bubbleData.block.duration)} (${this.formatBlockHoursForDisplay(bubbleData.block.duration)})`,
           componentType: bubbleData.slideTemplate, // TODO: Make this dynamic. - Chad/Jase
           content: {
@@ -768,7 +757,7 @@
             end_time: bubbleData.block.start + bubbleData.block.duration,
           },
           meta: bubbleData.meta,
-          // title: this.formateDateForDisplay(this.date),
+          // title: this.formatDateForDisplay(this.date),
           // subtitle: this.formatTimesForDisplay(block.start, block.duration),
           // componentType: 'SimSlideWithAnEventForm', // TODO: Make this dynamic. - Chad/Jase
           // content: {},
