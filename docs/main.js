@@ -31,7 +31,7 @@ Vue.use(VueHighlightJS)
 const store = new Vuex.Store({
   state: {
     shouldBeAbleToScheduleEvents: true,
-    currentUser: { id: 704 },
+    currentUser: { id: 912 },
     base_url: 'https://dev.simcoretech.com/api/v1/',
   },
   modules: {

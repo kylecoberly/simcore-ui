@@ -8,6 +8,31 @@ import availabilityFilters from '../external/availabilities'
 const endpoint = 'users'
 const action = 'purview_availabilities'
 
+function filterData(commit, state, filtersToApply) {
+  const onlySpecificInstructorIds = _.filter(
+    filtersToApply.specificInstructorIds,
+    (instructorId) => { return instructorId !== undefined },
+  )
+
+  const filteredBlocks = availabilityFilters
+    .filterInstructorAvailabilityBlocks(
+      state.instructorsWithAvailabilityBlocks,
+      state.allInstructorAvailabilityBlocks,
+    {
+      eventLength: filtersToApply.eventLength,
+      instructorSlots: {
+        totalCount: filtersToApply.specificInstructorIds.length,
+        specificInstructorIds: onlySpecificInstructorIds,
+      },
+    },
+  )
+
+  commit(
+    'setFilteredBlocks',
+    { date: moment(), blocks: filteredBlocks },
+  )
+}
+
 const availabilities = {
   state: {
     last_updated: null,
@@ -28,7 +53,7 @@ const availabilities = {
     allInstructorAvailabilityBlocks: {},
     // {
     //  2020-10-10: {
-    //    duration: 8,
+    //    duration: 8,n
     //    endSegment: 21,
     //    endTime: 10.5,
     //    numberOfSegments: 16,
@@ -60,7 +85,7 @@ const availabilities = {
 
       state.allSegmentsForDates = Object.assign({}, segments)
     },
-    setAggregateAvailabilityBlocks(state, availabilityBlocks) {
+    setFilteredBlocks(state, availabilityBlocks) {
       const date = availabilityBlocks.date
 
       if (state.last_updated !== date) {
@@ -76,8 +101,13 @@ const availabilities = {
     },
   },
   actions: {
-    getInstructorAvailabilitySegments({ commit }, { baseUrl, userId, startDate, endDate }) {
-      axios.get(`${baseUrl}${endpoint}/${userId}/${action}?start_date=${startDate}&end_date=${endDate}&key_by=user_id`)
+    filterInstructorAvailabilityBlocks({ commit, state }, filtersToApply) {
+      if (_.size(state.instructorsWithAvailabilityBlocks) > 0) {
+        filterData(commit, state, filtersToApply)
+      }
+    },
+    getInstructorAvailabilitySegments({ commit, state }, { baseUrl, userId, startDate, endDate }) {
+      axios.get(`${baseUrl}${endpoint}/${userId}/${action}?start_date=${startDate}&end_date=${endDate}&key_by=user_id&mock=true`)
         .then((response) => {
           const allInstructorAvailabilityBlocks             = response.data.users
           const allSegmentsFromInstructorAvailabilityBlocks = availabilityFilters
@@ -98,24 +128,7 @@ const availabilities = {
             allBlocksFromInstructorAvailabilitySegments,
           )
 
-          // filteredBlocks -- This is what the current calendar is looking for to render blocks.
-          const specificInstructorIds = []
-          const filteredBlocks = availabilityFilters
-            .filterInstructorAvailabilityBlocks(
-              response.data.users,
-              allBlocksFromInstructorAvailabilitySegments,
-            {
-              eventLength: 1,
-              instructorSlots: {
-                totalCount: specificInstructorIds.length,
-                specificInstructorIds,
-              },
-            },
-            )
-          commit(
-            'setAggregateAvailabilityBlocks',
-            { date: moment(), blocks: filteredBlocks },
-          )
+          filterData(commit, state, { specificInstructorIds: [], eventLength: 1 })
         })
     },
   },

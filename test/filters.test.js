@@ -900,12 +900,13 @@ test('getOnlyTheBlocksAtLeastAllTheUsers', () => {
 
   const expectedContiguousTimeBlocks = {
     '0.5': {
+      start: 0.5,
       startTime: 0.5,
-      endTime: 5,
-      duration: 4.5,
+      endTime: 2,
+      duration: 1.5,
       startSegment: 1,
-      endSegment: 9,
-      numberOfSegments: 9,
+      endSegment: 3,
+      numberOfSegments: 3,
       uniqueInstructorIds: ['1220', '4112', '7475'],
       numberOfInstructors: 3,
       segments: {
@@ -914,14 +915,15 @@ test('getOnlyTheBlocksAtLeastAllTheUsers', () => {
         '3': { 'user_ids': ['1220', '4112', '7475'], 'start': 3 },
       }
     },
-    '14': {
-      startTime: 14,
+    '16': {
+      start: 16,
+      startTime: 16,
       endTime: 19,
-      duration: 5,
-      startSegment: 28,
+      duration: 3,
+      startSegment: 32,
       endSegment: 37,
-      numberOfSegments: 10,
-      uniqueInstructorIds: ['4112', '3726', '6630', '7475'],
+      numberOfSegments: 6,
+      uniqueInstructorIds: ['3726', '4112', '6630', '7475'],
       numberOfInstructors: 4,
       segments: {
         '32': { 'user_ids': ['3726', '4112', '6630', '7475'], 'start': 32 },

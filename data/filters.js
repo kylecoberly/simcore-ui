@@ -85,6 +85,8 @@ export const groupInstructorSegmentsForADayByContiguousTime =
       // It was breaking instructor view for adding availability
       timeBlocks[currentBlockStartTime].start =
         availabilities.convertToDecimal(currentBlockStartSegment)
+      timeBlocks[currentBlockStartTime].startTime =
+        availabilities.convertToDecimal(currentBlockStartSegment)
       timeBlocks[currentBlockStartTime].endTime   =
         availabilities.convertToDecimal(currentBlockStartSegment + numberOfSegments)
       timeBlocks[currentBlockStartTime].duration  =
@@ -104,8 +106,9 @@ export const groupAllInstructorAvailabilityBlocksByDate =
     const allBlocksFromInstructorAvailabilitySegments = {}
     _.each(segments,
       (availabilitySegment, date) => {
-        allBlocksFromInstructorAvailabilitySegments[date] =
-          groupInstructorSegmentsForADayByContiguousTime(availabilitySegment)
+        const blocks = groupInstructorSegmentsForADayByContiguousTime(availabilitySegment)
+
+        allBlocksFromInstructorAvailabilitySegments[date] = blocks
       })
 
     return allBlocksFromInstructorAvailabilitySegments
