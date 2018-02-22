@@ -13,10 +13,11 @@
     color: var(--bubble-fg, var(--lightest));
     background: var(--bubble-bg, var(--dark));
     border-radius: .3em;
-    box-shadow: 0 .5em 2em -.3em rgba(0, 0, 0, .5);
+    box-shadow: 0 0 0 1px var(--dusk), 0 .5em 2em -.3em rgba(0, 0, 0, .5);
     overflow: hidden;
   }
 
+  &::before,
   &::after {
     content: '';
     position: absolute;
@@ -30,9 +31,20 @@
   &--left {
     left: calc(var(--x) * 1px);
 
+    &::before {
+      --left: 0;
+      --border-color: var(--dusk);
+    }
+
     &::after {
-      left: 1px;
-      border-right-color: var(--dark);
+      --left: 1px;
+      --border-color: var(--bubble-bg, var(--dark));
+    }
+
+    &::before,
+    &::after {
+      left: var(--left);
+      border-right-color: var(--border-color);
       transform: translate(-100%, -50%);
     }
   }
@@ -40,10 +52,21 @@
   &--right {
     right: calc(var(--x) * 1px);
 
+    &::before {
+      --left: 100%;
+      --border-color: var(--dusk);
+    }
+
     &::after {
-      left: 100%;
-      border-left-color: var(--dark);
-      transform: translate(-1px, -50%);
+      --left: calc(100% - 1px);
+      --border-color: var(--bubble-bg, var(--dark));
+    }
+
+    &::before,
+    &::after {
+      left: var(--left);
+      border-left-color: var(--border-color);
+      transform: translate(0px, -50%);
     }
   }
 

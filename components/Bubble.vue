@@ -5,7 +5,8 @@
         <slot></slot>
       </div>
       <div class="sim-bubble--dismiss" @click="dismiss">
-        <SimIconText icon="fa-times fa-lg"></SimIconText>
+        <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
+        <!-- <SimIconText icon="fa-times fa-lg"></SimIconText> -->
       </div>
     </div>
   </transition>

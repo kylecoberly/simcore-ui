@@ -18,31 +18,12 @@
 
     <div class="sim-timepicker--inner" :class="timelineClasses">
 
-      <SimTimeLines :mode="timelineMode" :start="startTime" :end="endTime" />
-
-      <!-- <ul>
-        <template v-if="timelineMode === 'hours'">
-          <li v-for="segment in totalSegments" @mousedown="createTimeBlock($event, segment-1)" :class="setHourClasses(segment-1)">
-            <div v-if="segment === 13" class="sim-timepicker--time sim-timepicker--noon">
-              <SimIconText icon="fa-sun-o"></SimIconText>
-            </div>
-            <div v-else-if="segment === 1 || segment === 25" class="sim-timepicker--time sim-timepicker--midnight">
-              <SimIconText icon="fa-moon-o"></SimIconText>
-            </div>
-            <div v-else-if="isWholeNumber(segment)" class="sim-timepicker--time">
-              {{ displayHour(segment-1) }}
-            </div>
-          </li>
-        </template>
-        <template v-else-if="timelineMode === 'numbers'">
-          <li v-for="segment in totalSegments" @mousedown="createTimeBlock($event, segment-1)" :class="setHourClasses(segment-1)">
-            <div v-if="isWholeNumber(segment)" class="sim-timepicker--time">
-              {{ segment-1 }}
-            </div>
-          </li>
-        </template>
-      </ul> -->
-
+      <SimTimeLines :mode="timelineMode"
+                    :start="startTime"
+                    :end="endTime"
+                    :show-half-hour-ticks="showHalfHourTicks"
+                    @create-time-block="createTimeBlock"
+                    />
       <SimTimeBlock v-for="(block, index) in currentBlocks"
                     :key="index"
                     :block="block"
@@ -86,6 +67,10 @@
       timelineMode: {
         type: String,
         default: 'hours',
+      },
+      showHalfHourTicks: {
+        type: Boolean,
+        default: true,
       },
       blockTheme: {
         type: String,
@@ -222,38 +207,11 @@
     },
     methods: {
       // UI Management Methods
-      isWholeNumber(value) {
-        return Math.ceil(parseFloat(value)) === parseInt(value)
-      },
       setMovingState(bool) {
         this.isMoving = bool
       },
       setStretchingState(bool) {
         this.isStretching = bool
-      },
-      displayHour(hour) {
-        hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour)
-
-        return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
-      },
-      setHourClasses(hour) {
-        const classes = []
-
-        if (this.timelineMode === 'hours') {
-          if (hour >= 6 && hour <= 17.5) {
-            classes.push('is-daytime')
-          } else {
-            classes.push('is-nighttime')
-          }
-        }
-
-        if (this.isWholeNumber(hour)) {
-          classes.push(`is-hour is-hour-${hour}`)
-        } else {
-          classes.push(`is-half-hour is-hour-${Math.floor(hour)}-half`)
-        }
-
-        return classes
       },
 
       // Time Block Methods.
@@ -269,9 +227,9 @@
           return parseFloat(a.start) - parseFloat(b.start)
         })
       },
-      createTimeBlock(event, hour) {
-        // if (event.which === 1 && this.currentUserAvailabilityBlocks.length < this.timeBlockLimit) {
-        if (event.which === 1 && this.currentBlocks.length < this.timeBlockLimit) {
+      createTimeBlock(hour) {
+        // if (this.currentUserAvailabilityBlocks.length < this.timeBlockLimit) {
+        if (this.currentBlocks.length < this.timeBlockLimit) {
           let useModifier = false
           const modifiedDuration = (this.endTime - hour)
 
@@ -289,7 +247,6 @@
           this.currentBlocks.push({ start: hour, duration: maxDuration })
           this.emitUpdateBlocks()
         }
-
       },
       removeTimeBlock(index) {
         // this.currentUserAvailabilityBlocks.splice(index, 1)

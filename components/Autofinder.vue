@@ -14,9 +14,9 @@
             @keydown.enter="select"
             @keydown.tab="select"
             @keyup.esc="blur"
-            @input="onInput($event.target.value)"
+            @input="onInput"
             />
-      <div class="sim-autofinder--remove-item" @click="removeItem" v-if="!isAlone || search.length || foundItem">
+      <div class="sim-autofinder--remove-item" @click="removeItem" v-if="shouldShowRemoveItemCue">
         <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
       </div>
     </label>
@@ -94,6 +94,9 @@
       isDisabled() {
         return this.shouldBeDisabled
       },
+      shouldShowRemoveItemCue() {
+        return !this.isAlone || this.search.length || this.foundItem
+      },
     },
     mounted() {
       if (this.item && this.item.lastname) {
@@ -103,7 +106,7 @@
     },
     methods: {
       onInput() {
-        this.isOpen = (this.search.length > 2)
+        this.isOpen = (this.search.length > 0)
         this.position = 0
 
         // @NOTE if we have an item in context AND subtract-altering the search string, reset the input - Jase

@@ -254,7 +254,7 @@
     --remover-x-end: 50%;
     --remover-y-end: -50%;
     top: calc(var(--start) * var(--segment-size, 4.1667) * 1%);
-    left: 0;
+    right: 0;
     width: 100%;
     height: calc(var(--duration) * var(--segment-size, 4.1667) * 1%);
 
@@ -318,6 +318,7 @@
   &--gray {
     --timeblock-color: var(--mist) radial-gradient(ellipse at 0% -100%, var(--dust) 0%, var(--shade) 90%);
     box-shadow: 0 0 0 1px var(--shade) inset;
+    max-width: 2.5em;
 
     .sim-timeblock--icon {
       opacity: 1;
@@ -327,7 +328,8 @@
   &--null,
   &--red {
     --timeblock-color: var(--red-film-lighter) repeating-linear-gradient(45deg, transparent 0px, transparent 5px, var(--red-film-light) 5px, var(--red-film-light) 7px);
-    box-shadow: 0 0 0 1px var(--red-film) inset;
+    box-shadow: 0 0 0 1px var(--red-film-light) inset;
+    max-width: 2.5em;
 
     .sim-timeblock--icon {
       opacity: 1;
