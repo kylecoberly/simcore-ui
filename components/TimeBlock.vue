@@ -172,7 +172,7 @@
       },
       displayBlockTime() {
         const day = moment().startOf('day')
-        const start = day.add(this.block.startTime, 'hours').format('h:mma')
+        const start = day.add(this.block.start, 'hours').format('h:mma')
         const end = day.add(this.block.duration, 'hours').format('h:mma')
         // times = `${start.replace(':00', '')} — ${end.replace(':00', '')}`
 

@@ -18,7 +18,7 @@
       <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber }}</div>
 
       <template v-if="isInstructorContext">
-        <div v-if="showHistoricalData" class="local--day--blocks local--day--event-blocks">
+        <div class="local--day--blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             theme="event"
             v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
@@ -30,7 +30,7 @@
             :orientation="timeBlockOrientation"
             />
         </div>
-        <div v-if="showHistoricalData" class="local--day--blocks local--day--time-blocks">
+        <div v-if="(showHistoricalData || !isBeforeToday)" class="local--day--blocks local--day--time-blocks">
           <SimTimeBlock v-for="(block, index) in currentUserAvailabilityBlocks"
             theme="available"
             :class="displayMode"
@@ -73,7 +73,7 @@
             />
         </div>
 
-        <div class="local--day--blocks local--day--pending-blocks">
+        <!-- <div class="local--day--blocks local--day--pending-blocks">
           <SimTimeBlock v-for="(block, index) in pendingEvents"
             theme="pending-event"
             v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: true, slideTemplate: 'SimSlideWithAList'}"
@@ -84,7 +84,7 @@
             :show-controls="showTimeBlockControls"
             :orientation="timeBlockOrientation"
             />
-        </div>
+        </div> -->
 
         <div v-if="(showHistoricalData || !isBeforeToday) && isMonthView" class="local--day--blocks local--day--aggregate-blocks">
           <template v-if="thereAreNoFilteredResultsForThisDay">
@@ -104,7 +104,7 @@
             <SimTimeBlock v-for="(block, index) in filteredBlocks"
               theme="aggregate"
               v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
-              :tooltip="{icon: '#icon--instructors-exist', text: pluralize(1, 'Instructor Found', 'Instructors Found')}"
+              :tooltip="{icon: '#icon--instructors-exist', text: pluralize(block.numberOfInstructors, 'Instructor Found', 'Instructors Found')}"
               :class="displayMode"
               :key="index"
               :block="block"
@@ -291,13 +291,15 @@
       },
       shouldShowTimelines() {
         let show = false
-        if (this.isInstructorContext) {
-          if (this.isSelected && this.showExpandedWeek) {
-            show = true
-          }
-        } else if (this.isCoordinatorContext) {
-          if (this.isSelected && (this.showExpandedWeek || this.bubbleIsOpen) && this.thereIsDataForThisDay) {
-            show = true
+        if (this.showHistoricalData || !this.isBeforeToday) {
+          if (this.isInstructorContext) {
+            if (this.isSelected && this.showExpandedWeek) {
+              show = true
+            }
+          } else if (this.isCoordinatorContext) {
+            if (this.isSelected && (this.showExpandedWeek || this.bubbleIsOpen) && this.thereIsDataForThisDay) {
+              show = true
+            }
           }
         }
         return show

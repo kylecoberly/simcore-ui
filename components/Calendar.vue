@@ -35,24 +35,34 @@
     </svg>
 
     <div class="sim-calendar--header">
-      <div class="sim-calendar--header--title">{{ displayDate }}</div>
-      <div class="sim-calendar--header--context" v-if="canScheduleEvents">
+      <div class="sim-calendar--header--controls sim-calendar--header--controls--months">
+        <span @click="loadPrevDays">
+          <SimIconText icon="fa-arrow-left fa-fw"></SimIconText>
+        </span>
+        <span @click="setTheActiveDateToToday">
+          {{ displayDate }}
+        </span>
+        <span @click="loadNextDays">
+          <SimIconText icon="fa-arrow-right fa-fw"></SimIconText>
+        </span>
+      </div>
+      <div class="sim-calendar--header--mode" v-if="canScheduleEvents">
         <SimSwitch v-model="contextSwitch" left-label="My Availability" right-label="Schedule Events"/>
       </div>
-      <div class="sim-calendar--header--modes">
+      <div class="sim-calendar--header--mode">
         <SimSwitch v-model="showExpandedWeek" left-label="" right-label="Expand Week"/>
       </div>
-      <div class="sim-calendar--header--modes">
+      <div class="sim-calendar--header--mode">
         <SimSwitch v-model="showHistoricalData" left-label="" right-label="Show Historical Data"/>
       </div>
-      <div class="sim-calendar--header--controls">
-        <span @click="loadPrevDays">
+      <div class="sim-calendar--header--controls sim-calendar--header--controls--days">
+        <span @click="loadPrevDay">
           <SimIconText icon="fa-arrow-left fa-fw"></SimIconText>
         </span>
         <span @click="setTheActiveDateToToday">
           today
         </span>
-        <span @click="loadNextDays">
+        <span @click="loadNextDay">
           <SimIconText icon="fa-arrow-right fa-fw"></SimIconText>
         </span>
       </div>
@@ -860,6 +870,20 @@
         this.closeBubble()
         this.$store.commit('setActiveDate', previousDays)
       },
+      loadNextDay() {
+        const nextDay = this.activeMoment.add(1, 'day')
+          .format('YYYY-MM-DD')
+
+        this.closeBubble()
+        this.$store.commit('setActiveDate', nextDay)
+      },
+      loadPrevDay() {
+        const prevDay = this.activeMoment.subtract(1, 'day')
+          .format('YYYY-MM-DD')
+
+        this.closeBubble()
+        this.$store.commit('setActiveDate', prevDay)
+      },
       setTheActiveDateToToday() {
         this.closeBubble()
         this.$store.commit('setActiveDate', moment().format(this.$store.state.calendar.settings.date_format.raw))
@@ -954,10 +978,10 @@
       top: calc(var(--dink-y) * 1px);
     }
     &--left {
-      left: calc(14.285% * var(--x));
+      left: calc(14.285% * var(--x) - .2em);
     }
     &--right {
-      left: calc(14.285% * (var(--x) - 1));
+      left: calc(14.285% * (var(--x) - 1) + .2em);
       transform: translateX(-100%);
     }
   }
@@ -990,11 +1014,17 @@
           width: 0;
         }
       }
+      .sim-calendar--grid--day--timelines {
+        left: 40%;
+      }
     }
 
     &.is-coordinator-context {
       .sim-calendar--aside {
         width: 25em;
+      }
+      .sim-calendar--grid--day--timelines {
+        left: 40%;
       }
     }
 

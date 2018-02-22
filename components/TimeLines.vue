@@ -1,24 +1,26 @@
 <template lang="html">
-  <ul class="sim-timelines">
-    <li v-for="segment in totalSegments" @dblclick="dblClickCreateTimeBlock($event, segment-1)" @mousedown="mousedownCreateTimeBlock($event, segment-1)" :class="setHourClasses(segment-1)">
-      <template v-if="showLineNumbersAsTime">
-        <div v-if="segment === 13" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--noon">
-          <SimIconText icon="fa-sun-o"></SimIconText>
-        </div>
-        <div v-else-if="segment === 1 || segment === 25" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--midnight">
-          <SimIconText icon="fa-moon-o"></SimIconText>
-        </div>
-        <div v-else-if="isWholeNumber(segment)" class="sim-timeline--time">
-          {{ displayHour(segment-1) }}
-        </div>
-      </template>
-      <template v-else-if="showLineNumbersAsNumbers">
-        <div v-if="isWholeNumber(segment)" class="sim-timeline--time">
-          {{ segment-1 }}
-        </div>
-      </template>
-    </li>
-  </ul>
+  <transition name="fade">
+    <ul class="sim-timelines">
+      <li v-for="segment in totalSegments" @dblclick="dblClickCreateTimeBlock($event, segment-1)" @mousedown="mousedownCreateTimeBlock($event, segment-1)" :class="setHourClasses(segment-1)">
+        <template v-if="showLineNumbersAsTime">
+          <div v-if="segment === 13" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--noon">
+            <SimIconText icon="fa-sun-o"></SimIconText>
+          </div>
+          <div v-else-if="segment === 1 || segment === 25" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--midnight">
+            <SimIconText icon="fa-moon-o"></SimIconText>
+          </div>
+          <div v-else-if="isWholeNumber(segment)" class="sim-timeline--time">
+            {{ displayHour(segment-1) }}
+          </div>
+        </template>
+        <template v-else-if="showLineNumbersAsNumbers">
+          <div v-if="isWholeNumber(segment)" class="sim-timeline--time">
+            {{ segment-1 }}
+          </div>
+        </template>
+      </li>
+    </ul>
+  </transition>
 </template>
 
 <script>
@@ -83,7 +85,7 @@
         const classes = []
 
         if (this.mode === 'hours') {
-          classes.push((hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'))
+          classes.push((hour >= 6 && hour <= 17.5 ? 'is-daytime' : 'is-nighttime'))
         }
 
         classes.push((hour === 0 || hour === 24 ? 'is-midnight' : (hour === 12 ? 'is-noon' : '')))
@@ -112,4 +114,10 @@
 
 <style lang="scss">
   // @import '../styles/timelines';
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 300ms ease-out;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
 </style>
