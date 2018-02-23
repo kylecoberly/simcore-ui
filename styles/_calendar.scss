@@ -398,10 +398,23 @@
     .is-before-today {
       // background-image: repeating-linear-gradient(-45deg, transparent 0px, transparent 5px, var(--lighter) 5px, var(--lighter) 7px);
       background-color: var(--lighter);
-      filter: grayscale(.5);
+      filter: grayscale(.8);
+
+      &:not(.is-selected) {
+        filter: grayscale(1);
+
+        .local--day {
+          opacity: .3;
+        }
+      }
 
       .sim-calendar--grid--date {
-        color: #ddd;
+        color: var(--shadow);
+      }
+      &.is-selected {
+        .sim-calendar--grid--date {
+          color: var(--medium-grey);
+        }
       }
     }
 
@@ -416,6 +429,9 @@
     .is-selected {
       z-index: 2;
       background-color: var(--blue-film-light);
+      .sim-calendar--grid--date {
+        color: var(--light);
+      }
     }
   }
 

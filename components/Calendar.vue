@@ -52,9 +52,9 @@
       <div class="sim-calendar--header--mode">
         <SimSwitch v-model="showExpandedWeek" left-label="" right-label="Expand Week"/>
       </div>
-      <div class="sim-calendar--header--mode">
+      <!-- <div class="sim-calendar--header--mode">
         <SimSwitch v-model="showHistoricalData" left-label="" right-label="Show Historical Data"/>
-      </div>
+      </div> -->
       <div class="sim-calendar--header--controls sim-calendar--header--controls--days">
         <span @click="loadPrevDay">
           <SimIconText icon="fa-arrow-left fa-fw"></SimIconText>
@@ -302,7 +302,7 @@
         isLoading: false,
         hideSlideNavigationControls: false,
         showExpandedWeek: false,
-        showHistoricalData: false,
+        showHistoricalData: true,
         date: this.$store.state.activeDate.date,
         institutions: [],
         departments: [],
@@ -1027,12 +1027,6 @@
 
       .sim-calendar--grid--day {
         display: flex;
-      }
-    }
-
-    .is-before-today {
-      .sim-calendar--grid--date {
-        color: #ddd;
       }
     }
   }
