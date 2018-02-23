@@ -297,7 +297,7 @@
       return {
         lastUpdated: Date.now(), // TODO: Not this. - Chad
         rawUserData: {},
-        contextSwitch: true,
+        contextSwitch: false,
         calendarIsUpdating: false,
         isLoading: false,
         hideSlideNavigationControls: false,
