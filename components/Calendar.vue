@@ -1014,7 +1014,7 @@
 
     &.is-coordinator-context {
       .sim-calendar--aside {
-        width: 25em;
+        width: 28em;
       }
       .sim-calendar--grid--day--timelines {
         left: 40%;
@@ -1050,7 +1050,7 @@
     &.filter--duration {
       background: var(--shade);
       margin: -1em 1em -1em -1em;
-      padding: 1em 0 1em 1em;
+      padding: 1em;
     }
 
     &.filter--instructors {
