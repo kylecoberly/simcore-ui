@@ -162,7 +162,7 @@
           </div>
           <div class="sim-calendar--aside--body">
             <div class="sim-flex--1 sim-flex--column filter-molecule filter--duration">
-              <h3 class="filter-molecule--heading"><SimIconText icon="#icon--event-duration" icon-type="svg" text="Duration"></SimIconText></h3>
+              <h3 class="filter-molecule--heading text--orange--lighter"><SimIconText icon="#icon--event-duration" icon-type="svg" text="Duration"></SimIconText></h3>
               <div class="filter-molecule--options sim-flex--handoff">
                 <SimTimePicker orientation="y"
                               timeline-mode="numbers"
@@ -181,7 +181,7 @@
 
             <div class="sim-flex--2">
               <div class="filter-molecule filter--instructors sim-filter">
-                <h3 class="filter-molecule--heading">
+                <h3 class="filter-molecule--heading text--green">
                   <SimIconText icon="#icon--instructors-checked" icon-type="svg" :text="`Instructors: ${activeInstructorCount}`"></SimIconText>
                 </h3>
                 <div class="filter-molecule--options">
@@ -210,7 +210,7 @@
                 </div>
               </div>
               <div class="filter-molecule filter--categories">
-                <h3 class="filter-molecule--heading"><SimIconText icon="#icon--instructors-exist" icon-type="svg" text="Filters"></SimIconText></h3>
+                <h3 class="filter-molecule--heading text--blue--lighter"><SimIconText icon="#icon--instructors-exist" icon-type="svg" text="Filters"></SimIconText></h3>
                 <div class="filter-molecule--options">
                   <SimFilterBy xv-if="userTypeIsClient" system-echo="(Filter is not available yet)" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
                   <SimFilterBy system-echo="(Filter is not available yet)" label="Departments" type="department_id" :list="departments" @filter="applyFilter"></SimFilterBy>
