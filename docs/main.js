@@ -33,6 +33,7 @@ const store = new Vuex.Store({
     shouldBeAbleToScheduleEvents: true,
     currentUser: { id: 912 },
     base_url: 'https://dev.simcoretech.com/api/v1/',
+    mock: true,
   },
   modules: {
     activeDate,

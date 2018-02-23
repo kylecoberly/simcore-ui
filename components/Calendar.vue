@@ -364,6 +364,7 @@
           userId: this.$store.state.currentUser.id,
           startDate: firstDayOfTheMonth,
           endDate: lastDayOfTheMonth,
+          mock: this.$store.state.mock,
         },
       )
 
