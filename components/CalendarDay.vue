@@ -20,7 +20,7 @@
         <div class="local--day--blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             theme="event"
-            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
+            xv-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
             :class="{displayMode}"
             :key="index"
             :block="block"
@@ -62,7 +62,7 @@
         <div class="local--day--time-blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             theme="event"
-            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
+            xv-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
             :class="displayMode"
             :key="index"
             :block="block"
@@ -90,7 +90,7 @@
             <SimTimeBlock
               theme="empty"
               block-icon="#icon--instructors-none"
-              :tooltip="{icon: '#icon--instructors-none', text: pluralize(0, 'Instructor Found', 'Instructors Found')}"
+              :tooltip="{icon: '#icon--instructors-none', text: 'No Instructors Found'}"
               :class="displayMode"
               :key="0"
               :block="{start: 0, duration: 24}"
@@ -102,7 +102,7 @@
           <template v-else-if="thereIsDataForThisDay">
             <SimTimeBlock v-for="(block, index) in filteredBlocks"
               theme="aggregate"
-              v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
+              xv-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
               :tooltip="{icon: '#icon--instructors-exist', text: pluralize(block.numberOfInstructors, 'Instructor Found', 'Instructors Found')}"
               :class="displayMode"
               :key="index"
@@ -115,7 +115,6 @@
           <template v-else-if="thereIsNoDataForThisDay">
             <SimTimeBlock
               theme="null"
-              xblock-icon="#icon--instructors-null"
               :tooltip="{icon: '#icon--instructors-null', text: 'No Data'}"
               :class="displayMode"
               :key="0"

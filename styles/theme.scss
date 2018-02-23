@@ -17,6 +17,7 @@
   --red-film-light: rgba(#ca1e34, .15);
   --red-film-lighter: rgba(#ca1e34, .05);
   --orange: #ff7042;
+  --orange-lighter: #f5a623;
   --orange-film: rgba(#ff7042, .5);
   --yellow: #ffc929;
   --yellow-film: rgba(#ffc929, .5);
@@ -25,6 +26,7 @@
   --aqua: #00c1d9;
   --aqua-film: rgba(#00c1d9, .5);
   --blue: #4A93B9;
+  --blue-lighter: #96b3cb;
   --blue-film: rgba(#4A93B9, .5);
   --blue-film-light: rgba(#4A93B9, .15);
   --blue-film-heavy: rgba(14, 103, 150, .9);
@@ -80,6 +82,10 @@
 
   &--orange {
     color: var(--orange);
+
+    &--lighter {
+      color: var(--orange-lighter);
+    }
   }
 
   &--yellow {
@@ -96,6 +102,10 @@
 
   &--blue {
     color: var(--blue);
+
+    &--lighter {
+      color: var(--blue-lighter);
+    }
   }
 
   &--purple {

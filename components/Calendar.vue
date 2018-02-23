@@ -512,7 +512,7 @@
           classes.push('sim-calendar--filters')
 
           if (this.bubbleIsOpen) {
-            classes.push('x-sim-calendar--filters--disabled')
+            classes.push('sim-calendar--filters--disabled')
           }
         }
 
@@ -749,7 +749,8 @@
           subtitle: `${this.formatTimesForDisplay(bubbleData.block.start, bubbleData.block.duration)} (${this.formatBlockHoursForDisplay(bubbleData.block.duration)})`,
           componentType: bubbleData.slideTemplate, // TODO: Make this dynamic. - Chad/Jase
           content: {
-            items: bubbleData.block.user_ids,
+            items: bubbleData.block.uniqueInstructorIds,
+            specificItems: this.specificInstructorIds,
             selectedItems: [],
             foundItems: [],
             itemSearch: '',
@@ -983,8 +984,8 @@
     --switch-color-active: var(--lighter-grey);
     --switch-handle-color: var(--action);
     --timeblock-color: var(--green);
-    --bubble-fg: var(--dark);
-    --bubble-bg: #fcf9e9; //var(--lightest);
+    --bubble-fg: var(--lighter);
+    --bubble-bg: var(--dark-grey); //#fcf9e9; //var(--lightest);
     --slide-fg: var(--bubble-fg);
     --slide-bg: var(--bubble-bg);
 

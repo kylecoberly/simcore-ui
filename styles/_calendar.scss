@@ -118,8 +118,9 @@
       }
 
       .sim-calendar--aside--body {
-        background-color: var(--cloud);
-        color: var(--grey);
+        opacity: .7;
+        // background-color: var(--cloud);
+        // color: var(--grey);
       }
 
       .sim-datalist {
@@ -405,6 +406,14 @@
 
         .local--day {
           opacity: .3;
+        }
+      }
+
+      &:hover {
+        filter: grayscale(.8);
+
+        .local--day {
+          opacity: 1;
         }
       }
 

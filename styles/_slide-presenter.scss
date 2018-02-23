@@ -66,6 +66,14 @@
 
   &--content {
     padding: 0 1em 1em;
+
+    &--section {
+      margin-bottom: 2em;
+
+      header {
+        text-transform: uppercase;
+      }
+    }
   }
 }
 

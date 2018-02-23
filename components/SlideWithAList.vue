@@ -1,16 +1,37 @@
 <template lang="html">
   <div class="sim-slide sim-slide--with-list">
 
-    <SimSlideHeader :title="slide.title" :subtitle="slide.subtitle" />
+    <SimSlideHeader :title="slide.title" />
+
     <SimSlideIntro :content="slide.intro" />
 
     <div class="sim-slide--content">
-      <template v-if="items">
-        <SimDatalist v-if="items" :items="foundItems" :animate="true">
-          <div slot="static-before" key="before">
+      <section class="sim-slide--content--section">
+        <header class="text--orange--lighter">
+          <SimIconText icon="#icon--event-duration" icon-type="svg" :text="slide.subtitle"></SimIconText>
+        </header>
+      </section>
+
+      <section v-if="thereAreSpecificItems" class="sim-slide--content--section">
+        <header class="text--green">
+          <SimIconText icon="#icon--instructors-checked" icon-type="svg" text="Specific Instructors"></SimIconText>
+        </header>
+        <SimDatalist :items="specificItems" :animate="false">
+          <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
+            <SimIconText icon="#icon--checkbox--checked" icon-type="svg" :text="`${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+          </li>
+        </SimDatalist>
+      </section>
+
+      <section v-if="thereAreItems" class="sim-slide--content--section">
+        <header class="text--blue--lighter">
+          <SimIconText icon="#icon--instructors-exist" icon-type="svg" :text="labelForAvailableInstructors"></SimIconText>
+        </header>
+        <SimDatalist :items="foundItems" :animate="true">
+          <!-- @TODO commented out as a temporary solution until thisis ready to be utilized - Jase -->
+          <!-- <div slot="static-before" key="before">
             <input type="search" v-model="itemSearch" placeholder="find..." />
-          </div>
-          <!-- @TODO temporary solution - Jase -->
+          </div> -->
           <!-- <li slot="item" slot-scope="props" :key="props.item.id">
             <sim-selection
               :item="props.item"
@@ -23,12 +44,11 @@
             </sim-selection>
           </li> -->
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText :icon="setItemIcon(props.item.id)" :text="`${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+            <SimIconText icon="#icon--checkbox--available" icon-type="svg" :text="`${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
           </li>
         </SimDatalist>
-      </template>
+      </section>
     </div>
-
   </div>
 </template>
 
@@ -117,15 +137,33 @@
       // this.bubbleElement.style.removeProperty('--width-factor')
     },
     computed: {
+      specificItems() {
+        return this.slide.content.specificItems
+        ? getListFromIds(this.slide.content.specificItems, this.$store.state.user.instructors, 'lastname')
+        : null
+      },
       items() {
-        return this.slide.content.items
-            ? getListFromIds(this.slide.content.items, this.$store.state.user.instructors, 'lastname')
+        let items = this.slide.content.items.filter((item) => {
+          return !this.slide.content.specificItems.includes(parseInt(item, 10))
+        })
+        // const items = this.slide.content.items
+        return items
+            ? getListFromIds(items, this.$store.state.user.instructors, 'lastname')
             : null
       },
       foundItems() {
         return sortByKey(this.items.filter(item => {
           return `${item.lastname}, ${item.firstname}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
         }), 'lastname', 'asc')
+      },
+      thereAreSpecificItems() {
+        return this.specificItems.length
+      },
+      thereAreItems() {
+        return this.items.length
+      },
+      labelForAvailableInstructors() {
+        return this.thereAreSpecificItems ? 'Other Available Instructors' : 'Available Instructors'
       },
     },
     methods: {
