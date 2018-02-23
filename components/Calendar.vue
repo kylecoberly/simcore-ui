@@ -166,7 +166,7 @@
               <div class="filter-molecule--options sim-flex--handoff">
                 <SimTimePicker orientation="y"
                               timeline-mode="numbers"
-                              block-theme="pending-event"
+                              block-theme="duration"
                               :show-block-time="false"
                               :time-block-limit="1"
                               :time-block-default-duration="1"
