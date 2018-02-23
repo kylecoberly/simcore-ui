@@ -999,7 +999,7 @@
 
     &.is-instructor-context {
       .sim-calendar--aside {
-        width: 18em;
+        width: 20em;
       }
 
       &.is-week-view {

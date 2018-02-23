@@ -275,8 +275,8 @@
           &:last-of-type {
             pointer-events: none;
             flex: none;
-            height: 1px;
-            margin-top: -1px;
+            height: 0;
+            margin-top: 0;
           }
 
           &.is-noon {
@@ -289,11 +289,8 @@
           top: 0;
           left: 0;
           transform: translate(calc(-100% - .5em), -50%);
-          // background: var(--darkest);
-          // color: var(--light);
           width: 1.5em;
           height: 1.5em;
-          // border-radius: .3em;
           display: flex;
           align-items: center;
           justify-content: center;
