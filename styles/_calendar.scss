@@ -137,6 +137,12 @@
         display: flex;
         justify-content: space-between;
         align-items: baseline;
+        text-transform: uppercase;
+        font-size: 1em;
+
+        svg {
+          font-size: 1.5em;
+        }
       }
 
       + .filter-molecule {

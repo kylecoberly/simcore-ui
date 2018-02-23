@@ -161,8 +161,8 @@
             <span><b>Filters</b></span>
           </div>
           <div class="sim-calendar--aside--body">
-            <div class="sim-flex--1 sim-flex--column filter-molecule filter--duration">
-              <h3 class="filter-molecule--heading text--orange--lighter"><SimIconText icon="#icon--event-duration" icon-type="svg" text="Duration"></SimIconText></h3>
+            <section class="sim-flex--1 sim-flex--column filter-molecule filter--duration">
+              <header class="filter-molecule--heading text--orange--lighter"><SimIconText icon="#icon--event-duration" icon-type="svg" text="Duration"></SimIconText></header>
               <div class="filter-molecule--options sim-flex--handoff">
                 <SimTimePicker orientation="y"
                               timeline-mode="numbers"
@@ -177,13 +177,13 @@
                               :date="date"
                               />
               </div>
-            </div>
+            </section>
 
             <div class="sim-flex--2">
-              <div class="filter-molecule filter--instructors sim-filter">
-                <h3 class="filter-molecule--heading text--green">
+              <section class="filter-molecule filter--instructors sim-filter">
+                <header class="filter-molecule--heading text--green">
                   <SimIconText icon="#icon--instructors-checked" icon-type="svg" :text="`Instructors: ${activeInstructorCount}`"></SimIconText>
-                </h3>
+                </header>
                 <div class="filter-molecule--options">
                   <SimDatalist :items="activeInstructors" :animate="true">
                     <li slot="item" slot-scope="props" :key="props.item.seat" :class="`instructor-${props.item.id}`">
@@ -208,15 +208,15 @@
                     </li>
                   </SimDatalist>
                 </div>
-              </div>
-              <div class="filter-molecule filter--categories">
-                <h3 class="filter-molecule--heading text--blue--lighter"><SimIconText icon="#icon--instructors-exist" icon-type="svg" text="Filters"></SimIconText></h3>
+              </section>
+              <section class="filter-molecule filter--categories">
+                <header class="filter-molecule--heading text--blue--lighter"><SimIconText icon="#icon--instructors-exist" icon-type="svg" text="Filters"></SimIconText></header>
                 <div class="filter-molecule--options">
                   <SimFilterBy xv-if="userTypeIsClient" system-echo="(Filter is not available yet)" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
                   <SimFilterBy system-echo="(Filter is not available yet)" label="Departments" type="department_id" :list="departments" @filter="applyFilter"></SimFilterBy>
                   <SimFilterBy system-echo="(Filter is not available yet)" label="Professional Titles" type="title_id" :list="professionalTitles" @filter="applyFilter"></SimFilterBy>
                 </div>
-              </div>
+              </section>
             </div>
           </div>
         </template>
@@ -964,7 +964,7 @@
   .sim-calendar .sim-bubble {
     top: -1em;
     bottom: -1em;
-    width: calc(var(--width-factor, 1) * 20em);
+    width: calc(var(--width-factor, 1) * 25em);
     max-width: 50%;
     &::before,
     &::after {
