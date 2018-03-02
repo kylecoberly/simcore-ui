@@ -348,55 +348,21 @@
       blockWasUpdated() {
         this.updateBlocks()
       },
-      createBlock(event, hour) {
-        if (this.isInstructorContext) {
-          this.createTimeBlock(hour)
-        } else {
-          // FIXME: This is disabled for now now until week view filters are working - Jase
-          this.createEventBlock(event.target, hour)
-        }
-      },
       createTimeBlock(hour) {
         this.currentUserAvailabilityBlocks.push({ start: hour, duration: 1 })
-
         this.updateBlocks()
       },
-      // createEventBlock(element, hour) {
-      //   this.pendingEvents.push({ start: hour, duration: this.initialEventLength })
-      //   this.pendingEvents.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
-      //
-      //   // TODO: Make this an emit like above. - Chad
-      //   this.$store.commit('setPendingEventBlocksForDay', { date: this.date, blocks: this.pendingEvents })
-      //
-      //   const properties = {}
-      //   properties.position = element.getBoundingClientRect()
-      //   properties.position.dinkY = properties.position.top + properties.position.height / 2
-      //   properties.position.dinkX = properties.position.left + properties.position.width / 2
-      //   properties.position.x = this.dayOfWeek+1
-      //
-      //   this.$emit('set-bubble-position', properties.position)
-      //   this.$emit('set-bubble-data', {
-      //       date: this.date,
-      //       block: {
-      //         start: hour,
-      //         duration: this.initialEventLength
-      //       },
-      //       x: this.dayOfWeek+1,
-      //       followMousemove: true,
-      //       slideTemplate: 'SimSlideWithAList',
-      //     }
-      //   )
-      // },
-
       createPendingBlock(block) {
-        const pendingBlock = {...block, duration: this.initialEventLength}
-
         this.pendingEvents = []
-        this.pendingEvents.push(pendingBlock)
-
-        return pendingBlock
+        this.pendingEvents.push({
+          ...block,
+          duration: this.initialEventLength,
+          limits: {
+            starting: block.start,
+            ending: block.start + block.duration - this.initialEventLength
+          }
+        })
       },
-
       popOpenTheBubble(element, block) {
         const properties = {}
         properties.position = element.getBoundingClientRect()
@@ -414,14 +380,12 @@
           }
         )
       },
-
       timeBlockClicked(event, block) {
-        const pendingBlock = this.createPendingBlock(block)
+        this.createPendingBlock(block)
         this.$nextTick(() => {
-          this.popOpenTheBubble(this.$refs.peblox.$el, pendingBlock)
+          this.popOpenTheBubble(this.$refs.peblox.$el, this.pendingBlock)
         })
       },
-
       emitLodestar() {
         this.$emit('run-lodestar')
       },

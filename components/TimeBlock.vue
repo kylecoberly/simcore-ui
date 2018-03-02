@@ -242,15 +242,6 @@
         this.$emit('time-block-clicked', event, this.block)
       },
 
-      // ---------- For moving ----------
-      setMovingStart(event) {
-        const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
-        const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
-        const currentStart = _cap(calc, this.metrics.axis[this.orientation], 0, this.metrics.max[this.orientation])
-
-        this.block.start = (Math.round((currentStart) / this.metrics.segment[this.orientation]) / 2) + this.timeShiftOffset
-      },
-
       // ---------- For stretching up or left ----------
       setStretchingStart(event, mouseCoordinate) {
         const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
@@ -273,7 +264,17 @@
 
       // ---------- Move ----------
       move(event) {
-        this.setMovingStart(event)
+        const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
+        const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
+        const currentStart = _cap(calc, this.metrics.axis[this.orientation], 0, this.metrics.max[this.orientation])
+
+        let start = (Math.round((currentStart) / this.metrics.segment[this.orientation]) / 2) + this.timeShiftOffset
+
+        if (this.block.limits && this.block.limits.starting && this.block.limits.ending) {
+          start = _cap(start, 0, this.block.limits.starting, this.block.limits.ending)
+        }
+
+        this.block.start = start
       },
       doneMoving() {
         this.isMoving = false
@@ -285,7 +286,6 @@
       startMove(event) {
         if (event.which === 1) {
           event.preventDefault()
-          // event.stopPropagation()
           this.isMoving = true
           this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-moving', true)
