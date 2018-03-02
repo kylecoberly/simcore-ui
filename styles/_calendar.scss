@@ -4,7 +4,6 @@
 .sim-calendar {
   --edge-color: var(--medium-grey);
   --edge: 1px 1px 0 0 var(--edge-color);
-  // --lines: 0 0 0 1px var(--edge-color);
   --lines: -1px -1px 0px 0px var(--edge-color), -1px -1px 0px 0px var(--edge-color) inset;
   --picker-bg: var(--lighter);
   --picker-fg: var(--dark);
@@ -55,12 +54,6 @@
 
         &:nth-child(2) {
           flex: 1;
-        }
-
-        &:hover {
-          // padding: .7em .5em;
-          // margin: -.7em 0;
-          // transform: scale(1, 1.2);
         }
       }
     }
@@ -119,8 +112,6 @@
 
       .sim-calendar--aside--body {
         opacity: .7;
-        // background-color: var(--cloud);
-        // color: var(--grey);
       }
 
       .sim-datalist {
@@ -147,7 +138,6 @@
 
       + .filter-molecule {
         margin-top: 1.5em;
-        // padding-top: 1.5em;
       }
     }
 
@@ -305,6 +295,11 @@
           }
         }
       }
+
+      &:hover .sim-calendar--grid--tools {
+        opacity: 1;
+        pointer-events: auto;
+      }
     }
 
     &--before {
@@ -325,6 +320,21 @@
       align-items: center;
       justify-content: center;
     }
+
+    &--tools {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 2.25em;
+      left: 0;
+      width: 2em;
+      height: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 200ms linear;
+    }
   }
 
   // borders & colors
@@ -333,11 +343,6 @@
 
     > * {
       color: var(--action);
-
-      &:hover {
-        // color: #fff;
-        // background: var(--action);
-      }
     }
   }
 
@@ -400,7 +405,6 @@
     }
 
     .is-before-today {
-      // background-image: repeating-linear-gradient(-45deg, transparent 0px, transparent 5px, var(--lighter) 5px, var(--lighter) 7px);
       background-color: var(--lighter);
       filter: grayscale(.8);
 
@@ -420,9 +424,6 @@
         }
       }
 
-      .sim-calendar--grid--date {
-        color: var(--shadow);
-      }
       &.is-selected {
         .sim-calendar--grid--date {
           color: var(--medium-grey);
@@ -441,31 +442,9 @@
     .is-selected {
       z-index: 2;
       background-color: var(--blue-film-light);
-      .sim-calendar--grid--date {
-        color: var(--light);
-      }
-    }
-  }
 
-  &.is-week-view {
-    .sim-calendar--grid {
-      &--before,
-      &--after {
-        display: none;
-      }
-
-      &--body {
-        margin-left: 2.5em;
-      }
-
-      &--days {
-        flex-wrap: nowrap;
-      }
-
-      &--day {
-        flex: 1;
-        height: 48em;
-        max-height: 70vh;
+      .local--day--aggregate-blocks {
+        mix-blend-mode: multiply;
       }
     }
   }

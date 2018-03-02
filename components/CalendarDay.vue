@@ -14,31 +14,27 @@
                     @create-time-block="createTimeBlock"
                     />
 
-      <div v-if="isMonthView" class="sim-calendar--grid--date">{{ showDayNumber }}</div>
+      <div class="sim-calendar--grid--date">{{ showDayNumber }}</div>
 
       <template v-if="isInstructorContext">
         <div class="local--day--blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             theme="event"
             xv-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
-            :class="{displayMode}"
             :key="index"
             :block="block"
             :index="index"
             :show-controls="false"
-            :orientation="timeBlockOrientation"
             />
         </div>
         <div v-if="(showHistoricalData || !isBeforeToday)" class="local--day--blocks local--day--time-blocks">
           <SimTimeBlock v-for="(block, index) in currentUserAvailabilityBlocks"
             theme="available"
-            :class="displayMode"
             :key="index"
             :block="block"
             :index="index"
             :block-icon="null"
             :show-controls="showTimeBlockControls"
-            :orientation="timeBlockOrientation"
             @remove-time-block="removeTimeBlock"
             @block-was-updated="blockWasUpdated"
             />
@@ -46,87 +42,64 @@
       </template>
 
       <template v-if="isCoordinatorContext">
-
-        <div v-if="(showHistoricalData || !isBeforeToday) && isWeekView" class="local--day--blocks local--day--aggregate-blocks">
-          <SimTimeBlock v-for="(block, index) in filteredBlocks"
-            theme="aggregate"
-            :class="displayMode"
-            :key="index"
-            :block="block"
-            :index="index"
-            :show-controls="false"
-            :orientation="timeBlockOrientation"
-            />
-        </div>
-
         <div class="local--day--time-blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             theme="event"
             xv-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
-            :class="displayMode"
             :key="index"
             :block="block"
             :index="index"
             :show-controls="false"
-            :orientation="timeBlockOrientation"
-            />
+          />
         </div>
 
-        <!-- <div class="local--day--blocks local--day--pending-blocks">
-          <SimTimeBlock v-for="(block, index) in pendingEvents"
+        <div class="local--day--blocks local--day--pending-blocks">
+          <SimTimeBlock ref="peblox" v-if="pendingBlock"
             theme="pending-event"
-            v-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: true, slideTemplate: 'SimSlideWithAList'}"
-            :class="displayMode"
-            :key="index"
+            v-bubble-trigger="{date: date, block: pendingBlock, x: dayOfWeek+1, followMousemove: true, slideTemplate: 'SimSlideWithAList'}"
+            key="peblox"
+            :block="pendingBlock"
+            :index="0"
+            :show-controls="showTimeBlockControls"
+            :settings="pendingBlockSettings"
+            @remove-time-block="removePendingBlock"
+          />
+        </div>
+
+        <div class="local--day--blocks local--day--aggregate-blocks">
+          <SimTimeBlock v-if="thereAreNoFilteredResultsForThisDay"
+            theme="empty"
+            block-icon="#icon--instructors-none"
+            :tooltip="{icon: '#icon--instructors-none', text: 'No Instructors Found'}"
+            :block="{start: 0, duration: 24}"
+            :index="0"
+            :show-controls="false"
+          />
+
+          <SimTimeBlock v-else-if="thereIsDataForThisDay" v-for="(block, index) in filteredBlocks"
+            :theme="availabilityBlockTheme"
+            :tooltip="{icon: '#icon--instructors-exist', text: pluralize(block.numberOfInstructors, 'Instructor Found', 'Instructors Found')}"
             :block="block"
             :index="index"
-            :show-controls="showTimeBlockControls"
-            :orientation="timeBlockOrientation"
-            />
-        </div> -->
+            :show-controls="false"
+            @time-block-clicked="timeBlockClicked"
+          />
 
-        <div v-if="(showHistoricalData || !isBeforeToday) && isMonthView" class="local--day--blocks local--day--aggregate-blocks">
-          <template v-if="thereAreNoFilteredResultsForThisDay">
-            <SimTimeBlock
-              theme="empty"
-              block-icon="#icon--instructors-none"
-              :tooltip="{icon: '#icon--instructors-none', text: 'No Instructors Found'}"
-              :class="displayMode"
-              :key="0"
-              :block="{start: 0, duration: 24}"
-              :index="0"
-              :show-controls="false"
-              :orientation="timeBlockOrientation"
-              />
-          </template>
-          <template v-else-if="thereIsDataForThisDay">
-            <SimTimeBlock v-for="(block, index) in filteredBlocks"
-              theme="aggregate"
-              xv-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithAList'}"
-              :tooltip="{icon: '#icon--instructors-exist', text: pluralize(block.numberOfInstructors, 'Instructor Found', 'Instructors Found')}"
-              :class="displayMode"
-              :key="index"
-              :block="block"
-              :index="index"
-              :show-controls="false"
-              :orientation="timeBlockOrientation"
-              />
-          </template>
-          <template v-else-if="thereIsNoDataForThisDay">
-            <SimTimeBlock
-              theme="null"
-              :tooltip="{icon: '#icon--instructors-null', text: 'No Data'}"
-              :class="displayMode"
-              :key="0"
-              :block="{start: 0, duration: 24}"
-              :index="0"
-              :show-controls="false"
-              :orientation="timeBlockOrientation"
-            />
-          </template>
+          <SimTimeBlock v-else-if="thereIsNoDataForThisDay"
+            theme="null"
+            :tooltip="{icon: '#icon--instructors-null', text: 'No Data'}"
+            :block="{start: 0, duration: 24}"
+            :index="0"
+            :show-controls="false"
+          />
         </div>
-
       </template>
+
+      <div class="sim-calendar--grid--tools">
+        <span @click="toggleExpandedWeek" v-if="!bubbleIsOpen">
+          <SimIconText :icon="expandIcon" icon-type="svg"></SimIconText>
+        </span>
+      </div>
 
     </div>
   </div>
@@ -155,7 +128,7 @@
       'isInActiveWeek',
       'showExpandedWeek',
       'showHistoricalData',
-      'displayMode',
+      'hasOnlySpecificInstructors',
       'userContext',
       'initialEventLength',
       'initialEventBlocks',
@@ -172,6 +145,14 @@
         currentUserAvailabilityBlocks: [],
         filteredBlocks: [],
         allBlocks: [],
+        pendingBlockSettings: {
+          showBlockHours: true,
+          showBlockTime: false,
+          canRemoveBlock: true,
+          canResizeBlockStart: false,
+          canResizeBlockEnd: false,
+          canMoveBlock: true,
+        },
       }
     },
     mounted() {
@@ -209,12 +190,6 @@
       },
     },
     computed: {
-      isMonthView() {
-        return this.displayMode === 'month'
-      },
-      isWeekView() {
-        return this.displayMode === 'week'
-      },
       isSelected() {
         return moment(this.$store.state.activeDate.date).isSame(this.date, 'day')
       },
@@ -269,11 +244,8 @@
       isCoordinatorContext() {
         return (this.userContext === 'coordinator')
       },
-      timeBlockOrientation() {
-        return (this.isMonthView ? 'y' : 'y')
-      },
       showTimeBlockControls() {
-        return this.showExpandedWeek && this.isInActiveWeek
+        return (this.showExpandedWeek || this.bubbleIsOpen) && this.isInActiveWeek
       },
       bubbleIsOpen() {
         return this.$store.state.bubble.is_open
@@ -296,13 +268,22 @@
             }
           } else if (this.isCoordinatorContext) {
             // if (this.isSelected && (this.showExpandedWeek || this.bubbleIsOpen) && this.thereIsDataForThisDay) {
-            if (this.isSelected && this.showExpandedWeek && this.thereIsDataForThisDay) {
+            if (this.isSelected && this.thereIsDataForThisDay && (this.showExpandedWeek || this.bubbleIsOpen)) {
               show = true
             }
           }
         }
         return show
-      }
+      },
+      pendingBlock() {
+        return this.pendingEvents[0] || null
+      },
+      availabilityBlockTheme() {
+        return this.hasOnlySpecificInstructors ? 'specific' : 'aggregate'
+      },
+      expandIcon() {
+        return this.showExpandedWeek && this.isInActiveWeek ? '#icon--control--contract' : '#icon--control--expand'
+      },
     },
     methods: {
 
@@ -341,6 +322,9 @@
 
         return hour > 12 ? `${hour - 12}` : (parseInt(hour) ? `${hour}` : hour)
       },
+      closeBubble() {
+        this.$store.commit('toggleBubbleVisibility', false)
+      },
       // TimeBlock Methods
       sortBlocks() {
         this.currentUserAvailabilityBlocks.sort((a, b) => {
@@ -356,6 +340,10 @@
         this.currentUserAvailabilityBlocks.splice(index, 1)
 
         this.updateBlocks()
+      },
+      removePendingBlock() {
+        this.closeBubble()
+        this.pendingEvents.splice(0, 1)
       },
       blockWasUpdated() {
         this.updateBlocks()
@@ -373,34 +361,72 @@
 
         this.updateBlocks()
       },
-      createEventBlock(element, hour) {
-        this.pendingEvents.push({ start: hour, duration: this.initialEventLength })
-        this.pendingEvents.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
+      // createEventBlock(element, hour) {
+      //   this.pendingEvents.push({ start: hour, duration: this.initialEventLength })
+      //   this.pendingEvents.sort((a, b) => parseFloat(a.start) - parseFloat(b.start))
+      //
+      //   // TODO: Make this an emit like above. - Chad
+      //   this.$store.commit('setPendingEventBlocksForDay', { date: this.date, blocks: this.pendingEvents })
+      //
+      //   const properties = {}
+      //   properties.position = element.getBoundingClientRect()
+      //   properties.position.dinkY = properties.position.top + properties.position.height / 2
+      //   properties.position.dinkX = properties.position.left + properties.position.width / 2
+      //   properties.position.x = this.dayOfWeek+1
+      //
+      //   this.$emit('set-bubble-position', properties.position)
+      //   this.$emit('set-bubble-data', {
+      //       date: this.date,
+      //       block: {
+      //         start: hour,
+      //         duration: this.initialEventLength
+      //       },
+      //       x: this.dayOfWeek+1,
+      //       followMousemove: true,
+      //       slideTemplate: 'SimSlideWithAList',
+      //     }
+      //   )
+      // },
 
-        // TODO: Make this an emit like above. - Chad
-        this.$store.commit('setPendingEventBlocksForDay', { date: this.date, blocks: this.pendingEvents })
+      createPendingBlock(block) {
+        const pendingBlock = {...block, duration: this.initialEventLength}
 
+        this.pendingEvents = []
+        this.pendingEvents.push(pendingBlock)
+
+        return pendingBlock
+      },
+
+      popOpenTheBubble(element, block) {
         const properties = {}
         properties.position = element.getBoundingClientRect()
         properties.position.dinkY = properties.position.top + properties.position.height / 2
         properties.position.dinkX = properties.position.left + properties.position.width / 2
-        properties.position.x = this.dayOfWeek+1
+        properties.position.x = this.dayOfWeek + 1
 
         this.$emit('set-bubble-position', properties.position)
         this.$emit('set-bubble-data', {
             date: this.date,
-            block: {
-              start: hour,
-              duration: this.initialEventLength
-            },
-            x: this.dayOfWeek+1,
+            block: block,
+            x: properties.position.x,
             followMousemove: true,
             slideTemplate: 'SimSlideWithAList',
           }
         )
       },
+
+      timeBlockClicked(event, block) {
+        const pendingBlock = this.createPendingBlock(block)
+        this.$nextTick(() => {
+          this.popOpenTheBubble(this.$refs.peblox.$el, pendingBlock)
+        })
+      },
+
       emitLodestar() {
         this.$emit('run-lodestar')
+      },
+      toggleExpandedWeek() {
+        this.$emit('toggle-expanded-week')
       },
     },
   }

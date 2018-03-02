@@ -1,10 +1,10 @@
 <template lang="html">
-  <div :class="blockClasses" :style="blockStyles">
+  <div :class="blockClasses" :style="blockStyles" @click="emitBlockClicked">
 
     <template v-if="showControls">
 
-      <div v-if="canRemoveBlock" class="sim-timeblock--remover" @click="emitRemoveTimeBlock">
-        <SimIconText icon="fa-times"></SimIconText>
+      <div v-if="canRemoveBlock" class="sim-timeblock--remover" @click.stop="emitRemoveTimeBlock">
+        <SimIconText icon="#icon--control--minus" icon-type="svg"></SimIconText>
       </div>
 
       <template v-if="orientationIsX">
@@ -18,14 +18,13 @@
       </template>
 
       <div v-if="canMoveBlock" class="sim-timeblock--mover" @mousedown="startMove"></div>
+    </template>
 
-      <template v-if="showBlockInfo">
-        <div class="sim-timeblock--info">
-          <div v-if="showBlockHours" class="sim-timeblock--info--hours">{{ displayBlockHours }}</div>
-          <div v-if="showBlockTime" class="sim-timeblock--info--time">{{ displayBlockTime }}</div>
-        </div>
-      </template>
-
+    <template v-if="showBlockInfo">
+      <div class="sim-timeblock--info">
+        <div v-if="showBlockHours" class="sim-timeblock--info--hours">{{ displayBlockHours }}</div>
+        <div v-if="showBlockTime" class="sim-timeblock--info--time">{{ displayBlockTime }}</div>
+      </div>
     </template>
 
     <div v-if="hasTooltip" class="sim-timeblock--tooltip">
@@ -101,7 +100,7 @@
       },
       orientation: {
         type: String,
-        default: 'x',
+        default: 'y',
       },
       showControls: {
         type: Boolean,
@@ -228,6 +227,7 @@
         const styles = []
         styles.push(`--start: ${this.block.start - this.timeShiftOffset}`)
         styles.push(`--duration: ${this.block.duration}`)
+
         styles.push(`--segment-size: ${this.segmentSize}`)
 
         return styles.join(';')
@@ -235,9 +235,11 @@
     },
     methods: {
       emitRemoveTimeBlock(event) {
-        event.stopPropagation()
-        event.preventDefault()
         this.$emit('remove-time-block', this.index)
+      },
+
+      emitBlockClicked(event) {
+        this.$emit('time-block-clicked', event, this.block)
       },
 
       // ---------- For moving ----------

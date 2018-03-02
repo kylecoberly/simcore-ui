@@ -7,12 +7,14 @@
         Normal / Default
       </template>
       <template slot="view">
-        <SimTimePicker :date="date" :blocks="blocks" :should-show-date="true"
-                       @calendar-day-selected="manageDayControlPanel"
-                       @all-time-blocks-removed="allTimeBlocksRemoved"
-                       @time-block-removed="timeBlockRemoved"
-        >
-        </SimTimePicker>
+        <SimTimePicker orientation="x"
+          :date="date"
+          :blocks="blocks"
+          :should-show-date="true"
+          @calendar-day-selected="manageDayControlPanel"
+          @all-time-blocks-removed="allTimeBlocksRemoved"
+          @time-block-removed="timeBlockRemoved"
+        />
         <br/>
         <p>Data</p>
         <div class="flex-baseline-around">

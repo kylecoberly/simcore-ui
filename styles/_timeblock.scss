@@ -30,7 +30,7 @@
 
   &.is-moving,
   &.is-stretching {
-    transition: 80ms linear;
+    transition: 120ms linear;
 
     .sim-timeblock--info--time {
       display: block;
@@ -76,7 +76,7 @@
       .sim-timeblock--tooltip {
         opacity: .85;
         transform: translate(var(--tooltip-shift-x, -50%), calc(-100% - .5em)) scale(1);
-        transition-delay: 300ms;
+        transition-delay: var(--default-ms, 300ms);
       }
     }
   }
@@ -107,8 +107,9 @@
 
   &--remover {
     position: absolute;
-    width: 1.5em;
-    height: 1.5em;
+    font-size: 80%;
+    width: 2em;
+    height: 2em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -293,6 +294,7 @@
   &--available,
   &--blue {
     --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
+    border-radius: .2em;
   }
 
   &--aggregate,
@@ -303,6 +305,11 @@
   }
 
   &--specific,
+  &--alt-green {
+    --timeblock-color: var(--green-lighter) radial-gradient(ellipse at 0% -100%, var(--green-film) 0%, var(--green-lighter) 90%);
+    cursor: pointer;
+  }
+
   &--green {
     --timeblock-color: var(--green) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--green) 90%);
     cursor: pointer;
@@ -311,6 +318,8 @@
   &--pending-event,
   &--orange {
     --timeblock-color: var(--orange) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--orange) 90%);
+    box-shadow: 0 .4em 1em -.4em;
+    border-radius: .3em;
   }
 
   &--duration,

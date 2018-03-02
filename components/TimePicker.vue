@@ -8,7 +8,7 @@
       <div class="sim-timepicker--display-date">
         <span>{{ displayDate }} <br /><b>{{ displayTotalTimeBlockHours }}</b></span>
         <span v-if="countTimeBlockHours > 0" class="sim-timepicker--remove-blocks" @click="removeAllTimeBlocks">
-          <SimIconText icon="fa-times"></SimIconText>
+          <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
         </span>
       </div>
       <div class="sim-timepicker--next-day" @click="nextDay">
@@ -91,7 +91,7 @@
       },
       orientation: {
         type: String,
-        default: 'x',
+        default: 'y',
       },
       startTime: {
         type: Number,

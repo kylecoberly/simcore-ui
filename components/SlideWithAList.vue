@@ -44,7 +44,7 @@
             </sim-selection>
           </li> -->
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText icon="#icon--checkbox--available" icon-type="svg" :text="`${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+            <SimIconText icon="#icon--checkbox--unchecked" icon-type="svg" :text="`${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
           </li>
         </SimDatalist>
       </section>

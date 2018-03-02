@@ -13,7 +13,7 @@
     color: var(--bubble-fg, var(--lightest));
     background: var(--bubble-bg, var(--dark));
     border-radius: .3em;
-    box-shadow: 0 0 0 1px var(--dusk), 0 .5em 2em -.3em rgba(0, 0, 0, .5);
+    box-shadow: 0 0 0 1px var(--fog), 0 .5em 2em -.3em rgba(0, 0, 0, .5);
     overflow: hidden;
   }
 
@@ -33,7 +33,7 @@
 
     &::before {
       --left: 0;
-      --border-color: var(--dusk);
+      --border-color: var(--fog);
     }
 
     &::after {
@@ -54,7 +54,7 @@
 
     &::before {
       --left: 100%;
-      --border-color: var(--dusk);
+      --border-color: var(--fog);
     }
 
     &::after {
