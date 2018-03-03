@@ -166,6 +166,7 @@
                   <SimDatalist :items="activeInstructors" :animate="true">
                     <li slot="item" slot-scope="props" :key="props.item.seat" :class="`instructor-${props.item.id}`">
                       <SimAutofinder placeholder="Any Available Instructor"
+                                     :tabIndex="props.index"
                                      :item="props.item"
                                      :index="props.index"
                                      :is-alone="(activeInstructorCount === 1)"
@@ -173,6 +174,7 @@
                                      @select="addItemToActiveInstructorsList"
                                      @clear="clearItemFromActiveInstructorsList"
                                      @remove="removeFromActiveInstructorsList"
+                                     @add-another="addSlotToActiveInstructorsList"
                                      >
                         <template slot="option" slot-scope="props">
                           {{ props.option.lastname }}, {{ props.option.firstname }}
@@ -693,6 +695,7 @@
             itemSearch: '',
             start_time: bubbleData.block.start,
             end_time: bubbleData.block.start + bubbleData.block.duration,
+            segments: bubbleData.block.segments,
           },
           meta: bubbleData.meta,
         }
@@ -946,7 +949,7 @@
       }
 
       .sim-calendar--grid--day--timelines {
-        left: 40%;
+        left: 50%;
       }
     }
 
@@ -955,7 +958,7 @@
         width: 28em;
       }
       .sim-calendar--grid--day--timelines {
-        left: 40%;
+        left: 3em;
       }
     }
 

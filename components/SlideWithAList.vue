@@ -137,13 +137,26 @@
       // this.bubbleElement.style.removeProperty('--width-factor')
     },
     computed: {
+      startSegment() {
+        return (this.slide.content.start_time * 2)
+      },
+      endSegment() {
+        return (this.slide.content.end_time * 2) - 1
+      },
+      segmentItems() {
+        let items = []
+        for(let iterator = this.startSegment; iterator <= this.endSegment; iterator++) {
+          items = [...new Set([...items, ...this.slide.content.segments[iterator].user_ids])]
+        }
+        return items
+      },
       specificItems() {
         return this.slide.content.specificItems
         ? getListFromIds(this.slide.content.specificItems, this.$store.state.user.instructors, 'lastname')
         : null
       },
       items() {
-        let items = this.slide.content.items.filter((item) => {
+        let items = this.segmentItems.filter((item) => {
           return !this.slide.content.specificItems.includes(parseInt(item, 10))
         })
         // const items = this.slide.content.items

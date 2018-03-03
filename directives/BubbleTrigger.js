@@ -2,7 +2,7 @@ export default {
   bind(element, binding, vnode) {
     // let isDraggable = false
     let timeout
-    let mouseWillHaveMoved = false
+    let mouseHasMoved = false
     const willMove = binding.value.followMousemove || false
 
     const emitPosition = () => {
@@ -27,31 +27,33 @@ export default {
     }
 
     const mouseMove = () => {
-      emitPosition()
-      clearTimeout(timeout)
-      timeout = setTimeout(() => {
-        emitData()
-      }, 50)
+      if (mouseHasMoved) {
+        emitPosition()
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+          emitData()
+        }, 50)
+      }
     }
 
     const mouseDown = () => {
-      emitPosition()
-      emitData()
+      // emitPosition()
+      // emitData()
       if (willMove === true) {
         element.addEventListener('mousemove', mouseMove)
-        mouseWillHaveMoved = true
+        mouseHasMoved = true
       }
     }
 
     const mouseUp = () => {
-      if (mouseWillHaveMoved) {
+      if (mouseHasMoved) {
         emitPosition()
         emitData()
       }
 
       if (willMove === true) {
         element.removeEventListener('mousemove', mouseMove)
-        mouseWillHaveMoved = false
+        mouseHasMoved = false
       }
     }
 

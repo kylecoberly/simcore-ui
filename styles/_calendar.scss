@@ -257,7 +257,7 @@
         bottom: 0;
         display: flex;
         flex-direction: column;
-        opacity: .25;
+        opacity: .35;
         margin: 0;
         padding: 0;
         list-style: none;
@@ -290,6 +290,8 @@
           display: flex;
           align-items: center;
           justify-content: center;
+          font-size: .8em;
+
           &.sim-timeline--icon--midnight {
             display: none;
           }

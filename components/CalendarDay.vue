@@ -380,11 +380,15 @@
           }
         )
       },
-      timeBlockClicked(event, block) {
-        this.createPendingBlock(block)
-        this.$nextTick(() => {
-          this.popOpenTheBubble(this.$refs.peblox.$el, this.pendingBlock)
-        })
+      timeBlockClicked(block) {
+        if (this.showExpandedWeek || this.bubbleIsOpen) {
+          this.createPendingBlock(block)
+          this.$nextTick(() => {
+            this.popOpenTheBubble(this.$refs.peblox.$el, this.pendingBlock)
+          })
+        } else {
+          this.toggleExpandedWeek()
+        }
       },
       emitLodestar() {
         this.$emit('run-lodestar')

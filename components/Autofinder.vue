@@ -12,7 +12,7 @@
             @keydown.down="moveDown"
             @keydown.up="moveUp"
             @keydown.enter="select"
-            @keydown.tab="select"
+            @keydown.tab="selectAndAddAnother"
             @keyup.esc="blur"
             @input="onInput"
             />
@@ -142,6 +142,12 @@
           this.previousValueLength = this.search.length
 
           this.isOpen = false
+        }
+      },
+      selectAndAddAnother() {
+        if (this.isOpen && this.foundOptions.length) {
+          this.$emit('add-another')
+          this.select()
         }
       },
       clickSelect() {

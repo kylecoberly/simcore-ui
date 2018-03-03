@@ -239,7 +239,7 @@
       },
 
       emitBlockClicked(event) {
-        this.$emit('time-block-clicked', event, this.block)
+        this.$emit('time-block-clicked', this.block, event)
       },
 
       // ---------- For stretching up or left ----------
