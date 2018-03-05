@@ -82,6 +82,7 @@
             :block="block"
             :index="index"
             :show-controls="false"
+            :settings="filteredBlockSettings"
             @time-block-clicked="timeBlockClicked"
           />
 
@@ -152,6 +153,14 @@
           canResizeBlockStart: false,
           canResizeBlockEnd: false,
           canMoveBlock: true,
+        },
+        filteredBlockSettings: {
+          showBlockHours: false,
+          showBlockTime: false,
+          canRemoveBlock: false,
+          canResizeBlockStart: false,
+          canResizeBlockEnd: false,
+          canMoveBlock: false,
         },
       }
     },

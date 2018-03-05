@@ -1,9 +1,7 @@
 export default {
   bind(element, binding, vnode) {
-    // let isDraggable = false
-    let timeout
     let mouseHasMoved = false
-    const willMove = binding.value.followMousemove || false
+    const mouseWillMove = binding.value.followMousemove || false
 
     const emitPosition = () => {
       const bubble = {}
@@ -27,22 +25,8 @@ export default {
     }
 
     const mouseMove = () => {
-      if (mouseHasMoved) {
-        emitPosition()
-        clearTimeout(timeout)
-        timeout = setTimeout(() => {
-          emitData()
-        }, 50)
-      }
-    }
-
-    const mouseDown = () => {
-      // emitPosition()
-      // emitData()
-      if (willMove === true) {
-        element.addEventListener('mousemove', mouseMove)
-        mouseHasMoved = true
-      }
+      emitPosition()
+      emitData()
     }
 
     const mouseUp = () => {
@@ -51,15 +35,21 @@ export default {
         emitData()
       }
 
-      if (willMove === true) {
-        element.removeEventListener('mousemove', mouseMove)
+      if (mouseWillMove === true) {
+        document.removeEventListener('mousemove', mouseMove)
         mouseHasMoved = false
       }
+
+      document.removeEventListener('mouseup', mouseUp)
     }
 
-    if (element) {
-      element.addEventListener('mousedown', mouseDown)
-      element.addEventListener('mouseup', mouseUp)
-    }
+    element.addEventListener('mousedown', () => {
+      if (mouseWillMove === true) {
+        document.addEventListener('mousemove', mouseMove)
+        mouseHasMoved = true
+      }
+
+      document.addEventListener('mouseup', mouseUp)
+    })
   },
 }
