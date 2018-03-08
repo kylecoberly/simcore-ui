@@ -20,7 +20,6 @@
         <div class="local--day--blocks local--day--event-blocks">
           <SimTimeBlock v-for="(block, index) in events"
             theme="event"
-            xv-bubble-trigger="{date: date, block, x: dayOfWeek+1, followMousemove: false, slideTemplate: 'SimSlideWithEventDetails'}"
             :key="index"
             :block="block"
             :index="index"
@@ -54,11 +53,12 @@
         </div>
 
         <div class="local--day--blocks local--day--pending-blocks">
-          <SimTimeBlock ref="peblox" v-if="pendingBlock"
+          <SimTimeBlock v-if="pendingEvent"
             theme="pending-event"
-            v-bubble-trigger="{date: date, block: pendingBlock, x: dayOfWeek+1, followMousemove: true, slideTemplate: 'SimSlideWithAList'}"
             key="peblox"
-            :block="pendingBlock"
+            :can-have-a-bubble="true"
+            :offset="{ x: dayOfWeek + 1, y: 0 }"
+            :block="pendingEvent"
             :index="0"
             :show-controls="showTimeBlockControls"
             :settings="pendingBlockSettings"
@@ -71,7 +71,7 @@
             theme="empty"
             block-icon="#icon--instructors-none"
             :tooltip="{icon: '#icon--instructors-none', text: 'No Instructors Found'}"
-            :block="{start: 0, duration: 24}"
+            :block="{startTime: 0, duration: 24}"
             :index="0"
             :show-controls="false"
           />
@@ -88,7 +88,7 @@
           <SimTimeBlock v-else-if="thereIsNoDataForThisDay"
             theme="null"
             :tooltip="{icon: '#icon--instructors-null', text: 'No Data'}"
-            :block="{start: 0, duration: 24}"
+            :block="{startTime: 0, duration: 24}"
             :index="0"
             :show-controls="false"
           />
@@ -141,7 +141,6 @@
       return {
         dateFormat: 'YYYY-MM-DD',
         events: [],
-        pendingEvents: [],
         currentUserAvailabilityBlocks: [],
         filteredBlocks: [],
         allBlocks: [],
@@ -153,6 +152,7 @@
           canResizeBlockEnd: false,
           canMoveBlock: true,
         },
+        pendingEvent: null,
       }
     },
     mounted() {
@@ -160,7 +160,7 @@
         this.events = this.initialEventBlocks
       }
       if (this.initialPendingEventBlocks) {
-        this.pendingEvents = this.initialPendingEventBlocks
+        this.pendingEvent = this.initialPendingEventBlocks[0]
       }
       if (this.initialCurrentUserAvailabilityBlocks) {
         this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
@@ -177,7 +177,7 @@
         this.events = this.initialEventBlocks
       },
       initialPendingEventBlocks() {
-        this.pendingEvents = this.initialPendingEventBlocks
+        this.pendingEvent = this.initialPendingEventBlocks[0]
       },
       initialCurrentUserAvailabilityBlocks() {
         this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
@@ -275,9 +275,6 @@
         }
         return show
       },
-      pendingBlock() {
-        return this.pendingEvents[0] || null
-      },
       availabilityBlockTheme() {
         return this.hasOnlySpecificInstructors ? 'specific' : 'aggregate'
       },
@@ -286,21 +283,6 @@
       },
     },
     methods: {
-
-      eventHandler(event) {
-        var items = document.querySelectorAll('.dock .item');
-
-        if(items.length) {
-          for (var i = 0, len = items.length; i < len; i++) {
-            items[i].classList.remove('is-in-row');
-          }
-        }
-
-        if (event.target.tagName === 'SPAN' && e.srcElement.previousElementSibling) {
-          e.srcElement.previousElementSibling.classList.add('is-in-row');
-        }
-      },
-
       pluralize(count, single, other) {
         return (count === 1 ? `${count} ${single}` : `${count} ${other}`)
       },
@@ -308,7 +290,7 @@
         this.$store.commit('setActiveDate', this.date)
       },
       isWholeNumber(value) {
-        return Math.ceil(parseFloat(value)) === parseInt(value)
+        return Math.ceil(parseFloat(value)) === parseInt(value, 10)
       },
       setHourClasses(hour) {
         const classes = []
@@ -320,7 +302,7 @@
       displayHour(hour) {
         hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour)
 
-        return hour > 12 ? `${hour - 12}` : (parseInt(hour) ? `${hour}` : hour)
+        return hour > 12 ? `${hour - 12}` : (parseInt(hour, 10) ? `${hour}` : hour)
       },
       closeBubble() {
         this.$store.commit('toggleBubbleVisibility', false)
@@ -328,7 +310,7 @@
       // TimeBlock Methods
       sortBlocks() {
         this.currentUserAvailabilityBlocks.sort((a, b) => {
-          return parseFloat(a.start) - parseFloat(b.start)
+          return parseFloat(a.startTime) - parseFloat(b.startTime)
         })
       },
       updateBlocks() {
@@ -343,49 +325,29 @@
       },
       removePendingBlock() {
         this.closeBubble()
-        this.pendingEvents.splice(0, 1)
+        this.pendingEvent = null
       },
       blockWasUpdated() {
         this.updateBlocks()
       },
       createTimeBlock(hour) {
-        this.currentUserAvailabilityBlocks.push({ start: hour, duration: 1 })
+        this.currentUserAvailabilityBlocks.push({ startTime: hour, duration: 1 })
         this.updateBlocks()
       },
       createPendingBlock(block) {
-        this.pendingEvents = []
-        this.pendingEvents.push({
+        console.log('create pending', block)
+        this.pendingEvent = {
           ...block,
           duration: this.initialEventLength,
           limits: {
-            starting: block.start,
-            ending: block.start + block.duration - this.initialEventLength
-          }
-        })
-      },
-      popOpenTheBubble(element, block) {
-        const properties = {}
-        properties.position = element.getBoundingClientRect()
-        properties.position.dinkY = properties.position.top + properties.position.height / 2
-        properties.position.dinkX = properties.position.left + properties.position.width / 2
-        properties.position.x = this.dayOfWeek + 1
-
-        this.$emit('set-bubble-position', properties.position)
-        this.$emit('set-bubble-data', {
-            date: this.date,
-            block: block,
-            x: properties.position.x,
-            followMousemove: true,
-            slideTemplate: 'SimSlideWithAList',
-          }
-        )
+            starting: block.startTime,
+            ending: block.startTime + block.duration - this.initialEventLength,
+          },
+        }
       },
       timeBlockClicked(block) {
         if (this.showExpandedWeek || this.bubbleIsOpen) {
           this.createPendingBlock(block)
-          this.$nextTick(() => {
-            this.popOpenTheBubble(this.$refs.peblox.$el, this.pendingBlock)
-          })
         } else {
           this.toggleExpandedWeek()
         }

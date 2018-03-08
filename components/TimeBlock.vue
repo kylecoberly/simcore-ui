@@ -46,6 +46,7 @@
 <script>
   import moment from 'moment'
   import SimIconText from './IconText'
+  import * as dateFormatter from '../data/date'
 
   const _cap = (num, previous, min, max) => {
     return (num < min ? min : (num > max - previous ? max - previous : num))
@@ -90,6 +91,12 @@
     components: {
       SimIconText,
     },
+    mounted() {
+      this.updatePosition()
+    },
+    updated() {
+      this.updatePosition()
+    },
     props: {
       block: {
         type: Object,
@@ -108,11 +115,21 @@
       },
       theme: {
         type: String,
-        default: 'default'
+        default: 'default',
       },
       tooltip: {
         icon: null,
         text: null,
+      },
+      offset: {
+        type: Object,
+        default() {
+          return { x: 0, y: 0 }
+        },
+      },
+      canHaveABubble: {
+        type: Boolean,
+        default: false,
       },
       blockIcon: null,
       variables: {
@@ -164,26 +181,16 @@
         return this.orientation === 'y'
       },
       segmentSize() {
-        return (100/this.variables.maximumDuration)
+        return (100 / this.variables.maximumDuration)
       },
       timeShiftOffset() {
         return this.variables.startTime
       },
       displayBlockTime() {
-        const day = moment().startOf('day')
-        const start = day.add(this.block.start, 'hours').format('h:mma')
-        const end = day.add(this.block.duration, 'hours').format('h:mma')
-        // times = `${start.replace(':00', '')} — ${end.replace(':00', '')}`
-
-        return `${start} — ${end}`
+        return dateFormatter.formatTimesForDisplay(this.block.startTime, this.block.duration)
       },
       displayBlockHours() {
-        const total = this.block.duration
-        const output = total.toString()
-          .replace(/\.5/, '½')
-          .replace(/^0/, '') || 0
-
-        return `${output} ${(total > 0 && total <= 1 ? 'hour' : 'hours')}`
+        return dateFormatter.formatBlockHoursForDisplay(this.block.duration)
       },
       showBlockHours() {
         return this.settings.showBlockHours
@@ -225,7 +232,7 @@
       },
       blockStyles() {
         const styles = []
-        styles.push(`--start: ${this.block.start - this.timeShiftOffset}`)
+        styles.push(`--start: ${this.block.startTime - this.timeShiftOffset}`)
         styles.push(`--duration: ${this.block.duration}`)
 
         styles.push(`--segment-size: ${this.segmentSize}`)
@@ -234,7 +241,7 @@
       },
     },
     methods: {
-      emitRemoveTimeBlock(event) {
+      emitRemoveTimeBlock() {
         this.$emit('remove-time-block', this.index)
       },
 
@@ -246,7 +253,7 @@
       setStretchingStart(event, mouseCoordinate) {
         const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
         const currentStart = Math.floor(calc / this.metrics.segment[this.orientation]) / 2
-        this.block.start = _cap((currentStart), 0, 0, (this.metrics.startValue + this.metrics.durationValue - 0.5)) + this.timeShiftOffset
+        this.block.startTime = _cap((currentStart), 0, 0, (this.metrics.startValue + this.metrics.durationValue - 0.5)) + this.timeShiftOffset
 
         return currentStart
       },
@@ -259,29 +266,82 @@
       setDurationFromEnd(event, mouseCoordinate) {
         const currentDuration = Math.round((this.metrics.axis[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation]) / this.metrics.segment[this.orientation]) / 2
 
-        this.block.duration = _cap(currentDuration, 0, 0.5, this.variables.maximumDuration - this.block.start + this.timeShiftOffset)
+        this.block.duration = _cap(currentDuration, 0, 0.5, this.variables.maximumDuration - this.block.startTime + this.timeShiftOffset)
+      },
+
+      packageSlideContent() {
+        const block = this.block
+
+        const meta = {}
+        meta.initialEventDuration = parseFloat(this.block.duration)
+        
+        this.$store.commit('resetHistory')
+        this.$store.commit('addASlide',
+          {
+            title: dateFormatter.formatDateForDisplay(
+              this.$store.state.activeDate.date,
+              this.$store.state.calendar.settings.date_format.display,
+            ),
+            subtitle: `${dateFormatter.formatBlockHoursForDisplay(block.duration)} • ${dateFormatter.formatTimesForDisplay(block.startTime, block.duration)}`,
+            componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
+            content: {
+              items: [],
+              specificItems: this.$store.state.availabilities.availabilityInstructors.specific,
+              selectedItems: [],
+              foundItems: [],
+              itemSearch: '',
+              start_time: block.startTime,
+              end_time: block.startTime + block.duration,
+              segments: block.segments,
+            },
+            meta,
+          })
       },
 
       // ---------- Move ----------
-      move(event) {
-        const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
-        const calc = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
-        const currentStart = _cap(calc, this.metrics.axis[this.orientation], 0, this.metrics.max[this.orientation])
+      updatePosition() {
+        const newPosition = this.$el.getBoundingClientRect()
+        if (this.canHaveABubble) {
+          this.$nextTick(() => {
+            this.$store.commit('updateBubblePosition', {
+              domPosition: this.$el.getBoundingClientRect(),
+              offset: this.offset,
+            })
 
-        let start = (Math.round((currentStart) / this.metrics.segment[this.orientation]) / 2) + this.timeShiftOffset
-
-        if (this.block.limits && this.block.limits.starting && this.block.limits.ending) {
-          start = _cap(start, 0, this.block.limits.starting, this.block.limits.ending)
+            this.packageSlideContent()
+          })
         }
 
-        this.block.start = start
+        this.block.position = newPosition
+      },
+      move(event) {
+        const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
+        const calc            = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
+        const currentStart    = _cap(calc, this.metrics.axis[this.orientation], 0, this.metrics.max[this.orientation])
+
+        let startTime = (Math.round((currentStart) / this.metrics.segment[this.orientation]) / 2) + this.timeShiftOffset
+
+        if (this.block.limits && this.block.limits.starting && this.block.limits.ending) {
+          startTime = _cap(startTime, 0, this.block.limits.starting, this.block.limits.ending)
+        }
+
+        addEventListener('transitionend', this.updatePosition)
+        this.updatePosition()
+
+        this.$store.commit('updateBubblePosition', {
+          domPosition: this.$el.getBoundingClientRect(),
+          offset: this.offset,
+        })
+        this.block.startTime = startTime
       },
       doneMoving() {
+        this.updatePosition()
         this.isMoving = false
         this.$emit('is-moving', false)
         this.$emit('block-was-updated')
         removeEventListener('mousemove', this.move)
         removeEventListener('mouseup', this.doneMoving)
+        removeEventListener('transitionend', this.updatePosition)
       },
       startMove(event) {
         if (event.which === 1) {

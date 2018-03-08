@@ -81,10 +81,6 @@ export const groupInstructorSegmentsForADayByContiguousTime =
       timeBlocks[currentBlockStartTime].startSegment        = currentBlockStartSegment
       timeBlocks[currentBlockStartTime].endSegment          = endSegment
 
-      // QUESTION for Chad: why was this startTime and not start?
-      // It was breaking instructor view for adding availability
-      timeBlocks[currentBlockStartTime].start =
-        availabilities.convertToDecimal(currentBlockStartSegment)
       timeBlocks[currentBlockStartTime].startTime =
         availabilities.convertToDecimal(currentBlockStartSegment)
       timeBlocks[currentBlockStartTime].endTime   =

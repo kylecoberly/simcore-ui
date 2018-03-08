@@ -14,6 +14,8 @@ function filterData(commit, state, filtersToApply) {
     (instructorId) => { return instructorId !== undefined },
   )
 
+  const totalCount = filtersToApply.specificInstructorIds.length
+
   const filteredBlocks = availabilityFilters
     .filterInstructorAvailabilityBlocks(
       state.instructorsWithAvailabilityBlocks,
@@ -21,11 +23,17 @@ function filterData(commit, state, filtersToApply) {
     {
       eventLength: filtersToApply.eventLength,
       instructorSlots: {
-        totalCount: filtersToApply.specificInstructorIds.length,
+        totalCount,
         specificInstructorIds: onlySpecificInstructorIds,
       },
     },
   )
+
+  commit('setAvailabilityInstructors', {
+    totalCount,
+    specific: onlySpecificInstructorIds,
+    nonspecific: [],
+  })
 
   commit(
     'setFilteredBlocks',
@@ -35,6 +43,11 @@ function filterData(commit, state, filtersToApply) {
 
 const availabilities = {
   state: {
+    availabilityInstructors: {
+      totalCount: 0,
+      specific: [],
+      nonspecific: [],
+    },
     last_updated: null,
     instructorFilterSlots: {},
     // {
@@ -76,6 +89,9 @@ const availabilities = {
     specificBlocks: {},
   },
   mutations: {
+    setAvailabilityInstructors(state, instructors) {
+      state.availabilityInstructors = Object.assign({}, instructors)
+    },
     setAllInstructorAvailabilityBlocks(state, availabilityBlocks) {
       state.allInstructorAvailabilityBlocks = Object.assign({}, availabilityBlocks)
     },

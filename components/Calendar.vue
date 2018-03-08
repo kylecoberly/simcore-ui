@@ -5,6 +5,8 @@
       <symbol id="icon--event-duration" viewBox="0 0 14 14">
         <path class="icon--event-duration" fill="#f5a623" d="M12.5,7 L7,7 L7,1.5 C10.0375661,1.5 12.5,3.96243388 12.5,7 Z M7,1 C3.6862915,1 1,3.6862915 1,7 C1,10.3137085 3.6862915,13 7,13 C10.3137085,13 13,10.3137085 13,7 C13,3.6862915 10.3137085,1 7,1 Z M7,0 C10.8659932,-7.10171439e-16 14,3.13400675 14,7 C14,10.8659932 10.8659932,14 7,14 C3.13400675,14 -3.07926605e-15,10.8659932 -3.55271368e-15,7 C-4.73447626e-16,3.13400675 3.13400675,7.10171439e-16 7,0 Z"></path>
       </symbol>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <symbol id="icon--instructors-checked" viewBox="0 0 14 14">
         <path class="icon--instructors-checked" fill="#b8e986" d="M0.874370824,13.125 L8.89399073,13.125 L9.60441702,14 L0.86070878,14 C0.623898831,14 0.421247203,13.9134123 0.252747816,13.7402344 C0.0842484296,13.5670564 0,13.3619804 0,13.125 L0,11.8125 C0,11.566405 0.143450029,11.3590503 0.43035439,11.1904297 L0.86070878,10.9375 L4.69974318,9.11914062 C4.39917671,8.87304564 4.14415443,8.57910327 3.93466871,8.23730469 C3.72518298,7.8955061 3.55440914,7.54231953 3.42234205,7.17773437 C3.29027497,6.81314922 3.19464161,6.45996265 3.13543913,6.11816406 C3.07623664,5.77636548 3.04663584,5.48698035 3.04663584,5.25 L3.04663584,3.0625 C3.04663584,2.69791484 3.16048507,2.33333516 3.38818694,1.96875 C3.61588882,1.60416484 3.91645078,1.27604312 4.28988186,0.984375 C4.66331293,0.692706875 5.08455508,0.455730078 5.55362094,0.2734375 C6.0226868,0.0911449219 6.49857658,0 6.98130455,0 C7.46403252,0 7.9399223,0.0911449219 8.40898816,0.2734375 C8.87805402,0.455730078 9.29929617,0.692706875 9.67272724,0.984375 C10.0461583,1.27604312 10.3467203,1.60416484 10.5744222,1.96875 C10.802124,2.33333516 10.9159733,2.69791484 10.9159733,3.0625 L10.9159733,5.25 C10.9159733,5.51432424 10.8886494,5.81965973 10.834001,6.16601562 C10.7793525,6.51237152 10.6882732,6.8655581 10.5607601,7.22558594 C10.4332471,7.58561378 10.2670272,7.93424311 10.0620955,8.27148437 C9.85716381,8.60872564 9.60441852,8.89583215 9.30385205,9.1328125 L11.6673857,10.2402344 L11.148228,10.9785156 L8.93497686,9.92578125 C8.79835573,9.86197885 8.6845065,9.7685553 8.59342576,9.64550781 C8.50234501,9.52246032 8.44769738,9.38346432 8.42948123,9.22851562 C8.41126508,9.08268156 8.43175794,8.93912831 8.49096042,8.79785156 C8.55016291,8.65657481 8.63896531,8.53580779 8.75737028,8.43554687 C9.22188211,8.07096172 9.55204487,7.55371429 9.74786848,6.88378906 C9.9436921,6.21386384 10.0416024,5.66927293 10.0416024,5.25 L10.0416024,3.0625 C10.0416024,2.82551965 9.95280003,2.57942836 9.77519257,2.32421875 C9.59758511,2.06900914 9.3630557,1.83431097 9.0715973,1.62011719 C8.7801389,1.40592341 8.45225312,1.22819081 8.08793012,1.08691406 C7.72360712,0.945637314 7.35473562,0.875 6.98130455,0.875 C6.61698155,0.875 6.25266402,0.945637314 5.88834102,1.08691406 C5.52401802,1.22819081 5.19613224,1.40820203 4.90467384,1.62695312 C4.61321544,1.84570422 4.37640905,2.08268102 4.19424755,2.33789062 C4.01208605,2.59310023 3.92100666,2.83463428 3.92100666,3.0625 L3.92100666,5.25 C3.92100666,5.67838756 4.03030192,6.22525709 4.24889572,6.890625 C4.46748952,7.55599291 4.80448324,8.07096172 5.25988699,8.43554687 C5.37829196,8.53580779 5.46481738,8.65429619 5.51946583,8.79101562 C5.57411428,8.92773506 5.59233015,9.07356693 5.574114,9.22851562 C5.55589785,9.37434969 5.50125022,9.50878845 5.41016947,9.63183594 C5.31908872,9.75488343 5.2052395,9.84830697 5.06861837,9.91210937 L1.22958397,11.7304687 C1.1840436,11.7578126 1.11345707,11.8056637 1.01782229,11.8740234 C0.9221875,11.9423832 0.874370824,12.0631502 0.874370824,12.2363281 L0.874370824,13.125 Z M13.8259887,9.8984375 C13.9261775,9.97135453 13.9831021,10.0670567 13.9967642,10.1855469 C14.0104263,10.3040371 13.9808255,10.4088537 13.9079609,10.5 L11.8176682,13.6855469 C11.8085601,13.7128908 11.7971752,13.7379556 11.7835131,13.7607422 C11.7698509,13.7835288 11.7539121,13.8040364 11.7356959,13.8222656 C11.6446152,13.9042973 11.5398739,13.9453125 11.4214689,13.9453125 C11.3030639,13.9453125 11.1983226,13.9042973 11.1072419,13.8222656 L9.56343089,12.2773437 C9.48145821,12.1861975 9.44047249,12.0813808 9.44047249,11.9628906 C9.44047249,11.8444004 9.48145821,11.744141 9.56343089,11.6621094 C9.64540356,11.5709631 9.74786787,11.5253906 9.87082688,11.5253906 C9.99378589,11.5253906 10.0962502,11.5709631 10.1782229,11.6621094 L11.3394966,12.8242187 L13.2111967,9.96679688 C13.2840613,9.87565059 13.3819716,9.82096363 13.5049306,9.80273438 C13.6278896,9.78450512 13.7349079,9.81640584 13.8259887,9.8984375 Z"></path>
       </symbol>
@@ -20,6 +22,8 @@
       <symbol id="icon--checkbox--warning" viewBox="0 0 15 15">
         <path class="icon--checkbox--warning" fill="#f8e71c" d="M7.49999539,10 C8.04753309,10 8.49140009,10.443867 8.49140009,10.9914047 L8.49140009,11.0085953 C8.49140009,11.556133 8.04753309,12 7.49999539,12 C6.9524577,12 6.5085907,11.556133 6.5085907,11.0085953 L6.5085907,10.9914047 C6.5085907,10.443867 6.9524577,10 7.49999539,10 Z M7.50002903,3 C8.05232065,3 8.5000359,3.44771525 8.5000359,4 C8.5000359,4.03035027 8.49865419,4.06068481 8.49589507,4.0909094 L8.09755021,8.45454359 C8.06934677,8.76349571 7.81026923,9 7.50003247,9 C7.18979571,9 6.93071816,8.76349571 6.90251472,8.45454359 L6.50416987,4.0909094 C6.45396199,3.54091157 6.8591218,3.05434871 7.40911963,3.00414083 C7.43934423,3.00138171 7.46967876,3 7.50002903,3 Z M7.5,13 C10.5375661,13 13,10.5375661 13,7.5 C13,4.46243388 10.5375661,2 7.5,2 C4.46243388,2 2,4.46243388 2,7.5 C2,10.5375661 4.46243388,13 7.5,13 Z M7.5,14 C3.91014913,14 1,11.0898509 1,7.5 C1,3.91014913 3.91014913,1 7.5,1 C11.0898509,1 14,3.91014913 14,7.5 C14,11.0898509 11.0898509,14 7.5,14 Z"></path>
       </symbol>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <symbol id="icon--checkbox--checked" viewBox="0 0 15 15">
         <path class="icon--checkbox--checked" fill="#b8e986" d="M10.0668733,4.73047335 C10.3947209,4.42317555 10.9262668,4.42317555 11.2541143,4.73047335 C11.5819619,5.03777116 11.5819619,5.53599934 11.2541143,5.84329714 L6.53189211,10.2695266 C6.20404456,10.5768245 5.67249865,10.5768245 5.3446511,10.2695266 L3.24588567,8.30231353 C2.91803811,7.99501573 2.91803811,7.49678755 3.24588567,7.18948975 C3.57373322,6.88219194 4.10527913,6.88219194 4.43312668,7.18948975 L5.9382716,8.60029097 L10.0668733,4.73047335 Z"></path>
       </symbol>
@@ -32,6 +36,8 @@
       <symbol id="icon--checkbox--unchecked" viewBox="0 0 15 15">
         <circle class="icon--checkbox--unchecked" stroke="#9b9b9b" fill="none" cx="7.5" cy="7.5" r="6"></circle>
       </symbol>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <symbol id="icon--control--add" viewBox="0 0 15 15">
         <path class="icon--control--add" fill="#b8e986" d="M7.5,1 C11.0898509,1 14,3.91014913 14,7.5 C14,11.0898509 11.0898509,14 7.5,14 C3.91014913,14 1,11.0898509 1,7.5 C1,3.91014913 3.91014913,1 7.5,1 Z M8.14285714,6.85714286 L8.14285714,3.64285714 C8.14285714,3.28781695 7.8550402,3 7.5,3 C7.1449598,3 6.85714286,3.28781695 6.85714286,3.64285714 L6.85714286,6.85714286 L3.64285714,6.85714286 C3.28781695,6.85714286 3,7.1449598 3,7.5 C3,7.8550402 3.28781695,8.14285714 3.64285714,8.14285714 L6.85714286,8.14285714 L6.85714286,11.3571429 C6.85714286,11.7121831 7.1449598,12 7.5,12 C7.8550402,12 8.14285714,11.7121831 8.14285714,11.3571429 L8.14285714,8.14285714 L11.3571429,8.14285714 C11.7121831,8.14285714 12,7.8550402 12,7.5 C12,7.1449598 11.7121831,6.85714286 11.3571429,6.85714286 L8.14285714,6.85714286 Z"></path>
       </symbol>
@@ -85,7 +91,7 @@
       <main class="sim-calendar--main">
         <div class="sim-calendar--grid">
           <div class="sim-calendar--grid--header">
-            <div v-for="(dayName, index) in $store.state.calendar.settings.day_names" class="sim-calendar--grid--header--day">
+            <div v-for="dayName in $store.state.calendar.settings.day_names" class="sim-calendar--grid--header--day">
               <span class="sim-calendar--grid--header--dayname">
                 {{ dayName }}
               </span>
@@ -96,12 +102,9 @@
 
               <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
 
-              <CalendarDay v-for="(day, index) in monthDays"
+              <CalendarDay v-for="day in monthDays"
                            class="sim-calendar--grid--day"
                            @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
-                           @run-lodestar="runLodestar"
-                           @set-bubble-position="prepareTheBubblePosition"
-                           @set-bubble-data="prepareTheBubbleData"
                            @toggle-expanded-week="toggleExpandedWeek"
                            :key="day.date"
                            :date="day.date"
@@ -357,28 +360,12 @@
       userAvailabilitiesPromise.then((response) => {
         this.$store.commit('setCurrentUserAvailabilities', { blocks: response.data.dates, date: this.date })
       })
-      //
-      // const aggregateAvailabilitiesPromise = availabilities.getAvailabilities(
-      //   this.$store.state.base_url,
-      //   this.$store.state.currentUser.id,
-      //   firstDayOfTheMonth,
-      //   lastDayOfTheMonth,
-      // )
-      // aggregateAvailabilitiesPromise.then((response) => {
-      //   let transformedAggregateAvailabilities = []
-      //   if (response.data.users) {
-      //     this.rawUserData = response.data.users
-      //     transformedAggregateAvailabilities = availabilities.transform(response.data.users)
-      //   }
-      //
-      //   this.$store.commit('setAggregateAvailabilityBlocks', { blocks: transformedAggregateAvailabilities, date: Date.now() })
-      // })
 
-      this.eventBlocks = this.$store.state.events.blocks
-      this.pendingEventBlocks = this.$store.state.events.pendingBlocks
-      this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
-      this.aggregateUserAvailabilityBlocks = this.$store.state.availabilities.filteredBlocks
-      this.allBlocks = this.$store.state.availabilities.allInstructorAvailabilityBlocks
+      this.eventBlocks                      = this.$store.state.events.blocks
+      this.pendingEventBlocks               = this.$store.state.events.pendingBlocks
+      this.currentUserAvailabilityBlocks    = this.$store.state.user.availabilities
+      this.aggregateUserAvailabilityBlocks  = this.$store.state.availabilities.filteredBlocks
+      this.allBlocks                        = this.$store.state.availabilities.allInstructorAvailabilityBlocks
 
       // TODO: activate these when we need to build them out - Jase
       // this.institutions = this.$store.state.user.institutions || []
@@ -565,17 +552,11 @@
       activeInstructorCount() {
         return this.activeInstructors.length
       },
-      inactiveInstructorCount() {
-        return this.inactiveInstructors.length
-      },
       specificInstructorIds() {
         return this.activeInstructorIds.filter((id) => id !== undefined)
       },
       specificInstructorCount() {
         return this.specificInstructorIds.length
-      },
-      thereAreSpecificInstructors() {
-        return (this.specificInstructorCount > 0)
       },
       thereAreOnlySpecificInstructors() {
         return (this.specificInstructorCount === this.activeInstructorCount)
@@ -634,6 +615,7 @@
             eventLength: this.filterEventLength,
             date: this.lastUpdated,
             specificInstructorIds: this.activeInstructorIds,
+            nonspecificInstructorIds: _.map(this.activeInstructors, (instructor) => instructor.id),
           })
 
         return this.activeInstructors
@@ -646,6 +628,7 @@
             eventLength: this.filterEventLength,
             date: this.lastUpdated,
             specificInstructorIds: this.activeInstructorIds,
+            nonspecificInstructorIds: _.map(this.activeInstructors, (instructor) => instructor.id),
           })
       },
     },
@@ -653,66 +636,6 @@
       toggleExpandedWeek() {
         this.showExpandedWeek = !this.showExpandedWeek
         this.$store.commit('setCalendarExpandWeek', this.showExpandedWeek)
-      },
-      instructorFilterItem(item) {
-        let output = ''
-        if (item.firstname && item.lastname) {
-          output = `${item.lastname}, ${item.firstname}`
-        }
-
-        return output
-      },
-      formatDateForDisplay(date) {
-        return moment(date).format(this.$store.state.calendar.settings.date_format.display)
-      },
-      formatTimeMeridians(time) {
-        return time.replace(':00', '').replace('12am', 'Midnight').replace('12pm', 'Noon')
-      },
-      formatTimesForDisplay(start, duration) {
-        const day = moment().startOf('day')
-        const startTime = day.add(start, 'hours').format('h:mma')
-        const endTime = day.add(duration, 'hours').format('h:mma')
-
-        return `${this.formatTimeMeridians(startTime)} – ${this.formatTimeMeridians(endTime)}`
-      },
-      formatBlockHoursForDisplay(duration) {
-        const output = duration.toString()
-          .replace(/\.5/, '½')
-          .replace(/^0/, '') || 0
-
-        return `${output} ${(duration > 0 && duration <= 1 ? 'Hour' : 'Hours')}`
-      },
-      packageSlideContent(bubbleData) {
-        return {
-          title: this.formatDateForDisplay(bubbleData.date),
-          subtitle: `${this.formatTimesForDisplay(bubbleData.block.start, bubbleData.block.duration)} (${this.formatBlockHoursForDisplay(bubbleData.block.duration)})`,
-          componentType: bubbleData.slideTemplate, // TODO: Make this dynamic. - Chad/Jase
-          content: {
-            items: bubbleData.block.uniqueInstructorIds,
-            specificItems: this.specificInstructorIds,
-            selectedItems: [],
-            foundItems: [],
-            itemSearch: '',
-            start_time: bubbleData.block.start,
-            end_time: bubbleData.block.start + bubbleData.block.duration,
-            segments: bubbleData.block.segments,
-          },
-          meta: bubbleData.meta,
-        }
-      },
-      prepareTheBubblePosition(bubblePosition) {
-        this.$store.commit('updateBubblePosition', bubblePosition)
-        if (!this.bubbleIsOpen) {
-          this.$store.commit('toggleBubbleVisibility', true)
-        }
-      },
-      prepareTheBubbleData(bubbleData) {
-        bubbleData.meta = {}
-        bubbleData.meta.initialEventDuration = parseFloat(this.filterEventLength)
-        this.hideSlideNavigationControls = bubbleData.hideSlideNavigationControls || false
-
-        this.$store.commit('resetHistory')
-        this.$store.commit('addASlide', this.packageSlideContent(bubbleData))
       },
       // @TODO move to common utilities or use Lowdash? - Jase
       sortItemsByProperty(items, property) {
@@ -726,8 +649,8 @@
             seat: this.currentSeat,
             firstname: '',
             lastname: '',
-          }
-        )
+          })
+
         this.currentSeat++
       },
       addItemToActiveInstructorsList(item, index) {
@@ -810,20 +733,6 @@
       },
       loadPrevDay() {
         const date = this.activeMoment.subtract(1, 'day')
-          .format(this.$store.state.calendar.settings.date_format.raw)
-
-        this.$store.commit('setActiveDate', date)
-        this.closeBubble()
-      },
-      loadNextWeek() {
-        const date = this.activeMoment.add(7, 'days')
-          .format(this.$store.state.calendar.settings.date_format.raw)
-
-        this.$store.commit('setActiveDate', date)
-        this.closeBubble()
-      },
-      loadPrevWeek() {
-        const date = this.activeMoment.subtract(7, 'days')
           .format(this.$store.state.calendar.settings.date_format.raw)
 
         this.$store.commit('setActiveDate', date)

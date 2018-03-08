@@ -849,7 +849,7 @@ test('getOnlyTheBlocksWithAMinimumNumberOfInstructors', () => {
   expect(actualAvailabilityBlocks).toEqual(expectedContiguousTimeBlocks)
 })
 
-test('getOnlyTheBlocksAtLeastAllTheUsers', () => {
+test('getOnlyTheBlocksWithAtLeastAllTheUsers', () => {
   const specificUserIds = [4112, 7475]
 
   const startingContiguousTimeBlocks = {
@@ -900,7 +900,6 @@ test('getOnlyTheBlocksAtLeastAllTheUsers', () => {
 
   const expectedContiguousTimeBlocks = {
     '0.5': {
-      start: 0.5,
       startTime: 0.5,
       endTime: 2,
       duration: 1.5,
@@ -916,7 +915,6 @@ test('getOnlyTheBlocksAtLeastAllTheUsers', () => {
       }
     },
     '16': {
-      start: 16,
       startTime: 16,
       endTime: 19,
       duration: 3,
@@ -2230,17 +2228,6 @@ test('convertingAnOddWholeNumberToDecimalReturnsHalfTheOriginalWholeNumber', () 
 })
 
 // --- DURATIONS ---
-test('convertingADurationFromAWholeToADecimal-', () => {
-  const startTime = 3
-  const endTime   = 8
-
-  const expectedSegments = 6 // 3 (decimal version
-
-  const actualDuration = (endTime - startTime)
-
-  expect(actualDuration).toEqual(expectedSegments)
-})
-
 test('convertingADurationFromAWholeToADecimal--', () => {
   const startTime = 13.5
   const endTime   = 14

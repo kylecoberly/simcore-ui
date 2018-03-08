@@ -1,10 +1,6 @@
 const bubble = {
   state: {
     position: {},
-    previous_position: {
-      x: 3,
-      orientation: 'left',
-    },
     is_open: false,
   },
   mutations: {
@@ -15,19 +11,29 @@ const bubble = {
         state.is_open = !state.is_open
       }
     },
-    updateBubblePosition(state, position) {
-      if (position.x > state.previous_position.x && position.x > 2) {
+    updateBubblePosition(state, { domPosition, offset, shouldBeOpen = undefined }) {
+      if (shouldBeOpen === true || !state.is_open) {
+        state.is_open = true
+      }
+
+      const position = {}
+      position.dinkY = domPosition.top + domPosition.height / 2
+      position.dinkX = domPosition.left + domPosition.width / 2
+
+      position.x = offset.x
+      position.y = offset.y
+
+      if (state.position && position.x > state.position.x && position.x > 2) {
         position.orientation = 'right'
-      } else if (position.x < state.previous_position.x && position.x < 6) {
+      } else if (state.position && position.x < state.position.x && position.x < 6) {
         position.orientation = 'left'
+      } else if (state.position.orientation) {
+        position.orientation = state.position.orientation
       } else {
-        position.orientation = state.previous_position.orientation
+        position.orientation = 'right'
       }
+
       state.position = position
-      state.previous_position = {
-        x: position.x,
-        orientation: position.orientation,
-      }
     },
   },
   actions: {},

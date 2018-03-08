@@ -224,7 +224,7 @@
       sortBlocks() {
         // this.currentUserAvailabilityBlocks.sort((a, b) => {
         this.currentBlocks.sort((a, b) => {
-          return parseFloat(a.start) - parseFloat(b.start)
+          return parseFloat(a.startTime) - parseFloat(b.startTime)
         })
       },
       createTimeBlock(hour) {
@@ -243,8 +243,8 @@
 
           const maxDuration = useModifier ? modifiedDuration : this.timeBlockDefaultDuration
 
-          // this.currentUserAvailabilityBlocks.push({ start: hour, duration: maxDuration })
-          this.currentBlocks.push({ start: hour, duration: maxDuration })
+          // this.currentUserAvailabilityBlocks.push({ startTime: hour, duration: maxDuration })
+          this.currentBlocks.push({ startTime: hour, duration: maxDuration })
           this.emitUpdateBlocks()
         }
       },

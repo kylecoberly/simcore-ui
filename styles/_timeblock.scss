@@ -30,7 +30,7 @@
 
   &.is-moving,
   &.is-stretching {
-    transition: 120ms linear;
+    transition: 45ms linear;
 
     .sim-timeblock--info--time {
       display: block;

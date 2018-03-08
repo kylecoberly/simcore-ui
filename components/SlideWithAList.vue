@@ -27,7 +27,7 @@
         <header class="text--blue--lighter">
           <SimIconText icon="#icon--instructors-exist" icon-type="svg" :text="labelForAvailableInstructors"></SimIconText>
         </header>
-        <SimDatalist :items="foundItems" :animate="true">
+        <SimDatalist :items="items" :animate="false">
           <!-- @TODO commented out as a temporary solution until thisis ready to be utilized - Jase -->
           <!-- <div slot="static-before" key="before">
             <input type="search" v-model="itemSearch" placeholder="find..." />
@@ -44,7 +44,7 @@
             </sim-selection>
           </li> -->
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText icon="#icon--checkbox--unchecked" icon-type="svg" :text="`${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+            <SimIconText icon="#icon--checkbox--unchecked" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
           </li>
         </SimDatalist>
       </section>
@@ -145,7 +145,7 @@
       },
       segmentItems() {
         let items = []
-        for(let iterator = this.startSegment; iterator <= this.endSegment; iterator++) {
+        for (let iterator = this.startSegment; iterator <= this.endSegment; iterator++) {
           items = [...new Set([...items, ...this.slide.content.segments[iterator].user_ids])]
         }
         return items
@@ -189,47 +189,47 @@
         return icon
       },
       isItemSelected(itemId) {
-        return this.selectedItems.find((item) => item.id === itemId) ? true : false
+        // return this.selectedItems.find((item) => item.id === itemId) ? true : false
       },
       toggleItemInSelectedItems(itemId, value) {
-        let selectedItemsWasUpdated = false
+        // let selectedItemsWasUpdated = false
 
-        const foundItem = this.foundItems.find((item) => item.id === itemId)
+        // const foundItem = this.foundItems.find((item) => item.id === itemId)
 
-        if (foundItem) {
-          if (value === true) {
-            this.selectedItems.push(foundItem)
-          } else if (value === false) {
-            this.selectedItems.splice(this.selectedItems.indexOf(foundItem), 1)
-          }
-          selectedItemsWasUpdated = true
-        }
+        // if (foundItem) {
+        //   if (value === true) {
+        //     this.selectedItems.push(foundItem)
+        //   } else if (value === false) {
+        //     this.selectedItems.splice(this.selectedItems.indexOf(foundItem), 1)
+        //   }
+        //   selectedItemsWasUpdated = true
+        // }
 
-        let nextSlide = null
-
-        if (this.selectedItems.length > 0) {
-          nextSlide = this.$store.state.slideDeck.slideTemplates.event_time_picker
-          nextSlide.items = this.selectedItems
-          nextSlide.title = this.slide.title
-          // nextSlide.subtitle = this.slide.subtitle
-          nextSlide.start_time = this.slide.content.start_time
-          nextSlide.end_time = this.slide.content.end_time
-          nextSlide.meta = this.slide.meta
-        }
+        // let nextSlide = null
+        //
+        // if (this.selectedItems.length > 0) {
+        //   nextSlide = this.$store.state.slideDeck.slideTemplates.event_time_picker
+        //   // nextSlide.items = this.selectedItems
+        //   nextSlide.title = this.slide.title
+        //   // nextSlide.subtitle = this.slide.subtitle
+        //   nextSlide.start_time = this.slide.content.start_time
+        //   nextSlide.end_time = this.slide.content.end_time
+        //   nextSlide.meta = this.slide.meta
+        // }
 
         const currentSlide = this.slide
 
-        currentSlide.content.selectedItems = this.selectedItems
+        // currentSlide.content.selectedItems = this.selectedItems
         currentSlide.content.itemSearch = this.itemSearch
-        currentSlide.content.foundItems = this.foundItems
+        // currentSlide.content.foundItems = this.foundItems
 
-        if (selectedItemsWasUpdated) {
-          this.$emit('theSlideHasAnUpdate', {
-            currentSlide,
-            nextSlide,
-            nextControl: {text: 'Next'},
-          })
-        }
+        // if (selectedItemsWasUpdated) {
+        //   this.$emit('theSlideHasAnUpdate', {
+        //     currentSlide,
+        //     nextSlide,
+        //     nextControl: {text: 'Next'},
+        //   })
+        // }
       },
     },
   }
