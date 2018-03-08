@@ -274,7 +274,7 @@
 
         const meta = {}
         meta.initialEventDuration = parseFloat(this.block.duration)
-        
+
         this.$store.commit('resetHistory')
         this.$store.commit('addASlide',
           {
@@ -292,6 +292,8 @@
               itemSearch: '',
               start_time: block.startTime,
               end_time: block.startTime + block.duration,
+              segment_start: (block.startTime * 2),
+              segment_end: (((block.startTime + block.duration) * 2) - 1),
               segments: block.segments,
             },
             meta,
@@ -325,7 +327,7 @@
           startTime = _cap(startTime, 0, this.block.limits.starting, this.block.limits.ending)
         }
 
-        addEventListener('transitionend', this.updatePosition)
+        // this.$el.addEventListener('transitionend', this.updatePosition)
         this.updatePosition()
 
         this.$store.commit('updateBubblePosition', {
@@ -341,7 +343,7 @@
         this.$emit('block-was-updated')
         removeEventListener('mousemove', this.move)
         removeEventListener('mouseup', this.doneMoving)
-        removeEventListener('transitionend', this.updatePosition)
+        // this.$el.removeEventListener('transitionend', this.updatePosition)
       },
       startMove(event) {
         if (event.which === 1) {

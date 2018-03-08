@@ -344,7 +344,6 @@
         this.updateBlocks()
       },
       createPendingBlock(block) {
-        console.log('create pending', block)
         this.pendingEvent = {
           ...block,
           duration: this.initialEventLength,
