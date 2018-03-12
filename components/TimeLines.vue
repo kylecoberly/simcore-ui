@@ -1,7 +1,11 @@
 <template lang="html">
   <transition name="fade">
     <ul class="sim-timelines">
-      <li v-for="segment in totalSegments" @dblclick.stop="dblClickCreateTimeBlock($event, segment-1)" @mousedown="mousedownCreateTimeBlock($event, segment-1)" :class="setHourClasses(segment-1)">
+      <li v-for="segment in totalSegments"
+        :class="setHourClasses(segment-1)"
+        @dblclick.stop="dblClickCreateTimeBlock($event, segment-1)"
+        @mousedown="mousedownCreateTimeBlock($event, segment-1)"
+        >
         <template v-if="showLineNumbersAsTime">
           <div v-if="segment === 13" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--noon">
             <SimIconText icon="fa-sun-o"></SimIconText>
@@ -39,7 +43,7 @@
       },
       action: {
         type: String,
-        default: 'mousedown'
+        default: null
       },
       showHalfHourTicks: {
         type: Boolean,

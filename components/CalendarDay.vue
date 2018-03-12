@@ -8,7 +8,7 @@
       <SimTimeLines v-if="shouldShowTimelines"
                     class="sim-calendar--grid--day--timelines"
                     mode="hours"
-                    action="dblClick"
+                    :action="timelineAction"
                     :start="0"
                     :end="24"
                     @create-time-block="createTimeBlock"
@@ -290,6 +290,9 @@
       expandIcon() {
         return this.showExpandedWeek && this.isInActiveWeek ? '#icon--control--contract' : '#icon--control--expand'
       },
+      timelineAction() {
+        return this.isInstructorContext ? 'dblClick' : null
+      }
     },
     methods: {
       pluralize(count, single, other) {

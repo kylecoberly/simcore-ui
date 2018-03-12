@@ -232,9 +232,16 @@
       },
       blockStyles() {
         const styles = []
+
+        // @TODO - Remove this once the backend is only returning startTime - Jase
+        // if (this.block.hasOwnProperty('start')) {
+        //   window.console.log('has start')
+        //   this.block.startTime = this.block.start
+        //   delete this.block.start
+        // }
+
         styles.push(`--start: ${this.block.startTime - this.timeShiftOffset}`)
         styles.push(`--duration: ${this.block.duration}`)
-
         styles.push(`--segment-size: ${this.segmentSize}`)
 
         return styles.join(';')
@@ -302,8 +309,8 @@
 
       // ---------- Move ----------
       updatePosition() {
-        const newPosition = this.$el.getBoundingClientRect()
         if (this.canHaveABubble) {
+          const newPosition = this.$el.getBoundingClientRect()
           this.$nextTick(() => {
             this.$store.commit('updateBubblePosition', {
               domPosition: this.$el.getBoundingClientRect(),
@@ -312,9 +319,9 @@
 
             this.packageSlideContent()
           })
-        }
 
-        this.block.position = newPosition
+          this.block.position = newPosition
+        }
       },
       move(event) {
         const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
@@ -327,14 +334,8 @@
           startTime = _cap(startTime, 0, this.block.limits.starting, this.block.limits.ending)
         }
 
-        // this.$el.addEventListener('transitionend', this.updatePosition)
-        this.updatePosition()
-
-        this.$store.commit('updateBubblePosition', {
-          domPosition: this.$el.getBoundingClientRect(),
-          offset: this.offset,
-        })
         this.block.startTime = startTime
+        this.updatePosition()
       },
       doneMoving() {
         this.updatePosition()
@@ -343,7 +344,6 @@
         this.$emit('block-was-updated')
         removeEventListener('mousemove', this.move)
         removeEventListener('mouseup', this.doneMoving)
-        // this.$el.removeEventListener('transitionend', this.updatePosition)
       },
       startMove(event) {
         if (event.which === 1) {
@@ -369,7 +369,6 @@
       startStretchRight(event) {
         if (event.which === 1) {
           event.preventDefault()
-          // event.stopPropagation()
           this.stretchDirection = 'right'
           this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
@@ -391,7 +390,6 @@
       startStretchDown(event) {
         if (event.which === 1) {
           event.preventDefault()
-          // event.stopPropagation()
           this.stretchDirection = 'down'
           this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
@@ -414,7 +412,6 @@
       startStretchLeft(event) {
         if (event.which === 1) {
           event.preventDefault()
-          // event.stopPropagation()
           this.stretchDirection = 'left'
           this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)
@@ -437,7 +434,6 @@
       startStretchUp(event) {
         if (event.which === 1) {
           event.preventDefault()
-          // event.stopPropagation()
           this.stretchDirection = 'up'
           this.metrics = _getMetrics(event, this.$el, this.variables.maximumDuration)
           this.$emit('is-stretching', true)

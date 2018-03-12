@@ -70,9 +70,6 @@
       <div class="sim-calendar--header--mode" v-if="canScheduleEvents">
         <SimSwitch v-model="contextSwitch" left-label="My Availability" right-label="Schedule Events"/>
       </div>
-      <!-- <div class="sim-calendar--header--mode">
-        <SimSwitch v-model="showExpandedWeek" left-label="" right-label="Expand Week"/>
-      </div> -->
       <div class="sim-calendar--header--controls sim-calendar--header--controls--days">
         <span @click="loadPrevDay">
           <SimIconText icon="fa-arrow-left fa-fw"></SimIconText>
@@ -210,6 +207,7 @@
           </div>
           <div class="sim-calendar--aside--body">
             <SimTimePicker orientation="y"
+                          timeline-action="mousedown"
                           :blocks="currentUserAvailabilityBlocksForCurrentDate"
                           :date="date"
                           :should-show-date="true"

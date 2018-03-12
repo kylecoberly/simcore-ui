@@ -27,12 +27,12 @@
         <header class="text--blue--lighter">
           <SimIconText icon="#icon--instructors-exist" icon-type="svg" :text="labelForAvailableInstructors"></SimIconText>
         </header>
-        <SimDatalist :items="items" :animate="true">
+        <SimDatalist :items="items" :animate="true" style="--selection-color: var(--green)">
           <!-- @TODO commented out as a temporary solution until this is ready to be utilized - Jase -->
           <!-- <div slot="static-before" key="before">
             <input type="search" v-model="itemSearch" placeholder="find..." />
           </div> -->
-          <!-- <li slot="item" slot-scope="props" :key="props.item.id">
+          <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
             <sim-selection
               :item="props.item"
               :item-id="props.item.id"
@@ -40,11 +40,10 @@
               :should-be-selected="isItemSelected(props.item.id)"
               @toggle="toggleItemInSelectedItems"
             >
-              {{ props.item.lastname }}, {{ props.item.firstname }}
+              {{props.item.id}}: {{ props.item.lastname }}, {{ props.item.firstname }}
+              <small class="ghost" v-if="props.item.department_id">({{ getItemName(departments, props.item.department_id) }})</small>
             </sim-selection>
-          </li> -->
-          <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText icon="#icon--checkbox--unchecked" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+            <!-- <SimIconText icon="#icon--checkbox--unchecked" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText> -->
           </li>
         </SimDatalist>
       </section>
@@ -131,6 +130,9 @@
       })
     },
     computed: {
+      departments() {
+        return this.$store.state.user.departments
+      },
       segmentItems() {
         let items
         let user_ids
@@ -167,7 +169,7 @@
         return this.items.length
       },
       labelForAvailableInstructors() {
-        return this.thereAreSpecificItems ? 'Other Available Instructors' : 'Available Instructors'
+        return this.thereAreSpecificItems ? 'Available Instructors' : 'Available Instructors'
       },
     },
     methods: {
@@ -181,6 +183,12 @@
       },
       isItemSelected(itemId) {
         // return this.selectedItems.find((item) => item.id === itemId) ? true : false
+      },
+      getDepartmentName(id) {
+          const department = this.departments.find((item) => item.id === id)
+          if(department && department.hasOwnProperty('name')) {
+              return department.name
+          }
       },
       toggleItemInSelectedItems(itemId, value) {
         // let selectedItemsWasUpdated = false
