@@ -39,6 +39,8 @@ function filterData(commit, state, filtersToApply) {
     'setFilteredBlocks',
     { date: moment(), blocks: filteredBlocks },
   )
+
+  commit('setIsLoading', false)
 }
 
 const availabilities = {
@@ -48,6 +50,7 @@ const availabilities = {
       specific: [],
       nonspecific: [],
     },
+    isLoading: false,
     last_updated: null,
     instructorFilterSlots: {},
     // {
@@ -114,6 +117,9 @@ const availabilities = {
     setInstructorsWithAvailabilityBlocks(state, availabilityBlocks) {
       state.instructorsWithAvailabilityBlocks = availabilityBlocks
     },
+    setIsLoading(state, value) {
+      state.isLoading = value
+    },
   },
   actions: {
     filterInstructorAvailabilityBlocks({ commit, state }, filtersToApply) {
@@ -122,6 +128,7 @@ const availabilities = {
       }
     },
     getInstructorAvailabilitySegments({ commit, state }, { baseUrl, userId, startDate, endDate, mock, filtersToApply }) {
+      commit('setIsLoading', true)
       axios.get(`${baseUrl}${endpoint}/${userId}/${action}?start_date=${startDate}&end_date=${endDate}&key_by=user_id&mock=${mock}`)
         .then((response) => {
           const allInstructorAvailabilityBlocks             = response.data.users
