@@ -313,7 +313,6 @@
         aggregateUserAvailabilityBlocks: [],
         allBlocks: [],
         monthDays: {},
-        weekDays: {},
       }
     },
     created() {
@@ -335,29 +334,8 @@
         this.$store.commit('setInstructors', Object.values(response.data.users))
       })
 
-      const firstDayOfTheMonth = moment(this.activeMoment).startOf('month').format('YYYY-MM-DD 00:00:00')
-      const lastDayOfTheMonth = moment(this.activeMoment).endOf('month').format('YYYY-MM-DD 23:59:59')
-
-      this.$store.dispatch(
-        'getInstructorAvailabilitySegments',
-        {
-          baseUrl: this.$store.state.base_url,
-          userId: this.$store.state.currentUser.id,
-          startDate: firstDayOfTheMonth,
-          endDate: lastDayOfTheMonth,
-          mock: this.$store.state.mock,
-        },
-      )
-
-      const userAvailabilitiesPromise = currentUser.availabilities(
-        this.$store.state.base_url,
-        this.$store.state.currentUser.id,
-        firstDayOfTheMonth,
-        lastDayOfTheMonth,
-      )
-      userAvailabilitiesPromise.then((response) => {
-        this.$store.commit('setCurrentUserAvailabilities', { blocks: response.data.dates, date: this.date })
-      })
+      this.fetchInstructorAvailabilitySegments(this.activeMoment)
+      this.fetchCurrentUserAvailabilities(this.activeMoment)
 
       this.eventBlocks                      = this.$store.state.events.blocks
       this.pendingEventBlocks               = this.$store.state.events.pendingBlocks
@@ -376,6 +354,8 @@
       this.setTheActiveDateToToday()
       this.resetInactiveInstructors()
       this.addSlotToActiveInstructorsList()
+
+      this.dateFormat = this.$store.state.calendar.settings.date_format.raw
 
       // When the week/month is updated, refresh this day's currentUserAvailabilityBlocks.
       this.$store.watch(this.$store.getters.getActiveDate, () => {
@@ -399,9 +379,6 @@
             this.$store.state.user.availabilities[date],
           )
 
-          if (this.weekDays[date]) {
-            this.$set(this.weekDays[date], 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
-          }
           this.$set(this.monthDays[date], 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
         }
       })
@@ -414,9 +391,6 @@
             this.$store.state.events.pendingBlocks[date],
           )
 
-          if (this.weekDays[date]) {
-            this.$set(this.weekDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
-          }
           this.$set(this.monthDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
         }
       })
@@ -561,6 +535,15 @@
       },
     },
     watch: {
+      activeMoment(newDate, oldDate) {
+        if (!moment(newDate).isSame(oldDate, 'month')) {
+          if (this.isCoordinatorContext) {
+            this.fetchInstructorAvailabilitySegments(newDate)
+          } else {
+            this.fetchCurrentUserAvailabilities(newDate)
+          }
+        }
+      },
       aggregateUserAvailabilityBlocks() {
         const startOfWeek = moment(this.activeMoment).startOf('week')
         const startOfMonth = moment(this.activeMoment).startOf('month')
@@ -571,19 +554,7 @@
         const activeWeekDays = this.setDays(startOfWeek, weekLimit)
         const activeMonthDays = this.setDays(startOfMonth, monthLimit)
 
-        this.weekDays = {}
         this.monthDays = {}
-
-        _.each(activeWeekDays, (weekDay) => {
-          this.$set(this.weekDays, [weekDay], {
-            date: weekDay,
-            currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[weekDay] || [],
-            aggregateUserAvailabilityBlocks: this.$store.state.availabilities.filteredBlocks[weekDay] || {},
-            allBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks[weekDay] || {},
-            eventBlocks: this.eventBlocks[weekDay] || [],
-            pendingEventBlocks: this.pendingEventBlocks[weekDay] || [],
-          })
-        })
 
         _.each(activeMonthDays, (monthDay) => {
           this.$set(this.monthDays, [monthDay], {
@@ -598,6 +569,13 @@
         })
       },
       contextSwitch() {
+        const date = moment(this.activeMoment).format(this.dateFormat)
+        this.$store.commit('setActiveDate', date)
+        if (this.isCoordinatorContext) {
+          this.fetchInstructorAvailabilitySegments(date)
+        } else {
+          this.fetchCurrentUserAvailabilities(date)
+        }
         this.closeBubble()
       },
       calendarIsUpdating(value) {
@@ -631,15 +609,38 @@
       },
     },
     methods: {
+      fetchInstructorAvailabilitySegments(date) {
+        const firstDayOfTheMonth = moment(date).startOf('month').format('YYYY-MM-DD 00:00:00')
+        const lastDayOfTheMonth = moment(date).endOf('month').format('YYYY-MM-DD 23:59:59')
+
+        this.$store.dispatch(
+          'getInstructorAvailabilitySegments',
+          {
+            baseUrl: this.$store.state.base_url,
+            userId: this.$store.state.currentUser.id,
+            startDate: firstDayOfTheMonth,
+            endDate: lastDayOfTheMonth,
+            mock: this.$store.state.mock,
+          },
+        )
+      },
+      fetchCurrentUserAvailabilities(date) {
+        const firstDayOfTheMonth = moment(date).startOf('month').format('YYYY-MM-DD 00:00:00')
+        const lastDayOfTheMonth = moment(date).endOf('month').format('YYYY-MM-DD 23:59:59')
+
+        const userAvailabilitiesPromise = currentUser.availabilities(
+          this.$store.state.base_url,
+          this.$store.state.currentUser.id,
+          firstDayOfTheMonth,
+          lastDayOfTheMonth,
+        )
+        userAvailabilitiesPromise.then((response) => {
+          this.$store.commit('setCurrentUserAvailabilities', { blocks: response.data.dates, date: this.date })
+        })
+      },
       toggleExpandedWeek() {
         this.showExpandedWeek = !this.showExpandedWeek
         this.$store.commit('setCalendarExpandWeek', this.showExpandedWeek)
-      },
-      // @TODO move to common utilities or use Lowdash? - Jase
-      sortItemsByProperty(items, property) {
-        items.sort((a, b) => {
-          return (a[property] > b[property]) - (a[property] < b[property])
-        })
       },
       addSlotToActiveInstructorsList() {
         this.activeInstructors.push(
@@ -681,82 +682,49 @@
 
         if (!this.inactiveInstructors.includes(item)) {
           this.inactiveInstructors.push(item)
-          this.sortItemsByProperty(this.inactiveInstructors, 'lastname')
+          _.sortBy(this.inactiveInstructors, ['lastname', 'firstname'])
         }
       },
       resetInactiveInstructors() {
         this.inactiveInstructors = JSON.parse(JSON.stringify(this.instructors)) // cheap cologne :) - Jase
-        this.sortItemsByProperty(this.inactiveInstructors, 'lastname')
-      },
-      runLodestar() {
-        this.closeBubble()
-        lodestar(this.$el, 'lodestar', '.sim-calendar--filters .sim-calendar--aside--body', 'value')
-      },
-      isCurrentDay(date) {
-        return moment().isSame(date, 'day')
+        _.sortBy(this.inactiveInstructors, ['lastname', 'firstname'])
       },
       closeBubble() {
         this.$store.commit('toggleBubbleVisibility', false)
       },
       setDays(start, limit) {
-        const dateStrings = [start.format(this.$store.state.calendar.settings.date_format.raw)]
+        const dateStrings = [start.format(this.dateFormat)]
 
         for (let i = 1; i < limit; i++) {
-          dateStrings.push(start.add(1, 'day')
-            .format(this.$store.state.calendar.settings.date_format.raw))
+          dateStrings.push(start.add(1, 'day').format(this.dateFormat))
         }
 
         return dateStrings
       },
       loadNextMonth() {
-        const date = moment(this.activeMoment).add(1, 'month')
-          .format(this.$store.state.calendar.settings.date_format.raw)
-
+        const date = moment(this.activeMoment).add(1, 'month').format(this.dateFormat)
         this.closeBubble()
         this.$store.commit('setActiveDate', date)
       },
       loadPreviousMonth() {
-        const date = moment(this.activeMoment).subtract(1, 'month')
-          .format(this.$store.state.calendar.settings.date_format.raw)
-
+        const date = moment(this.activeMoment).subtract(1, 'month').format(this.dateFormat)
         this.closeBubble()
         this.$store.commit('setActiveDate', date)
       },
       loadNextDay() {
-        const date = this.activeMoment.add(1, 'day')
-          .format(this.$store.state.calendar.settings.date_format.raw)
-
-        this.$store.commit('setActiveDate', date)
+        const date = moment(this.activeMoment).add(1, 'day').format(this.dateFormat)
         this.closeBubble()
+        this.$store.commit('setActiveDate', date)
       },
       loadPrevDay() {
-        const date = this.activeMoment.subtract(1, 'day')
-          .format(this.$store.state.calendar.settings.date_format.raw)
-
-        this.$store.commit('setActiveDate', date)
+        const date = moment(this.activeMoment).subtract(1, 'day').format(this.dateFormat)
         this.closeBubble()
+        this.$store.commit('setActiveDate', date)
       },
       setTheActiveDateToToday() {
+        const date = moment().format(this.dateFormat)
         this.closeBubble()
-        this.$store.commit('setActiveDate', moment().format(this.$store.state.calendar.settings.date_format.raw))
-      },
-      displayHour(hour) {
-        hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour) // (hour % 2 === 0 ? hour : ''))
-
-        return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
-      },
-      showDayNumber(date) {
-        date = date.split('-')
-
-        return parseInt(date[2])
-      },
-      halfGlyph(number, singularUnit, pluralUnits) {
-        const grammaticalUnit = number > 0 && number <= 1 ? singularUnit : pluralUnits
-        const glyph = number.toString()
-          .replace(/\.5/, '½')
-          .replace(/^0/, '') || 0
-
-        return `${glyph} ${grammaticalUnit}`
+        this.$store.commit('setActiveDate', date)
       },
       applyFilter(type, data) {
           this.filters.find((filter) => filter.type === type).items = data
@@ -856,6 +824,7 @@
       }
 
       .sim-calendar--grid--day--timelines {
+        cursor: cell;
         left: 50%;
       }
     }

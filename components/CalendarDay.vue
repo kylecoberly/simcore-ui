@@ -36,6 +36,7 @@
             :show-controls="showTimeBlockControls"
             @remove-time-block="removeTimeBlock"
             @block-was-updated="blockWasUpdated"
+            @time-block-clicked="availabilityTimeBlockClicked"
             />
         </div>
       </template>
@@ -83,7 +84,7 @@
             :index="index"
             :show-controls="false"
             :settings="filteredBlockSettings"
-            @time-block-clicked="timeBlockClicked"
+            @time-block-clicked="aggregateTimeBlockClicked"
           />
 
           <SimTimeBlock v-else-if="thereIsNoDataForThisDay"
@@ -291,7 +292,7 @@
         return this.showExpandedWeek && this.isInActiveWeek ? '#icon--control--contract' : '#icon--control--expand'
       },
       timelineAction() {
-        return this.isInstructorContext ? 'dblClick' : null
+        return this.isInstructorContext ? 'mousedown' : null
       }
     },
     methods: {
@@ -356,7 +357,13 @@
           },
         }
       },
-      timeBlockClicked(block) {
+      availabilityTimeBlockClicked() {
+        // @TODO interaction evaluation needed for dealing with timeblocks - Jase
+        // if (!this.showExpandedWeek) {
+        //   this.toggleExpandedWeek()
+        // }
+      },
+      aggregateTimeBlockClicked(block) {
         if (this.showExpandedWeek || this.bubbleIsOpen) {
           this.createPendingBlock(block)
         } else {

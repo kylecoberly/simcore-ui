@@ -35,7 +35,7 @@ export default {
         const key = Object.keys(date)
         const dateOnlyKey = key[0].slice(0, -9) // TODO: Replace this with simpler timestamps when Rick's update is done. - Chad
 
-        const startOffset = date[key[0]].start * 2
+        const startOffset = date[key[0]].startTime * 2
 
         const durationOffset = (date[key[0]].duration * 2)
         for (
@@ -55,8 +55,8 @@ export default {
             blocksByDate[dateOnlyKey][currentBlock].user_ids = []
           }
 
-          if (!blocksByDate[dateOnlyKey][currentBlock].start) {
-            blocksByDate[dateOnlyKey][currentBlock].start = currentBlock
+          if (!blocksByDate[dateOnlyKey][currentBlock].startTime) {
+            blocksByDate[dateOnlyKey][currentBlock].startTime = currentBlock
           }
 
           if (!_.includes(blocksByDate[dateOnlyKey][currentBlock].user_ids, userId)) {
