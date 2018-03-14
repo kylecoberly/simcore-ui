@@ -621,6 +621,11 @@
             startDate: firstDayOfTheMonth,
             endDate: lastDayOfTheMonth,
             mock: this.$store.state.mock,
+            filtersToApply: {
+              eventLength: this.filterEventLength,
+              specificInstructorIds: this.activeInstructorIds,
+              nonspecificInstructorIds: _.map(this.activeInstructors, (instructor) => instructor.id),
+            },
           },
         )
       },
