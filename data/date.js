@@ -24,4 +24,3 @@ export const formatBlockHoursForDisplay = (duration) => {
 
   return `${output} ${(duration > 0 && duration <= 1 ? 'hour' : 'hours')}`
 }
-

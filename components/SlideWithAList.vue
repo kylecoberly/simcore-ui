@@ -18,7 +18,7 @@
         </header>
         <SimDatalist :items="specificItems" :animate="false">
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText icon="#icon--checkbox--checked" icon-type="svg" :text="`${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+            <SimIconText icon="#icon--checkbox--checked" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
           </li>
         </SimDatalist>
       </section>
@@ -27,12 +27,12 @@
         <header class="text--blue--lighter">
           <SimIconText icon="#icon--instructors-exist" icon-type="svg" :text="labelForAvailableInstructors"></SimIconText>
         </header>
-        <SimDatalist :items="items" :animate="false">
-          <!-- @TODO commented out as a temporary solution until thisis ready to be utilized - Jase -->
+        <SimDatalist :items="items" :animate="true" style="--selection-color: var(--green)">
+          <!-- @TODO commented out as a temporary solution until this is ready to be utilized - Jase -->
           <!-- <div slot="static-before" key="before">
             <input type="search" v-model="itemSearch" placeholder="find..." />
           </div> -->
-          <!-- <li slot="item" slot-scope="props" :key="props.item.id">
+          <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
             <sim-selection
               :item="props.item"
               :item-id="props.item.id"
@@ -40,11 +40,10 @@
               :should-be-selected="isItemSelected(props.item.id)"
               @toggle="toggleItemInSelectedItems"
             >
-              {{ props.item.lastname }}, {{ props.item.firstname }}
+              {{props.item.id}}: {{ props.item.lastname }}, {{ props.item.firstname }}
+              <small class="ghost" v-if="props.item.department_id">({{ getItemName(departments, props.item.department_id) }})</small>
             </sim-selection>
-          </li> -->
-          <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText icon="#icon--checkbox--unchecked" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+            <!-- <SimIconText icon="#icon--checkbox--unchecked" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText> -->
           </li>
         </SimDatalist>
       </section>
@@ -129,40 +128,34 @@
       this.$store.watch(this.$store.getters.currentSlide, (currentSlide) => {
         this.$set(this, 'slide', currentSlide)
       })
-
-      // this.bubbleElement = this.$el.closest('.sim-bubble')
-      // this.bubbleElement.style.setProperty('--width-factor', this.slide.meta.slideWidthFactor)
-    },
-    destroyed() {
-      // this.bubbleElement.style.removeProperty('--width-factor')
     },
     computed: {
-      startSegment() {
-        return (this.slide.content.start_time * 2)
-      },
-      endSegment() {
-        return (this.slide.content.end_time * 2) - 1
+      departments() {
+        return this.$store.state.user.departments
       },
       segmentItems() {
-        let items = []
-        for (let iterator = this.startSegment; iterator <= this.endSegment; iterator++) {
-          items = [...new Set([...items, ...this.slide.content.segments[iterator].user_ids])]
+        let items
+        let user_ids
+        for (let iterator = this.slide.content.segment_start; iterator <= this.slide.content.segment_end; iterator++) {
+          user_ids = this.slide.content.segments[iterator].user_ids
+          items = items ? _.intersection(items, user_ids) : user_ids
         }
+
         return items
       },
       specificItems() {
         return this.slide.content.specificItems
-        ? getListFromIds(this.slide.content.specificItems, this.$store.state.user.instructors, 'lastname')
-        : null
+          ? getListFromIds(this.slide.content.specificItems, this.$store.state.user.instructors, 'lastname')
+          : null
       },
       items() {
         let items = this.segmentItems.filter((item) => {
           return !this.slide.content.specificItems.includes(parseInt(item, 10))
         })
-        // const items = this.slide.content.items
+
         return items
-            ? getListFromIds(items, this.$store.state.user.instructors, 'lastname')
-            : null
+          ? getListFromIds(items, this.$store.state.user.instructors, 'lastname')
+          : null
       },
       foundItems() {
         return sortByKey(this.items.filter(item => {
@@ -176,7 +169,7 @@
         return this.items.length
       },
       labelForAvailableInstructors() {
-        return this.thereAreSpecificItems ? 'Other Available Instructors' : 'Available Instructors'
+        return this.thereAreSpecificItems ? 'Available Instructors' : 'Available Instructors'
       },
     },
     methods: {
@@ -190,6 +183,12 @@
       },
       isItemSelected(itemId) {
         // return this.selectedItems.find((item) => item.id === itemId) ? true : false
+      },
+      getDepartmentName(id) {
+          const department = this.departments.find((item) => item.id === id)
+          if(department && department.hasOwnProperty('name')) {
+              return department.name
+          }
       },
       toggleItemInSelectedItems(itemId, value) {
         // let selectedItemsWasUpdated = false

@@ -8,7 +8,7 @@
       <SimTimeLines v-if="shouldShowTimelines"
                     class="sim-calendar--grid--day--timelines"
                     mode="hours"
-                    action="dblClick"
+                    :action="timelineAction"
                     :start="0"
                     :end="24"
                     @create-time-block="createTimeBlock"
@@ -36,6 +36,7 @@
             :show-controls="showTimeBlockControls"
             @remove-time-block="removeTimeBlock"
             @block-was-updated="blockWasUpdated"
+            @time-block-clicked="availabilityTimeBlockClicked"
             />
         </div>
       </template>
@@ -83,7 +84,7 @@
             :index="index"
             :show-controls="false"
             :settings="filteredBlockSettings"
-            @time-block-clicked="timeBlockClicked"
+            @time-block-clicked="aggregateTimeBlockClicked"
           />
 
           <SimTimeBlock v-else-if="thereIsNoDataForThisDay"
@@ -290,6 +291,9 @@
       expandIcon() {
         return this.showExpandedWeek && this.isInActiveWeek ? '#icon--control--contract' : '#icon--control--expand'
       },
+      timelineAction() {
+        return this.isInstructorContext ? 'mousedown' : null
+      }
     },
     methods: {
       pluralize(count, single, other) {
@@ -344,7 +348,6 @@
         this.updateBlocks()
       },
       createPendingBlock(block) {
-        console.log('create pending', block)
         this.pendingEvent = {
           ...block,
           duration: this.initialEventLength,
@@ -354,7 +357,13 @@
           },
         }
       },
-      timeBlockClicked(block) {
+      availabilityTimeBlockClicked() {
+        // @TODO interaction evaluation needed for dealing with timeblocks - Jase
+        // if (!this.showExpandedWeek) {
+        //   this.toggleExpandedWeek()
+        // }
+      },
+      aggregateTimeBlockClicked(block) {
         if (this.showExpandedWeek || this.bubbleIsOpen) {
           this.createPendingBlock(block)
         } else {

@@ -21,6 +21,7 @@
       <SimTimeLines :mode="timelineMode"
                     :start="startTime"
                     :end="endTime"
+                    :action="timelineAction"
                     :show-half-hour-ticks="showHalfHourTicks"
                     @create-time-block="createTimeBlock"
                     />
@@ -63,6 +64,10 @@
       shouldShowDate: {
         type: Boolean,
         default: false,
+      },
+      timelineAction: {
+        type: String,
+        default: null
       },
       timelineMode: {
         type: String,

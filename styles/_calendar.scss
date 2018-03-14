@@ -445,6 +445,7 @@
       z-index: 2;
       background-color: var(--blue-film-light);
 
+      .local--day--time-blocks,
       .local--day--aggregate-blocks {
         mix-blend-mode: multiply;
       }

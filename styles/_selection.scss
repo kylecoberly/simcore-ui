@@ -12,8 +12,6 @@
     }
   }
   input {
-    --selection-unchecked-icon: var(--icon-circle-thin, '\f1db');
-    --selection-checked-icon: var(--icon-check-circle, '\f058');
     appearance: none;
     outline: none;
     font: inherit;
@@ -21,24 +19,24 @@
     color: inherit;
     width: 1em;
     height: 1em;
-    margin: 0 1ch 0 0;
+    margin: 0 1em 0 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    transform: scale(1.5);
-    will-change: transform;
-    transition: transform var(--ms, var(--default-ms, 350ms)) ease-out;
-    &:active:not(:disabled) {
-      transform: scale(.9);
-    }
     &::before {
-      content: var(--selection-unchecked-icon);
+      content: var(--selection-unchecked-icon, var(--icon-circle-thin, '\f1db'));
       font-family: var(--icon-font-family, 'FontAwesome');
+      transform: scale(1.5);
+      will-change: transform;
+      transition: transform var(--ms, var(--default-ms, 350ms)) ease-out;
+    }
+    &:active:not(:disabled)::before {
+      transform: scale(.9);
     }
     &:checked {
       color: var(--selection-color, var(--action));
       &::before {
-        content: var(--selection-checked-icon);
+        content: var(--selection-checked-icon, var(--icon-check-circle, '\f058'));
       }
     }
   }
