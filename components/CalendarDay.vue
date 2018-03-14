@@ -293,7 +293,7 @@
       },
       timelineAction() {
         return this.isInstructorContext ? 'mousedown' : null
-      }
+      },
     },
     methods: {
       pluralize(count, single, other) {
