@@ -2,8 +2,9 @@ import _ from 'lodash'
 import axios from 'axios'
 import moment from 'moment'
 
-import * as filters from '../data/filters'
-import availabilityFilters from '../external/availabilities'
+import filter from '../data/availabilities/index'
+import * as cleansers from '../data/availabilities/cleansers'
+import * as transformers from '../data/availabilities/transformers'
 
 const endpoint = 'users'
 const action = 'purview_availabilities'
@@ -16,8 +17,7 @@ function filterData(commit, state, filtersToApply) {
 
   const totalCount = filtersToApply.specificInstructorIds.length
 
-  const filteredBlocks = availabilityFilters
-    .filterInstructorAvailabilityBlocks(
+  const filteredBlocks = filter(
       state.instructorsWithAvailabilityBlocks,
       state.allInstructorAvailabilityBlocks,
     {
@@ -96,8 +96,7 @@ const availabilities = {
       state.allInstructorAvailabilityBlocks = Object.assign({}, availabilityBlocks)
     },
     setAllSegmentsFromInstructorAvailabilityBlocks(state, instructorAvailabilityBlocks) {
-      const segments = availabilityFilters
-        .groupInstructorAvailabilitiesKeyedByDateAndStartTime(instructorAvailabilityBlocks)
+      const segments = cleansers.groupByDateAndStartTime(instructorAvailabilityBlocks)
 
       state.allSegmentsForDates = Object.assign({}, segments)
     },
@@ -126,10 +125,10 @@ const availabilities = {
       axios.get(`${baseUrl}${endpoint}/${userId}/${action}?start_date=${startDate}&end_date=${endDate}&key_by=user_id&mock=${mock}`)
         .then((response) => {
           const allInstructorAvailabilityBlocks             = response.data.users
-          const allSegmentsFromInstructorAvailabilityBlocks = availabilityFilters
-            .groupInstructorAvailabilitiesKeyedByDateAndStartTime(allInstructorAvailabilityBlocks)
+          const allSegmentsFromInstructorAvailabilityBlocks =
+            cleansers.groupByDateAndStartTime(allInstructorAvailabilityBlocks)
           const allBlocksFromInstructorAvailabilitySegments =
-            filters.groupAllInstructorAvailabilityBlocksByDate(
+            cleansers.groupByDate(
               allSegmentsFromInstructorAvailabilityBlocks,
             )
 

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import availabilities from '../external/availabilities'
+import * as timeBlock from './availabilities/timeBlock'
 
 export const transformBlock = (instructorBlock, segments) => {
   const startSegment      = parseInt(_.first(_.keys(segments)), 10)
@@ -10,13 +10,11 @@ export const transformBlock = (instructorBlock, segments) => {
   const transformedBlock = Object.assign({}, instructorBlock)
 
   transformedBlock.numberOfSegments  = numberOfSegments
-  // start is DEPRECATED. Use startTime instead.
-  transformedBlock.start        = availabilities.convertToDecimal(startSegment)
-  transformedBlock.startTime    = availabilities.convertToDecimal(startSegment)
-  transformedBlock.endTime      = availabilities.convertToDecimal(startSegment + numberOfSegments)
+  transformedBlock.startTime    = timeBlock.convertToDecimal(startSegment)
+  transformedBlock.endTime      = timeBlock.convertToDecimal(startSegment + numberOfSegments)
   transformedBlock.startSegment = startSegment
   transformedBlock.endSegment   = endSegment
-  transformedBlock.duration     = availabilities.convertToDecimal(numberOfSegments)
+  transformedBlock.duration     = timeBlock.convertToDecimal(numberOfSegments)
   transformedBlock.segments     = segments
 
   return transformedBlock
