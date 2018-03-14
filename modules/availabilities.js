@@ -121,7 +121,7 @@ const availabilities = {
         filterData(commit, state, filtersToApply)
       }
     },
-    getInstructorAvailabilitySegments({ commit, state }, { baseUrl, userId, startDate, endDate, mock }) {
+    getInstructorAvailabilitySegments({ commit, state }, { baseUrl, userId, startDate, endDate, mock, filtersToApply }) {
       axios.get(`${baseUrl}${endpoint}/${userId}/${action}?start_date=${startDate}&end_date=${endDate}&key_by=user_id&mock=${mock}`)
         .then((response) => {
           const allInstructorAvailabilityBlocks             = response.data.users
@@ -143,7 +143,7 @@ const availabilities = {
             allBlocksFromInstructorAvailabilitySegments,
           )
 
-          filterData(commit, state, { specificInstructorIds: [], eventLength: 1 })
+          filterData(commit, state, filtersToApply)
         })
     },
   },
