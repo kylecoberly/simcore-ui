@@ -1,29 +1,35 @@
 import _ from 'lodash'
 
 import {
-  groupAllInstructorAvailabilityBlocksByDate,
-  groupSegmentsByContiguousTime,
-} from './transformers'
+  groupByDate,
+  groupByDateAndStartTime,
+} from './cleansers'
 
 import {
   filterBlocksByDuration,
+  getBlocksWithAMinimumNumberOfInstructors,
+  getInstructorAvailabilitiesFromAListOfInstructorIds,
   getSpecificBlocksFromAListOfInstructorIds,
 } from './filters'
+
+import {
+  groupSegmentsByContiguousTime,
+} from './transformers'
 
 // Get only exactly the specific instructors.
 // This will by far be the fastest option when possible.
 function filterOnlySpecificInstructors(instructorsWithAvailabilityBlocks, filtersToApply) {
   const specificAndExactInstructors =
-    this.getInstructorAvailabilitiesFromAListOfInstructorIds(
+    getInstructorAvailabilitiesFromAListOfInstructorIds(
       instructorsWithAvailabilityBlocks,
       filtersToApply.instructorSlots.specificInstructorIds,
     )
 
   const allSegmentsFromInstructorAvailabilityBlocks =
-    this.groupByDateAndStartTime(specificAndExactInstructors)
+    groupByDateAndStartTime(specificAndExactInstructors)
 
   const groupedInstructorBlocks =
-    groupAllInstructorAvailabilityBlocksByDate(
+    groupByDate(
       allSegmentsFromInstructorAvailabilityBlocks,
     )
 
@@ -45,7 +51,7 @@ function filterSpecificAndNonSpecificInstructors(allInstructorAvailabilityBlocks
   const blocksWithAMinimumNumberOfInstructors = {}
   _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
     const onlyBlocksWithAllInstructors =
-      this.getBlocksWithAMinimumNumberOfInstructors(
+      getBlocksWithAMinimumNumberOfInstructors(
         instructorBlocks,
         filtersToApply.instructorSlots.totalCount,
       )
@@ -85,7 +91,7 @@ function filterByMinimumRequiredInstructors(allInstructorAvailabilityBlocks, fil
   const instructorAvailabilityBlocksWithAMinimumNumberOfInstructors = {}
   _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
     const onlyBlocksWithAllInstructors =
-      this.getBlocksWithAMinimumNumberOfInstructors(
+      getBlocksWithAMinimumNumberOfInstructors(
         instructorBlocks,
         filtersToApply.instructorSlots.totalCount,
       )
