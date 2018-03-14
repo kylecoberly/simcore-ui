@@ -21,8 +21,6 @@
 </template>
 
 <script>
-  import beans from '../../../test/beanstalk/beans'
-
   import Demobox from '../../../docs/utility/Demobox'
 
   export default {
@@ -35,7 +33,6 @@
       }
     },
     mounted() {
-      beans.run()
     },
   }
 </script>

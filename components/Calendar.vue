@@ -234,7 +234,6 @@
 
   import { lodestar } from '../utilities/animations'
 
-  import availabilities from '../external/availabilities'
   import currentUser from '../external/currentUser'
   import events from '../external/events'
   import eventEditorSlides from '../external/eventEditorSlides'

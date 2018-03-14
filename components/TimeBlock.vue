@@ -274,7 +274,7 @@
 
         const meta = {}
         meta.initialEventDuration = parseFloat(this.block.duration)
-        
+
         this.$store.commit('resetHistory')
         this.$store.commit('addASlide',
           {
