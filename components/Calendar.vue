@@ -125,7 +125,6 @@
             <SimBubble v-if="bubbleIsOpen">
               <SimSlidePresenter :should-hide-navigation-controls="hideSlideNavigationControls"></SimSlidePresenter>
             </SimBubble>
-
             <div class="sim-loader--shield" v-if="isLoading">
               <SimLoader :is-loading="true"></SimLoader>
             </div>
@@ -278,8 +277,6 @@
         lastUpdated: Date.now(), // TODO: Not this. - Chad
         rawUserData: {},
         contextSwitch: false,
-        calendarIsUpdating: false,
-        isLoading: false,
         hideSlideNavigationControls: false,
         showExpandedWeek: this.$store.state.calendar.expand_week,
         showHistoricalData: true,
@@ -532,6 +529,9 @@
       thereAreOnlySpecificInstructors() {
         return (this.specificInstructorCount === this.activeInstructorCount)
       },
+      isLoading() {
+        return this.$store.state.availabilities.isLoading
+      }
     },
     watch: {
       activeMoment(newDate, oldDate) {
@@ -576,9 +576,6 @@
           this.fetchCurrentUserAvailabilities(date)
         }
         this.closeBubble()
-      },
-      calendarIsUpdating(value) {
-        this.isLoading = value
       },
       activeInstructors() {
         this.activeInstructorIds = _.map(this.activeInstructors, (instructor) => instructor.id)
