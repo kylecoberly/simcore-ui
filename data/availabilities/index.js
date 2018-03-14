@@ -89,6 +89,7 @@ function filterSpecificAndNonSpecificInstructors(allInstructorAvailabilityBlocks
 
 function filterByMinimumRequiredInstructors(allInstructorAvailabilityBlocks, filtersToApply) {
   const instructorAvailabilityBlocksWithAMinimumNumberOfInstructors = {}
+  console.log(allInstructorAvailabilityBlocks)
   _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
     const onlyBlocksWithAllInstructors =
       getBlocksWithAMinimumNumberOfInstructors(
@@ -101,6 +102,8 @@ function filterByMinimumRequiredInstructors(allInstructorAvailabilityBlocks, fil
         onlyBlocksWithAllInstructors
     }
   })
+
+  console.log(instructorAvailabilityBlocksWithAMinimumNumberOfInstructors)
 
   const instructorBlocksReducedToSegmentsWithAMinimumNumberOfInstructors = {}
   _.each(instructorAvailabilityBlocksWithAMinimumNumberOfInstructors, (instructorBlocks, key) => {
@@ -143,12 +146,12 @@ export default (
       )
     } else if (filtersToApply.instructorSlots.specificInstructorIds.length > 0) {
       instructorAvailabilityBlocks = filterSpecificAndNonSpecificInstructors(
-        instructorsWithAvailabilityBlocks,
+        allInstructorAvailabilityBlocks,
         filtersToApply,
       )
     } else {
       instructorAvailabilityBlocks = filterByMinimumRequiredInstructors(
-        instructorsWithAvailabilityBlocks,
+        allInstructorAvailabilityBlocks,
         filtersToApply,
       )
     }
