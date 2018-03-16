@@ -280,6 +280,7 @@
         hideSlideNavigationControls: false,
         showExpandedWeek: this.$store.state.calendar.expand_week,
         showHistoricalData: true,
+        calendarIsUpdating: false,
         date: this.$store.state.activeDate.date,
         institutions: [],
         departments: [],
@@ -530,7 +531,7 @@
         return (this.specificInstructorCount === this.activeInstructorCount)
       },
       isLoading() {
-        return this.$store.state.availabilities.isLoading
+        return this.$store.state.availabilities.isLoading // || this.calendarIsUpdating
       }
     },
     watch: {
@@ -626,6 +627,7 @@
         )
       },
       fetchCurrentUserAvailabilities(date) {
+        this.calendarIsUpdating = true
         const firstDayOfTheMonth = moment(date).startOf('month').format('YYYY-MM-DD 00:00:00')
         const lastDayOfTheMonth = moment(date).endOf('month').format('YYYY-MM-DD 23:59:59')
 
@@ -637,6 +639,7 @@
         )
         userAvailabilitiesPromise.then((response) => {
           this.$store.commit('setCurrentUserAvailabilities', { blocks: response.data.dates, date: this.date })
+          this.calendarIsUpdating = false
         })
       },
       toggleExpandedWeek() {
