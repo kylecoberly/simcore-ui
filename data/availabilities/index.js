@@ -6,7 +6,7 @@ import {
 } from './cleansers'
 
 import {
-  filterBlocksByDuration,
+  getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration,
   getBlocksWithAMinimumNumberOfInstructors,
   getInstructorAvailabilitiesFromAListOfInstructorIds,
   getSpecificBlocksFromAListOfInstructorIds,
@@ -48,6 +48,7 @@ function filterOnlySpecificInstructors(instructorsWithAvailabilityBlocks, filter
 
 
 function filterSpecificAndNonSpecificInstructors(allInstructorAvailabilityBlocks, filtersToApply) {
+  console.dir(allInstructorAvailabilityBlocks, filtersToApply)
   const blocksWithAMinimumNumberOfInstructors = {}
   _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
     const onlyBlocksWithAllInstructors =
@@ -89,7 +90,7 @@ function filterSpecificAndNonSpecificInstructors(allInstructorAvailabilityBlocks
 
 function filterByMinimumRequiredInstructors(allInstructorAvailabilityBlocks, filtersToApply) {
   const instructorAvailabilityBlocksWithAMinimumNumberOfInstructors = {}
-  console.log(allInstructorAvailabilityBlocks)
+  console.log(filtersToApply)
   _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
     const onlyBlocksWithAllInstructors =
       getBlocksWithAMinimumNumberOfInstructors(
@@ -102,8 +103,6 @@ function filterByMinimumRequiredInstructors(allInstructorAvailabilityBlocks, fil
         onlyBlocksWithAllInstructors
     }
   })
-
-  console.log(instructorAvailabilityBlocksWithAMinimumNumberOfInstructors)
 
   const instructorBlocksReducedToSegmentsWithAMinimumNumberOfInstructors = {}
   _.each(instructorAvailabilityBlocksWithAMinimumNumberOfInstructors, (instructorBlocks, key) => {
@@ -159,9 +158,16 @@ export default (
     instructorAvailabilityBlocks = allInstructorAvailabilityBlocks
   }
 
-  // Event Length
-  return filterBlocksByDuration(
-    instructorAvailabilityBlocks,
-    filtersToApply.eventLength,
-  )
+  const minimumWithDuration = {}
+  _.forEach(instructorAvailabilityBlocks, (block, date) => {
+    const minimumWithDurations = getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration(
+      block,
+      filtersToApply.eventLength,
+      filtersToApply.instructorSlots.totalCount,
+    )
+
+    minimumWithDuration[date] = _.values(minimumWithDurations)
+  })
+
+  return minimumWithDuration
 }

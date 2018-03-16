@@ -429,43 +429,52 @@ test('getOnlyTheBlocksWithAMinimumNumberOfInstructors', () => {
       startSegment: 28,
       endSegment: 37,
       numberOfSegments: 10,
-      uniqueInstructorIds: ['4112', '3726', '6630', '7475'],
-      numberOfInstructors: 4,
+      uniqueInstructorIds: ['4112', '3726', '6630', '7475', '5938', '2811'],
+      numberOfInstructors: 6,
       segments: {
         '28': { 'user_ids': ['4112'], 'startTime': 28 },
-        '29': { 'user_ids': ['4112'], 'startTime': 29 },
+        '29': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 29 },
         '30': { 'user_ids': ['4112'], 'startTime': 30 },
         '31': { 'user_ids': ['4112'], 'startTime': 31 },
-        '32': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 32 },
-        '33': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 33 },
-        '34': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 34 },
-        '35': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 35 },
-        '36': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 36 },
+        '32': { 'user_ids': ['6630', '7475', '5938', '2811'], 'startTime': 32 },
+        '33': { 'user_ids': ['6630', '7475', '5938', '2811'], 'startTime': 33 },
+        '34': { 'user_ids': ['3726', '4112', '6630', '5938'], 'startTime': 34 },
+        '35': { 'user_ids': ['3726', '4112', '6630', '2811'], 'startTime': 35 },
+        '36': { 'user_ids': ['3726', '4112', '6630', '7475', '2811'], 'startTime': 36 },
         '37': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 37 },
       },
     }
   }
 
   const expectedContiguousTimeBlocks = {
-    '14': {
-      startTime: 14,
-      endTime: 19,
-      duration: 5,
-      startSegment: 28,
-      endSegment: 37,
-      numberOfSegments: 10,
-      uniqueInstructorIds: ['4112', '3726', '6630', '7475'],
+    '14.5': {
+      startTime: 14.5,
+      endTime: 15,
+      duration: 0.5,
+      startSegment: 29,
+      endSegment: 29,
+      numberOfSegments: 1,
+      uniqueInstructorIds: ['3726', '4112', '6630', '7475'],
       numberOfInstructors: 4,
       segments: {
-        '28': { 'user_ids': ['4112'], 'startTime': 28 },
-        '29': { 'user_ids': ['4112'], 'startTime': 29 },
-        '30': { 'user_ids': ['4112'], 'startTime': 30 },
-        '31': { 'user_ids': ['4112'], 'startTime': 31 },
-        '32': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 32 },
-        '33': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 33 },
-        '34': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 34 },
-        '35': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 35 },
-        '36': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 36 },
+        '29': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 29 },
+      },
+    },
+    '16': {
+      startTime: 16,
+      endTime: 19,
+      duration: 3,
+      startSegment: 32,
+      endSegment: 37,
+      numberOfSegments: 6,
+      uniqueInstructorIds: ['6630', '7475', '5938', '2811', '3726', '4112'],
+      numberOfInstructors: 6,
+      segments: {
+        '32': { 'user_ids': ['6630', '7475', '5938', '2811'], 'startTime': 32 },
+        '33': { 'user_ids': ['6630', '7475', '5938', '2811'], 'startTime': 33 },
+        '34': { 'user_ids': ['3726', '4112', '6630', '5938'], 'startTime': 34 },
+        '35': { 'user_ids': ['3726', '4112', '6630', '2811'], 'startTime': 35 },
+        '36': { 'user_ids': ['3726', '4112', '6630', '7475', '2811'], 'startTime': 36 },
         '37': { 'user_ids': ['3726', '4112', '6630', '7475'], 'startTime': 37 },
       },
     }
@@ -479,6 +488,179 @@ test('getOnlyTheBlocksWithAMinimumNumberOfInstructors', () => {
 
   expect(actualAvailabilityBlocks).toEqual(expectedContiguousTimeBlocks)
 })
+
+test('getOnlyTheBlocksWithAMinimumNumberOfInstructorsForALongerMinimumDuration', () => {
+  const startingContiguousTimeBlocks = {
+    '0.5': {
+      startTime: 0.5,
+      endTime: 5,
+      duration: 4.5,
+      startSegment: 1,
+      endSegment: 9,
+      numberOfSegments: 9,
+      uniqueInstructorIds: ['1', '2', '3'],
+      numberOfInstructors: 3,
+      segments: {
+        '1': { 'user_ids': ['1', '2', '3'], 'startTime': 1 },
+        '2': { 'user_ids': ['1', '2', '3'], 'startTime': 2 },
+        '3': { 'user_ids': ['1', '2', '3'], 'startTime': 3 },
+        '4': { 'user_ids': ['1', '3'], 'startTime': 4 },
+        '5': { 'user_ids': ['1', '3'], 'startTime': 5 },
+        '6': { 'user_ids': ['1', '3'], 'startTime': 6 },
+        '7': { 'user_ids': ['1', '3'], 'startTime': 7 },
+        '8': { 'user_ids': ['1'], 'startTime': 8 },
+        '9': { 'user_ids': ['1'], 'startTime': 9 },
+      }
+    },
+    '14': {
+      startTime: 14,
+      endTime: 19,
+      duration: 5,
+      startSegment: 28,
+      endSegment: 37,
+      numberOfSegments: 10,
+      uniqueInstructorIds: ['2', '4', '5', '3', '6', '7'],
+      numberOfInstructors: 6,
+      segments: {
+        '28': { 'user_ids': ['2'], 'startTime': 28 },
+        '29': { 'user_ids': ['4', '2', '5', '3'], 'startTime': 29 },
+        '30': { 'user_ids': ['2'], 'startTime': 30 },
+        '31': { 'user_ids': ['2'], 'startTime': 31 },
+        '32': { 'user_ids': ['5', '3', '6', '7'], 'startTime': 32 },
+        '33': { 'user_ids': ['5', '3', '6', '7'], 'startTime': 33 },
+        '34': { 'user_ids': ['4', '2', '6', '7'], 'startTime': 34 },
+        '35': { 'user_ids': ['4', '2', '5', '7'], 'startTime': 35 },
+        '36': { 'user_ids': ['4', '2', '5', '3', '7'], 'startTime': 36 },
+        '37': { 'user_ids': ['4', '2', '5', '3', '7'], 'startTime': 37 },
+      },
+    }
+  }
+
+  const expectedContiguousTimeBlocks = {
+    '0.5': {
+      startTime: 0.5,
+      endTime: 4,
+      duration: 3.5,
+      startSegment: 1,
+      endSegment: 7,
+      numberOfSegments: 7,
+      uniqueInstructorIds: ['1', '2', '3'],
+      numberOfInstructors: 3,
+      segments: {
+        '1': { 'user_ids': ['1', '2', '3'], 'startTime': 1 },
+        '2': { 'user_ids': ['1', '2', '3'], 'startTime': 2 },
+        '3': { 'user_ids': ['1', '2', '3'], 'startTime': 3 },
+        '4': { 'user_ids': ['1', '3'], 'startTime': 4 },
+        '5': { 'user_ids': ['1', '3'], 'startTime': 5 },
+        '6': { 'user_ids': ['1', '3'], 'startTime': 6 },
+        '7': { 'user_ids': ['1', '3'], 'startTime': 7 },
+      }
+    },
+  }
+
+  const actualAvailabilityBlocks =
+    filters.getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration(
+      startingContiguousTimeBlocks,
+      2,
+      5,
+    )
+
+  expect(actualAvailabilityBlocks).toEqual(expectedContiguousTimeBlocks)
+})
+
+test('getOnlyTheBlocksWithMoreInstructorsForAMinimumDuration', () => {
+  const startingContiguousTimeBlocks = {
+    '0.5': {
+      startTime: 0.5,
+      endTime: 5,
+      duration: 4.5,
+      startSegment: 1,
+      endSegment: 9,
+      numberOfSegments: 9,
+      uniqueInstructorIds: ['1', '2', '3'],
+      numberOfInstructors: 3,
+      segments: {
+        '1': { 'user_ids': ['1', '2', '3'], 'startTime': 1 },
+        '2': { 'user_ids': ['1', '2', '3'], 'startTime': 2 },
+        '3': { 'user_ids': ['1', '2', '3'], 'startTime': 3 },
+        '4': { 'user_ids': ['1', '3'], 'startTime': 4 },
+        '5': { 'user_ids': ['1', '3'], 'startTime': 5 },
+        '6': { 'user_ids': ['1', '3'], 'startTime': 6 },
+        '7': { 'user_ids': ['1', '3'], 'startTime': 7 },
+        '8': { 'user_ids': ['1'], 'startTime': 8 },
+        '9': { 'user_ids': ['1'], 'startTime': 9 },
+      }
+    },
+    '14': {
+      startTime: 14,
+      endTime: 19,
+      duration: 5,
+      startSegment: 28,
+      endSegment: 37,
+      numberOfSegments: 10,
+      uniqueInstructorIds: ['2', '4', '5', '3', '6', '7'],
+      numberOfInstructors: 6,
+      segments: {
+        '28': { 'user_ids': ['2'], 'startTime': 28 },
+        '29': { 'user_ids': ['4', '2', '5', '3'], 'startTime': 29 },
+        '30': { 'user_ids': ['2'], 'startTime': 30 },
+        '31': { 'user_ids': ['2'], 'startTime': 31 },
+        '32': { 'user_ids': ['5', '3', '6', '7'], 'startTime': 32 },
+        '33': { 'user_ids': ['5', '3', '6', '7'], 'startTime': 33 },
+        '34': { 'user_ids': ['4', '2', '6', '7'], 'startTime': 34 },
+        '35': { 'user_ids': ['4', '2', '5', '7'], 'startTime': 35 },
+        '36': { 'user_ids': ['4', '2', '5', '3', '7'], 'startTime': 36 },
+        '37': { 'user_ids': ['4', '2', '5', '3', '7'], 'startTime': 37 },
+      },
+    }
+  }
+
+  const expectedContiguousTimeBlocks = {
+    '0.5': {
+      startTime: 0.5,
+      endTime: 2,
+      duration: 1.5,
+      startSegment: 1,
+      endSegment: 3,
+      numberOfSegments: 3,
+      uniqueInstructorIds: ['1', '2', '3'],
+      numberOfInstructors: 3,
+      segments: {
+        '1': { 'user_ids': ['1', '2', '3'], 'startTime': 1 },
+        '2': { 'user_ids': ['1', '2', '3'], 'startTime': 2 },
+        '3': { 'user_ids': ['1', '2', '3'], 'startTime': 3 },
+      }
+    },
+    '16': {
+      startTime: 16,
+      endTime: 19,
+      duration: 3,
+      startSegment: 32,
+      endSegment: 37,
+      numberOfSegments: 6,
+      uniqueInstructorIds: ['5', '3', '6', '7', '4', '2'],
+      numberOfInstructors: 6,
+      segments: {
+        '32': { 'user_ids': ['5', '3', '6', '7'], 'startTime': 32 },
+        '33': { 'user_ids': ['5', '3', '6', '7'], 'startTime': 33 },
+        '34': { 'user_ids': ['4', '2', '6', '7'], 'startTime': 34 },
+        '35': { 'user_ids': ['4', '2', '5', '7'], 'startTime': 35 },
+        '36': { 'user_ids': ['4', '2', '5', '3', '7'], 'startTime': 36 },
+        '37': { 'user_ids': ['4', '2', '5', '3', '7'], 'startTime': 37 },
+      },
+    }
+  }
+
+  const actualAvailabilityBlocks =
+    filters.getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration(
+      startingContiguousTimeBlocks,
+      3,
+      2,
+    )
+
+  expect(actualAvailabilityBlocks).toEqual(expectedContiguousTimeBlocks)
+})
+
 
 test('getOnlyTheBlocksWithAtLeastAllTheUsers', () => {
   const specificUserIds = [4112, 7475]
