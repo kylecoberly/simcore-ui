@@ -116,7 +116,7 @@
                            :initialCurrentUserAvailabilityBlocks="day.currentUserAvailabilityBlocks"
                            :initialAggregateUserAvailabilityBlocks="day.aggregateUserAvailabilityBlocks"
                            :initialAllBlocks="day.allBlocks"
-                />
+              />
 
               <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
 
