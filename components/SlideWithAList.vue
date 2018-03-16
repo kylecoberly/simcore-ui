@@ -135,7 +135,7 @@
       },
       segmentItems() {
         let items
-        let user_ids
+        let user_ids = []
         for (let iterator = this.slide.content.segment_start; iterator <= this.slide.content.segment_end; iterator++) {
           user_ids = this.slide.content.segments[iterator].user_ids
           items = items ? _.intersection(items, user_ids) : user_ids
@@ -146,16 +146,17 @@
       specificItems() {
         return this.slide.content.specificItems
           ? getListFromIds(this.slide.content.specificItems, this.$store.state.user.instructors, 'lastname')
-          : null
+          : []
       },
       items() {
-        let items = this.segmentItems.filter((item) => {
-          return !this.slide.content.specificItems.includes(parseInt(item, 10))
-        })
+        let items = null
+        if (this.segmentItems && this.segmentItems.length) {
+          items = this.segmentItems.filter((item) => !this.slide.content.specificItems.includes(parseInt(item, 10)))
+        }
 
         return items
           ? getListFromIds(items, this.$store.state.user.instructors, 'lastname')
-          : null
+          : []
       },
       foundItems() {
         return sortByKey(this.items.filter(item => {
@@ -173,16 +174,8 @@
       },
     },
     methods: {
-      // @TODO: Temporary solution - Jase
-      setItemIcon(itemId) {
-        let icon = 'fa-circle-thin ghost'
-        if (this.isItemSelected(itemId)) {
-          icon = 'fa-check-circle ghost'
-        }
-        return icon
-      },
       isItemSelected(itemId) {
-        // return this.selectedItems.find((item) => item.id === itemId) ? true : false
+        return this.selectedItems.find((item) => item.id === itemId) ? true : false
       },
       getDepartmentName(id) {
           const department = this.departments.find((item) => item.id === id)
@@ -191,44 +184,44 @@
           }
       },
       toggleItemInSelectedItems(itemId, value) {
-        // let selectedItemsWasUpdated = false
+        let selectedItemsWasUpdated = false
 
-        // const foundItem = this.foundItems.find((item) => item.id === itemId)
+        const foundItem = this.foundItems.find((item) => item.id === itemId)
 
-        // if (foundItem) {
-        //   if (value === true) {
-        //     this.selectedItems.push(foundItem)
-        //   } else if (value === false) {
-        //     this.selectedItems.splice(this.selectedItems.indexOf(foundItem), 1)
-        //   }
-        //   selectedItemsWasUpdated = true
-        // }
+        if (foundItem) {
+          if (value === true) {
+            this.selectedItems.push(foundItem)
+          } else if (value === false) {
+            this.selectedItems.splice(this.selectedItems.indexOf(foundItem), 1)
+          }
+          selectedItemsWasUpdated = true
+        }
 
-        // let nextSlide = null
-        //
-        // if (this.selectedItems.length > 0) {
-        //   nextSlide = this.$store.state.slideDeck.slideTemplates.event_time_picker
-        //   // nextSlide.items = this.selectedItems
-        //   nextSlide.title = this.slide.title
-        //   // nextSlide.subtitle = this.slide.subtitle
-        //   nextSlide.start_time = this.slide.content.start_time
-        //   nextSlide.end_time = this.slide.content.end_time
-        //   nextSlide.meta = this.slide.meta
-        // }
+        let nextSlide = null
+
+        if (this.selectedItems.length > 0) {
+          nextSlide = this.$store.state.slideDeck.slideTemplates.event_form
+          nextSlide.items = _.sortBy([...this.selectedItems, ...this.specificItems], ['lastname', 'firstname'])
+          nextSlide.title = this.slide.title
+          nextSlide.subtitle = this.slide.subtitle
+          nextSlide.start_time = this.slide.content.start_time
+          nextSlide.end_time = this.slide.content.end_time
+          nextSlide.meta = this.slide.meta
+        }
 
         const currentSlide = this.slide
 
-        // currentSlide.content.selectedItems = this.selectedItems
+        currentSlide.content.selectedItems = this.selectedItems
         currentSlide.content.itemSearch = this.itemSearch
-        // currentSlide.content.foundItems = this.foundItems
+        currentSlide.content.foundItems = this.foundItems
 
-        // if (selectedItemsWasUpdated) {
-        //   this.$emit('theSlideHasAnUpdate', {
-        //     currentSlide,
-        //     nextSlide,
-        //     nextControl: {text: 'Next'},
-        //   })
-        // }
+        if (selectedItemsWasUpdated) {
+          this.$emit('theSlideHasAnUpdate', {
+            currentSlide,
+            nextSlide,
+            nextControl: {text: 'Next'},
+          })
+        }
       },
     },
   }
