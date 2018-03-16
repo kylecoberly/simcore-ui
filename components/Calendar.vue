@@ -690,8 +690,7 @@
         }
       },
       resetInactiveInstructors() {
-        this.inactiveInstructors = JSON.parse(JSON.stringify(this.instructors)) // cheap cologne :) - Jase
-        _.sortBy(this.inactiveInstructors, ['lastname', 'firstname'])
+        this.inactiveInstructors = _.sortBy([...this.instructors], ['lastname', 'firstname'])
       },
       closeBubble() {
         this.$store.commit('toggleBubbleVisibility', false)
