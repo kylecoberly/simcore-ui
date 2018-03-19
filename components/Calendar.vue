@@ -295,7 +295,7 @@
         currentUserAvailabilityBlocks: [],
         durationFilterBlocks: [
           {
-            start: 0,
+            startTime: 0,
             duration: 1,
           },
         ],
