@@ -170,7 +170,7 @@
         return this.items.length
       },
       labelForAvailableInstructors() {
-        return this.thereAreSpecificItems ? 'Available Instructors' : 'Available Instructors'
+        return `Available Instructors: ${this.thereAreItems}` // this.thereAreSpecificItems ? `Other Available Instructors: ${this.thereAreItems}` : `Available Instructors: ${this.thereAreItems}`
       },
     },
     methods: {

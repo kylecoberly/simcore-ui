@@ -101,8 +101,6 @@
 
               <CalendarDay v-for="day in monthDays"
                            class="sim-calendar--grid--day"
-                           @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
-                           @toggle-expanded-week="toggleExpandedWeek"
                            :key="day.date"
                            :date="day.date"
                            :is-in-active-week="day.isInActiveWeek"
@@ -116,6 +114,8 @@
                            :initialCurrentUserAvailabilityBlocks="day.currentUserAvailabilityBlocks"
                            :initialAggregateUserAvailabilityBlocks="day.aggregateUserAvailabilityBlocks"
                            :initialAllBlocks="day.allBlocks"
+                           @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
+                           @toggle-expanded-week="toggleExpandedWeek"
               />
 
               <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
@@ -152,7 +152,8 @@
                               :block-settings="durationFilterBlockSettings"
                               :duration-filter-blocks="durationFilterBlocks"
                               :date="date"
-                              />
+                              @blocksWereUpdated="updateFilterEventLength"
+                />
               </div>
             </section>
 
@@ -174,7 +175,7 @@
                                      @clear="clearItemFromActiveInstructorsList"
                                      @remove="removeFromActiveInstructorsList"
                                      @add-another="addSlotToActiveInstructorsList"
-                                     >
+                      >
                         <template slot="option" slot-scope="props">
                           {{ props.option.lastname }}, {{ props.option.firstname }}
                         </template>
@@ -215,7 +216,7 @@
                           :initial-current-user-availability-blocks="currentDay.currentUserAvailabilityBlocks"
                           :initialAggregateUserAvailabilityBlocks="currentDay.aggregateUserAvailabilityBlocks"
                           @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
-                          />
+            />
           </div>
         </template>
       </aside>
@@ -293,6 +294,7 @@
         eventBlocks: [],
         pendingEventBlocks: [],
         currentUserAvailabilityBlocks: [],
+        filterEventLength: 1,
         durationFilterBlocks: [
           {
             startTime: 0,
@@ -514,10 +516,6 @@
       currentUserAvailabilityBlocksForCurrentDate() {
         return this.currentUserAvailabilityBlocks[this.date]
       },
-      filterEventLength() {
-        // TODO: Update Vuex available instructors here. - Chad
-        return this.durationFilterBlocks[0].duration
-      },
       activeInstructorCount() {
         return this.activeInstructors.length
       },
@@ -606,6 +604,10 @@
       },
     },
     methods: {
+      updateFilterEventLength() {
+        // TODO: Update Vuex available instructors here. - Chad
+        this.filterEventLength = this.durationFilterBlocks[0].duration
+      },
       fetchInstructorAvailabilitySegments(date) {
         const firstDayOfTheMonth = moment(date).startOf('month').format('YYYY-MM-DD 00:00:00')
         const lastDayOfTheMonth = moment(date).endOf('month').format('YYYY-MM-DD 23:59:59')
