@@ -28,10 +28,6 @@
           <SimIconText icon="#icon--instructors-exist" icon-type="svg" :text="labelForAvailableInstructors"></SimIconText>
         </header>
         <SimDatalist :items="items" :animate="true" style="--selection-color: var(--green)">
-          <!-- @TODO commented out as a temporary solution until this is ready to be utilized - Jase -->
-          <!-- <div slot="static-before" key="before">
-            <input type="search" v-model="itemSearch" placeholder="find..." />
-          </div> -->
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
             <sim-selection
               :item="props.item"
@@ -43,7 +39,6 @@
               {{props.item.id}}: {{ props.item.lastname }}, {{ props.item.firstname }}
               <small class="ghost" v-if="props.item.department_id">({{ getItemName(departments, props.item.department_id) }})</small>
             </sim-selection>
-            <!-- <SimIconText icon="#icon--checkbox--unchecked" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText> -->
           </li>
         </SimDatalist>
       </section>
@@ -120,7 +115,6 @@
     data() {
       return {
         selectedItems: [],
-        itemSearch: '',
         slide: this.$store.getters.currentSlide(),
       }
     },
@@ -158,19 +152,23 @@
           ? getListFromIds(items, this.$store.state.user.instructors, 'lastname')
           : []
       },
-      foundItems() {
-        return sortByKey(this.items.filter(item => {
-          return `${item.lastname}, ${item.firstname}`.toLowerCase().includes(this.itemSearch.toLowerCase().trim())
-        }), 'lastname', 'asc')
-      },
-      thereAreSpecificItems() {
+      specificItemCount() {
         return this.specificItems.length
       },
-      thereAreItems() {
+      thereAreSpecificItems() {
+        return (this.specificItemCount > 0)
+      },
+      itemCount() {
         return this.items.length
       },
+      thereAreItems() {
+        return (this.itemCount > 0)
+      },
+      minimumItemsNeeded() {
+        return this.$store.state.availabilities.availabilityInstructors.totalCount - this.specificItemCount
+      },
       labelForAvailableInstructors() {
-        return `Available Instructors: ${this.thereAreItems}` // this.thereAreSpecificItems ? `Other Available Instructors: ${this.thereAreItems}` : `Available Instructors: ${this.thereAreItems}`
+        return `Available Instructors: ${this.itemCount}`
       },
     },
     methods: {
@@ -186,20 +184,20 @@
       toggleItemInSelectedItems(itemId, value) {
         let selectedItemsWasUpdated = false
 
-        const foundItem = this.foundItems.find((item) => item.id === itemId)
+        const itemFound = this.items.find((item) => item.id === itemId)
 
-        if (foundItem) {
+        if (itemFound) {
           if (value === true) {
-            this.selectedItems.push(foundItem)
+            this.selectedItems.push(itemFound)
           } else if (value === false) {
-            this.selectedItems.splice(this.selectedItems.indexOf(foundItem), 1)
+            this.selectedItems.splice(this.selectedItems.indexOf(itemFound), 1)
           }
           selectedItemsWasUpdated = true
         }
 
         let nextSlide = null
 
-        if (this.selectedItems.length > 0) {
+        if (this.selectedItems.length >= this.minimumItemsNeeded) {
           nextSlide = this.$store.state.slideDeck.slideTemplates.event_form
           nextSlide.items = _.sortBy([...this.selectedItems, ...this.specificItems], ['lastname', 'firstname'])
           nextSlide.title = this.slide.title
@@ -212,8 +210,6 @@
         const currentSlide = this.slide
 
         currentSlide.content.selectedItems = this.selectedItems
-        currentSlide.content.itemSearch = this.itemSearch
-        currentSlide.content.foundItems = this.foundItems
 
         if (selectedItemsWasUpdated) {
           this.$emit('theSlideHasAnUpdate', {
