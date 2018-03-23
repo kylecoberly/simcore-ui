@@ -170,9 +170,10 @@ export const getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration = (
     return uniqueInstructorIds
   }, {})
 
-  const unconfirmedInstructorLog = []
-  const instructorTallyLog = []
-  const segmentLog = []
+  // const unconfirmedInstructorLog = []
+  // const instructorTallyLog = []
+  // const segmentLog = []
+
   // currentTally
   // duration
 
@@ -196,7 +197,7 @@ export const getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration = (
     unconfirmed: [],
     confirmed: [],
   }
-  let unconfirmedInstructors          = []
+  let unconfirmedInstructors            = []
   let instructorContiguousSegmentCounts = resetInstructorSegmentTally(allUniqueInstructorIds)
 
   const segmentsWithAMinimumNumberOfInstructors = getSegmentsFromBlocksWithAMinimumNumberOfInstructors(instructorAvailabilityBlocks, instructorMinimum)
@@ -265,7 +266,8 @@ export const getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration = (
             return !_.includes(instructorsNoLongerInTheRunning, instructorString)
           })
           if (_.size(userIdsWithAllSegments) >= instructorMinimum) {
-            const unconfirmedSegmentWithOnlyUsersWithAllSegments = { ...unconfirmedSegment, user_ids: _.keys(userIdsWithAllSegments) }
+            const unconfirmedSegmentWithOnlyUsersWithAllSegments    = Object.assign({}, unconfirmedSegment)
+            unconfirmedSegmentWithOnlyUsersWithAllSegments.user_ids = _.keys(userIdsWithAllSegments)
 
             unconfirmedSegments.push(unconfirmedSegmentWithOnlyUsersWithAllSegments)
             unconfirmedSegmentTally += 1
@@ -284,14 +286,14 @@ export const getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration = (
       segments = confirmSegments(segments, minimumDuration)
     }
 
-    unconfirmedInstructorLog.push(JSON.stringify(unconfirmedInstructors))
-    instructorTallyLog.push(JSON.stringify(instructorContiguousSegmentCounts))
-    segmentLog.push(JSON.stringify(segments))
+    // unconfirmedInstructorLog.push(JSON.stringify(unconfirmedInstructors))
+    // instructorTallyLog.push(JSON.stringify(instructorContiguousSegmentCounts))
+    // segmentLog.push(JSON.stringify(segments))
 
     previousSegment = segment
   })
 
-  console.log(segmentLog)
+  // console.log(segmentLog)
 
   segments = confirmSegments(segments, minimumDuration)
 
