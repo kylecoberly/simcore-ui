@@ -5,6 +5,7 @@
 import _ from 'lodash'
 
 import * as mock from './mock'
+import * as mockLarge from './mock-large'
 
 import * as filters from '../../data/availabilities/filters'
 
@@ -489,6 +490,19 @@ test('getOnlyTheBlocksWithAMinimumNumberOfInstructors', () => {
   expect(actualAvailabilityBlocks).toEqual(expectedContiguousTimeBlocks)
 })
 
+test('aMinimumOfFourInstructorsForAMinimumOfThreeHours', () => {
+  const expectedContiguousTimeBlocks = mockLarge.expectedSingleDayBlocksFourInstructorsThreeHours
+
+  const actualAvailabilityBlocks =
+    filters.getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration(
+      mockLarge.unfilteredSingleDayBlocks,
+      4,
+      6,
+    )
+
+  expect(actualAvailabilityBlocks).toEqual(expectedContiguousTimeBlocks)
+})
+
 test('getOnlyTheBlocksWithAMinimumNumberOfInstructorsForALongerMinimumDuration', () => {
   const startingContiguousTimeBlocks = {
     '0.5': {
@@ -501,10 +515,10 @@ test('getOnlyTheBlocksWithAMinimumNumberOfInstructorsForALongerMinimumDuration',
       uniqueInstructorIds: ['1', '2', '3'],
       numberOfInstructors: 3,
       segments: {
-        '1': { 'user_ids': ['1', '2', '3'], 'startTime': 1 },
+        '1': { 'user_ids': ['1'], 'startTime': 1 },
         '2': { 'user_ids': ['1', '2', '3'], 'startTime': 2 },
         '3': { 'user_ids': ['1', '2', '3'], 'startTime': 3 },
-        '4': { 'user_ids': ['1', '3'], 'startTime': 4 },
+        '4': { 'user_ids': ['1', '2', '3'], 'startTime': 4 },
         '5': { 'user_ids': ['1', '3'], 'startTime': 5 },
         '6': { 'user_ids': ['1', '3'], 'startTime': 6 },
         '7': { 'user_ids': ['1', '3'], 'startTime': 7 },
@@ -537,20 +551,19 @@ test('getOnlyTheBlocksWithAMinimumNumberOfInstructorsForALongerMinimumDuration',
   }
 
   const expectedContiguousTimeBlocks = {
-    '0.5': {
-      startTime: 0.5,
+    '1': {
+      startTime: 1,
       endTime: 4,
-      duration: 3.5,
-      startSegment: 1,
+      duration: 3,
+      startSegment: 2,
       endSegment: 7,
-      numberOfSegments: 7,
+      numberOfSegments: 6,
       uniqueInstructorIds: ['1', '2', '3'],
       numberOfInstructors: 3,
       segments: {
-        '1': { 'user_ids': ['1', '2', '3'], 'startTime': 1 },
         '2': { 'user_ids': ['1', '2', '3'], 'startTime': 2 },
         '3': { 'user_ids': ['1', '2', '3'], 'startTime': 3 },
-        '4': { 'user_ids': ['1', '3'], 'startTime': 4 },
+        '4': { 'user_ids': ['1', '2', '3'], 'startTime': 4 },
         '5': { 'user_ids': ['1', '3'], 'startTime': 5 },
         '6': { 'user_ids': ['1', '3'], 'startTime': 6 },
         '7': { 'user_ids': ['1', '3'], 'startTime': 7 },
