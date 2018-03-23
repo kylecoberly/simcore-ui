@@ -370,9 +370,6 @@
           this.toggleExpandedWeek()
         }
       },
-      emitLodestar() {
-        this.$emit('run-lodestar')
-      },
       toggleExpandedWeek() {
         this.$emit('toggle-expanded-week')
       },
