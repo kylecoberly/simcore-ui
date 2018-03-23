@@ -10,7 +10,7 @@
         <div class="sim-form--molecule sim-form--molecule--event-title">
           <!-- <div class="sim-form--molecule--label"><label for="event-title">Event Title</label></div> -->
           <div class="sim-form--molecule--field">
-            <textarea class="resize--y" id="event-title" v-model="eventFormData.title" placeholder="Event Title" rows="1" style="font-size: 1.2em"></textarea>
+            <textarea autofocus class="resize--y" id="event-title" v-model="eventFormData.title" placeholder="Event Title" rows="1" style="font-size: 1.2em"></textarea>
           </div>
         </div>
 
@@ -27,29 +27,57 @@
             </div>
           </div>
 
-          <div class="sim-form--molecule sim-form--molecule--event-instructors">
+          <div v-if="specificItemsCount" class="sim-form--molecule sim-form--molecule--event-specific-instructors">
             <div class="sim-form--molecule--label">
               <SimIconText icon="#icon--instructors-checked" icon-type="svg" text=""></SimIconText>
             </div>
             <div class="sim-form--molecule--field">
               <input type="hidden" v-model="eventFormData.instructor_ids" />
-              <b>Instructors: {{ activeInstructorsCount }}</b>
-              <SimDatalist :items="slide.items" :animate="true">
-                <li slot="static-before" key="static-before" class="text--yellow" v-if="!activeInstructorsCount">
-                  <SimIconText icon="fa-exclamation-triangle" text="Missing Expected Items"></SimIconText>
-                </li>
+              <!-- <b>Specific Instructors: {{ specificItemsCount }}</b> -->
+              <div v-for="item in specificItems">
+                {{ item.lastname }}, {{ item.firstname}} ({{ item.id }})
+              </div>
+              <!-- <SimDatalist :items="specificItems" :animate="false">
                 <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-                  <SimIconText icon="fa-check-circle text--green" :text="`${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+                  <SimIconText xicon="#icon--checkbox--checked" xicon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
                 </li>
-              </SimDatalist>
+              </SimDatalist> -->
+            </div>
+          </div>
+
+          <div v-if="selectedItemsCount" class="sim-form--molecule sim-form--molecule--event-other-instructors">
+            <div class="sim-form--molecule--label">
+              <SimIconText icon="#icon--instructors-exist" icon-type="svg" text=""></SimIconText>
+            </div>
+            <div class="sim-form--molecule--field">
+              <input type="hidden" v-model="eventFormData.instructor_ids" />
+              <div v-for="item in selectedItems">
+                {{ item.lastname }}, {{ item.firstname}} ({{ item.id }})
+              </div>
+              <!-- <b>Selected Instructors: {{ selectedItemsCount }}</b> -->
+              <!-- <SimDatalist :items="selectedItems" :animate="false">
+                <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
+                  <SimIconText xicon="#icon--checkbox--checked" xicon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+                </li>
+              </SimDatalist> -->
+            </div>
+          </div>
+
+          <div class="sim-form--molecule sim-form--molecule--event-description">
+            <div class="sim-form--molecule--label"><label>Description</label></div>
+            <div class="sim-form--molecule--field">
+              <div @click="swapper" class="content-swapper--cue">
+                <SimIconText icon="#icon--control--add" icon-type="svg"></SimIconText>
+              </div>
+              <textarea class="resize--y" placeholder="..." v-model="eventFormData.description" rows="2"></textarea>
             </div>
           </div>
 
           <div class="sim-form--molecule sim-form--molecule--event-facility">
-            <div class="sim-form--molecule--label"><label>Location</label></div>
+            <div class="sim-form--molecule--label"><label>Facility</label></div>
             <div class="sim-form--molecule--field">
               <select v-model="eventFormData.facility_id">
-                <option value="">Select a facility...</option>
+                <option value="">Select...</option>
                 <option v-for="facility in facilities" :value="facility.id">
                   {{facility.name}}
                 </option>
@@ -57,37 +85,11 @@
             </div>
           </div>
 
-          <div class="sim-form--molecule sim-form--molecule--event-room">
-            <div class="sim-form--molecule--label"><label>Room</label></div>
-            <div class="sim-form--molecule--field">
-              TODO: fetch for available rooms, based on facility
-              <!-- <select v-model="eventFormData.room_id">
-                <option>...</option>
-              </select> -->
-            </div>
-          </div>
-
-          <div class="sim-form--molecule sim-form--molecule--event-description">
-            <div class="sim-form--molecule--label"><label>Description</label></div>
-            <div class="sim-form--molecule--field">
-              <SimIconText icon="fa-plus-circle" text="Add"></SimIconText>
-              TODO: basically opt in to provviding this data.
-              <textarea class="resize--y" placeholder="..." v-model="eventFormData.description" rows="2"></textarea>
-            </div>
-          </div>
-
-          <div class="sim-form--molecule sim-form--molecule--event-notes">
-            <div class="sim-form--molecule--label"><label>Notes</label></div>
-            <div class="sim-form--molecule--field">
-              <textarea class="resize--y" placeholder="..." v-model="eventFormData.notes" rows="2"></textarea>
-            </div>
-          </div>
-
           <div class="sim-form--molecule sim-form--molecule--event-department">
             <div class="sim-form--molecule--label"><label>Department</label></div>
             <div class="sim-form--molecule--field">
               <select v-model="eventFormData.department_id">
-                <option value="">Select a department...</option>
+                <option value="">Select...</option>
                 <option v-for="department in departments" :value="department.id">
                   {{department.name}}
                 </option>
@@ -99,7 +101,7 @@
             <div class="sim-form--molecule--label"><label>Scenario</label></div>
             <div class="sim-form--molecule--field">
               <select v-model="eventFormData.scenario_id">
-                <option value="">Select a scenario...</option>
+                <option value="">Select...</option>
                 <option v-for="scenario in scenarios" :value="scenario.id">
                   {{scenario.name}}
                 </option>
@@ -110,8 +112,18 @@
           <div class="sim-form--molecule sim-form--molecule--event-equipment">
             <div class="sim-form--molecule--label"><label>Equipment</label></div>
             <div class="sim-form--molecule--field">
-              TODO: options depend on scenario, and get fetched, and pre-checked
+              TODO: options depend on scenario, and get fetched, and pre-checked?
               <!-- <select v-model="eventFormData.equipent_ids">
+              <option>...</option>
+            </select> -->
+          </div>
+        </div>
+
+          <div class="sim-form--molecule sim-form--molecule--event-room">
+            <div class="sim-form--molecule--label"><label>Room</label></div>
+            <div class="sim-form--molecule--field">
+              TODO: fetch for available rooms, based on facility?
+              <!-- <select v-model="eventFormData.room_id">
                 <option>...</option>
               </select> -->
             </div>
@@ -122,79 +134,69 @@
             <div class="sim-form--molecule--field">
               <input type="hidden" v-model="eventFormData.learner_ids" />
               <SimDatalist :items="activeLearners" :animate="true">
-                <li slot="static-before" key="static-before" class="text--grey" v-if="!activeLearnersCount">
-                  <SimIconText icon="fa-info-circle" text="No learners added yet..."></SimIconText>
+                <li slot="item" slot-scope="props" :key="props.item.seat" :class="`learner-${props.item.id}`">
+                  <SimAutofinder placeholder="find learner..."
+                                 :tabIndex="props.index"
+                                 :item="props.item"
+                                 :index="props.index"
+                                 :is-alone="false"
+                                 :options="inactiveLearners"
+                                 @select="addItemToActiveLearnersList"
+                                 @clear="clearItemFromActiveLearnersList"
+                                 @remove="removeFromActiveLearnersList"
+                                 @add-another="addSlotToActiveLearnersList"
+                  >
+                    <template slot="option" slot-scope="props">
+                      {{ props.option.lastname }}, {{ props.option.firstname }}
+                    </template>
+                  </SimAutofinder>
                 </li>
-                <li slot="item" slot-scope="props" :key="props.item.id" :class="`learner-${props.item.id}`">
-                  <SimSelection
-                    :item="props.item"
-                    :item-id="props.item.id"
-                    :disabled="props.item.disabled"
-                    :should-be-selected="props.item.selected"
-                    @toggle="toggleItemInSelectedLearners"
-                    >
-                    {{ props.item.firstname }} {{ props.item.lastname }}
-                  </SimSelection>
-                  <span class="item-remover" @click="removeFromActiveLearnerList(props.item)">
-                    <SimIconText icon="fa-times fa-fw"></SimIconText>
+                <li slot="static-after" key="after">
+                  <span @click="addSlotToActiveLearnersList">
+                    <SimIconText icon="#icon--control--add" icon-type="svg"></SimIconText>
                   </span>
                 </li>
               </SimDatalist>
-              <SimAutocomplete placeholder="find learners..."
-                :options="inactiveLearners"
-                @select="addToLearnerList"
-                >
-                <div class="item-tag" slot="item" slot-scope="props">
-                  {{ props.option.firstname }} {{ props.option.lastname }}
-                </div>
-              </SimAutocomplete>
             </div>
           </div>
 
-          <div class="sim-form--molecule sim-form--molecule--event-learners">
+          <div class="sim-form--molecule sim-form--molecule--event-others">
             <div class="sim-form--molecule--label"><label>Others</label></div>
             <div class="sim-form--molecule--field">
               <input type="hidden" v-model="eventFormData.other_ids" />
               <SimDatalist :items="activeOthers" :animate="true">
-                <li slot="static-before" key="static-before" class="text--grey" v-if="!activeOthersCount">
-                  <SimIconText icon="fa-info-circle" text="No others added yet..."></SimIconText>
+                <li slot="item" slot-scope="props" :key="props.item.seat" :class="`other-${props.item.id}`">
+                  <SimAutofinder placeholder="find other..."
+                                 :tabIndex="props.index"
+                                 :item="props.item"
+                                 :index="props.index"
+                                 :is-alone="false"
+                                 :options="inactiveOthers"
+                                 @select="addItemToActiveOthersList"
+                                 @clear="clearItemFromActiveOthersList"
+                                 @remove="removeFromActiveOthersList"
+                                 @add-another="addSlotToActiveOthersList"
+                  >
+                    <template slot="option" slot-scope="props">
+                      {{ props.option.lastname }}, {{ props.option.firstname }}
+                    </template>
+                  </SimAutofinder>
                 </li>
-                <li slot="item" slot-scope="props" :key="props.item.id" :class="`learner-${props.item.id}`">
-                  <SimSelection
-                    :item="props.item"
-                    :item-id="props.item.id"
-                    :disabled="props.item.disabled"
-                    :should-be-selected="props.item.selected"
-                    @toggle="toggleItemInSelectedOthers"
-                    >
-                    {{ props.item.firstname }} {{ props.item.lastname }}
-                  </SimSelection>
-                  <span class="item-remover" @click="removeFromActiveOtherList(props.item)">
-                    <SimIconText icon="fa-times fa-fw"></SimIconText>
+                <li slot="static-after" key="after">
+                  <span @click="addSlotToActiveOthersList">
+                    <SimIconText icon="#icon--control--add" icon-type="svg"></SimIconText>
                   </span>
                 </li>
               </SimDatalist>
-              <SimAutocomplete placeholder="find others..."
-                :options="inactiveOthers"
-                @select="addToOtherList"
-                >
-                <div class="item-tag" slot="item" slot-scope="props">
-                  {{ props.option.firstname }} {{ props.option.lastname }}
-                </div>
-              </SimAutocomplete>
             </div>
           </div>
-
-          <!-- <div class="sim-form--molecule sim-form--molecule--event-others">
-            <div class="sim-form--molecule--label"><label>Others</label></div>
-            <div class="sim-form--molecule--field">
-              <textarea class="resize--y" v-model="eventFormData.others" placeholder="..." rows="3"></textarea>
-            </div>
-          </div> -->
 
           <div class="sim-form--molecule sim-form--molecule--event-attachment">
             <div class="sim-form--molecule--label">PDF</div>
             <div class="sim-form--molecule--field">
+              <div @click="swapper" class="content-swapper--cue">
+                <SimIconText icon="#icon--control--add" icon-type="svg"></SimIconText>
+              </div>
               <div class="sim-form--atomic-group">
                 <input @change="onFileChange($event)" type="file" name="attachment" id="attachment" />
                 <label for="attachment" class="sim-button sim-button--primary sim-ellipsis">
@@ -204,6 +206,16 @@
                   <SimIconText icon="fa-times fa-fw"></SimIconText>
                 </span>
               </div>
+            </div>
+          </div>
+
+          <div class="sim-form--molecule sim-form--molecule--event-notes">
+            <div class="sim-form--molecule--label"><label>Notes</label></div>
+            <div class="sim-form--molecule--field">
+              <div @click="swapper" class="content-swapper--cue">
+                <SimIconText icon="#icon--control--add" icon-type="svg"></SimIconText>
+              </div>
+              <textarea class="resize--y" placeholder="..." v-model="eventFormData.notes" rows="5"></textarea>
             </div>
           </div>
 
@@ -225,6 +237,7 @@
   import SimSelection from './Selection'
   import SimIconText from './IconText'
   import SimAutocomplete from './Autocomplete'
+  import SimAutofinder from './Autofinder'
 
   export default {
     name: 'sim-slide-with-an-event-form',
@@ -235,6 +248,7 @@
       SimSelection,
       SimIconText,
       SimAutocomplete,
+      SimAutofinder,
     },
     data() {
       return {
@@ -247,11 +261,13 @@
         activeLearners: [],
         inactiveLearners: [],
         selectedLearners: [],
+        currentLearnerSeat: 1,
 
         others: [],
         activeOthers: [],
         inactiveOthers: [],
         selectedOthers: [],
+        currentOtherSeat: 1,
 
         eventFormData: {
           facility_id: '',
@@ -283,7 +299,9 @@
       this.eventFormData.instructor_ids = this.activeInstructorIds
 
       this.bubbleElement = this.$el.closest('.sim-bubble')
-      this.bubbleElement.style.setProperty('--width-factor', this.slide.meta.slideWidthFactor)
+      if (this.slide.meta && this.slide.meta.slideWidthFactor) {
+        this.bubbleElement.style.setProperty('--width-factor', this.slide.meta.slideWidthFactor)
+      }
 
       this.resetInactiveLearners()
 
@@ -296,8 +314,20 @@
       this.bubbleElement.style.removeProperty('--width-factor')
     },
     computed: {
+      specificItems() {
+        return _.sortBy(this.slide.specificItems, ['lastname', 'firstname'])
+      },
+      specificItemsCount() {
+        return this.slide.specificItems.length
+      },
+      selectedItems() {
+        return _.sortBy(this.slide.selectedItems, ['lastname', 'firstname'])
+      },
+      selectedItemsCount() {
+        return this.slide.selectedItems.length
+      },
       activeInstructors() {
-        return this.slide.items || []
+        return _.sortBy([...this.slide.selectedItems, ...this.slide.specificItems], ['lastname', 'firstname']) || []
       },
       activeInstructorIds() {
         return this.activeInstructors.map((instructor) => instructor.id)
@@ -335,52 +365,42 @@
         })
       },
 
-      //
-      // autocomplete instructor methods
-      // -------------------------------
+      // autofinder methods -------------------------------
       // Learners
-      addToLearnerList(item) {
-        const foundItem = this.activeLearners.find((learner) => learner.id === item.id)
-        if (!foundItem) {
-          this.activeLearners.push(item)
-          this.inactiveLearners.splice(this.inactiveLearners.indexOf(item), 1)
-          this.toggleItemInSelectedLearners(item.id, true)
-          _.sortBy(this.activeLearners, ['lastname', 'firstname'])
-          _.sortBy(this.inactiveLearners, ['lastname', 'firstname'])
-        } else {
-          lodestar(this.$el, 'lodestar', `.learner-${item.id}`, 'value')
-        }
-      },
-      removeFromActiveLearnerList(item) {
-        const foundItem = this.activeLearners.find((learner) => learner.id === item.id)
-        this.toggleItemInSelectedLearners(item.id, false)
-        this.activeLearners.splice(this.activeLearners.indexOf(item), 1)
-        this.inactiveLearners.push(foundItem)
-        _.sortBy(this.activeLearners, ['lastname', 'firstname'])
-        _.sortBy(this.inactiveLearners, ['lastname', 'firstname'])
-      },
-      toggleItemInSelectedLearners(itemId, value) {
-        let selectedItemsWasUpdated = false
-
-        const foundItem = this.activeLearners.find((item) => item.id === itemId)
-
-        if (foundItem) {
-          if (value === true) {
-            foundItem.selected = true
-            this.selectedLearners.push(foundItem)
-          } else if (value === false) {
-            this.selectedLearners.splice(this.selectedLearners.indexOf(foundItem), 1)
-          }
-          selectedItemsWasUpdated = true
-        }
-      },
       resetInactiveLearners() {
         this.inactiveLearners = _.sortBy([...this.learners], ['lastname', 'firstname'])
       },
-      clearAllactiveLearners() {
-        this.activeLearners.splice(0, this.activeLearners.length)
-        this.selectedLearners.splice(0, this.selectedLearners.length)
-        this.resetInactiveLearners()
+
+      addSlotToActiveLearnersList() {
+        this.activeLearners.push(
+          {
+            seat: this.currentLearnerSeat,
+            firstname: '',
+            lastname: '',
+          })
+
+        this.currentLearnerSeat++
+      },
+
+      addItemToActiveLearnersList(item, index) {
+        this.activeLearners.splice(index, 1, item)
+        this.removeFromInactiveLearnersList(item)
+      },
+      clearItemFromActiveLearnersList(item) {
+        if (this.activeLearners.includes(item)) {
+          this.activeLearners.splice(this.activeLearners.indexOf(item), 1, {
+            seat: item.seat,
+            firstname: '',
+            lastname: '',
+          })
+          this.restoreItemToInactiveLearnersList(item)
+        }
+      },
+      removeFromActiveLearnersList(item) {
+        this.activeLearners = this.activeLearners.filter((element) => element.seat !== item.seat)
+        if (item.id) {
+          this.restoreItemToInactiveLearnersList(item)
+        }
       },
 
       // Others
@@ -428,6 +448,42 @@
         this.resetInactiveOthers()
       },
 
+      resetInactiveOthers() {
+        this.inactiveOthers = _.sortBy([...this.learners], ['lastname', 'firstname'])
+      },
+
+      addSlotToActiveOthersList() {
+        this.activeOthers.push(
+          {
+            seat: this.currentOtherSeat,
+            firstname: '',
+            lastname: '',
+          })
+
+        this.currentOtherSeat++
+      },
+
+      addItemToActiveOthersList(item, index) {
+        this.activeOthers.splice(index, 1, item)
+        this.removeFromInactiveOthersList(item)
+      },
+      clearItemFromActiveOthersList(item) {
+        if (this.activeOthers.includes(item)) {
+          this.activeOthers.splice(this.activeOthers.indexOf(item), 1, {
+            seat: item.seat,
+            firstname: '',
+            lastname: '',
+          })
+          this.restoreItemToInactiveOthersList(item)
+        }
+      },
+      removeFromActiveOthersList(item) {
+        this.activeOthers = this.activeOthers.filter((element) => element.seat !== item.seat)
+        if (item.id) {
+          this.restoreItemToInactiveOthersList(item)
+        }
+      },
+
       // FORM STUFFS
       onFileChange(event) {
         const input = event.target
@@ -449,10 +505,23 @@
         const label	= trigger.previousElementSibling.querySelector('span')
         label.innerHTML = 'Choose a file...'
       },
+      swapper(event) {
+        event.target.classList.add('swapperoo')
+      },
     },
   }
 </script>
 
 <style lang="scss">
   // uses: '../styles/slide-presenter';
+  .content-swapper--cue {
+    padding: 0 .5em;
+    > * {
+      pointer-events: none;
+    }
+    &.swapperoo,
+    &:not(.swapperoo) + * {
+      display: none;
+    }
+  }
 </style>
