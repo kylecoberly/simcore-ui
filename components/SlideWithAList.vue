@@ -123,6 +123,12 @@
         this.$set(this, 'slide', currentSlide)
       })
     },
+    updated() {
+      // @FIXME: keep this around for now - Jase
+      // This allows the backbutton to repopulate the selected items
+      // but breaks the selected items when scrubbing
+      // this.selectedItems = this.slide.content.selectedItems
+    },
     computed: {
       departments() {
         return this.$store.state.user.departments
@@ -165,10 +171,16 @@
         return (this.itemCount > 0)
       },
       minimumItemsNeeded() {
-        return this.$store.state.availabilities.availabilityInstructors.totalCount - this.specificItemCount
+        // @FIXME: This is a hack to keep the next button from working when we arent ready for it yet - Jase
+        return 1000 // this.$store.state.availabilities.availabilityInstructors.totalCount - this.specificItemCount
       },
       labelForAvailableInstructors() {
         return `Available Instructors: ${this.itemCount}`
+      },
+    },
+    watch: {
+      segmentItems() {
+        this.selectedItems = _.intersection(this.items, this.selectedItems)
       },
     },
     methods: {
@@ -199,12 +211,14 @@
 
         if (this.selectedItems.length >= this.minimumItemsNeeded) {
           nextSlide = this.$store.state.slideDeck.slideTemplates.event_form
-          nextSlide.items = _.sortBy([...this.selectedItems, ...this.specificItems], ['lastname', 'firstname'])
+          nextSlide.selectedItems = this.selectedItems
+          nextSlide.specificItems = this.specificItems
           nextSlide.title = this.slide.title
           nextSlide.subtitle = this.slide.subtitle
           nextSlide.start_time = this.slide.content.start_time
           nextSlide.end_time = this.slide.content.end_time
           nextSlide.meta = this.slide.meta
+          nextSlide.meta.slideWidthFactor = 2
         }
 
         const currentSlide = this.slide

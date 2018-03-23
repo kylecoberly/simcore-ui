@@ -189,7 +189,7 @@
                   </SimDatalist>
                 </div>
               </section>
-              <section class="filter-molecule filter--categories">
+              <section v-if="false" class="filter-molecule filter--categories">
                 <header class="filter-molecule--heading text--blue--lighter"><SimIconText icon="#icon--instructors-exist" icon-type="svg" text="Filters"></SimIconText></header>
                 <div class="filter-molecule--options">
                   <SimFilterBy xv-if="userTypeIsClient" system-echo="(Filter is not available yet)" label="Facilities" type="institution_id" :list="institutions" @filter="applyFilter"></SimFilterBy>
