@@ -105,7 +105,7 @@ function areThereEnoughSegments(currentSegmentIndex, minimumSegmentCount) {
 }
 
 function getInstructorsWithAtLeastAsManySegmentsAsALimit(instructorContiguousSegmentTally, limit) {
-  console.log(instructorContiguousSegmentTally)
+  // console.log(instructorContiguousSegmentTally)
   return _.pickBy(instructorContiguousSegmentTally,
     (instructorSegmentTally) => {
       return instructorSegmentTally >= limit
