@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import _ from 'lodash'
 
 import * as transformers from './transformers'
@@ -147,7 +149,10 @@ function confirmSegments(segments, minimumDuration, shouldReset = false) {
 
   if (_.size(segments.confirmed) > 0) {
     if (_.size(segments.confirmed) >= minimumDuration) {
-      segments.final = _.concat(segments.final, segments.confirmed)
+      // TODO: Reduce the instructors in each confirmed segment to only those with enough segments.
+      const confirmedSegmentsWithOnlyValidInstructors = filterSegmentUsers(segments.confirmed, minimumDuration)
+
+      segments.final = _.concat(segments.final, confirmedSegmentsWithOnlyValidInstructors)
     }
     segments.confirmed = []
   }
@@ -157,6 +162,100 @@ function confirmSegments(segments, minimumDuration, shouldReset = false) {
 
 function confirmAndResetSegments(segments, minimumDuration) {
   return confirmSegments(segments, minimumDuration, true)
+}
+
+function verifyAllCurrentInstructors(
+  instructorsNoLongerInTheRunning,
+  allUniqueInstructorIds,
+  segments,
+  minimumDuration,
+  instructorMinimum,
+  ) {
+  // update any unconfirmed segments, removing any users not in the instructorsWithAtLeastAsManySegmentsAsTheCurrentRun array
+  // remove any 'unconfirmed segments' if, after updating its users, it no longer has enough instructors ('instructor minimum')
+  const unconfirmedSegments = []
+  let instructorTally       = resetInstructorSegmentTally(allUniqueInstructorIds)
+  _.forEach(segments.unconfirmed, (unconfirmedSegment) => {
+    const minimumTallyLimit = (_.size(unconfirmedSegments) + 1 < minimumDuration) ? _.size(unconfirmedSegments) + 1 : minimumDuration
+
+    instructorTally = tallyInstructorSegments(instructorTally, unconfirmedSegment.user_ids, minimumTallyLimit)
+    const instructorsWithAtLeastAsManySegmentsAsTheCurrentTally = getInstructorsWithAtLeastAsManySegmentsAsALimit(
+        instructorTally,
+        minimumTallyLimit,
+      )
+
+    const instructorIdsWithAllSegments = _.pickBy(instructorsWithAtLeastAsManySegmentsAsTheCurrentTally,
+      (instructor, key) => {
+        return !_.includes(instructorsNoLongerInTheRunning, key.toString())
+      })
+
+    if (_.size(instructorIdsWithAllSegments) >= instructorMinimum) {
+      const unconfirmedSegmentWithOnlyUsersWithAllSegments    = Object.assign({}, unconfirmedSegment)
+      unconfirmedSegmentWithOnlyUsersWithAllSegments.user_ids = _.keys(instructorIdsWithAllSegments)
+
+      unconfirmedSegments.push(unconfirmedSegmentWithOnlyUsersWithAllSegments)
+    } else {
+      console.log('remove this segment.')
+    }
+  })
+
+  segments.unconfirmed = unconfirmedSegments
+
+  return segments
+}
+
+function filterSegmentUsers(segments, minimumDuration) {
+  let instructorTallies = {}
+
+  let increment = 0
+  let previousSegmentKey
+  _.forEach(segments, (segment) => {
+      const startTime = segment.startTime
+    _.forEach(segment.user_ids, (instructorId) => {
+      if (!instructorTallies[instructorId]) {
+        instructorTallies[instructorId] = {
+          runs: {
+            [startTime]: { segments: { [startTime]: 1 }, tally: 1 },
+          },
+          lastAddedSegment: startTime,
+          currentRun: startTime,
+        }
+      } else if (instructorTallies[instructorId].lastAddedSegment === previousSegmentKey) {
+        const currentRun  = instructorTallies[instructorId].currentRun
+        const newTally    = instructorTallies[instructorId].runs[currentRun].segments[previousSegmentKey] + 1
+
+        instructorTallies[instructorId].runs[currentRun].segments[startTime] = newTally
+        instructorTallies[instructorId].runs[currentRun].tally = newTally
+
+        instructorTallies[instructorId].lastAddedSegment = startTime
+      } else if (instructorTallies[instructorId].lastAddedSegment !== previousSegmentKey || increment + 1 === _.size(segments)) {
+        instructorTallies[instructorId].runs[startTime] = { segments: { [startTime]: 1 }, tally: 1 }
+        instructorTallies[instructorId].currentRun = startTime
+      }
+    })
+
+    previousSegmentKey = startTime
+    increment += 1
+  })
+
+  const newSegments = {}
+  _.forEach(instructorTallies, (instructor, instructorId) => {
+    _.forEach(instructor.runs, (run) => {
+      if (run.tally >= minimumDuration) {
+        _.forEach(run.segments, (segment, segmentStartTime) => {
+          if (newSegments[segmentStartTime]) {
+            newSegments[segmentStartTime].user_ids.push(instructorId)
+          } else {
+            newSegments[segmentStartTime] = { user_ids: [instructorId], startTime: parseInt(segmentStartTime, 10) }
+          }
+        })
+      }
+    })
+  })
+
+  const newSegmentArray = _.values(newSegments)
+
+  return newSegmentArray
 }
 
 export const getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration = (
@@ -169,28 +268,6 @@ export const getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration = (
 
     return uniqueInstructorIds
   }, {})
-
-  // const unconfirmedInstructorLog = []
-  // const instructorTallyLog = []
-  // const segmentLog = []
-
-  // currentTally
-  // duration
-
-  // unconfirmedInstructors
-  // instructorTallies
-
-  // instructorMinimum
-  // unconfirmedSegments
-
-  // while currentTally < duration, if any unconfirmedInstructor's instructor.tally < currentTally:
-  //    remove them from the 'unconfirmedInstructors' list.
-  //    if that segment's valid instructor count (without said instructor) < 'instructor minimum'
-  //        remove any 'unconfirmed segments'
-  //        reset current tally to 0 from that segment
-
-  // once currentTally === duration... (confirm...? and?)
-
 
   let segments = {
     final: [],
@@ -238,11 +315,13 @@ export const getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration = (
     } else {
       // We DO have enough instructors BUT NOT enough contiguous segments.
       segments.unconfirmed.push(segment)
+
       contiguousSegmentTally += 1
 
-      const instructorsWithAtLeastAsManySegmentsAsTheCurrentRun = getInstructorsWithAtLeastAsManySegmentsAsALimit(instructorContiguousSegmentCounts, contiguousSegmentTally)
-      // any currently unconfirmed instructors NOT in the current run now?
+      const minimumContiguousTallyLimit = (contiguousSegmentTally < minimumDuration) ? contiguousSegmentTally : minimumDuration
+      const instructorsWithAtLeastAsManySegmentsAsTheCurrentRun = getInstructorsWithAtLeastAsManySegmentsAsALimit(instructorContiguousSegmentCounts, minimumContiguousTallyLimit)
 
+      // any currently unconfirmed instructors NOT in the current run now?
       const keysOfInstructorsWithAllSegments = _.keys(instructorsWithAtLeastAsManySegmentsAsTheCurrentRun)
       const instructorsNoLongerInTheRunning = _.pickBy(unconfirmedInstructors, (unconfirmedInstructor) => {
         return !_.includes(keysOfInstructorsWithAllSegments, unconfirmedInstructor)
@@ -250,50 +329,23 @@ export const getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration = (
 
       // if this segment's valid instructor count (without said instructor) < 'instructor minimum'
       if (_.size(instructorsNoLongerInTheRunning) > 0) {
-        // update any unconfirmed segments, removing any users not in the instructorsWithAtLeastAsManySegmentsAsTheCurrentRun array
-        // remove any 'unconfirmed segments' if, after updating its users, it no longer has enough instructors ('instructor minimum')
-        // reset the tally and repeat.
-        let unconfirmedSegmentTally = 0
-        const unconfirmedSegments = []
-        _.forEach(segments.unconfirmed, (unconfirmedSegment) => {
-          let instructorsWithAtLeastAsManySegmentsAsTheCurrentTally = instructorsWithAtLeastAsManySegmentsAsTheCurrentRun
-          if (unconfirmedSegmentTally > 0) {
-            instructorsWithAtLeastAsManySegmentsAsTheCurrentTally = getInstructorsWithAtLeastAsManySegmentsAsALimit(instructorContiguousSegmentCounts, unconfirmedSegmentTally)
-          }
+        segments = verifyAllCurrentInstructors(
+          instructorsNoLongerInTheRunning,
+          allUniqueInstructorIds,
+          segments,
+          minimumDuration,
+          instructorMinimum,
+        )
 
-          const userIdsWithAllSegments = _.pickBy(instructorsWithAtLeastAsManySegmentsAsTheCurrentTally, (instructor, key) => {
-            const instructorString = key.toString()
-            return !_.includes(instructorsNoLongerInTheRunning, instructorString)
-          })
-          if (_.size(userIdsWithAllSegments) >= instructorMinimum) {
-            const unconfirmedSegmentWithOnlyUsersWithAllSegments    = Object.assign({}, unconfirmedSegment)
-            unconfirmedSegmentWithOnlyUsersWithAllSegments.user_ids = _.keys(userIdsWithAllSegments)
-
-            unconfirmedSegments.push(unconfirmedSegmentWithOnlyUsersWithAllSegments)
-            unconfirmedSegmentTally += 1
-          } else {
-            // reset current tally to 0 from that segment
-            unconfirmedSegmentTally = 1
-          }
-        })
-
-        contiguousSegmentTally  = _.size(unconfirmedSegments)
-
-        segments.unconfirmed = unconfirmedSegments
+        contiguousSegmentTally  = _.size(segments.unconfirmed)
       }
 
-      unconfirmedInstructors = _.keys(instructorsWithAtLeastAsManySegmentsAsTheCurrentRun)
-      segments = confirmSegments(segments, minimumDuration)
+      unconfirmedInstructors  = _.keys(instructorsWithAtLeastAsManySegmentsAsTheCurrentRun)
+      segments                = confirmSegments(segments, minimumDuration)
     }
-
-    // unconfirmedInstructorLog.push(JSON.stringify(unconfirmedInstructors))
-    // instructorTallyLog.push(JSON.stringify(instructorContiguousSegmentCounts))
-    // segmentLog.push(JSON.stringify(segments))
 
     previousSegment = segment
   })
-
-  // console.log(segmentLog)
 
   segments = confirmSegments(segments, minimumDuration)
 
