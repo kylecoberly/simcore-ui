@@ -3,7 +3,7 @@
 /* eslint comma-dangle: 0 */
 
 export const unfilteredSingleDayBlocks = {
- '5': {
+  '5': {
       'startSegment': 10,
       'endSegment': 47,
       'startTime': 5,
