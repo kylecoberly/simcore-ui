@@ -242,7 +242,9 @@
 
         styles.push(`--start: ${this.block.startTime - this.timeShiftOffset}`)
         styles.push(`--duration: ${this.block.duration}`)
-        styles.push(`--segment-size: ${this.segmentSize}`)
+        if (this.variables.maximumDuration < 24) {
+          styles.push(`--segment-size: ${this.segmentSize}`)
+        }
 
         return styles.join(';')
       },
@@ -292,7 +294,7 @@
             subtitle: `${dateFormatter.formatBlockHoursForDisplay(block.duration)} • ${dateFormatter.formatTimesForDisplay(block.startTime, block.duration)}`,
             componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
             content: {
-              items: [],
+              items: block.items,
               specificItems: this.$store.state.availabilities.availabilityInstructors.specific,
               selectedItems: [],
               foundItems: [],

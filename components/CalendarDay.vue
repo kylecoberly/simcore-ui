@@ -77,10 +77,10 @@
             :show-controls="false"
           />
 
-          <SimTimeBlock v-else-if="thereIsDataForThisDay" v-for="(block, index) in filteredBlocks"
+          <SimTimeBlock v-else-if="thereIsDataForThisDay" v-for="(block, index) in useTheseSegments"
             :theme="availabilityBlockTheme"
-            :tooltip="{icon: '#icon--instructors-exist', text: pluralize(block.numberOfInstructors, 'Instructor Found', 'Instructors Found')}"
-            :block="block"
+            :xtooltip="{icon: '#icon--instructors-exist', text: pluralize(block.user_ids.length, 'Instructor Found', 'Instructors Found')}"
+            :block="{startTime: (block.startTime / 2), duration: 0.5, items: block.user_ids}"
             :index="index"
             :show-controls="false"
             :settings="filteredBlockSettings"
@@ -152,7 +152,7 @@
           canRemoveBlock: true,
           canResizeBlockStart: false,
           canResizeBlockEnd: false,
-          canMoveBlock: true,
+          canMoveBlock: false,
         },
         filteredBlockSettings: {
           showBlockHours: false,
@@ -163,6 +163,19 @@
           canMoveBlock: false,
         },
         pendingEvent: null,
+        useTheseSegments: [
+          { 'user_ids': [705, 9517, 9557, 9873], 'startTime': 15 },
+          { 'user_ids': [705, 9416, 9517, 9518, 9557, 9873], 'startTime': 16 },
+          { 'user_ids': [705, 1349, 9416, 9436, 9517, 9518, 9555, 9557, 9873], 'startTime': 17 },
+          { 'user_ids': [265, 270, 705, 1349, 9416, 9436, 9517, 9518, 9555, 9557, 9873], 'startTime': 18 },
+          { 'user_ids': [270, 632, 1349, 9416, 9436, 9466, 9518, 9555, 9557, 9873], 'startTime': 19 },
+          { 'user_ids': [632, 1349, 9416, 9436, 9466, 9518, 9555, 9557, 9873], 'startTime': 20 },
+          { 'user_ids': [632, 1349, 9416, 9436, 9466, 9518, 9555, 9557, 9873], 'startTime': 21 },
+          { 'user_ids': [12, 266, 632, 912, 1349, 9416, 9436, 9466, 9518, 9555, 9557], 'startTime': 22 },
+          { 'user_ids': [264, 271, 632, 912, 1349, 9874], 'startTime': 30 },
+          { 'user_ids': [264, 271, 632, 912, 9874], 'startTime': 31 },
+          { 'user_ids': [264, 271, 912, 9874], 'startTime': 32 },
+        ]
       }
     },
     mounted() {
@@ -348,6 +361,7 @@
         this.updateBlocks()
       },
       createPendingBlock(block) {
+        window.console.log(block)
         this.pendingEvent = {
           ...block,
           duration: this.initialEventLength,
