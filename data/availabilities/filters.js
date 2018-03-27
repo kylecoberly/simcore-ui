@@ -107,7 +107,6 @@ function areThereEnoughSegments(currentSegmentIndex, minimumSegmentCount) {
 }
 
 function getInstructorsWithAtLeastAsManySegmentsAsALimit(instructorContiguousSegmentTally, limit) {
-  console.log(instructorContiguousSegmentTally)
   return _.pickBy(instructorContiguousSegmentTally,
     (instructorSegmentTally) => {
       return instructorSegmentTally >= limit
@@ -202,6 +201,99 @@ function verifyAllCurrentInstructors(
   segments.unconfirmed = unconfirmedSegments
 
   return segments
+}
+
+function doesThisSegmentHaveEnoughInstructors(segment, minimumInstructors) {
+  return _.size(segment.user_ids) >= minimumInstructors || false
+}
+
+// returns an array of contiguous segment arrays OR empty array if none are valid
+export const getSegmentsWithMinimumInstructorsForACompleteDuration = (segments, minimumInstructors, duration) => {
+  const confirmedStartingSegments = {}
+
+  let currentContiguousStartTime  = null
+  let currentContiguousRun        = []
+
+  let previousSegment = null
+  _.forEach(segments, (currentSegment) => {
+    if (previousSegment === null) {
+      // Init if we have enough instructors
+      if (doesThisSegmentHaveEnoughInstructors(currentSegment, minimumInstructors)) {
+        // Init.
+        currentContiguousStartTime  = currentSegment.startTime
+        currentContiguousRun        = [currentSegment]
+
+        previousSegment = currentSegment
+      }
+    } else if (previousSegment.startTime + 1 === currentSegment.startTime) {
+      // Are there enough contiguous segments to meet the duration requirement?
+      if (doesThisSegmentHaveEnoughInstructors(currentSegment, minimumInstructors)) {
+        currentContiguousStartTime = currentContiguousStartTime || currentSegment.startTime
+        // Add
+        currentContiguousRun.push(currentSegment)
+
+        // Is our duration long enough?
+        if (_.size(currentContiguousRun) === duration) {
+          confirmedStartingSegments[currentContiguousStartTime] = currentContiguousRun.slice()
+
+          currentContiguousRun.shift()
+          currentContiguousStartTime = _.first(currentContiguousRun).startTime
+        }
+      } else {
+        currentContiguousStartTime  = null
+        currentContiguousRun        = []
+      }
+
+      previousSegment = currentSegment
+    } else {
+      // Reset if we have enough instructors
+      if (doesThisSegmentHaveEnoughInstructors(currentSegment, minimumInstructors)) {
+        currentContiguousStartTime  = currentSegment.startTime
+        currentContiguousRun        = [currentSegment]
+      } else {
+        currentContiguousStartTime  = null
+        currentContiguousRun        = []
+      }
+
+      previousSegment = currentSegment
+    }
+  })
+
+  return confirmedStartingSegments
+}
+
+// returns an array of instructors OR null
+function reduceToMinimumInstructorIdsPresentInAllSegments(segments, minimumInstructors) {
+  const validUserIds = _.reduce(segments, (validIdsSoFar, segment) => {
+    if (validIdsSoFar === null) {
+      return segment.user_ids
+    }
+
+    return _.intersection(validIdsSoFar, segment.user_ids)
+  }, null)
+
+  return _.size(validUserIds) >= minimumInstructors ? validUserIds : null
+}
+
+export const filterMinimumUsersWithACompleteDuration = (segments, minimumInstructors, duration) => {
+  const segmentArrays = getSegmentsWithMinimumInstructorsForACompleteDuration(segments, minimumInstructors, duration)
+
+  // Make a list of start times with users.
+  const startTimesWithUsers = {}
+
+  _.forEach(segmentArrays, (segmentsWithEnoughUsersAndDuration, startTime) => {
+    const startTimeWithUsers = {
+      startTime: parseInt(startTime, 10),
+      user_ids: reduceToMinimumInstructorIdsPresentInAllSegments(segmentsWithEnoughUsersAndDuration, minimumInstructors),
+    }
+
+    // startTimeWithUsers.user_ids = finalUsers
+    if (_.size(startTimeWithUsers.user_ids) >= minimumInstructors) {
+      startTimesWithUsers[startTime] = startTimeWithUsers
+    }
+  })
+
+  return startTimesWithUsers
 }
 
 function filterSegmentUsers(segments, minimumDuration) {
@@ -321,13 +413,12 @@ export const getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration = (
       const minimumContiguousTallyLimit = (contiguousSegmentTally < minimumDuration) ? contiguousSegmentTally : minimumDuration
       const instructorsWithAtLeastAsManySegmentsAsTheCurrentRun = getInstructorsWithAtLeastAsManySegmentsAsALimit(instructorContiguousSegmentCounts, minimumContiguousTallyLimit)
 
-      // any currently unconfirmed instructors NOT in the current run now?
-      const keysOfInstructorsWithAllSegments = _.keys(instructorsWithAtLeastAsManySegmentsAsTheCurrentRun)
-      const instructorsNoLongerInTheRunning = _.pickBy(unconfirmedInstructors, (unconfirmedInstructor) => {
+      // Are there any currently unconfirmed instructors NOT in the current run now?
+      const keysOfInstructorsWithAllSegments  = _.keys(instructorsWithAtLeastAsManySegmentsAsTheCurrentRun)
+      const instructorsNoLongerInTheRunning   = _.pickBy(unconfirmedInstructors, (unconfirmedInstructor) => {
         return !_.includes(keysOfInstructorsWithAllSegments, unconfirmedInstructor)
       })
 
-      // if this segment's valid instructor count (without said instructor) < 'instructor minimum'
       if (_.size(instructorsNoLongerInTheRunning) > 0) {
         segments = verifyAllCurrentInstructors(
           instructorsNoLongerInTheRunning,
