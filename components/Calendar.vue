@@ -886,9 +886,32 @@
     .local--day--pending-blocks {
       position: absolute;
       top: 0;
-      left: 15%;
-      right: 15%;
+      left: 25%;
+      right: 25%;
       bottom: 0;
+
+      .sim-timeblock::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translateX(50%);
+        border: 1em solid var(--orange);
+        border-right-color: transparent;
+        border-bottom-width: 0;
+        pointer-events: none;
+      }
+      .sim-timeblock::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        transform: translateX(50%);
+        border: 1em solid var(--orange);
+        border-right-color: transparent;
+        border-top-width: 0;
+        pointer-events: none;
+      }
     }
   }
 

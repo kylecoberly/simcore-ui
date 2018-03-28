@@ -78,6 +78,7 @@
             :show-controls="false"
           />
 
+          <!-- initialEventLength -->
           <SimTimeBlock v-else-if="thereIsDataForThisDay" v-for="(block, index) in filteredSegments"
             :theme="availabilityBlockTheme"
             :block="{startTime: (block.startTime / 2), duration: 0.5, items: block.user_ids}"
@@ -155,7 +156,7 @@
           canRemoveBlock: true,
           canResizeBlockStart: false,
           canResizeBlockEnd: false,
-          canMoveBlock: false,
+          canMoveBlock: true,
         },
         filteredBlockSettings: {
           showBlockHours: false,
@@ -369,10 +370,10 @@
         this.pendingEvent = {
           ...block,
           duration: this.initialEventLength,
-          limits: {
-            starting: block.startTime,
-            ending: block.startTime + block.duration - this.initialEventLength,
-          },
+          // limits: {
+          //   starting: block.startTime,
+          //   ending: block.startTime + block.duration - this.initialEventLength,
+          // },
         }
       },
       availabilityTimeBlockClicked() {
