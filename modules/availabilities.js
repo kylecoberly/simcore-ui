@@ -158,6 +158,9 @@ const availabilities = {
     getLastUpdatedAggregateAvailabilityBlocks: (state) => () => {
       return state.last_updated
     },
+    getLastUpdatedAggregateAvailabilitySegments: (state) => () => {
+      return state.last_updated
+    },
   },
 }
 
