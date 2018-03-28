@@ -4,7 +4,6 @@ import moment from 'moment'
 
 import filter from '../data/availabilities/index'
 import * as cleansers from '../data/availabilities/cleansers'
-import * as transformers from '../data/availabilities/transformers'
 
 const endpoint = 'users'
 const action = 'purview_availabilities'
