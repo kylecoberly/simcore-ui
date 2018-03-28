@@ -119,6 +119,7 @@
       }
     },
     mounted() {
+      window.console.log('slide mounted', this.slide.content)
       this.$store.watch(this.$store.getters.currentSlide, (currentSlide) => {
         this.$set(this, 'slide', currentSlide)
       })
@@ -134,14 +135,15 @@
         return this.$store.state.user.departments
       },
       segmentItems() {
-        let items
-        let user_ids = []
-        for (let iterator = this.slide.content.segment_start; iterator <= this.slide.content.segment_end; iterator++) {
-          user_ids = this.slide.content.segments[iterator].user_ids
-          items = items ? _.intersection(items, user_ids) : user_ids
-        }
-
-        return items
+        // let items
+        // let user_ids = []
+        // for (let iterator = this.slide.content.segment_start; iterator <= this.slide.content.segment_end; iterator++) {
+        //   user_ids = this.slide.content.segments[iterator].user_ids
+        //   items = items ? _.intersection(items, user_ids) : user_ids
+        // }
+        //
+        // return items
+        return []
       },
       specificItems() {
         return this.slide.content.specificItems
@@ -150,8 +152,8 @@
       },
       items() {
         let items = null
-        if (this.segmentItems && this.segmentItems.length) {
-          items = this.segmentItems.filter((item) => !this.slide.content.specificItems.includes(parseInt(item, 10)))
+        if (this.slide.content.items && this.slide.content.items) {
+          items = this.slide.content.items.filter((item) => !this.slide.content.specificItems.includes(parseInt(item, 10)))
         }
 
         return items
