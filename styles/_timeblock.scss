@@ -304,8 +304,9 @@
     cursor: pointer;
 
     &:hover {
-      --timeblock-color: var(--orange) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--orange) 90%);
-      box-shadow: 0 0 0 1px var(--dusk) inset, 0 .3em .5em -.3em var(--shadow);
+      mix-blend-mode: color-burn;
+      // --timeblock-color: var(--orange-film) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--orange) 90%);
+      // box-shadow: 0 0 0 1px var(--dusk) inset, 0 .3em .5em -.3em var(--shadow);
     }
   }
 
@@ -322,9 +323,15 @@
 
   &--pending-event,
   &--orange {
-    --timeblock-color: var(--orange) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--orange) 90%);
+    --timeblock-color: var(--orange);// linear-gradient(180deg, var(--orange) 50%, var(--yellow-film) 100%);
     box-shadow: 0 .4em 1em -.4em;
     border-radius: .3em;
+  }
+
+  &--pending-event .sim-timeblock--remover {
+    --remover-x-end: -50%;
+    right: auto;
+    left: 0;
   }
 
   &--duration,
