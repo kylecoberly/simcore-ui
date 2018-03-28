@@ -114,6 +114,8 @@
                            :initialCurrentUserAvailabilityBlocks="day.currentUserAvailabilityBlocks"
                            :initialAggregateUserAvailabilityBlocks="day.aggregateUserAvailabilityBlocks"
                            :initialAllBlocks="day.allBlocks"
+                           :initialAggregateUserAvailabilitySegments="day.aggregateUserAvailabilitySegments"
+                           :initialAllSegments="day.allSegments"
                            @blocksWereUpdated="saveUpdatedBlocksFromACalendarDay"
                            @toggle-expanded-week="toggleExpandedWeek"
               />
@@ -311,6 +313,8 @@
         },
         aggregateUserAvailabilityBlocks: [],
         allBlocks: [],
+        aggregateUserAvailabilitySegments: [],
+        allSegments: [],
         monthDays: {},
       }
     },
@@ -341,6 +345,8 @@
       this.currentUserAvailabilityBlocks    = this.$store.state.user.availabilities
       this.aggregateUserAvailabilityBlocks  = this.$store.state.availabilities.filteredBlocks
       this.allBlocks                        = this.$store.state.availabilities.allInstructorAvailabilityBlocks
+      this.aggregateUserAvailabilitySegments  = this.$store.state.availabilities.filteredSegments
+      this.allSegments                        = this.$store.state.availabilities.allInstructorAvailabilitySegments
 
       // TODO: activate these when we need to build them out - Jase
       // this.institutions = this.$store.state.user.institutions || []
@@ -400,6 +406,12 @@
 
         this.$forceUpdate()
       })
+      this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilitySegments, () => {
+        this.$set(this, 'aggregateUserAvailabilitySegments', this.$store.state.availabilities.filteredSegments)
+        this.$set(this, 'allSegments', this.$store.state.availabilities.allInstructorAvailabilitySegments)
+
+        this.$forceUpdate()
+      })
     },
     computed: {
       currentDay() {
@@ -409,6 +421,8 @@
           currentUserAvailabilityBlocks: [],
           aggregateUserAvailabilityBlocks: [],
           allBlocks: [],
+          aggregateUserAvailabilitySegments: [],
+          allSegments: [],
         }
 
         let currentDay = this.monthDays[this.date]
@@ -485,6 +499,8 @@
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[day] || [],
             aggregateUserAvailabilityBlocks: this.aggregateUserAvailabilityBlocks[day] || [],
             allBlocks: this.allBlocks[day] || [],
+            aggregateUserAvailabilitySegments: this.aggregateUserAvailabilitySegments[day] || [],
+            allSegments: this.allSegments[day] || [],
             eventBlocks: this.eventBlocks[day] || [],
             pendingEventBlocks: this.pendingEventBlocks[day] || [],
           }
@@ -561,6 +577,30 @@
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[monthDay] || [],
             aggregateUserAvailabilityBlocks: this.$store.state.availabilities.filteredBlocks[monthDay] || {},
             allBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks[monthDay] || {},
+            eventBlocks: this.eventBlocks[monthDay] || [],
+            pendingEventBlocks: this.pendingEventBlocks[monthDay] || [],
+          })
+        })
+      },
+      aggregateUserAvailabilitySegments() {
+        const startOfWeek = moment(this.activeMoment).startOf('week')
+        const startOfMonth = moment(this.activeMoment).startOf('month')
+
+        const weekLimit = 7
+        const monthLimit = this.activeMoment.daysInMonth()
+
+        const activeWeekDays = this.setDays(startOfWeek, weekLimit)
+        const activeMonthDays = this.setDays(startOfMonth, monthLimit)
+
+        this.monthDays = {}
+
+        _.each(activeMonthDays, (monthDay) => {
+          this.$set(this.monthDays, [monthDay], {
+            date: monthDay,
+            isInActiveWeek: activeWeekDays.includes(monthDay),
+            currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[monthDay] || [],
+            aggregateUserAvailabilitySegments: this.$store.state.availabilities.filteredSegments[monthDay] || {},
+            allSegments: this.$store.state.availabilities.allInstructorAvailabilitySegments[monthDay] || {},
             eventBlocks: this.eventBlocks[monthDay] || [],
             pendingEventBlocks: this.pendingEventBlocks[monthDay] || [],
           })
