@@ -886,31 +886,27 @@
     .local--day--pending-blocks {
       position: absolute;
       top: 0;
-      left: 25%;
-      right: 25%;
+      left: 30%;
+      right: 40%;
       bottom: 0;
 
-      .sim-timeblock::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        transform: translateX(50%);
-        border: 1em solid var(--orange);
-        border-right-color: transparent;
-        border-bottom-width: 0;
-        pointer-events: none;
-      }
-      .sim-timeblock::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        transform: translateX(50%);
-        border: 1em solid var(--orange);
-        border-right-color: transparent;
-        border-top-width: 0;
-        pointer-events: none;
+      .sim-timeblock {
+        border: 1px solid var(--lighter);
+        border-radius: .3em .1em .3em .3em;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 1px;
+          transform: translateX(100%);
+          height: 1em;
+          width: 100%;
+          background: var(--orange);
+          border: 1px solid var(--lighter);
+          border-left: 0;
+          pointer-events: none;
+        }
       }
     }
   }

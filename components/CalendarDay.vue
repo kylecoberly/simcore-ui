@@ -79,9 +79,9 @@
           />
 
           <!-- initialEventLength -->
-          <SimTimeBlock v-else-if="thereIsDataForThisDay" v-for="(block, index) in filteredSegments"
+          <SimTimeBlock v-else-if="thereIsDataForThisDay" v-for="(item, segmentKey, index) in filteredSegments"
             :theme="availabilityBlockTheme"
-            :block="{startTime: (block.startTime / 2), duration: 0.5, items: block.user_ids}"
+            :block="{startTime: (segmentKey / 2), duration: 0.5, items: item.user_ids}"
             :index="index"
             :show-controls="false"
             :settings="filteredBlockSettings"
@@ -282,7 +282,7 @@
       },
       thereIsDataForThisDay() {
         // return (this.filteredBlocks.length > 0)
-        return (this.filteredSegments.length > 0)
+        return (_.size(this.filteredSegments) > 0)
       },
       thereAreNoFilteredResultsForThisDay() {
         // return (!_.isEmpty(this.allBlocks) && this.filteredBlocks.length === 0)

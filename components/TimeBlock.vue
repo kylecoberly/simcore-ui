@@ -280,6 +280,11 @@
 
       packageSlideContent() {
         const block = this.block
+        const startingSegment = (block.startTime * 2)
+
+        const items = this.$store.state.availabilities.filteredSegments[this.$store.state.activeDate.date][startingSegment]
+        ? this.$store.state.availabilities.filteredSegments[this.$store.state.activeDate.date][(block.startTime * 2)].user_ids
+        : []
 
         const meta = {}
         meta.initialEventDuration = parseFloat(this.block.duration)
@@ -294,7 +299,7 @@
             subtitle: `${dateFormatter.formatBlockHoursForDisplay(block.duration)} • ${dateFormatter.formatTimesForDisplay(block.startTime, block.duration)}`,
             componentType: 'SimSlideWithAList', // TODO: Make this dynamic. - Chad/Jase
             content: {
-              items: block.items,
+              items: items,
               specificItems: this.$store.state.availabilities.availabilityInstructors.specific,
               selectedItems: [],
               foundItems: [],
@@ -306,7 +311,8 @@
               segments: block.segments,
             },
             meta,
-          })
+          }
+        )
       },
 
       // ---------- Move ----------
