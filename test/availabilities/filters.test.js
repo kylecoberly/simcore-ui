@@ -686,6 +686,30 @@ test('getSegmentStartTimesWithEnoughInstructorsForAMinimumDuration', () => {
   expect(actualStartTimes).toEqual(expectedStartTimes)
 })
 
+test('segmentStartTimesWithAtLeastOneInstructorForAtLeaseHalfAnHourShouldBeTheSameAsTheStartingSet', () => {
+  const expectedStartTimes = mockLarge.unfilteredSingleDaySegments
+
+  const actualStartTimes = filters.filterMinimumUsersWithACompleteDuration(
+    mockLarge.unfilteredSingleDaySegments,
+    1,
+    1
+  )
+
+  expect(actualStartTimes).toEqual(expectedStartTimes)
+})
+
+test('segmentStartTimesWithAtLeastTwoInstructorsForAtLeaseHalfAnHour', () => {
+  const expectedStartTimes = mockLarge.unfilteredSingleDaySegments
+
+  const actualStartTimes = filters.filterMinimumUsersWithACompleteDuration(
+    mockLarge.unfilteredSingleDaySegments,
+    2,
+    1
+  )
+
+  expect(actualStartTimes).toEqual(expectedStartTimes)
+})
+
 test('getSegmentStartTimesWithEnoughOfTheSameInstructorsForAMinimumDuration', () => {
   const expectedStartTimes = mockLarge.expectedSegmentsWithTheSameFourInstructorsForThreeHours
 

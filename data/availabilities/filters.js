@@ -216,12 +216,17 @@ export const getSegmentsWithMinimumInstructorsForACompleteDuration = (segments, 
 
   let previousSegment = null
   _.forEach(segments, (currentSegment) => {
-    if (previousSegment === null) {
+    if (duration === 1) {
+      if (doesThisSegmentHaveEnoughInstructors(currentSegment, minimumInstructors)) {
+        currentContiguousStartTime = currentSegment.startTime
+        confirmedStartingSegments[currentContiguousStartTime] = [currentSegment]
+      }
+    } else if (previousSegment === null) {
       // Init if we have enough instructors
       if (doesThisSegmentHaveEnoughInstructors(currentSegment, minimumInstructors)) {
         // Init.
-        currentContiguousStartTime  = currentSegment.startTime
-        currentContiguousRun        = [currentSegment]
+        currentContiguousStartTime = currentSegment.startTime
+        currentContiguousRun = [currentSegment]
 
         previousSegment = currentSegment
       }
@@ -276,6 +281,10 @@ function reduceToMinimumInstructorIdsPresentInAllSegments(segments, minimumInstr
 }
 
 export const filterMinimumUsersWithACompleteDuration = (segments, minimumInstructors, duration) => {
+  if (minimumInstructors === 1 && duration === 1) {
+    return segments
+  }
+
   const segmentArrays = getSegmentsWithMinimumInstructorsForACompleteDuration(segments, minimumInstructors, duration)
 
   // Make a list of start times with users.
@@ -287,7 +296,6 @@ export const filterMinimumUsersWithACompleteDuration = (segments, minimumInstruc
       user_ids: reduceToMinimumInstructorIdsPresentInAllSegments(segmentsWithEnoughUsersAndDuration, minimumInstructors),
     }
 
-    // startTimeWithUsers.user_ids = finalUsers
     if (_.size(startTimeWithUsers.user_ids) >= minimumInstructors) {
       startTimesWithUsers[startTime] = startTimeWithUsers
     }
