@@ -9,12 +9,7 @@ import {
   filterMinimumUsersWithACompleteDuration,
   getBlocksWithAMinimumNumberOfInstructors,
   getInstructorAvailabilitiesFromAListOfInstructorIds,
-  getSpecificBlocksFromAListOfInstructorIds,
 } from './filters'
-
-import {
-  groupSegmentsByContiguousTime,
-} from './transformers'
 
 // Get only exactly the specific instructors.
 // This will by far be the fastest option when possible.
@@ -33,22 +28,11 @@ function filterOnlySpecificInstructors(instructorsWithAvailabilityBlocks, filter
       allSegmentsFromInstructorAvailabilityBlocks,
     )
 
-  const allBlocksWithAllInstructorsForAllDays = {}
-  _.each(groupedInstructorBlocks, (instructorBlock, key) => {
-    const onlyBlocksWithAllInstructors =
-      getSpecificBlocksFromAListOfInstructorIds(
-        instructorBlock,
-        filtersToApply.instructorSlots.specificInstructorIds,
-      )
-    allBlocksWithAllInstructorsForAllDays[key] = onlyBlocksWithAllInstructors
-  })
-
-  return allBlocksWithAllInstructorsForAllDays
+  return groupedInstructorBlocks
 }
 
 
 function filterSpecificAndNonSpecificInstructors(allInstructorAvailabilityBlocks, filtersToApply) {
-  console.dir(allInstructorAvailabilityBlocks, filtersToApply)
   const blocksWithAMinimumNumberOfInstructors = {}
   _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
     const onlyBlocksWithAllInstructors =
@@ -63,64 +47,7 @@ function filterSpecificAndNonSpecificInstructors(allInstructorAvailabilityBlocks
     }
   })
 
-  const blocksReducedBySegmentsWithAMinimumNumberOfInstructors = {}
-  _.each(blocksWithAMinimumNumberOfInstructors, (instructorBlocks, key) => {
-    _.each(instructorBlocks, (instructorBlock) => {
-      const segmentsWithAMinimumNumberOfInstructors = _.pickBy(instructorBlock.segments, (segment) => {
-        return segment.user_ids.length >= filtersToApply.instructorSlots.totalCount
-      })
-
-      const groupedBlocks =
-        groupSegmentsByContiguousTime(segmentsWithAMinimumNumberOfInstructors)
-
-      const blocksWithAllInstructors = getSpecificBlocksFromAListOfInstructorIds(
-        groupedBlocks,
-        filtersToApply.instructorSlots.specificInstructorIds,
-      )
-
-      blocksReducedBySegmentsWithAMinimumNumberOfInstructors[key] = Object.assign(
-        blocksReducedBySegmentsWithAMinimumNumberOfInstructors[key] || {},
-        blocksWithAllInstructors,
-      )
-    })
-  })
-
-  return blocksReducedBySegmentsWithAMinimumNumberOfInstructors
-}
-
-function filterByMinimumRequiredInstructors(allInstructorAvailabilityBlocks, filtersToApply) {
-  const instructorAvailabilityBlocksWithAMinimumNumberOfInstructors = {}
-  _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
-    const onlyBlocksWithAllInstructors =
-      getBlocksWithAMinimumNumberOfInstructors(
-        instructorBlocks,
-        filtersToApply.instructorSlots.totalCount,
-      )
-
-    if (_.size(onlyBlocksWithAllInstructors) > 0) {
-      instructorAvailabilityBlocksWithAMinimumNumberOfInstructors[key] =
-        onlyBlocksWithAllInstructors
-    }
-  })
-
-  const instructorBlocksReducedToSegmentsWithAMinimumNumberOfInstructors = {}
-  _.each(instructorAvailabilityBlocksWithAMinimumNumberOfInstructors, (instructorBlocks, key) => {
-    _.each(instructorBlocks, (instructorBlock) => {
-      const segmentsWithAMinimumNumberOfInstructors = _.pickBy(instructorBlock.segments, (segment) => {
-        return segment.user_ids.length >= filtersToApply.instructorSlots.totalCount
-      })
-
-      const groupedBlocks =
-        groupSegmentsByContiguousTime(segmentsWithAMinimumNumberOfInstructors)
-
-      instructorBlocksReducedToSegmentsWithAMinimumNumberOfInstructors[key] = Object.assign(
-        instructorBlocksReducedToSegmentsWithAMinimumNumberOfInstructors[key] || {},
-        groupedBlocks,
-      )
-    })
-  })
-
-  return instructorBlocksReducedToSegmentsWithAMinimumNumberOfInstructors
+  return blocksWithAMinimumNumberOfInstructors
 }
 
 export default (
@@ -148,21 +75,22 @@ export default (
         filtersToApply,
       )
     } else {
-      instructorAvailabilityBlocks = filterByMinimumRequiredInstructors(
-        allInstructorAvailabilityBlocks,
-        filtersToApply,
-      )
+      instructorAvailabilityBlocks = allInstructorAvailabilityBlocks
     }
   } else {
     instructorAvailabilityBlocks = allInstructorAvailabilityBlocks
   }
 
   const minimumWithDuration = {}
+  if (filtersToApply.eventLength < 1) {
+    console.log(filtersToApply)
+  }
   _.forEach(instructorAvailabilityBlocks, (block, date) => {
     const segments = {}
     _.forEach(_.keys(block), (key) => {
       _.assign(segments, block[key].segments)
     })
+
 
     const minimumWithDurations = filterMinimumUsersWithACompleteDuration(
       segments,
@@ -172,6 +100,7 @@ export default (
 
     minimumWithDuration[date] = minimumWithDurations
   })
+  console.log('filtered')
 
   return minimumWithDuration
 }
