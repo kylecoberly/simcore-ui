@@ -9,6 +9,7 @@
   --color: var(--timeblock-color, var(--dark));
   --tooltip-shift-x: -50%;
   --tooltip-dink-x: 50%;
+  --segment-size: 4.1667;
   background: var(--color);
   opacity: 1;
   border-radius: 0;
@@ -220,8 +221,8 @@
     --remover-x-end: 50%;
     --remover-y-end: -50%;
     top: 50%;
-    left: calc(var(--start, 8) * var(--segment-size, 4.1667) * 1%);
-    width: calc(var(--duration, 8) * var(--segment-size, 4.1667) * 1%);
+    left: calc(var(--start, 8) * var(--segment-size) * 1%);
+    width: calc(var(--duration, 8) * var(--segment-size) * 1%);
     height: 2.5em;
     transform: translateY(-50%);
 
@@ -254,10 +255,10 @@
   &--y {
     --remover-x-end: 50%;
     --remover-y-end: -50%;
-    top: calc(var(--start) * var(--segment-size, 4.1667) * 1%);
+    top: calc(var(--start) * var(--segment-size) * 1%);
     right: 0;
     width: 100%;
-    height: calc(var(--duration) * var(--segment-size, 4.1667) * 1%);
+    height: calc(var(--duration) * var(--segment-size) * 1%);
 
     &.is-moving {
       transform: translateY(-.1em);
@@ -300,8 +301,12 @@
   &--aggregate,
   &--alt-blue {
     --timeblock-color: var(--blue-lighter) radial-gradient(ellipse at 0% -100%, var(--blue-film) 0%, var(--blue-lighter) 90%);
-    // opacity: .5;
     cursor: pointer;
+
+    &:hover {
+      --timeblock-color: var(--orange) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--orange) 90%);
+      box-shadow: 0 0 0 1px var(--dusk) inset, 0 .3em .5em -.3em var(--shadow);
+    }
   }
 
   &--specific,
