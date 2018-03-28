@@ -119,7 +119,6 @@
       }
     },
     mounted() {
-      window.console.log('slide mounted', this.slide.content)
       this.$store.watch(this.$store.getters.currentSlide, (currentSlide) => {
         this.$set(this, 'slide', currentSlide)
       })

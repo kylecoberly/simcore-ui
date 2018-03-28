@@ -2,8 +2,9 @@
   <div class="sim-calendar-day"
       @mousedown="setActiveDateToToday"
       :class="dayClasses"
-      >
+  >
     <div class="local--day">
+
 
       <SimTimeLines v-if="shouldShowTimelines"
                     class="sim-calendar--grid--day--timelines"
@@ -79,7 +80,6 @@
 
           <SimTimeBlock v-else-if="thereIsDataForThisDay" v-for="(block, index) in filteredSegments"
             :theme="availabilityBlockTheme"
-            :xtooltip="{icon: '#icon--instructors-exist', text: pluralize(block.user_ids.length, 'Instructor Found', 'Instructors Found')}"
             :block="{startTime: (block.startTime / 2), duration: 0.5, items: block.user_ids}"
             :index="index"
             :show-controls="false"
@@ -366,7 +366,6 @@
         this.updateBlocks()
       },
       createPendingBlock(block) {
-        window.console.log(block)
         this.pendingEvent = {
           ...block,
           duration: this.initialEventLength,
