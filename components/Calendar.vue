@@ -340,11 +340,11 @@
       this.fetchInstructorAvailabilitySegments(this.activeMoment)
       this.fetchCurrentUserAvailabilities(this.activeMoment)
 
-      this.eventBlocks                      = this.$store.state.events.blocks
-      this.pendingEventBlocks               = this.$store.state.events.pendingBlocks
-      this.currentUserAvailabilityBlocks    = this.$store.state.user.availabilities
-      this.aggregateUserAvailabilityBlocks  = this.$store.state.availabilities.filteredBlocks
-      this.allBlocks                        = this.$store.state.availabilities.allInstructorAvailabilityBlocks
+      this.eventBlocks                        = this.$store.state.events.blocks
+      this.pendingEventBlocks                 = this.$store.state.events.pendingBlocks
+      this.currentUserAvailabilityBlocks      = this.$store.state.user.availabilities
+      this.aggregateUserAvailabilityBlocks    = this.$store.state.availabilities.filteredBlocks
+      this.allBlocks                          = this.$store.state.availabilities.allInstructorAvailabilityBlocks
       this.aggregateUserAvailabilitySegments  = this.$store.state.availabilities.filteredSegments
       this.allSegments                        = this.$store.state.availabilities.allInstructorAvailabilitySegments
 
