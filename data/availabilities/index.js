@@ -6,7 +6,7 @@ import {
 } from './cleansers'
 
 import {
-  getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration,
+  filterMinimumUsersWithACompleteDuration,
   getBlocksWithAMinimumNumberOfInstructors,
   getInstructorAvailabilitiesFromAListOfInstructorIds,
   getSpecificBlocksFromAListOfInstructorIds,
@@ -90,7 +90,6 @@ function filterSpecificAndNonSpecificInstructors(allInstructorAvailabilityBlocks
 
 function filterByMinimumRequiredInstructors(allInstructorAvailabilityBlocks, filtersToApply) {
   const instructorAvailabilityBlocksWithAMinimumNumberOfInstructors = {}
-  console.log(filtersToApply)
   _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
     const onlyBlocksWithAllInstructors =
       getBlocksWithAMinimumNumberOfInstructors(
@@ -160,13 +159,18 @@ export default (
 
   const minimumWithDuration = {}
   _.forEach(instructorAvailabilityBlocks, (block, date) => {
-    const minimumWithDurations = getBlocksWithAMinimumNumberOfInstructorsForAMinimumDuration(
-      block,
-      filtersToApply.eventLength,
+    const segments = {}
+    _.forEach(_.keys(block), (key) => {
+      _.assign(segments, block[key].segments)
+    })
+
+    const minimumWithDurations = filterMinimumUsersWithACompleteDuration(
+      segments,
       filtersToApply.instructorSlots.totalCount,
+      filtersToApply.eventLength * 2,
     )
 
-    minimumWithDuration[date] = _.values(minimumWithDurations)
+    minimumWithDuration[date] = minimumWithDurations
   })
 
   return minimumWithDuration
