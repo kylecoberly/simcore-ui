@@ -16,7 +16,7 @@ function filterData(commit, state, filtersToApply) {
 
   const totalCount = filtersToApply.specificInstructorIds.length
 
-  const filteredBlocks = filter(
+  const filteredSegments = filter(
       state.instructorsWithAvailabilityBlocks,
       state.allInstructorAvailabilityBlocks,
     {
@@ -35,8 +35,8 @@ function filterData(commit, state, filtersToApply) {
   })
 
   commit(
-    'setFilteredBlocks',
-    { date: moment(), blocks: filteredBlocks },
+    'setFilteredSegments',
+    { segments: filteredSegments, date: moment() },
   )
 
   commit('setIsLoading', false)
@@ -89,6 +89,9 @@ const availabilities = {
 
     filteredBlocks: {},
     specificBlocks: {},
+
+    allInstructorAvailabilitySegments: {},
+    filteredSegments: {},
   },
   mutations: {
     setAvailabilityInstructors(state, instructors) {
@@ -102,14 +105,12 @@ const availabilities = {
 
       state.allSegmentsForDates = Object.assign({}, segments)
     },
-    setFilteredBlocks(state, availabilityBlocks) {
-      const date = availabilityBlocks.date
-
-      if (state.last_updated !== date) {
-        state.last_updated = date
+    setFilteredSegments(state, segments) {
+      if (state.last_updated !== segments.date) {
+        state.last_updated = segments.date
       }
 
-      state.filteredBlocks = availabilityBlocks.blocks
+      state.filteredSegments = segments.segments
 
       state.last_updated = moment()
     },

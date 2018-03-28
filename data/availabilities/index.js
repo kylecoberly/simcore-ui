@@ -90,7 +90,6 @@ function filterSpecificAndNonSpecificInstructors(allInstructorAvailabilityBlocks
 
 function filterByMinimumRequiredInstructors(allInstructorAvailabilityBlocks, filtersToApply) {
   const instructorAvailabilityBlocksWithAMinimumNumberOfInstructors = {}
-  console.log(filtersToApply)
   _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
     const onlyBlocksWithAllInstructors =
       getBlocksWithAMinimumNumberOfInstructors(
@@ -174,6 +173,5 @@ export default (
     minimumWithDuration[date] = minimumWithDurations
   })
 
-  console.log('--- results --- ', minimumWithDuration)
   return minimumWithDuration
 }

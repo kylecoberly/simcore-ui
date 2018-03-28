@@ -279,7 +279,7 @@ export const filterMinimumUsersWithACompleteDuration = (segments, minimumInstruc
   const segmentArrays = getSegmentsWithMinimumInstructorsForACompleteDuration(segments, minimumInstructors, duration)
 
   // Make a list of start times with users.
-  const startTimesWithUsers = {}
+  const startTimesWithUsers = []
 
   _.forEach(segmentArrays, (segmentsWithEnoughUsersAndDuration, startTime) => {
     const startTimeWithUsers = {
@@ -289,7 +289,7 @@ export const filterMinimumUsersWithACompleteDuration = (segments, minimumInstruc
 
     // startTimeWithUsers.user_ids = finalUsers
     if (_.size(startTimeWithUsers.user_ids) >= minimumInstructors) {
-      startTimesWithUsers[startTime] = startTimeWithUsers
+      startTimesWithUsers.push(startTimeWithUsers)
     }
   })
 
