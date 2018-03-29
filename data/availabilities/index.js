@@ -31,24 +31,24 @@ function filterOnlySpecificInstructors(instructorsWithAvailabilityBlocks, filter
   return groupedInstructorBlocks
 }
 
-
-function filterSpecificAndNonSpecificInstructors(allInstructorAvailabilityBlocks, filtersToApply) {
-  const blocksWithAMinimumNumberOfInstructors = {}
-  _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
-    const onlyBlocksWithAllInstructors =
-      getBlocksWithAMinimumNumberOfInstructors(
-        instructorBlocks,
-        filtersToApply.instructorSlots.totalCount,
-      )
-
-    if (_.size(onlyBlocksWithAllInstructors) > 0) {
-      blocksWithAMinimumNumberOfInstructors[key] =
-        onlyBlocksWithAllInstructors
-    }
-  })
-
-  return blocksWithAMinimumNumberOfInstructors
-}
+//
+// function filterSpecificAndNonSpecificInstructors(allInstructorAvailabilityBlocks, filtersToApply) {
+//   const blocksWithAMinimumNumberOfInstructors = {}
+//   _.each(allInstructorAvailabilityBlocks, (instructorBlocks, key) => {
+//     const onlyBlocksWithAllInstructors =
+//       getBlocksWithAMinimumNumberOfInstructors(
+//         instructorBlocks,
+//         filtersToApply.instructorSlots.totalCount,
+//       )
+//
+//     if (_.size(onlyBlocksWithAllInstructors) > 0) {
+//       blocksWithAMinimumNumberOfInstructors[key] =
+//         onlyBlocksWithAllInstructors
+//     }
+//   })
+//
+//   return blocksWithAMinimumNumberOfInstructors
+// }
 
 export default (
   instructorsWithAvailabilityBlocks,
@@ -60,47 +60,33 @@ export default (
   // TODO: where in (filter.professionalTitles)
   let instructorAvailabilityBlocks
 
-  if (filtersToApply.instructorSlots.totalCount > 0) {
-    if (
+  if (filtersToApply.instructorSlots.totalCount > 0 &&
       filtersToApply.instructorSlots.specificInstructorIds.length
       === filtersToApply.instructorSlots.totalCount
     ) {
-      instructorAvailabilityBlocks = filterOnlySpecificInstructors(
-        instructorsWithAvailabilityBlocks,
-        filtersToApply,
-      )
-    } else if (filtersToApply.instructorSlots.specificInstructorIds.length > 0) {
-      instructorAvailabilityBlocks = filterSpecificAndNonSpecificInstructors(
-        allInstructorAvailabilityBlocks,
-        filtersToApply,
-      )
-    } else {
-      instructorAvailabilityBlocks = allInstructorAvailabilityBlocks
-    }
+    instructorAvailabilityBlocks = filterOnlySpecificInstructors(
+      instructorsWithAvailabilityBlocks,
+      filtersToApply,
+    )
+
   } else {
     instructorAvailabilityBlocks = allInstructorAvailabilityBlocks
   }
 
-  const minimumWithDuration = {}
-  if (filtersToApply.eventLength < 1) {
-    console.log(filtersToApply)
-  }
+  const segmentsWithInstructorsForADuration = {}
   _.forEach(instructorAvailabilityBlocks, (block, date) => {
     const segments = {}
     _.forEach(_.keys(block), (key) => {
       _.assign(segments, block[key].segments)
     })
 
-
-    const minimumWithDurations = filterMinimumUsersWithACompleteDuration(
+    segmentsWithInstructorsForADuration[date] = filterMinimumUsersWithACompleteDuration(
       segments,
       filtersToApply.instructorSlots.totalCount,
       filtersToApply.eventLength * 2,
+      _.map(filtersToApply.instructorSlots.specificInstructorIds, (specificInstructorId) => { return `${specificInstructorId}` }),
     )
-
-    minimumWithDuration[date] = minimumWithDurations
   })
-  console.log('filtered')
 
-  return minimumWithDuration
+  return segmentsWithInstructorsForADuration
 }
