@@ -283,7 +283,7 @@
         const startingSegment = (block.startTime * 2)
 
         const items = this.$store.state.availabilities.filteredSegments[this.$store.state.activeDate.date][startingSegment]
-        ? this.$store.state.availabilities.filteredSegments[this.$store.state.activeDate.date][(block.startTime * 2)].user_ids
+        ? this.$store.state.availabilities.filteredSegments[this.$store.state.activeDate.date][startingSegment].user_ids
         : []
 
         const meta = {}

@@ -18,16 +18,19 @@
         </header>
         <SimDatalist :items="specificItems" :animate="false">
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText icon="#icon--checkbox--checked" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+            <SimIconText :icon="specificItemIcon(props.item.id)" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
           </li>
         </SimDatalist>
       </section>
 
-      <section v-if="thereAreItems" class="sim-slide--content--section">
+      <section v-if="showOtherItems" class="sim-slide--content--section">
         <header class="text--blue--lighter">
           <SimIconText icon="#icon--instructors-exist" icon-type="svg" :text="labelForAvailableInstructors"></SimIconText>
         </header>
         <SimDatalist :items="items" :animate="true" style="--selection-color: var(--green)">
+          <li slot="static-before" key="static-before" v-if="!thereAreItems">
+            <SimIconText icon="#icon--checkbox--warning" icon-type="svg" text="No results found for this time span"></SimIconText>
+          </li>
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
             <sim-selection
               :item="props.item"
@@ -151,7 +154,7 @@
       },
       items() {
         let items = null
-        if (this.slide.content.items && this.slide.content.items) {
+        if (this.slide.content.items) {
           items = this.slide.content.items.filter((item) => !this.slide.content.specificItems.includes(parseInt(item, 10)))
         }
 
@@ -171,6 +174,9 @@
       thereAreItems() {
         return (this.itemCount > 0)
       },
+      showOtherItems() {
+        return !this.thereAreSpecificItems || (this.slide.content.items.length !== this.specificItemCount)
+      },
       minimumItemsNeeded() {
         // @FIXME: This is a hack to keep the next button from working when we arent ready for it yet - Jase
         return 1000 // this.$store.state.availabilities.availabilityInstructors.totalCount - this.specificItemCount
@@ -185,6 +191,9 @@
       },
     },
     methods: {
+      specificItemIcon(itemId) {
+        return this.slide.content.items.includes(`${itemId}`) ? '#icon--checkbox--checked' : '#icon--checkbox--warning'
+      },
       isItemSelected(itemId) {
         return this.selectedItems.find((item) => item.id === itemId) ? true : false
       },

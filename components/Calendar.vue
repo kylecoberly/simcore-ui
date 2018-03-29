@@ -886,26 +886,31 @@
     .local--day--pending-blocks {
       position: absolute;
       top: 0;
-      left: 30%;
-      right: 40%;
+      left: 3em;
+      right: 2em;
       bottom: 0;
 
       .sim-timeblock {
         border: 1px solid var(--lighter);
-        border-radius: .3em .1em .3em .3em;
+        box-shadow: 0 .3em 1em -.4em;
+        border-radius: .3em;
+        --timeblock-color: var(--orange-film);
 
-        &::after {
-          content: '';
-          position: absolute;
+        .sim-timeblock--info {
           top: 0;
-          right: 1px;
-          transform: translateX(100%);
-          height: 1em;
-          width: 100%;
+          transform: translateY(0);
           background: var(--orange);
-          border: 1px solid var(--lighter);
-          border-left: 0;
-          pointer-events: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: .2em;
+          line-height: 1.1;
+        }
+        .sim-timeblock--remover {
+          --remover-x-end: -50%;
+          --color: var(--orange);
+          right: auto;
+          left: 0;
         }
       }
     }

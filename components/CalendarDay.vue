@@ -78,7 +78,6 @@
             :show-controls="false"
           />
 
-          <!-- initialEventLength -->
           <SimTimeBlock v-else-if="thereIsDataForThisDay" v-for="(item, segmentKey, index) in filteredSegments"
             :theme="availabilityBlockTheme"
             :block="{startTime: (segmentKey / 2), duration: 0.5, items: item.user_ids}"
@@ -281,12 +280,10 @@
         return _.isEmpty(this.allSegments)
       },
       thereIsDataForThisDay() {
-        // return (this.filteredBlocks.length > 0)
         return (_.size(this.filteredSegments) > 0)
       },
       thereAreNoFilteredResultsForThisDay() {
-        // return (!_.isEmpty(this.allBlocks) && this.filteredBlocks.length === 0)
-        return (!_.isEmpty(this.allSegments) && this.filteredSegments.length === 0)
+        return (!_.isEmpty(this.allSegments) && _.size(this.filteredSegments) === 0)
       },
       shouldShowTimelines() {
         let show = false
@@ -296,7 +293,6 @@
               show = true
             }
           } else if (this.isCoordinatorContext) {
-            // if (this.isSelected && (this.showExpandedWeek || this.bubbleIsOpen) && this.thereIsDataForThisDay) {
             if (this.isSelected && this.thereIsDataForThisDay && (this.showExpandedWeek || this.bubbleIsOpen)) {
               show = true
             }

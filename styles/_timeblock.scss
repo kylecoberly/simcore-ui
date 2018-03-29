@@ -300,7 +300,7 @@
 
   &--aggregate,
   &--alt-blue {
-    --timeblock-color: var(--blue-lighter) radial-gradient(ellipse at 0% -100%, var(--blue-film) 0%, var(--blue-lighter) 90%);
+    --timeblock-color: var(--blue-lighter); // radial-gradient(ellipse at 0% -100%, var(--blue-film) 0%, var(--blue-lighter) 90%);
     cursor: pointer;
 
     &:hover {
@@ -312,7 +312,7 @@
 
   &--specific,
   &--alt-green {
-    --timeblock-color: var(--green-lighter) radial-gradient(ellipse at 0% -100%, var(--green-film) 0%, var(--green-lighter) 90%);
+    --timeblock-color: var(--green-lighter); // radial-gradient(ellipse at 0% -100%, var(--green-film) 0%, var(--green-lighter) 90%);
     cursor: pointer;
   }
 
@@ -323,15 +323,9 @@
 
   &--pending-event,
   &--orange {
-    --timeblock-color: var(--orange);// linear-gradient(180deg, var(--orange) 50%, var(--yellow-film) 100%);
+    --timeblock-color: var(--orange); // linear-gradient(180deg, var(--orange) 50%, var(--yellow-film) 100%);
     box-shadow: 0 .4em 1em -.4em;
     border-radius: .3em;
-  }
-
-  &--pending-event .sim-timeblock--remover {
-    --remover-x-end: -50%;
-    right: auto;
-    left: 0;
   }
 
   &--duration,
