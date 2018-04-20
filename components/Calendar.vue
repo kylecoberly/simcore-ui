@@ -334,7 +334,7 @@
         this.$store.state.currentUser.id,
       )
       instructorsPromise.then((response) => {
-        this.$store.commit('setInstructors', Object.values(response.data.users))
+        this.$store.commit('setInstructors', response.data.users)
       })
 
       this.fetchInstructorAvailabilitySegments(this.activeMoment)
