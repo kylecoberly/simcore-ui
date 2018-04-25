@@ -1,6 +1,74 @@
 //opinions
 .sim-autocomplete {
-  li.highlighted {
-    background: var(--autocomplete-highlight, var(--lighter));
+  position: relative;
+
+  .sim-autocomplete--search {
+    display: flex;
+    box-shadow: 0 0 0 1px var(--dusk) inset;
+    color: var(--autocomplete-search-fg, var(--dark));
+    background: var(--autocomplete-search-bg, var(--lighter));
+    border-radius: .2em;
+
+    .sim-autocomplete--search--input {
+      position: relative;
+      font: inherit;
+      color: var(--autocomplete-input-fg, var(--autocomplete-search-fg, var(--dark)));
+      background: var(--autocomplete-input-bg, transparent);
+      border: 0;
+      box-shadow: none;
+      z-index: 1;
+    }
+
+    &--icon {
+      color: var(--autocomplete-count-fg, var(--autocomplete-search-fg, var(--dark)));
+      background: var(--autocomplete-count-bg, transparent);
+    }
+    &--item-count {
+      color: var(--autocomplete-count-fg, var(--dusk));
+      background: var(--autocomplete-count-bg, transparent);
+    }
+
+    &--icon,
+    &--item-count {
+      width: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+
+  &--options-visible {
+    input {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  &--items {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 1px;
+    right: 1px;
+    max-height: 15em;
+    overflow: auto;
+    color: var(--autocomplete-items-fg, var(--dark));
+    background: var(--autocomplete-items-bg, var(--lighter));
+    border-radius: 0 0 .2rem .2rem;
+    box-shadow: 0 0 0 1px var(--fog), 0 .3em 1em -.3em var(--shadow);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+
+  li {
+    padding: .5em;
+
+    &.highlighted {
+      color: var(--autocomplete-highlight-fg, var(--blue));
+      background: var(--autocomplete-highlight-bg, var(--shade));
+    }
   }
 }

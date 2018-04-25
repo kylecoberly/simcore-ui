@@ -62,8 +62,8 @@
     text-decoration: none;
     &:hover {
       text-decoration: none;
-      color: var(--overlay-x-fg-hover, var(--lightest));
-      background: var(--overlay-x-bg-hover, var(--action));
+      color: var(--panel-x-fg-hover, var(--lightest));
+      background: var(--panel-x-bg-hover, var(--action));
     }
   }
   &.active .sim-panel__dismiss {

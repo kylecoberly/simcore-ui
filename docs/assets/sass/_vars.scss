@@ -1,6 +1,5 @@
 :root {
   --default-ms: 350ms;
-
   --panel-width: 30em;
 
   --base: #257AA5;
@@ -8,10 +7,8 @@
   --dust: #f7f7f7;
   --cloud: #dadadc;
   --accent-text: #fff;
-
   --helper: #ff6300;
 
-  --base-font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   --base-bg: var(--lightest);
   --base-color: var(--dark);
   --base-link-color: var(--action);
@@ -22,4 +19,108 @@
 
   --menu-bg: var(--lighter);
   --menu-fg: var(--dark);
+}
+
+.text {
+  &--red {
+    color: var(--red);
+  }
+
+  &--orange {
+    color: var(--orange);
+  }
+
+  &--yellow {
+    color: var(--yellow);
+  }
+
+  &--green {
+    color: var(--green);
+  }
+
+  &--aqua {
+    color: var(--aqua);
+  }
+
+  &--blue {
+    color: var(--blue);
+  }
+
+  &--purple {
+    color: var(--purple);
+  }
+
+  &--grey {
+    color: var(--grey);
+  }
+
+  &--gray {
+    color: var(--gray);
+  }
+
+  &--light {
+    color: var(--light);
+  }
+
+  &--dark {
+    color: var(--dark);
+  }
+
+  &--ghost {
+    color: var(--ghost);
+  }
+}
+
+.bg {
+  &--red {
+    background: var(--red);
+  }
+
+  &--orange {
+    background: var(--orange);
+  }
+
+  &--yellow {
+    background: var(--yellow);
+  }
+
+  &--green {
+    background: var(--green);
+  }
+
+  &--aqua {
+    background: var(--aqua);
+  }
+
+  &--blue {
+    background: var(--blue);
+  }
+
+  &--blue-film {
+    background: var(--blue-film);
+  }
+
+  &--purple {
+    background: var(--purple);
+  }
+
+  &--grey {
+    background: var(--grey);
+  }
+
+  &--gray {
+    background: var(--gray);
+  }
+
+  &--light {
+    background: var(--light);
+  }
+
+  &--dark {
+    background: var(--dark);
+  }
+
+  &--ghost {
+    background: var(--ghost);
+  }
 }

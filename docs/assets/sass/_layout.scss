@@ -1,17 +1,7 @@
 body {
-  background: var(--base-bg);
-  color: var(--base-color);
-  font-family: var(--base-font-family);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
   min-height: 150vh;
   margin: 0;
   display: flex;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
 }
 
 #app {
@@ -51,12 +41,6 @@ body {
   }
   > main {
     flex: 1;
-    > h1 {
-      margin-top: 0;
-    }
-    a {
-      color: var(--base-link-color)
-    }
   }
   > aside {
     flex: .2;
@@ -65,16 +49,21 @@ body {
     border-right: 1px solid var(--cloud);
     transition: all calc(var(--ms) / 2) ease-out;
   }
-  header {
+  .app-menu {
     position: sticky;
-    top: 3.2em;
+    top: 5.5em;
+    header {
+      // position: sticky;
+      // top: 3.2em;
+    }
   }
-  article {
-    position: relative;
-    transition: all calc(var(--ms) / 2) ease-out;
+  .library {
+    > article {
+      position: relative;
+      transition: all calc(var(--ms) / 2) ease-out;
+    }
   }
 }
-
 
 .flex-1 {flex: 1;}
 .flex-2 {flex: 2;}

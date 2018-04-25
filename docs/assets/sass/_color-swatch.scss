@@ -1,0 +1,46 @@
+.module-section--brand-colors {
+  .module--demo {
+    
+  }
+}
+
+
+.module--demo--colors {
+  background: var(--dark);
+  display: grid;
+  grid-gap: .25em;
+  padding: .25em;
+}
+    
+    
+.color-swatch {
+  display: flex;
+  color: var(--dark);
+  font-family: monospace;
+  font-weight: normal;
+  -moz-osx-font-smoothing: initial;
+  -webkit-font-smoothing: initial;
+  > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &--light {
+    color: var(--light);
+  }
+}
+
+.swatch {
+  background: inherit;
+  color: currentColor;
+  flex-basis: 50%;
+  padding: 2em;
+}
+
+.swatch-label {
+  background: var(--fog);
+  color: var(--dark);  display: flex;
+  font-size: .875em;
+  flex-basis: 50%;
+  padding: 1em;
+}

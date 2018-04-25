@@ -1,6 +1,7 @@
 <template lang="html">
   <span class="sim-icontext" :class="bling">
-    <span v-if="icon" class="sim-icon fa" :class="icon"></span>
+    <span v-if="icon && iconIsFA" class="sim-icon fa" :class="icon"></span>
+    <span v-if="icon && iconIsSVG" class="sim-icon svg"><svg><use :xlink:href="icon" /></svg></span>
     <span v-if="text">{{ text }}</span>
   </span>
 </template>
@@ -10,12 +11,22 @@
     name: 'sim-icontext',
     props: {
       icon: String,
+      iconType: {
+        type: String,
+        default: 'fa',
+      },
       text: [Number, String],
       circle: Boolean,
       round: Boolean,
       square: Boolean,
     },
     computed: {
+      iconIsFA() {
+        return this.iconType === 'fa'
+      },
+      iconIsSVG() {
+        return this.iconType === 'svg'
+      },
       bling () {
         if (this.circle) {
           return 'sim-icontext__circle'

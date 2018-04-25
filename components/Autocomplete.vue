@@ -1,9 +1,33 @@
 <template lang="html">
-  <div class="sim-autocomplete">
-    <input v-model="keyword" :placeholder="placeholder" @input="onInput($event.target.value)" @keyup.esc="isOpen = false" @blur="isOpen = false" @keydown.down="moveDown" @keydown.up="moveUp" @keydown.enter="select" />
-    <div v-show="isOpen">
+  <div class="sim-autocomplete" :class="{'sim-autocomplete--options-visible': isOpen}">
+    <div class="sim-autocomplete--search">
+      <span class="sim-autocomplete--search--icon">
+        <SimIconText icon="fa-search"></SimIconText>
+      </span>
+      <input type="search" v-model="keyword"
+        class="sim-autocomplete--search--input"
+        :placeholder="placeholder"
+        :disabled="isDisabled"
+        @input="onInput($event.target.value)"
+        @keyup.esc="reset"
+        @focus="focus"
+        @blur="blur"
+        @keydown.down="moveDown"
+        @keydown.up="moveUp"
+        @keydown.enter="select"
+        />
+      <span class="sim-autocomplete--search--item-count">
+        {{ filteredOptionsCount }}
+      </span>
+    </div>
+    <div class="sim-autocomplete--items" v-show="isOpen">
       <transition-group appear name="list" tag="ul" mode="in-out">
-        <li v-for="(option, index) in filteredOptions" :key="index" :class="{highlighted: index === position}" @mouseenter="position = index" @mousedown="select">
+        <li v-for="(option, index) in filteredOptions"
+          :key="index"
+          :class="{highlighted: index === position}"
+          @mouseenter="position = index"
+          @mousedown="clickSelect"
+          >
           <slot name="item" :option="option"></slot>
         </li>
       </transition-group>
@@ -12,13 +36,14 @@
 </template>
 
 <script>
+  import SimIconText from './IconText'
+
   export default {
     name: 'sim-autocomplete',
+    components: {
+      SimIconText
+    },
     props: {
-      name: {
-        type: String,
-        default: 'autocomplete',
-      },
       options: {
         type: Array,
         required: true,
@@ -27,6 +52,10 @@
         type: String,
         default: 'find...',
       },
+      shouldBeDisabled: {
+        type: Boolean,
+        default: false
+      }
     },
     data() {
       return {
@@ -37,8 +66,19 @@
     },
     computed: {
       filteredOptions() {
-        const expression = new RegExp(this.keyword, 'i')
-        return this.options.filter(option => option.name.match(expression))
+        return this.options.filter((option) => {
+          return Object.keys(option).some((prop) => {
+            if (option[prop] !== null && option[prop] !== undefined) {
+              return option[prop].toString().toLowerCase().includes(this.keyword.toLowerCase())
+            }
+          })
+        })
+      },
+      filteredOptionsCount() {
+        return this.filteredOptions.length
+      },
+      isDisabled() {
+        return this.shouldBeDisabled
       },
     },
     methods: {
@@ -59,10 +99,24 @@
         this.position = (this.position - 1 < 0 ? this.filteredOptions.length - 1 : this.position - 1)
       },
       select() {
-        const selectedOption = this.filteredOptions[this.position]
-        this.$emit('select', selectedOption)
+        if (this.isOpen) {
+          const selectedOption = this.filteredOptions[this.position]
+          this.$emit('select', selectedOption)
+        }
+      },
+      clickSelect() {
+        this.select()
+        this.reset()
+      },
+      reset() {
         this.isOpen = false
-        this.keyword = selectedOption.name
+        this.keyword = ''
+      },
+      blur() {
+        this.isOpen = false
+      },
+      focus() {
+        this.isOpen = true
       },
     },
   }

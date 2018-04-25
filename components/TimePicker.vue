@@ -1,44 +1,46 @@
 <template lang="html">
-  <div class="sim-timepicker">
+  <div class="sim-timepicker" :class="`sim-timepicker--${orientation}`">
 
     <div v-if="shouldShowDate" class="sim-timepicker--controls">
       <div class="sim-timepicker--prev-day" @click="prevDay">
-        <SimIconText icon="fa-arrow-left"></SimIconText>
+        <SimIconText icon="fa-arrow-circle-left fa-lg"></SimIconText>
       </div>
       <div class="sim-timepicker--display-date">
-        <span>{{ displayDate }} &mdash; <b>{{ displayDateTotalHours }}</b></span>
-        <span v-if="totalHours > 0" class="sim-timepicker--remove-blocks" @click="removeAllTimeBlocks">
-          <SimIconText icon="fa-times"></SimIconText>
+        <span>{{ displayDate }} <br /><b>{{ displayTotalTimeBlockHours }}</b></span>
+        <span v-if="countTimeBlockHours > 0" class="sim-timepicker--remove-blocks" @click="removeAllTimeBlocks">
+          <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
         </span>
       </div>
       <div class="sim-timepicker--next-day" @click="nextDay">
-        <SimIconText icon="fa-arrow-right"></SimIconText>
+        <SimIconText icon="fa-arrow-circle-right fa-lg"></SimIconText>
       </div>
     </div>
 
-    <div class="sim-timepicker--inner" :class="setClass()">
-      <ul>
-        <li v-for="hour in 25" @mousedown="createTimeBlock(hour-1)" :class="setHourClass(hour-1)">
-          <div v-if="hour === 13" class="sim-timepicker--time sim-timepicker--noon">
-            <SimIconText icon="fa-sun-o"></SimIconText>
-          </div>
-          <div v-else-if="hour === 1 || hour === 25" class="sim-timepicker--time sim-timepicker--midnight">
-            <SimIconText icon="fa-moon-o"></SimIconText>
-          </div>
-          <div v-else class="sim-timepicker--time">
-            {{ displayHour(hour-1) }}
-          </div>
-        </li>
-      </ul>
+    <div class="sim-timepicker--inner" :class="timelineClasses">
 
-      <SimTimeBlock v-for="(block, index) in blocks" :key="index" :block="block" :index="index" :date="date" :orientation="orientation"
-        @remove-time-block="removeTimeBlock"
-        @is-moving="setMovingState"
-        @is-stretching="setStretchingState"
-        @block-updated="blockWasUpdated"
-        ></SimTimeBlock>
-
+      <SimTimeLines :mode="timelineMode"
+                    :start="startTime"
+                    :end="endTime"
+                    :action="timelineAction"
+                    :show-half-hour-ticks="showHalfHourTicks"
+                    @create-time-block="createTimeBlock"
+                    />
+      <SimTimeBlock v-for="(block, index) in currentBlocks"
+                    :key="index"
+                    :block="block"
+                    :index="index"
+                    :date="date"
+                    :orientation="orientation"
+                    :theme="blockTheme"
+                    :variables="timeBlockVariables"
+                    :settings="timeBlockSettings"
+                    @remove-time-block="removeTimeBlock"
+                    @is-moving="setMovingState"
+                    @is-stretching="setStretchingState"
+                    @block-was-updated="blockWasUpdated"
+        />
     </div>
+
   </div>
 </template>
 
@@ -46,108 +48,284 @@
   import moment from 'moment'
   import SimIconText from './IconText'
   import SimTimeBlock from './TimeBlock'
-
-  const _zeroPad = function(num, pads) {
-    pads = pads || '000'
-    return (pads + num).substr(-2)
-  }
+  import SimTimeLines from './TimeLines'
 
   export default {
     name: 'sim-timepicker',
     components: {
       SimIconText,
       SimTimeBlock,
+      SimTimeLines,
     },
     props: {
       date: {
         type: String,
-        default: ''
-      },
-      blocks: {
-        type: Array,
       },
       shouldShowDate: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
+      timelineAction: {
+        type: String,
+        default: null
+      },
+      timelineMode: {
+        type: String,
+        default: 'hours',
+      },
+      showHalfHourTicks: {
+        type: Boolean,
+        default: true,
+      },
+      blockTheme: {
+        type: String,
+        default: 'default',
+      },
+      blockSettings: {
+        type: Object,
+        default() {
+          return {
+            showBlockHours: true,
+            showBlockTime: true,
+            canRemoveBlock: true,
+            canResizeBlockStart: true,
+            canResizeBlockEnd: true,
+            canMoveBlock: true,
+          }
+        },
+      },
+      orientation: {
+        type: String,
+        default: 'y',
+      },
+      startTime: {
+        type: Number,
+        default: 0,
+      },
+      endTime: {
+        type: Number,
+        default: 24,
+      },
+      timeBlockLimit: {
+        type: Number,
+        default: 48,
+      },
+      timeBlockDefaultDuration: {
+        type: Number,
+        default: 1,
+      },
+      durationFilterBlocks: {
+        type: Array,
+      },
+      initialEventBlocks: {
+        type: Array,
+      },
+      initialPendingEventBlocks: {
+        type: Array,
+      },
+      initialCurrentUserAvailabilityBlocks: {
+        type: Array,
+      },
+      initialAggregateAvailabilityBlocks: {
+        type: Array,
+      },
     },
-    data () {
+    data() {
       return {
         isMoving: false,
         isStretching: false,
-        orientation: 'x'
+        currentBlocks: [],
+        eventBlocks: [],
+        pendingEventBlocks: [],
+        currentUserAvailabilityBlocks: [],
+        aggregateAvailabilityBlocks: [],
+        blocks: this.$store.state.user.availabilities[this.$store.state.activeDate.date] || [],
       }
     },
     computed: {
-      activeMoment () {
+      timeBlockVariables() {
+        return {
+          maximumDuration: this.totalHoursInterger,
+          startTime: this.startTime,
+        }
+      },
+      timeBlockSettings() {
+        return {
+          showBlockHours: this.blockSettings.showBlockHours,
+          showBlockTime: this.blockSettings.showBlockTime,
+          canRemoveBlock: this.blockSettings.canRemoveBlock,
+          canResizeBlockStart: this.blockSettings.canResizeBlockStart,
+          canResizeBlockEnd: this.blockSettings.canResizeBlockEnd,
+          canMoveBlock: this.blockSettings.canMoveBlock,
+        }
+      },
+      totalSegments() {
+        const segments = []
+        for (let index = this.startTime + 1; index <= this.endTime + 1; index += 0.5) {
+          segments.push(index)
+        }
+        return segments
+      },
+      totalHoursInterger() {
+        return this.endTime - this.startTime
+      },
+      activeMoment() {
         return moment(this.date)
       },
-      displayDate () {
-        return moment(this.date).format('dddd, MMMM Do')
+      displayDate() {
+        return moment(this.date)
+          .format('dddd, MMM D')
       },
-      totalHours () {
-        return this.blocks.map((block) => block.duration).reduce((sum, value) => sum + value, 0)
+      countTimeBlockHours() {
+        // return this.currentUserAvailabilityBlocks
+        return this.currentBlocks
+          .map((block) => { return block.duration })
+          .reduce((sum, value) => sum + value, 0)
       },
-      displayDateTotalHours () {
-        let output = this.totalHours.toString().replace(/\.5/, '½').replace(/^0/, '') || 0
-        let hours = `${output} ${(this.totalHours > 0 && this.totalHours <= 1 ? 'hour' : 'hours')}`
-        return hours
+      displayTotalTimeBlockHours() {
+        const output = this.countTimeBlockHours.toString()
+          .replace(/\.5/, '½')
+          .replace(/^0/, '') || 0
+
+        return `${output} ${(this.countTimeBlockHours > 0 && this.countTimeBlockHours <= 1 ? 'hour' : 'hours')}`
       },
-    },
-    methods: {
-      sortBlocks () {
-        this.blocks.sort(function(a, b) {
-          return parseFloat(a.start) - parseFloat(b.start);
-        })
+      blockLimitReached() {
+        // return this.currentUserAvailabilityBlocks.length === this.timeBlockLimit
+        return this.currentBlocks.length === this.timeBlockLimit
       },
-      setClass () {
-        let classes = []
-        if(this.isMoving) {
+      timelineClasses() {
+        const classes = []
+        if (this.timeBlockSettings.canMoveBlock) {
+          classes.push('is-moveable')
+        }
+        if (this.blockLimitReached) {
+          classes.push('is-at-block-limit')
+        }
+        if (this.isMoving) {
           classes.push('is-moving')
         }
-        if(this.isStretching) {
+        if (this.isStretching) {
           classes.push('is-stretching')
         }
         return classes.join(' ')
       },
-      setMovingState (bool) {
+    },
+    methods: {
+      // UI Management Methods
+      setMovingState(bool) {
         this.isMoving = bool
       },
-      setStretchingState (bool) {
+      setStretchingState(bool) {
         this.isStretching = bool
       },
-      displayHour (hour) {
-        hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour)
-        return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
-      },
-      setHourClass (hour) {
-        return hour >= 6 && hour <= 17 ? 'is-daytime' : 'is-nighttime'
-      },
-      createTimeBlock (hour) {
-        this.blocks.push({start: hour, duration: 1})
+
+      // Time Block Methods.
+      emitUpdateBlocks() {
         this.sortBlocks()
-        this.$emit('time-block-created', this.date, this.blocks)
+
+        // this.$emit('blocksWereUpdated', { blocks: this.currentUserAvailabilityBlocks, date: this.date })
+        this.$emit('blocksWereUpdated', { blocks: this.currentBlocks, date: this.date })
       },
-      removeTimeBlock (index) {
-        this.blocks.splice(index, 1)
-        this.$emit('time-block-removed', this.date, this.blocks)
+      sortBlocks() {
+        // this.currentUserAvailabilityBlocks.sort((a, b) => {
+        this.currentBlocks.sort((a, b) => {
+          return parseFloat(a.startTime) - parseFloat(b.startTime)
+        })
       },
-      removeAllTimeBlocks () {
-        this.blocks.splice(0, this.blocks.length)
-        this.$emit('all-time-blocks-removed', this.date)
+      createTimeBlock(hour) {
+        // if (this.currentUserAvailabilityBlocks.length < this.timeBlockLimit) {
+        if (this.currentBlocks.length < this.timeBlockLimit) {
+          let useModifier = false
+          const modifiedDuration = (this.endTime - hour)
+
+          if (
+            hour === Math.floor(this.endTime)
+            || Math.ceil(hour) === this.endTime
+            || hour + this.timeBlockDefaultDuration > this.endTime
+          ) {
+            useModifier = true
+          }
+
+          const maxDuration = useModifier ? modifiedDuration : this.timeBlockDefaultDuration
+
+          // this.currentUserAvailabilityBlocks.push({ startTime: hour, duration: maxDuration })
+          this.currentBlocks.push({ startTime: hour, duration: maxDuration })
+          this.emitUpdateBlocks()
+        }
       },
-      emitDayClick (day) {
-        this.$emit('calendar-day-selected', day)
+      removeTimeBlock(index) {
+        // this.currentUserAvailabilityBlocks.splice(index, 1)
+        this.currentBlocks.splice(index, 1)
+
+        this.emitUpdateBlocks()
       },
-      blockWasUpdated (date) {
-        this.sortBlocks()
-        this.$emit('time-block-updated', date)
+      removeAllTimeBlocks() {
+        // this.currentUserAvailabilityBlocks.splice(0, this.currentUserAvailabilityBlocks.length)
+        this.currentBlocks.splice(0, this.currentBlocks.length)
+
+        this.emitUpdateBlocks()
       },
-      nextDay () {
-        this.emitDayClick(this.activeMoment.add(1, 'day').format('YYYY-MM-DD'))
+      blockWasUpdated() {
+        this.emitUpdateBlocks()
       },
-      prevDay () {
-        this.emitDayClick(this.activeMoment.subtract(1, 'day').format('YYYY-MM-DD'))
+      // Date Management Methods.
+      nextDay() {
+        const date = this.activeMoment.add(1, 'day')
+          .format('YYYY-MM-DD')
+
+        this.$store.commit('setActiveDate', date)
+      },
+      prevDay() {
+        const date = this.activeMoment.subtract(1, 'day')
+          .format('YYYY-MM-DD')
+
+        this.$store.commit('setActiveDate', date)
+      },
+    },
+    mounted() {
+      // if (this.initialEventBlocks) {
+      //   this.eventBlocks = this.initialEventBlocks
+      // }
+      // if (this.initialPendingEventBlocks) {
+      //   this.pendingEventBlocks = this.initialPendingEventBlocks
+      // }
+      // if (this.initialCurrentUserAvailabilityBlocks) {
+      //   this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
+      // }
+      // if (this.initialAggregateAvailabilityBlocks) {
+      //   this.aggregateAvailabilityBlocks = this.initialAggregateAvailabilityBlocks
+      // }
+      if (this.durationFilterBlocks) {
+        this.currentBlocks = this.durationFilterBlocks
+      }
+      else if (this.initialEventBlocks) {
+        this.currentBlocks = this.initialEventBlocks
+      }
+      else if (this.initialPendingEventBlocks) {
+        this.currentBlocks = this.initialPendingEventBlocks
+      }
+      else if (this.initialCurrentUserAvailabilityBlocks) {
+        this.currentBlocks = this.initialCurrentUserAvailabilityBlocks
+      }
+      else if (this.initialAggregateAvailabilityBlocks) {
+        this.currentBlocks = this.initialAggregateAvailabilityBlocks
+      }
+    },
+    watch: {
+      durationFilterBlocks() {
+        this.currentBlocks = this.durationFilterBlocks
+      },
+      initialEventBlocks() {
+        this.currentBlocks = this.initialEventBlocks
+      },
+      initialPendingEventBlocks() {
+        this.currentBlocks = this.initialPendingEventBlocks
+      },
+      initialCurrentUserAvailabilityBlocks() {
+        this.currentBlocks = this.initialCurrentUserAvailabilityBlocks
+      },
+      initialAggregateAvailabilityBlocks() {
+        this.currentBlocks = this.initialAggregateAvailabilityBlocks
       },
     },
   }

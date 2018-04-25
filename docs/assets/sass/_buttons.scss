@@ -1,42 +1,71 @@
-button,
-.button {
-  --color: var(--action);
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 0 0 1px rgba(#777, .5) inset;
-  padding: .4em .7em;
-  border-radius: .2em;
-  color: inherit;
+// buttons and input
+.sim-button,
+button {
+  font-size: inherit;
   font-family: inherit;
-  font-size: 1rem;
-  background: var(--color);
-  color: #fff;
+  border: 0;
+  padding: .5em 1em;
+  border-radius: .3em;
+  cursor: pointer;
+  transition: 300ms ease-in-out;
+  background: var(--line);
+  color: inherit;
+  opacity: 1;
   outline: none;
-  will-change: transform;
-  transition: transform .15s ease-out;
-  &:active {
-    transform: scale(.95);
+  box-shadow: none;
+
+  + .sim-button,
+  + button {
+    //margin-bottom: .5em;
+    margin-left: .5em;
   }
-  &:active,
-  &:focus {
-    box-shadow: 0 0 0 1px rgba(#777, .5) inset, 0 0 2px 1px var(--action);
+
+  &.active {
+    background: var(--active);
+    color: var(--lighter);
   }
-  &.secondary {
-    color: var(--action);
-    background: rgba(#777, .1);
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &[disabled] {
+    background: var(--light-grey);
+    opacity: .3;
+    cursor: not-allowed;
+
+    &.sim-button--cancel {
+      color: inherit;
+    }
     &:hover {
-      background: rgba(#777, .05);
+      transform: none;
     }
   }
-  &.link {
+
+  &--primary {
+    background: var(--action);
+    color: var(--lighter);
+  }
+
+  &--secondary {
+    background: var(--light);
     color: var(--action);
-    background: transparent;
-    &:not(:focus):not(:active) {
-      box-shadow: none;
+    &:hover {
+      background: var(--edge);
     }
   }
-  &.danger {
-    --color: var(--danger);
-    // background: var(--danger);
+
+  &--link {
+    background-color: transparent;
+    color: var(--action);
+    border-radius: 0;
   }
+
+  &--cancel {
+    background: var(--mist);
+  }
+}
+
+.sim-calendar-button {
+  background: var(--light);  
 }

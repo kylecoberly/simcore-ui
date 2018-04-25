@@ -1,0 +1,53 @@
+.local--day {
+  position: relative;
+  flex: 1;
+  display: flex;
+  transition: var(--default-ms) linear;
+
+  &--aggregate-blocks,
+  &--event-blocks,
+  &--pending-blocks,
+  &--time-blocks {
+    pointer-events: none;
+    position: relative;
+    flex: 1;
+
+    .sim-timeblock {
+      pointer-events: auto;
+    }
+  }
+
+  &--aggregate-blocks {
+    z-index: 1;
+
+    .sim-timeblock {
+      justify-content: flex-end;
+
+      &:hover {
+        z-index: 2;
+      }
+
+      &.active {
+        box-shadow: 0 0 0 .2em var(--aqua);
+      }
+    }
+  }
+
+  &--event-blocks,
+  &--pending-blocks {
+    z-index: 2;
+  }
+
+  > .local--day--blocks + .local--day--blocks {
+    margin: 0 0 0 .5em;
+  }
+}
+
+.is-coordinator-context {
+  .local--day {
+    &--time-blocks {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}

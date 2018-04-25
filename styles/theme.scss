@@ -3,6 +3,7 @@
   --darker: #222;
   --dark: #333;
   --dark-grey: #444;
+  --grey: #565656;
   --medium-grey: #777;
   --light-grey: #ccc;
   --lighter-grey: #ddd;
@@ -12,13 +13,30 @@
 
   // colors
   --red: #ca1e34;
+  --red-film: rgba(#ca1e34, .5);
+  --red-film-light: rgba(#ca1e34, .15);
+  --red-film-lighter: rgba(#ca1e34, .05);
   --orange: #ff7042;
+  --orange-lighter: #f5a623;
+  --orange-film: rgba(#ff7042, .5);
   --yellow: #ffc929;
+  --yellow-film: rgba(#ffc929, .5);
   --green: #9ccc66;
+  --green-lighter: #bfd98c;
+  --green-film: rgba(#9ccc66, .5);
+  --aqua: #00c1d9;
+  --aqua-film: rgba(#00c1d9, .5);
   --blue: #4A93B9;
+  --blue-lighter: #96b3cb;
+  --blue-film: rgba(#4A93B9, .5);
+  --blue-film-light: rgba(#4A93B9, .15);
+  --blue-film-heavy: rgba(14, 103, 150, .9);
   --purple: #ab47bd;
+  --purple-film: rgba(#ab47bd, .5);
   --accent: var(--medium-grey);
   --action: var(--blue);
+  --active: var(--blue-film-heavy);
+  --focus: var(--aqua);
   --success: var(--green);
   --danger: var(--red);
   --warnign: var(--orange);
@@ -26,14 +44,21 @@
   --royal: var(--purple);
 
   --shadow: rgba(#000, .8);
+  --twilight: rgba(#000, .5);
+  --dusk: rgba(#000, .3);
   --shade: rgba(#000, .05);
   --dust: rgba(#777, .05);
   --edge: rgba(#777, .15);
   --line: rgba(#777, .5);
+  --ghost: rgba(#808080, .5); // middle grey, middle opacity
+  --mist: rgba(#fff, .2);
+  --fog: rgba(#fff, .5);
+  --frost: rgba(#fff, .8);
 
   --default-ms: 350ms;
 
   --icon-font-family: 'FontAwesome';
+  --icon-check: '\f00c';
   --icon-check-circle: '\f058';
   --icon-check-square: '\f14a';
   --icon-check-square-o: '\f046';
@@ -41,8 +66,75 @@
   --icon-minus-circle: '\f056';
 
   // alternate spellings
-  --light-gray: var(--light-grey);
   --dark-gray: var(--dark-grey);
+  --gray: var(--grey);
   --medium-gray: var(--medium-grey);
+  --light-gray: var(--light-grey);
   --lighter-gray: var(--lighter-grey);
+
+  --base-font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --serif-font-family: 'Garamond', 'Cambria', Georgia, serif;
+
+}
+
+.text {
+  &--red {
+    color: var(--red);
+  }
+
+  &--orange {
+    color: var(--orange);
+
+    &--lighter {
+      color: var(--orange-lighter);
+    }
+  }
+
+  &--yellow {
+    color: var(--yellow);
+  }
+
+  &--green {
+    color: var(--green);
+  }
+
+  &--aqua {
+    color: var(--aqua);
+  }
+
+  &--blue {
+    color: var(--blue);
+
+    &--lighter {
+      color: var(--blue-lighter);
+    }
+  }
+
+  &--purple {
+    color: var(--purple);
+  }
+
+  &--grey {
+    color: var(--grey);
+  }
+
+  &--gray {
+    color: var(--gray);
+  }
+
+  &--light {
+    color: var(--light);
+  }
+
+  &--dark {
+    color: var(--dark);
+  }
+
+  &--ghost {
+    color: var(--ghost);
+  }
+}
+
+.ghost {
+  opacity: .5;
 }

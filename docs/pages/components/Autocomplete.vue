@@ -7,7 +7,7 @@
           Normal / Default
         </template>
         <template slot="view">
-          <sim-autocomplete :options="options" name="film" placeholder="find a movie..." @select="onSelect">
+          <sim-autocomplete :options="options" placeholder="find a movie..." @select="onSelect">
             <template slot="item" slot-scope="props">
               <article class="media">
                 <p>
@@ -24,7 +24,7 @@
           </p>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html" v-pre>&lt;sim-autocomplete :options="options" name="film" placeholder="find a movie..." @select="onSelect">
+          <pre v-highlightjs><code class="html" v-pre>&lt;sim-autocomplete :options="options" placeholder="find a movie..." @select="onSelect">
   &lt;template slot="item" slot-scope="props">
     &lt;article class="media">
       &lt;p>

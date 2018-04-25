@@ -14,3 +14,9 @@ selenium-debug.log
 *.ntvs*
 *.njsproj
 *.sln
+
+\.vscode/settings\.json
+
+docs/assets/sass/_temp\.scss
+
+coverage/

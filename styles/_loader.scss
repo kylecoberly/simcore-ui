@@ -9,12 +9,13 @@
   opacity: 1;
   border-radius: 50%;
   pointer-events: none;
-  box-shadow: 0 0 0 .1em rgba(0,0,0,.15) inset;
+  box-shadow: 0 0 0 .1em var(--loader-ring-color, var(--shade)) inset;
   transform: translate(-50%, -50%);
   will-change: opacity;
+
   circle {
     fill: none;
-    stroke: var(--action);
+    stroke: var(--loader-color, var(--action));
     stroke-width: 10%;
     stroke-linecap: round;
     transform-origin: 50% 50%;
@@ -25,6 +26,18 @@
       var(--ms-loader-rotate, 1329ms) loader-rotate ease-in-out infinite;
   }
 }
+
+.sim-loader--shield {
+  position: absolute;
+  background: var(--fog); // linear-gradient(135deg, var(--fog), var(--mist));
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 5;
+}
+
+
 @keyframes loader-rotate {
   to { transform: rotate3d(0, 0, 1, 360deg); }
 }
