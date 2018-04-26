@@ -82,6 +82,7 @@
             :theme="availabilityBlockTheme"
             :block="{startTime: (segmentKey / 2), duration: 0.5, items: item.user_ids}"
             :index="index"
+            :key="index"
             :show-controls="false"
             :settings="filteredBlockSettings"
             @time-block-clicked="aggregateTimeBlockClicked"
