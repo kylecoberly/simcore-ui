@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 // Docs: Components
 import DocAutocomplete from '../pages/components/Autocomplete'
+import DocAutofinder from '../pages/components/Autofinder'
 import DocBadges from '../pages/components/Badge'
 import DocBulkCheck from '../pages/components/BulkCheck'
 import DocCalendar from '../pages/components/Calendar'
@@ -73,6 +74,14 @@ export default new Router({
           label: 'Autocomplete',
           components: {
             details: DocAutocomplete,
+          },
+        },
+        {
+          path: 'autofinder',
+          name: 'autofinder',
+          label: 'Autofinder',
+          components: {
+            details: DocAutofinder,
           },
         },
         {
