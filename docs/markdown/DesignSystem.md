@@ -1,7 +1,7 @@
-<link rel="stylesheet" href="https://stackedit.io/style.css">
+<!-- <link rel="stylesheet" href="https://stackedit.io/style.css">
 
 <body class="stackedit">
-<div class="stackedit__html">
+<div class="stackedit__html"> -->
 
 ![Data illustration by Katerina Limpitsouni via unDraw](https://s3-us-west-2.amazonaws.com/s.cdpn.io/97621/img-undraw-data-SM.png)
 
@@ -32,7 +32,21 @@ We are in the early stages of our system. We are designing and building in the o
 
 ### PRINCIPLES
 
-Our **highest priority** is to **satisfy** the customer **through early and continuous delivery** of **valuable** software.
+Good Design:
+- Is innovative
+- Makes a product useful
+- Is aesthetic
+- Makes a product understandable
+- Is unobtrusive
+- Is honest
+- Is long-lasting
+- Is thorough down to the last detail
+- Is environmentally friendly
+- Involves as little design as possible
+
+reference: [Dieter Rams—Vistoe](https://www.vitsoe.com/us/about/good-design)
+
+Our highest priority is to **satisfy** the customer through **early** and **continuous delivery** of **valuable** software.
 
 See [Agile Manifesto](https://docs.healthscholars.com/showfile/Development/AgileManifesto.html) for details.
 
@@ -69,7 +83,7 @@ A list of useful resources, articles, and tools that influence and inspire our t
 
 - [Agile Manifesto](https://docs.healthscholars.com/showfile/Development/AgileManifesto.html)
 - [Zen and the Art of Motorcycle Maintenance](https://en.wikipedia.org/wiki/Zen_and_the_Art_of_Motorcycle_Maintenance/)
-- [Development Principles (Lonley Planet)](http://rizzo.lonelyplanet.com/documentation/general/development-principles)
+- [Development Principles](http://rizzo.lonelyplanet.com/documentation/general/development-principles)
 
 #### Design Tools
 
@@ -88,6 +102,7 @@ A list of useful resources, articles, and tools that influence and inspire our t
 - [Pattern Lab](http://patternlab.io/)
 - [CodeSandbox](https://codesandbox.io/)
 - [Mozilla Development Network](https://developer.mozilla.org/)
+- [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
 
 ### Change Log
@@ -101,7 +116,7 @@ A list of useful resources, articles, and tools that influence and inspire our t
 - Created: [`Change Log`](#change-log)
 - Published: [`Introduction[0.1]`](#introduction)
 
-[comment]: # (2018-29-01 - Eric Thayer) 
+[comment]: # (2018-29-01 - Eric Thayer)
 
 `0.0.2` - Resource Section
 

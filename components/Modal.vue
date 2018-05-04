@@ -1,9 +1,19 @@
 <template lang="html">
   <div class="sim-modal" :class="{active: shouldBeOpen}">
-    <div class="sim-modal__mask" v-if="shouldShowMask" @click="clickMask"></div>
+    <div
+      v-if="shouldShowMask"
+      class="sim-modal__mask"
+      @click="clickMask"
+      ></div>
     <div class="sim-modal__wrapper">
       <slot></slot>
-      <div class="sim-modal__dismiss" v-if="shouldShowDismiss" @click="dismiss">&times;</div>
+      <div
+        v-if="shouldShowDismiss"
+        class="sim-modal__dismiss"
+        @click="dismiss"
+        >
+          &times;
+      </div>
     </div>
   </div>
 </template>
@@ -46,7 +56,7 @@
           this.dismiss()
         }
       }
-    }
+    },
   }
 </script>
 

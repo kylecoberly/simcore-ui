@@ -47,10 +47,6 @@
   }
 </script>
 
-
-<style>
-  .demobox__view {
-    height: 4em;
-    position: relative;
-  }
+<style lang="scss" scoped>
+  
 </style>
