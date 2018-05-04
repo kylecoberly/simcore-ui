@@ -12,7 +12,7 @@ The HealthScholars' guideline for the development and implementation of all publ
 
 ### Current Status [0.0.2](#change-log)
 
-We are in the early stages of our system. We are designing and building in the open. We will continutue to update and maintain release notes and will document our journey as our process, priorities, and roadmap changes.
+We are in the early stages of our system. We are designing and building in the open. We will continue to update and maintain release notes and will document our journey as our process, priorities, and roadmap changes.
 
 ## Introduction
 
