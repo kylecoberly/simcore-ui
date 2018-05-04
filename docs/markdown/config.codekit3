@@ -7,11 +7,7 @@
 		"uuidString": "1B6C77D1-F7EE-4032-B879-DF6FECE124C6"
 		}
 	],
-<<<<<<< Updated upstream
-"creatorBuild": "26330",
-=======
 "creatorBuild": "26680",
->>>>>>> Stashed changes
 "files": {
 	"\/CodeStyleGuidelines.md": {
 		"cB": 0,
@@ -31,16 +27,6 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-<<<<<<< Updated upstream
-	"\/DesignSystem.html": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 0,
-		"oAP": "\/DesignSystem.html",
-		"oF": 0
-		},
-=======
->>>>>>> Stashed changes
 	"\/DesignSystem.md": {
 		"cB": 0,
 		"cS": 0,
@@ -59,11 +45,7 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-<<<<<<< Updated upstream
-	"\/features\/LaunchPad.md": {
-=======
 	"\/DiscoveryProcess.md": {
->>>>>>> Stashed changes
 		"cB": 0,
 		"cS": 0,
 		"eF": 1,
@@ -72,11 +54,7 @@
 		"eSQ": 1,
 		"ft": 4096,
 		"oA": 0,
-<<<<<<< Updated upstream
-		"oAP": "\/features\/LaunchPad.html",
-=======
 		"oAP": "\/DiscoveryProcess.html",
->>>>>>> Stashed changes
 		"oF": 0,
 		"oFM": 0,
 		"oS": 0,
@@ -85,29 +63,7 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-<<<<<<< Updated upstream
-	"\/features\/LaunchPad_OG.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"oA": 0,
-		"oAP": "\/features\/LaunchPad_OG.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"\/features\/VaccineApp\/VaccineUI-design-meeting-2018-03-08.md": {
-=======
 	"\/features\/LaunchPad.md": {
->>>>>>> Stashed changes
 		"cB": 0,
 		"cS": 0,
 		"eF": 1,
@@ -116,11 +72,7 @@
 		"eSQ": 1,
 		"ft": 4096,
 		"oA": 0,
-<<<<<<< Updated upstream
-		"oAP": "\/features\/VaccineApp\/VaccineUI-design-meeting-2018-03-08.html",
-=======
 		"oAP": "\/features\/LaunchPad.html",
->>>>>>> Stashed changes
 		"oF": 0,
 		"oFM": 0,
 		"oS": 0,
@@ -150,45 +102,6 @@
 		"opt": 1,
 		"oT": 1,
 		"q": 100
-<<<<<<< Updated upstream
-		},
-	"\/Refinement.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"oA": 0,
-		"oAP": "\/Refinement.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
-	"\/WeekInReview\/2018-02-26.md": {
-		"cB": 0,
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"oA": 0,
-		"oAP": "\/WeekInReview\/2018-02-26.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-=======
->>>>>>> Stashed changes
 		}
 	},
 "hooks": [
@@ -199,12 +112,8 @@
 	"creationDate": 538960449,
 	"displayValue": "markdown",
 	"displayValueWasSetByUser": 0,
-<<<<<<< Updated upstream
-	"iconImageName": "brackets_teal"
-=======
 	"iconImageName": "brackets_teal",
 	"iconImageWasSetByUser": 0
->>>>>>> Stashed changes
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
@@ -2007,10 +1916,7 @@
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
 		"autoOutputPathStyle": 0,
-<<<<<<< Updated upstream
-=======
 		"outputFormat": 0,
->>>>>>> Stashed changes
 		"quality": 100
 		},
 	"languageDefaultsJS": {
