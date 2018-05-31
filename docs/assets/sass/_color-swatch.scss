@@ -15,7 +15,7 @@
   }
 
 }
-    
+
 .color-swatch {
   background: var(--lightest);
   display: flex;
@@ -54,14 +54,14 @@
     //position: relative;
     //z-index: 1;
   }
-  
+
   &--name {
-    background: var(--lightest);  
+    background: var(--lightest);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     flex-basis: 50%;
-    //padding: 1em 1em 3.5em;    
+    //padding: 1em 1em 3.5em;
     padding: 1.25em 1em;
     //position: relative;
     //transition: var(--default-ms) ease;
@@ -94,11 +94,14 @@
 
   &.bg--lightest {
     background: var(--light-grey);
+
     .color-swatch--example {
       box-shadow: 0 0 0 1px var(--edge) inset;
     }
   }
+
   &:not(.brand-gradient) {
+
     &:hover,
     &:focus {
       background: transparent;
@@ -106,13 +109,16 @@
       outline: none;
       transform: scale(1.1);
       z-index: 1;
+
       button {
         opacity: 1;
       }
+
       b {
         color: var(--dark);
         font-size: 1.25em;
       }
+
       small {
         top: 0;
         right: 0;
