@@ -19,13 +19,13 @@
         font-size: .875em;
       }
     }
-    
+
   }
 
   .alt-logos {
 
     .module--demo {
-      
+
     }
     .brand-logo:not(.brand-logo--icon) {
       max-width: 15em;
@@ -50,11 +50,11 @@
   }
 
   &--light {
-    background: var(--brand-purple, var(--dark));
+    background: var(--color-brand-grey, var(--dark));
   }
 
 }
 
 .brand-gradient {
-  background: linear-gradient(to right, var(--brand-green) 20%, var(--brand-teal), 50%, var(--brand-purple) 68%, var(--brand-grey) 85%);
+  background: linear-gradient(to right, var(--color-brand-green) 20%, var(--color-brand-green-dark), 50%, var(--color-brand-green-faded) 68%, var(--color-brand-grey) 85%);
 }
