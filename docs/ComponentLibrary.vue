@@ -1,5 +1,5 @@
 <template lang="html">
-  <main 
+  <main
     id="main-content"
     class="app-main library library-gui"
     role="main"
@@ -10,7 +10,7 @@
       <router-view name="details" />
     </transition>
     <div class="app-footer">
-      <p>&copy; 2014-2018 SimCore</p>
+      <p>&copy; 2018 Health Scholars</p>
     </div>
   </main>
 </template>

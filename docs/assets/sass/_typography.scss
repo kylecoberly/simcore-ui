@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:300,500,700');
+@import url('//fonts.googleapis.com/css?family=Montserrat:300,500,700');
 
 :root {
   --theme-font-family: 'Montserrat', var(--base-font-family);
@@ -6,7 +6,7 @@
 
 .typography {
 
-  &-demo {      
+  &-demo {
     font-family: var(--theme-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -19,42 +19,42 @@
     h6,.h6 {
       margin-bottom: 0;
     }
-        
+
 
     h1,.h1 {
       font-size: 3.25em;
       font-weight: 700;
     }
-    
+
     h2,.h2 {
       font-size: 2.75em;
       font-weight: 700;
     }
-    
+
     h3,.h3 {
       font-size: 2.25em;
       font-weight: 700;
     }
-    
+
     h4,.h4 {
       font-size: 1.75em;
       font-weight: 500;
     }
-    
+
     h5,.h5 {
       font-size: 1.25em;
       font-weight: 500;
     }
-    
+
     h6,.h6 {
       font-size: .875em;
       font-weight: 500;
     }
-    
+
     p a,
     u {
       text-decoration: underline;
-      text-decoration-skip: ink; 
+      text-decoration-skip: ink;
     }
 
   }
@@ -63,8 +63,8 @@
 
 .module-section {
 
-  &--font-family {    
-    
+  &--font-family {
+
     font-size: .75em;
 
     p {
@@ -88,7 +88,7 @@
 
     .module--demo--info {
       background: transparent;
-      border-top: 1px solid var(--light-grey); 
+      border-top: 1px solid var(--light-grey);
       display: block;
       margin-top: 0;
       padding-top: 10px;
@@ -102,7 +102,7 @@
         max-width: 34rem;
         word-break: break-all;
       }
-      p:nth-child(2) { 
+      p:nth-child(2) {
         padding: 0;
       }
     }
@@ -115,7 +115,7 @@
   }
 
   &--copy {
-    
+
   }
 
 }
