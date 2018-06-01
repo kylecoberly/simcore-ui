@@ -56,7 +56,6 @@ body {
     // have a min-width of 15rem and a max-width of 13vmax
     // displays more proportionately at larger screens
     grid-template-columns: minmax(15rem, 13vmax) 1fr;
-
     grid-template-rows: auto 1fr;
   }
 }
@@ -109,7 +108,7 @@ body {
 
   @media (min-width: 40em) {
     position: sticky;
-    top: 4.5em;
+    top: 3.5em;
   }
 }
 
