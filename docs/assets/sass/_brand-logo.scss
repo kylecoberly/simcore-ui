@@ -2,31 +2,24 @@
 
   .grid {
     grid-gap: 4rem;
+
     .module--demo {
       margin-top: 3rem;
-      & + .module--demo {
-        //margin: 0;
-      }
     }
   }
 
   .module--demo {
-    display: grid;
     align-content: end;
+    display: grid;
 
-    &--info {
-      pre {
-        font-size: .875em;
-      }
+    &--info pre {
+      font-size: .875em;
     }
 
   }
 
   .alt-logos {
 
-    .module--demo {
-
-    }
     .brand-logo:not(.brand-logo--icon) {
       max-width: 15em;
     }
@@ -45,8 +38,26 @@
   max-width: 80em;
   padding: .75em;
 
-  &--icon {
+  img {
+    display: block;
+    margin: 0 auto;
+    max-width: 15em;
+  }
+
+  &--icon img {
     max-width: 10em;
+  }
+
+  &--vertical,
+  &--text {
+    padding: 3em;
+  }
+
+  &--text {
+
+    img {
+      max-width: 25em;
+    }
   }
 
   &--light {
