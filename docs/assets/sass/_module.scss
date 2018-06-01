@@ -7,11 +7,13 @@
   padding-bottom: 2rem;
 }
 
-.module-label.module-label { // I know. I will fix later
+ // I know. I will fix later
+ // this avoids using !important
+.module-label.module-label {
   border-bottom: 3px solid var(--light);
   color: var(--grey);
   display: inline-block;
-  font-family: var(--base-font-family);
+  font-family: var(--base-font);
   font-size: .875rem;
   font-weight: 700;
   letter-spacing: .1ch;
@@ -20,7 +22,7 @@
   position: relative;
   padding-bottom: .125rem;
   text-transform: uppercase;
-  
+
   &::before {
     color: var(--action);
     content: "#";
@@ -44,13 +46,13 @@
 
     &--item {
       flex-grow: 1;
-      
+
     }
-    
+
     &--info {
       flex-grow: 0;
     }
-    
+
     &--info {
       background: var(--snow);
       display: flex;
@@ -69,7 +71,7 @@
       }
       p {
         color: var(--grey);
-        //font-family: var(--base-font-family);
+        //font-family: var(--base-font);
         font-family: monospace;
         font-size: 1rem;
         font-weight: 600;
