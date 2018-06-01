@@ -1,7 +1,7 @@
 :root {
+  --grid-gap-size: 1rem;
   display: grid;
   height: 100vh;
-  --grid-gap-size: 1rem;
 }
 
 body {
@@ -129,6 +129,7 @@ body {
   padding: 1em 0;
 
   p {
+    font-size: .75rem;
     margin-bottom: 0;
   }
 }
@@ -201,6 +202,14 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
   }
 
+  &--auto-columns {
+    grid-template-columns: repeat(auto-fit, minmax(5em, 25%));
+    justify-content: center;
+
+    .module--demo {
+      align-content: space-between;
+    }
+  }
 }
 
 .sim-overlay {
