@@ -6,12 +6,12 @@
     >
     <h1 class="library--page-title">SimCore UI Components</h1>
     <hr />
-    <article>    
+    <article>
       <p>Component Library for SimCore apps</p>
 
       <h2>To Use In Your Project</h2>
       <p># in your package.json</p>
-      <div class="code-wrap">  
+      <div class="code-wrap">
       <pre v-highlightjs><code class="html" v-pre>
   "dependencies": {
     "simcore-ui": "git+ssh@github.com:SimCoreTechnology/simcore-ui.git#master"
@@ -64,7 +64,7 @@
       </div>
     </article>
     <div class="app-footer">
-      <p>&copy; 2014-2018 SimCore</p>
+      <p>&copy; 2014-2018 Health Scholars</p>
     </div>
   </main>
 </template>
