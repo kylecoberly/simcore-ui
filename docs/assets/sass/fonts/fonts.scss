@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'montserrat-300';
+  src: url('fonts/montserrat-300.woff2') format('woff2'),
+       url('fonts/montserrat-300.woff') format('woff');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'montserrat-400';
+  src: url('fonts/montserrat-400.woff2') format('woff2'),
+       url('fonts/montserrat-400.woff') format('woff');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'montserrat-500';
+  src: url('fonts/montserrat-500.woff2') format('woff2'),
+       url('fonts/montserrat-500.woff') format('woff');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'din-condensed';
+  src: url('fonts/din-condensed-bold.woff2') format('woff2'),
+       url('fonts/din-condensed-bold.woff') format('woff');
+  font-display: swap;
+  font-style: normal;
+  font-weight: normal;
+}
