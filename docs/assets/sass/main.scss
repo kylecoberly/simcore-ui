@@ -9,17 +9,12 @@
 // @import 'input';
 @import '../../../styles/form-elements';
 
-// layout
-@import 'layout';
-@import 'header';
-@import 'nav';
-@import 'brand-logo';
-
 // style guide content
 @import 'intro';
 
 // modules
 @import 'module';
+@import 'brand-logo';
 
 // theme styles
 @import 'color';
@@ -27,6 +22,10 @@
 @import 'typography';
 @import 'buttons';
 
-// ovverides
+// layout
+@import 'nav';
+@import 'header';
+@import 'layout';
+
+// overrides
 @import 'overrides';
-//@import 'modifiers';
