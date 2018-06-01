@@ -36,32 +36,42 @@
 .brand-logo {
   margin: 0 auto;
   max-width: 80em;
-  padding: .75em;
+  padding: 2em;
 
   img {
     display: block;
     margin: 0 auto;
-    max-width: 15em;
+  }
+
+  &--horizontal img {
+    max-width: 20em;
   }
 
   &--icon img {
     max-width: 10em;
   }
 
-  &--vertical,
-  &--text {
-    padding: 3em;
+  &--vertical img {
+    max-width: 15em;
   }
 
-  &--text {
+  &--icon,
+  &--primary {
+    padding: .75em;
+  }
 
-    img {
-      max-width: 25em;
-    }
+  // &--horizontal,
+  // &--vertical,
+  // &--text {
+  //   padding: 2em;
+  // }
+
+  &--text img {
+    max-width: 25em;
   }
 
   &--light {
-    background: var(--color-brand-grey, var(--dark));
+    background: var(--color-brand-grey-dark, var(--dark));
   }
 
 }

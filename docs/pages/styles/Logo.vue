@@ -39,8 +39,8 @@
             <h3 id="brand-logo" class="module-label">Brand Logo</h3>
             <div class="module module--demo module--demo--logo">
               <div class="module--demo--item">
-                <div class="brand-logo">
-                  <img src="../../assets/images/HealthScholars/logo/dark/healthscholars-logo-Primary-dark.svg" alt="Health Scholars" style="display: block; margin: 0 auto; max-width: 50em; padding-bottom: 2em;">
+                <div class="brand-logo brand-logo--primary">
+                  <img src="../../assets/images/HealthScholars/logo/dark/healthscholars-logo-primary-dark.svg" alt="Health Scholars" style="display: block; margin: 0 auto; max-width: 50em; padding-bottom: 2em;">
                 </div>
               </div>
               <div class="module--demo--info">
@@ -51,24 +51,24 @@
             <div class="grid grid--two-columns">
               <div class="module module--demo module--demo--logo">
                 <div class="module--demo--item">
-                  <div class="brand-logo brand-logo--light" style="padding: 2em;">
-                    <img src="../../assets/images/HealthScholars/logo/light/healthscholars-logo-Primary-light.svg" alt="Health Scholars">
+                  <div class="brand-logo brand-logo--light">
+                    <img src="../../assets/images/HealthScholars/logo/light/healthscholars-logo-primary-light.svg" alt="Health Scholars">
                   </div>
                 </div>
                 <div class="module--demo--info">
                   <p>Logo: Primary Light</p>
-                  <pre v-highlightjs><code class="html">&lt;img src="healthscholars-logo-Primary-light.svg" alt="Health Scholars"></code></pre>
+                  <pre v-highlightjs><code class="html">&lt;img src="healthscholars-logo-primary-light.svg" alt="Health Scholars"></code></pre>
                 </div>
               </div>
               <div class="module module--demo module--demo--logo">
                 <div class="module--demo--item">
-                  <div class="brand-logo brand-logo--light" style="padding: 2em;">
-                    <img src="../../assets/images/HealthScholars/logo/light/healthscholars-logo-Primary-light-alt.svg" alt="Health Scholars">
+                  <div class="brand-logo brand-logo--light">
+                    <img src="../../assets/images/HealthScholars/logo/light/healthscholars-logo-primary-light-alt.svg" alt="Health Scholars">
                   </div>
                 </div>
                 <div class="module--demo--info">
                   <p>Logo: Primary Light (alt)</p>
-                  <pre v-highlightjs><code class="html">&lt;img src="healthscholars-logo-Primary-light-alt.svg" alt="Health Scholars"></code></pre>
+                  <pre v-highlightjs><code class="html">&lt;img src="healthscholars-logo-primary-light-alt.svg" alt="Health Scholars"></code></pre>
                 </div>
               </div>
             </div>
@@ -78,8 +78,8 @@
             <div class="grid grid--two-columns">
               <div class="module module--demo module--demo--logo">
                 <div class="module--demo--item">
-                  <div class="brand-logo">
-                    <img src="../../assets/images/HealthScholars/logo/dark/healthscholars-logo-Horizontal-dark.svg" alt="Health Scholars">
+                  <div class="brand-logo brand-logo--horizontal">
+                    <img src="../../assets/images/HealthScholars/logo/dark/healthscholars-logo-horizontal-dark.svg" alt="Health Scholars">
                   </div>
                 </div>
                 <div class="module--demo--info">
@@ -89,8 +89,8 @@
               </div>
               <div class="module module--demo module--demo--logo">
                 <div class="module--demo--item">
-                  <div class="brand-logo brand-logo--light">
-                    <img src="../../assets/images/HealthScholars/logo/light/healthscholars-logo-Horizontal-light.svg" alt="Health Scholars">
+                  <div class="brand-logo brand-logo--horizontal brand-logo--light">
+                    <img src="../../assets/images/HealthScholars/logo/light/healthscholars-logo-horizontal-light.svg" alt="Health Scholars">
                   </div>
                 </div>
                 <div class="module--demo--info">
@@ -102,7 +102,7 @@
             <div class="grid grid--two-columns">
               <div class="module module--demo module--demo--logo">
                 <div class="module--demo--item">
-                  <div class="brand-logo brand-logo--vertical"><img src="../../assets/images/HealthScholars/logo/dark/healthscholars-logo-Vertical-dark.svg" alt="Health Scholars"></div>
+                  <div class="brand-logo brand-logo--vertical"><img src="../../assets/images/HealthScholars/logo/dark/healthscholars-logo-vertical-dark.svg" alt="Health Scholars"></div>
                 </div>
                 <div class="module--demo--info">
                   <p>Logo: Vertical Dark</p>
@@ -111,7 +111,7 @@
               </div>
               <div class="module module--demo module--demo--logo">
                 <div class="module--demo--item">
-                  <div class="brand-logo brand-logo--vertical brand-logo--light"><img src="../../assets/images/HealthScholars/logo/light/healthscholars-logo-Vertical-light.svg" alt="Health Scholars"></div>
+                  <div class="brand-logo brand-logo--vertical brand-logo--light"><img src="../../assets/images/HealthScholars/logo/light/healthscholars-logo-vertical-light.svg" alt="Health Scholars"></div>
                 </div>
                 <div class="module--demo--info">
                   <p>Logo: Vertical Light</p>
@@ -150,12 +150,12 @@
               <div class="module module--demo">
                 <div class="module--demo--item">
                   <div class="brand-logo brand-logo--icon">
-                    <img src="../../assets/images/HealthScholars/logo/flags/healthscholars-logo-flag-grey.svg" alt="Health Scholars">
+                    <img src="../../assets/images/HealthScholars/logo/flags/healthscholars-logo-flag-dark.svg" alt="Health Scholars">
                   </div>
                 </div>
                 <div class="module--demo--info">
                   <p>Logo Flag: Grey</p>
-                  <pre v-highlightjs><code class="html">&lt;img src="healthscholars-logo-flag-grey.svg" alt="Health Scholars"></code></pre>
+                  <pre v-highlightjs><code class="html">&lt;img src="healthscholars-logo-flag-dark.svg" alt="Health Scholars"></code></pre>
                 </div>
               </div>
               <div class="module module--demo">
