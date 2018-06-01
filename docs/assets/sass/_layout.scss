@@ -10,15 +10,18 @@ body {
 }
 
 #app {
-  flex: 1;
   display: flex;
+  flex: 1;
 }
+
 .app-layout {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
+
   > header {
     flex: none;
+
     + * {
       flex: 1;
     }
@@ -27,60 +30,67 @@ body {
 
 .app-header {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  justify-content: space-between;
   position: sticky;
-  z-index: 1;
   top: 0;
+  z-index: 1;
 }
 
 .app-content {
-  position: relative;
-  z-index: 0;
-  transition: all calc(var(--ms) / 2) ease-out;
   display: flex;
   flex-direction: row-reverse;
   flex-wrap: wrap;
-  display: grid;
-  grid-template-columns: fit-content(18em) 1fr;
-  grid-template-rows: auto 1fr;
-  @media (min-width: 50em) {
-    // display: grid;
-    // grid-template-columns: fit-content(18em) 1fr;
-    // grid-template-rows: auto 1fr;
+  position: relative;
+  transition: all calc(var(--ms) / 2) ease-out;
+  z-index: 0;
+
+  @media (min-width: 40em) {
+    display: grid;
+
+    // this sets the .app-sidebar grid-column to:
+    // grow with content up to 20rem
+    // grid-template-columns: fit-content(20rem) 1fr;
+
+    // this sets the .app-sidebar grid-column to:
+    // have a min-width of 15rem and a max-width of 13vmax
+    // displays more proportionately at larger screens
+    grid-template-columns: minmax(15rem, 13vmax) 1fr;
+
+    grid-template-rows: auto 1fr;
   }
 }
 
 .app-main {
-  flex-grow: 1;
-  flex-basis: 75%;
   //box-shadow: 1px 0 0 0 var(--edge);
   display: flex;
+  flex: 1 0 100%;
   flex-direction: column;
-  grid-column: span 2;
-  grid-row: 2 / 2;
   display: grid;
   grid-template-rows: repeat(2, auto) 1fr fit-content(1em);
   padding: 2em;
   position: relative;
+
   hr {
     width: 100%;
+  }
+
+  @media (min-width: 40em) {
+    flex: 1 0 auto;
+    grid-column: span 2;
+    grid-row: 2 / 2;
   }
 }
 
 .app-sidebar {
   background: var(--menu-bg);
-  flex-grow: 1;
-  flex-basis: 25%;
-  grid-row: 2 / 2;
   color: var(--menu-fg);
+  flex: 1 0 25%;
+  grid-row: 2 / 2;
   //opacity: 0;
   position: relative;
   transition: all .3s calc(var(--ms) / 2) ease-out;
-  .app-menu {
-    position: sticky;
-    top: 4.5em;
-  }
+
   &.is-visible {
     //opacity: 1;
     // position: absolute;
@@ -89,13 +99,22 @@ body {
     // width: 100%;
     // z-index: 1000;
   }
-  @media (min-width: 50em) {
+
+  @media (min-width: 40em) {
     display: block !important;
-    //max-width: 18em;
+  }
+}
+
+.app-menu {
+
+  @media (min-width: 40em) {
+    position: sticky;
+    top: 4.5em;
   }
 }
 
 .library {
+
   > article {
     position: relative;
     transition: all calc(var(--ms) / 2) ease-out;
@@ -103,11 +122,12 @@ body {
 }
 
 .app-footer {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: flex-end;
   margin-top: auto;
   padding: 1em 0;
+
   p {
     margin-bottom: 0;
   }
@@ -127,36 +147,42 @@ body {
 .flex-wrap {
   flex-wrap: wrap;
 }
+
 .flex-row {
   display: flex;
 }
+
 .flex-center {
-  display: flex;
   align-items: center;
+  display: flex;
 }
+
 .flex-baseline {
-  display: flex;
   align-items: baseline;
+  display: flex;
 }
+
 .flex-center-between {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: space-between;
 }
+
 .flex-baseline-between {
-  display: flex;
   align-items: baseline;
+  display: flex;
   justify-content: space-between;
 }
+
 .flex-baseline-around {
-  display: flex;
   align-items: baseline;
+  display: flex;
   justify-content: space-around;
 }
 
 .grid {
-  display: grid;
   align-content: center;
+  display: grid;
   grid-gap: var(--grid-gap-size, 1rem);
 
   &--no-gap {
@@ -180,21 +206,24 @@ body {
 .sim-overlay {
   section {
     padding: 2em 2em 0 2em;
+
     &.left {
+      background: var(--light) linear-gradient(90deg, #fff, var(--light));
       flex: 1;
       padding-left: 1em;
-      background: var(--light) linear-gradient(90deg, #fff, var(--light));
     }
+
     &.right {
+      background: #fff;
       flex: 1;
       padding-right: 1em;
-      background: #fff;
     }
   }
+
   > header,
   > footer {
+    background: #fff;
     flex: none;
     padding: 1em;
-    background: #fff;
   }
 }
