@@ -55,7 +55,7 @@
 
   --default-ms: 350ms;
 
-  --icon-font-family: 'FontAwesome';
+  --icon-font: 'FontAwesome';
   --icon-check-circle: '\f058';
   --icon-check-square: '\f14a';
   --icon-check-square-o: '\f046';
@@ -69,8 +69,8 @@
   --light-gray: var(--light-grey);
   --lighter-gray: var(--lighter-grey);
 
-  --base-font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --serif-font-family: 'Garamond', 'Cambria', Georgia, serif;
+  --base-font: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --serif-font: 'Garamond', 'Cambria', Georgia, serif;
   
 }
 

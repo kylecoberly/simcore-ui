@@ -33,7 +33,7 @@
     }
     &::before {
       content: var(--selection-unchecked-icon);
-      font-family: var(--icon-font-family, 'FontAwesome');
+      font-family: var(--icon-font, 'FontAwesome');
     }
     &:checked {
       color: var(--selection-color, var(--action));
