@@ -22,7 +22,7 @@
 <script>
   export default {
     name: 'sim-datalist',
-    props: ['items','animate'],
+    props: ['items', 'animate'],
   }
 </script>
 

@@ -97,7 +97,7 @@
   // @FIXME should be using common.getListFromIds(...) | jase
   const getListFromIds = (array, source, sortKey) => {
     if (array && array.length) {
-      const list = _.filter(source, (item) => unique(array).find((id) => item.id == id))
+      const list = _.filter(source, (item) => unique(array).find((id) => item.id.toString() === id.toString()))
       if (sortKey) {
         return sortByKey(list, sortKey)
       }
@@ -196,12 +196,6 @@
       },
       isItemSelected(itemId) {
         return this.selectedItems.find((item) => item.id === itemId) ? true : false
-      },
-      getDepartmentName(id) {
-          const department = this.departments.find((item) => item.id === id)
-          if(department && department.hasOwnProperty('name')) {
-              return department.name
-          }
       },
       toggleItemInSelectedItems(itemId, value) {
         let selectedItemsWasUpdated = false

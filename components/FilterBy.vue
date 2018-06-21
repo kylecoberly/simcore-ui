@@ -50,22 +50,22 @@
       return {
         selectedItems: [],
         items: [],
-        isOpen: false
+        isOpen: false,
       }
     },
     computed: {
-      shouldBeActive () {
+      shouldBeActive() {
         return this.selectedItems.length > 0
       },
-      showSystemEcho () {
+      showSystemEcho() {
         return (this.systemEcho && this.systemEcho.length && !this.list.length)
       },
     },
     methods: {
-      toggleOpenList: function(){
+      toggleOpenList() {
         this.isOpen = !this.isOpen
       },
-      toggleSelection (id, isSelected) {
+      toggleSelection(id, isSelected) {
         if (isSelected) {
           this.selectedItems.push(id)
         } else {
@@ -74,10 +74,10 @@
       },
     },
     watch: {
-      'selectedItems': function(newValue) {
+      'selectedItems': (newValue) => {
         this.$emit('filter', this.type, newValue)
-      }
-    }
+      },
+    },
   }
 </script>
 

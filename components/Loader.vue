@@ -10,11 +10,11 @@
 export default {
   name: 'sim-loader',
   props: {
-      isLoading: {
-          type: Boolean,
-          default: false
-      }
-  }
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
+  },
 }
 </script>
 

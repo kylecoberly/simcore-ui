@@ -67,8 +67,8 @@
       },
       shouldBeDisabled: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
     data() {
       return {
@@ -76,7 +76,7 @@
         position: 0,
         search: '',
         foundItem: null,
-        previousValueLength: 0
+        previousValueLength: 0,
       }
     },
     computed: {
@@ -112,7 +112,7 @@
         // @NOTE if we have an item in context AND subtract-altering the search string, reset the input - Jase
         if (this.foundItem && this.search.length <= this.previousValueLength) {
           this.$emit('clear', this.foundItem)
-          this.search = '';
+          this.search = ''
           this.previousValueLength = this.search.length
           this.foundItem = null
           this.isOpen = false

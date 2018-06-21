@@ -9,6 +9,7 @@ import DocCalendar from '../pages/components/Calendar'
 import DocDatalist from '../pages/components/Datalist'
 import DocDatepicker from '../pages/components/Datepicker'
 import DocFilterBy from '../pages/components/FilterBy'
+import DocFilterSet from '../pages/components/FilterSet'
 import DocIconText from '../pages/components/IconText'
 import DocLoader from '../pages/components/Loader'
 import DocModal from '../pages/components/Modal'
@@ -121,6 +122,14 @@ export default new Router({
           label: 'FilterBy',
           components: {
             details: DocFilterBy,
+          },
+        },
+        {
+          path: 'filter-set',
+          name: 'filter-set',
+          label: 'FilterSet',
+          components: {
+            details: DocFilterSet,
           },
         },
         {

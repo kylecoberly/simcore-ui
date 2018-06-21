@@ -68,7 +68,7 @@ const availabilities = {
     allInstructorAvailabilityBlocks: {},
     // {
     //  2020-10-10: {
-    //    duration: 8,n
+    //    duration: 8,
     //    endSegment: 21,
     //    endTime: 10.5,
     //    numberOfSegments: 16,

@@ -255,8 +255,6 @@
         slide: this.$store.getters.currentSlide(),
         allTheThingsAreTrue: false,
 
-        // instructors: [],
-
         learners: [],
         activeLearners: [],
         inactiveLearners: [],
@@ -275,14 +273,13 @@
           scenario_id: '',
           otherr_ids: [],
           instructor_ids: [],
-          attachment: null
+          attachment: null,
         },
         attachedFileName: '',
 
         facilities: currentUser.institutions(),
         departments: currentUser.departments(),
         scenarios: scenarios.scenarios(),
-        learners: [],
         departmentLearnerOptions: [],
       }
     },
@@ -307,7 +304,7 @@
 
       this.$emit('theSlideHasAnUpdate', {
         nextSlide: null,
-        nextControl: {text: 'Submit Event'},
+        nextControl:  {text: 'Submit Event' },
       })
     },
     destroyed() {
