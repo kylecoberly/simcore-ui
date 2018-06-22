@@ -5,29 +5,30 @@
         <SimIconText icon="fa-search"></SimIconText>
       </span>
       <input type="search" v-model="keyword"
-        class="sim-autocomplete--search--input"
-        :placeholder="placeholder"
-        :disabled="isDisabled"
-        @input="onInput($event.target.value)"
-        @keyup.esc="reset"
-        @focus="focus"
-        @blur="blur"
-        @keydown.down="moveDown"
-        @keydown.up="moveUp"
-        @keydown.enter="select"
-        />
+             class="sim-autocomplete--search--input"
+             :placeholder="placeholder"
+             :disabled="isDisabled"
+             @input="onInput($event.target.value)"
+             @keyup.esc="reset"
+             @focus="focus"
+             @blur="blur"
+             @keydown.down="moveDown"
+             @keydown.up="moveUp"
+             @keydown.enter="select"
+             @keydown.delete="onDelete"
+      />
       <span class="sim-autocomplete--search--item-count">
         {{ filteredOptionsCount }}
       </span>
     </div>
     <div class="sim-autocomplete--items" v-show="isOpen">
       <transition-group appear name="list" tag="ul" mode="in-out">
-        <li v-for="(option, index) in filteredOptions"
-          :key="index"
-          :class="{highlighted: index === position}"
-          @mouseenter="position = index"
-          @mousedown="clickSelect"
-          >
+        <li v-for="(option, index) in this.filteredOptions"
+            :key="index"
+            :class="{highlighted: index === position}"
+            @mouseenter="position = index"
+            @mousedown="clickSelect"
+        >
           <slot name="item" :option="option"></slot>
         </li>
       </transition-group>
@@ -36,12 +37,13 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import SimIconText from './IconText'
 
   export default {
     name: 'sim-autocomplete',
     components: {
-      SimIconText
+      SimIconText,
     },
     props: {
       options: {
@@ -54,53 +56,74 @@
       },
       shouldBeDisabled: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
+      searchKey: {
+        type: String,
+        default: 'name',
+      },
     },
     data() {
       return {
         isOpen: false,
         position: 0,
         keyword: '',
+        remainingItems: [],
       }
+    },
+    watch: {
+      keyword: function(newKeyword) {
+        if (this.filteredOptionsCount > 0) {
+          const lowerKeyword = newKeyword.toLowerCase()
+
+          this.remainingItems = this.options.filter((option) => {
+            return _.includes(option[this.searchKey].toLowerCase(), lowerKeyword)
+          })
+        }
+      },
+      options: function(newOptions) {
+        this.remainingItems = newOptions
+      },
     },
     computed: {
       filteredOptions() {
-        return this.options.filter((option) => {
-          return Object.keys(option).some((prop) => {
-            if (option[prop] !== null && option[prop] !== undefined) {
-              return option[prop].toString().toLowerCase().includes(this.keyword.toLowerCase())
-            }
-          })
-        })
+        return _.take(this.remainingItems, 10)
       },
       filteredOptionsCount() {
-        return this.filteredOptions.length
+        return this.remainingItems.length
       },
       isDisabled() {
         return this.shouldBeDisabled
       },
+    },
+    mounted() {
+      this.remainingItems = this.options
     },
     methods: {
       onInput(value) {
         this.position = 0
         this.isOpen = !!value
       },
-      moveDown() {
+      moveDown(event) {
         if (!this.isOpen) {
           return
         }
-        this.position = (this.position + 1) % this.filteredOptions.length
+        event.preventDefault()
+
+        this.position = (this.position + 1) % this.filteredOptionsCount
       },
-      moveUp() {
+      moveUp(event) {
         if (!this.isOpen) {
           return
         }
-        this.position = (this.position - 1 < 0 ? this.filteredOptions.length - 1 : this.position - 1)
+        event.preventDefault()
+
+        this.position = (this.position - 1 < 0 ? this.filteredOptionsCount - 1 : this.position - 1)
       },
       select() {
         if (this.isOpen) {
-          const selectedOption = this.filteredOptions[this.position]
+          const selectedOption = this.remainingItems[this.position]
+
           this.$emit('select', selectedOption)
         }
       },
@@ -108,7 +131,11 @@
         this.select()
         this.reset()
       },
+      onDelete() {
+        this.remainingItems = this.options
+      },
       reset() {
+        this.remainingItems = this.options
         this.isOpen = false
         this.keyword = ''
       },

@@ -3,16 +3,22 @@
 
     <div class="sim-filter--header sim-accordion--label" @click="toggleOpenList">{{ label }}</div>
 
-    <SimDatalist :items="list" :animate="true" class="sim-filter--items sim-accordion--items">
+    <SimDatalist v-if="!this.shouldShowAutocomplete" :items="list" :animate="true" class="sim-filter--items sim-accordion--items">
       <li slot="static-before" key="static-before" class="static system-echo FIXME-generic-classes" v-if="showSystemEcho">
         {{ systemEcho }}
       </li>
       <li slot="item" slot-scope="props" :key="props.item.id" class="no-wrap">
         <SimSelection :item-id="props.item.id" :should-be-selected="false" @toggle="toggleSelection">
-          {{ props.item.name }}
+          {{ props.item.title }}
         </SimSelection>
       </li>
     </SimDatalist>
+
+    <sim-selection-set v-if="this.shouldShowAutocomplete"
+                       :sourceItems="this.list"
+                       class="sim-filter--items sim-accordion--items"
+                       @toggle="toggleSelection"
+    ></sim-selection-set>
 
   </div>
 </template>
@@ -21,10 +27,12 @@
   import SimIconText from './IconText'
   import SimDatalist from './Datalist'
   import SimSelection from './Selection'
+  import SimSelectionSet from './Filters/SelectionSet'
 
   export default {
     name: 'sim-filter-by',
     components: {
+      SimSelectionSet,
       SimIconText,
       SimDatalist,
       SimSelection,
@@ -45,27 +53,34 @@
       systemEcho: {
         type: String,
       },
+      autocompleteThreshold: {
+        type: Number,
+        default: 30,
+      },
     },
     data() {
       return {
         selectedItems: [],
         items: [],
-        isOpen: false
+        isOpen: false,
       }
     },
     computed: {
-      shouldBeActive () {
+      shouldBeActive() {
         return this.selectedItems.length > 0
       },
-      showSystemEcho () {
+      showSystemEcho() {
         return (this.systemEcho && this.systemEcho.length && !this.list.length)
+      },
+      shouldShowAutocomplete() {
+        return this.list.length >= this.autocompleteThreshold
       },
     },
     methods: {
-      toggleOpenList: function(){
+      toggleOpenList() {
         this.isOpen = !this.isOpen
       },
-      toggleSelection (id, isSelected) {
+      toggleSelection(id, isSelected) {
         if (isSelected) {
           this.selectedItems.push(id)
         } else {
@@ -74,10 +89,10 @@
       },
     },
     watch: {
-      'selectedItems': function(newValue) {
+      selectedItems(newValue) {
         this.$emit('filter', this.type, newValue)
-      }
-    }
+      },
+    },
   }
 </script>
 
