@@ -47,7 +47,7 @@
     top: calc(100% + 1px);
     left: 1em;
     right: 1em;
-    //max-height: 15em;
+    max-height: 15em;
     overflow: auto;
     color: var(--autofinder-items-fg, var(--dark));
     background: var(--autofinder-items-bg, var(--lighter));
@@ -57,7 +57,7 @@
     padding: 0;
     list-style: none;
     z-index: 1;
-    
+
     li {
       padding: .5em;
 

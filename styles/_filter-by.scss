@@ -70,6 +70,10 @@
         opacity: 1;
         max-height: 90vh;
         overflow: auto;
+
+        &.sim-filter--items:not(.sim-datalist) {
+          overflow: visible;
+        }
       }
     }
 
