@@ -24,6 +24,8 @@
           :item-id="props.item.id"
           :disabled="props.item.disabled"
           :should-be-selected="true"
+          @toggle="toggleAnItem"
+          :toggleable="false"
         >
           {{ props.item.title }}
           <small class="ghost" v-if="props.item.description">{{ props.item.description }}</small>
@@ -36,21 +38,25 @@
 <script>
 import _ from 'lodash'
 
-import dumData from './dumData'
-
 import SimAutocomplete from '../Autocomplete'
 import SimDatalist from '../Datalist'
 import SimSelection from '../Selection'
 
 export default {
+  name: 'sim-selection-set',
   components: {
     SimSelection,
     SimDatalist,
     SimAutocomplete,
   },
+  props: {
+    sourceItems: {
+      type: Array,
+      default: [],
+    },
+  },
   data() {
     return {
-      sourceItems: dumData(),
       remainingItems: [],
       selectedItems: [],
     }
@@ -63,6 +69,20 @@ export default {
       this.selectedItems.push(selectedItem)
 
       this.remainingItems = _.difference(this.sourceItems, this.selectedItems)
+
+      this.$emit('toggle', selectedItem.id, true)
+    },
+    toggleAnItem(item) {
+      const itemIndex = _.findIndex(this.selectedItems, (selectedItem) => selectedItem.id === item)
+
+      if (itemIndex >= 0) {
+        const selectedItems = [...this.selectedItems]
+        const itemToRemove  = _.pullAt(selectedItems, [itemIndex])
+
+        this.selectedItems = selectedItems
+
+        this.$emit('toggle', _.first(itemToRemove).id, false)
+      }
     },
   },
 }

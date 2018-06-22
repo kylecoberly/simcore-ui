@@ -14,6 +14,10 @@
       itemId: [String, Number],
       shouldBeDisabled: Boolean,
       shouldBeSelected: Boolean,
+      toggleable: {
+        type: Boolean,
+        default: true,
+      },
     },
     data() {
       return {
@@ -22,7 +26,10 @@
     },
     methods: {
       toggleSelection() {
-        this.selected = !this.selected
+        if (this.toggleable) {
+          this.selected = !this.selected
+        }
+
         this.$emit('toggle', this.itemId, this.selected)
       },
     },

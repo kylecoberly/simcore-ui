@@ -7,7 +7,16 @@
           Normal / Default
         </template>
         <template slot="view">
-          <p>FilterBy component</p>
+          <SimFilterBy
+            :list="this.dummyData"
+            label="Departments"
+            type="departments"
+          ></SimFilterBy>
+          <SimFilterBy
+            :list="this.bigDummyData"
+            label="Professional Titles"
+            type="professional_titles"
+          ></SimFilterBy>
         </template>
         <template slot="html">
           <pre v-highlightjs><code class="html"></code></pre>
@@ -21,21 +30,25 @@
 </template>
 
 <script>
-  import Demobox from '../../utility/Demobox'
-  import SimFilterBy from '../../../components/FilterBy'
+import dummyData from '../../../components/Filters/dumData'
 
-  export default {
-    name: 'filter-by-doc',
-    components: {
-      Demobox,
-      SimFilterBy,
-    },
-    data() {
-      return {
-        msg: 'FilterBy',
-      }
-    },
-    computed: {
-    },
-  }
+import Demobox from '../../utility/Demobox'
+import SimFilterBy from '../../../components/FilterBy'
+
+export default {
+  name: 'filter-by-doc',
+  components: {
+    Demobox,
+    SimFilterBy,
+  },
+  data() {
+    return {
+      msg: 'FilterBy',
+      dummyData: _.take(dummyData(), 20),
+      bigDummyData: dummyData(),
+    }
+  },
+  computed: {
+  },
+}
 </script>
