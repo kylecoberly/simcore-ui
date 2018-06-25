@@ -9,7 +9,7 @@
       </li>
       <li slot="item" slot-scope="props" :key="props.item.id" class="no-wrap">
         <SimSelection :item-id="props.item.id" :should-be-selected="false" @toggle="toggleSelection">
-          {{ props.item.title }}
+          {{ props.item.name }}
         </SimSelection>
       </li>
     </SimDatalist>

@@ -3,12 +3,12 @@
     <sim-autocomplete
       :options='this.remainingItems'
       @select='didSelectAnItem'
-      searchKey="title"
+      searchKey="name"
     >
       <template slot="item" slot-scope="props">
         <article class='media'>
           <p>
-            <strong>{{ props.option.title }}</strong>
+            <strong>{{ props.option.name }}</strong>
             <br> {{ props.option.description }}
           </p>
         </article>
@@ -27,7 +27,7 @@
           @toggle="toggleAnItem"
           :toggleable="false"
         >
-          {{ props.item.title }}
+          {{ props.item.name }}
           <small class="ghost" v-if="props.item.description">{{ props.item.description }}</small>
         </sim-selection>
       </li>
