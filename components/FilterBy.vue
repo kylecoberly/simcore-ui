@@ -55,7 +55,7 @@
       },
       autocompleteThreshold: {
         type: Number,
-        default: 30,
+        default: 15,
       },
     },
     data() {
