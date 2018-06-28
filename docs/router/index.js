@@ -7,7 +7,6 @@ import GettingStarted from '../GettingStarted'
 import ComponentLibrary from '../ComponentLibrary'
 import StyleLibrary from '../StyleLibrary'
 import Extras from '../Extras'
-import TestLibrary from '../TestLibrary'
 
 // Docs: Components
 import DocAutocomplete from '../pages/components/Autocomplete'
@@ -39,7 +38,6 @@ import GuideButtons from '../pages/styles/Buttons'
 
 // Docs: Extras
 import ExtrasIntro from '../pages/extras/ExtrasIntro'
-import Tests from '../../tests/unit/components/Beanstalker'
 
 Vue.use(Router)
 
@@ -292,26 +290,6 @@ export default new Router({
           label: 'Intro',
           components: {
             details: ExtrasIntro,
-          },
-        },
-      ],
-    },
-    {
-      path: '/tests',
-      label: 'Tests',
-      icon: 'fa-edit fa-fw',
-      component: TestLibrary,
-      children: [
-        {
-          path: '',
-          redirect: 'beanstalker',
-        },
-        {
-          path: 'beanstalker',
-          name: 'beanstalker',
-          label: 'The Tests',
-          components: {
-            details: Tests,
           },
         },
       ],
