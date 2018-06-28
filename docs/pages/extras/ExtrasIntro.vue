@@ -6,12 +6,12 @@
 </template>
 
 <script>
-export default {
-  name: 'extras-intro',
-  data() {
-    return {
-      msg: 'Extras',
-    }
-  },
-}
+  export default {
+    name: 'extras-intro',
+    data() {
+      return {
+        msg: 'Extras',
+      }
+    },
+  }
 </script>

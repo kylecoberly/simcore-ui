@@ -14,7 +14,7 @@
         </template>
 
         <template slot="html">
-          <pre v-highlightjs><code class="html">&lt;</code></pre>
+          <pre v-highlightjs><code class="html"></code></pre>
         </template>
 
         <template slot="js">
@@ -30,7 +30,7 @@
   import Demobox from '../../utility/Demobox'
   import SimIconText from '../../../components/IconText'
   import SimGrid from '../../utility/Grid'
-  
+
 export default {
   name: 'guide-grid',
   components: {
