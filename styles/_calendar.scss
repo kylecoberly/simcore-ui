@@ -4,43 +4,31 @@
 .sim-calendar {
   --edge-color: var(--medium-grey);
   --edge: 1px 1px 0 0 var(--edge-color);
-  --lines: 0 0 0 1px var(--edge-color);
+  --lines: -1px -1px 0px 0px var(--edge-color), -1px -1px 0px 0px var(--edge-color) inset;
   --picker-bg: var(--lighter);
   --picker-fg: var(--dark);
   font-family: sans-serif;
-  font-size: calc(.5em + .5vmin);
+  font-size: calc(.5em + .3vmin);
   color: var(--fg);
 
   &--header {
     padding: 0 0 1em;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
     > * {
-      flex: 1;
-    }
-
-    &--title {
-      font-weight: 500;
-      font-size: 1.5em;
-    }
-
-    &--modes {
       display: flex;
+      font-size: 1.2em;
       align-items: center;
+      white-space: nowrap;
+    }
+
+    &--mode {
       justify-content: center;
-      font-size: .9em;
-    }
-
-    &--context {
-      flex: 2;
-      display: flex;
-      align-items: center;
-      font-size: 1.3em;
     }
 
     &--controls {
-      justify-content: flex-end;
       user-select: none;
       display: flex;
       align-items: center;
@@ -48,15 +36,24 @@
       line-height: 1;
       text-transform: uppercase;
       border-radius: .3em;
+      font-weight: 600;
+
+      &--months {
+        min-width: 20%;
+      }
+
+      &--days {
+      }
 
       > * {
-        padding: .5em 1em;
-        border-radius: .3em;
+        padding: .5em;
+        border-radius: 3em;
         cursor: pointer;
         transition: 300ms ease-in-out;
+        text-align: center;
 
-        &:hover {
-          transform: scale(1.2);
+        &:nth-child(2) {
+          flex: 1;
         }
       }
     }
@@ -78,9 +75,9 @@
     flex: none;
     display: flex;
     flex-direction: column;
-    width: 18em;
     position: relative;
     z-index: 1;
+    transition: width 200ms ease-in-out;
 
     &--header {
       padding: 1em 0;
@@ -92,10 +89,13 @@
       padding: 1em;
       box-shadow: var(--lines);
       background-image: linear-gradient(135deg, var(--shade), var(--mist));
-      background-color: var(--darker);
+      background-color: var(--dark);
       border-radius: 1px;
-      color: var(--lighter);
+      color: var(--lightest);
       transition: 200ms linear;
+
+      > div {
+      }
     }
   }
 
@@ -111,8 +111,7 @@
       }
 
       .sim-calendar--aside--body {
-        background-color: var(--cloud);
-        color: var(--grey);
+        opacity: .7;
       }
 
       .sim-datalist {
@@ -123,9 +122,22 @@
     }
 
     .filter-molecule {
+      &--heading {
+        font-weight: normal;
+        margin: 0 0 .5em 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        text-transform: uppercase;
+        font-size: 1em;
+
+        svg {
+          font-size: 1.5em;
+        }
+      }
+
       + .filter-molecule {
         margin-top: 1.5em;
-        // padding-top: 1.5em;
       }
     }
 
@@ -135,9 +147,10 @@
       }
 
       li {
-        padding: .5em 0 .5em .5em;
+        padding: .35em 0 .35em .5em;
         border-radius: 1px;
         transition-delay: 0ms;
+        align-items: center;
 
         &:hover {
           .item-remover  {
@@ -229,12 +242,12 @@
     &--day {
       position: relative;
       flex: 0 0 14.285%;
-      // height: 7vmax;
-      min-height: 7em;
-      padding: .5em;
+      min-height: 10vmin;
+      padding: 0 1px 1px 0;
       cursor: pointer;
       display: flex;
       flex-direction: column;
+      transition: min-height 200ms ease-out;
 
       &--timelines {
         position: absolute;
@@ -244,7 +257,7 @@
         bottom: 0;
         display: flex;
         flex-direction: column;
-        opacity: .25;
+        opacity: .35;
         margin: 0;
         padding: 0;
         list-style: none;
@@ -258,14 +271,36 @@
           &:last-of-type {
             pointer-events: none;
             flex: none;
-            height: 1px;
-            margin-top: -1px;
+            height: 0;
+            margin-top: 0;
           }
 
           &.is-noon {
             box-shadow: 0 -1px 0 0, 0 1px 0 0 inset;
           }
         }
+
+        .sim-timeline--time {
+          position: absolute;
+          top: 0;
+          left: 0;
+          transform: translate(calc(-100% - .5em), -50%);
+          width: 1.5em;
+          height: 1.5em;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: .8em;
+
+          &.sim-timeline--icon--midnight {
+            display: none;
+          }
+        }
+      }
+
+      &:hover .sim-calendar--grid--tools {
+        opacity: 1;
+        pointer-events: auto;
       }
     }
 
@@ -281,12 +316,26 @@
 
     &--date {
       pointer-events: none;
-      width: 1.5em;
-      height: 1.5em;
+      width: 2em;
+      height: 2em;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: .2em;
+    }
+
+    &--tools {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 2.25em;
+      left: 0;
+      width: 2em;
+      height: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 200ms linear;
     }
   }
 
@@ -296,17 +345,16 @@
 
     > * {
       color: var(--action);
-
-      &:hover {
-        color: #fff;
-        background: var(--action);
-      }
     }
   }
 
   &--grid {
     &--day {
       box-shadow: var(--lines);
+
+      &:hover {
+        z-index: 3;
+      }
 
       &--timelines li {
         &.is-nighttime {
@@ -346,7 +394,7 @@
     .is-weekday {
       background-color: #fff;
 
-      &:hover {
+      &:hover:not(.is-selected) {
         background-color: #fcf9e9;
       }
     }
@@ -359,50 +407,67 @@
     }
 
     .is-before-today {
-      // background-image: repeating-linear-gradient(-45deg, transparent 0px, transparent 5px, var(--lighter) 5px, var(--lighter) 7px);
       background-color: var(--lighter);
-      filter: grayscale(.5);
+      filter: grayscale(.8);
 
-      .sim-calendar--grid--date {
-        color: #ddd;
+      &:not(.is-selected) {
+        filter: grayscale(1);
+
+        .local--day {
+          opacity: .3;
+        }
+      }
+
+      &:hover {
+        filter: grayscale(.8);
+
+        .local--day {
+          opacity: 1;
+        }
+      }
+
+      &.is-selected {
+        .sim-calendar--grid--date {
+          color: var(--medium-grey);
+        }
       }
     }
 
     .is-weekend {
       background-color: var(--light); //#e9f9fc;
 
-      &:hover {
+      &:hover:not(.is-selected) {
         background-color: #f3f0e1; //#e7f3e7;
       }
     }
 
     .is-selected {
       z-index: 2;
-      box-shadow: 0 0 0 3px var(--action), 0 0 1em -.3em;
-      border-radius: .2em;
+      background-color: var(--blue-film-light);
+
+      .local--day--time-blocks,
+      .local--day--aggregate-blocks {
+        mix-blend-mode: multiply;
+      }
     }
   }
 
-  &.is-week-view {
-    .sim-calendar--grid {
-      &--before,
-      &--after {
-        display: none;
-      }
+  &.is-expanded {
+    .sim-calendar--grid--day {
+      min-height: 4vmin;
 
-      &--body {
-        margin-left: 2.5em;
-      }
+      &.is-in-active-week {
+        min-height: 45vmin;
+        max-height: 45em;
 
-      &--days {
-        flex-wrap: nowrap;
-      }
-
-      &--day {
-        flex: 1;
-        height: 48em;
-        max-height: 70vh;
+        .sim-timeblock--info {
+          opacity: 1;
+        }
       }
     }
+  }
+
+  .sim-calendar--grid--day .sim-timeblock--info {
+    opacity: 0;
   }
 }

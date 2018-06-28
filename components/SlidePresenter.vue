@@ -22,6 +22,7 @@
   import SimSlideWithAnEventForm from './SlideWithAnEventForm'
   import SimSlideWithATimePicker from './SlideWithATimePicker'
   import SimSlideWithEventDetails from './SlideWithEventDetails'
+  import SimSlideWithFilterMessage from './SlideWithFilterMessage'
   import SimSlideWithHTML from './SlideWithHTML'
 
   export default {
@@ -32,6 +33,7 @@
       SimSlideWithAnEventForm,
       SimSlideWithATimePicker,
       SimSlideWithEventDetails,
+      SimSlideWithFilterMessage,
       SimSlideWithHTML,
     },
     props: ['shouldHideNavigationControls'],

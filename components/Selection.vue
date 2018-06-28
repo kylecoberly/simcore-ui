@@ -13,24 +13,31 @@
     props: {
       itemId: [String, Number],
       shouldBeDisabled: Boolean,
-      shouldBeSelected: Boolean
+      shouldBeSelected: Boolean,
+      toggleable: {
+        type: Boolean,
+        default: true,
+      },
     },
-    data () {
+    data() {
       return {
-        selected: this.shouldBeSelected
+        selected: this.shouldBeSelected,
       }
     },
     methods: {
-      toggleSelection () {
-        this.selected = !this.selected
+      toggleSelection() {
+        if (this.toggleable) {
+          this.selected = !this.selected
+        }
+
         this.$emit('toggle', this.itemId, this.selected)
       },
     },
     watch: {
-      shouldBeSelected (value) {
+      shouldBeSelected(value) {
         this.selected = value
       },
-    }
+    },
   }
 </script>
 

@@ -2,6 +2,7 @@
   position: relative;
   flex: 1;
   display: flex;
+  transition: var(--default-ms) linear;
 
   &--aggregate-blocks,
   &--event-blocks,
@@ -17,72 +18,28 @@
   }
 
   &--aggregate-blocks {
+    z-index: 1;
+
     .sim-timeblock {
       justify-content: flex-end;
 
       &:hover {
         z-index: 2;
       }
-    }
-  }
-}
 
-.is-month-view {
-  .local--day {
-    > * + * {
-      margin: 0 0 0 .5em;
-    }
-
-    &--event-blocks,
-    &--pending-blocks {
-      z-index: 2;
-    }
-
-    &--aggregate-blocks {
-      z-index: 1;
-
-      .sim-timeblock {
-        &.active {
-          box-shadow: 0 0 0 .2em var(--aqua);
-        }
+      &.active {
+        box-shadow: 0 0 0 .2em var(--aqua);
       }
     }
   }
-}
 
-.is-week-view {
-  .local--day {
-    &--event-blocks {
-      min-width: 25%;
-    }
+  &--event-blocks,
+  &--pending-blocks {
+    z-index: 2;
+  }
 
-    &--pending-blocks {
-      flex: 6;
-      margin-left: .5em;
-      z-index: 2;
-    }
-
-    &--time-blocks {
-      flex: 6;
-      margin-left: 1em;
-    }
-
-    &--aggregate-blocks {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: calc(25% + .5em);
-      right: 0;
-
-      .sim-timeblock {
-        // @NOTE: keep this. Temporary supression - Jase
-        // pointer-events: none;
-
-        &::before {
-          display: none;
-        }
-      }
-    }
+  > .local--day--blocks + .local--day--blocks {
+    margin: 0 0 0 .5em;
   }
 }
 

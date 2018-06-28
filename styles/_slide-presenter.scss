@@ -35,20 +35,22 @@
 }
 
 .sim-slide {
-  background: var(--dark);
+  background: var(--slide-bg, var(--dark));
+  color: var(--slide-fg, var(--lighter));
 
   &--header {
     position: sticky;
     top: 0;
     z-index: 1;
-    padding: 1em;
+    padding: 2em 2em 0 2em;
     line-height: 1.4;
-    background: var(--dark);
+    background: var(--slide-bg, var(--dark));
 
     &--title {
       margin: 0;
       font-size: 1.3em;
-      font-weight: 300;
+      font-weight: 600;
+      text-transform: uppercase;
       color: inherit !important; // @FIXME - fighting platform css
     }
 
@@ -60,11 +62,24 @@
   }
 
   &--intro {
-    padding: 0 1em 1em;
+    padding: 0 2em;
   }
 
   &--content {
-    padding: 0 1em 1em;
+    padding: 2em;
+
+    &--section {
+      margin-bottom: 2em;
+
+      header {
+        text-transform: uppercase;
+        font-size: 1.2em;
+
+        svg {
+          font-size: 1.3em;
+        }
+      }
+    }
   }
 }
 
@@ -90,4 +105,8 @@
       }
     }
   }
+}
+
+.sim-slide--with-filter-message {
+
 }

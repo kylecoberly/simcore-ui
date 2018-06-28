@@ -1,7 +1,7 @@
 .sim-bubble {
   position: absolute;
   top: calc(var(--y) * 1px);
-  z-index: 2;
+  z-index: 3;
   transition: 600ms ease-out;
   display: flex;
   flex-direction: column;
@@ -13,16 +13,17 @@
     color: var(--bubble-fg, var(--lightest));
     background: var(--bubble-bg, var(--dark));
     border-radius: .3em;
-    box-shadow: 0 .5em 2em -.3em rgba(0, 0, 0, .5);
+    box-shadow: 0 0 0 1px var(--fog), 0 .5em 2em -.3em rgba(0, 0, 0, .5);
     overflow: hidden;
   }
 
+  &::before,
   &::after {
     content: '';
     position: absolute;
     top: 50%;
     pointer-events: none;
-    transition: top 80ms ease-out;
+    //transition: top 80ms ease-out;
     border: 1em solid transparent;
     border-width: 1.2em .8em;
   }
@@ -30,9 +31,20 @@
   &--left {
     left: calc(var(--x) * 1px);
 
+    &::before {
+      --left: 0;
+      --border-color: var(--fog);
+    }
+
     &::after {
-      left: 1px;
-      border-right-color: var(--dark);
+      --left: 1px;
+      --border-color: var(--bubble-bg, var(--dark));
+    }
+
+    &::before,
+    &::after {
+      left: var(--left);
+      border-right-color: var(--border-color);
       transform: translate(-100%, -50%);
     }
   }
@@ -40,10 +52,21 @@
   &--right {
     right: calc(var(--x) * 1px);
 
+    &::before {
+      --left: 100%;
+      --border-color: var(--fog);
+    }
+
     &::after {
-      left: 100%;
-      border-left-color: var(--dark);
-      transform: translate(-1px, -50%);
+      --left: calc(100% - 1px);
+      --border-color: var(--bubble-bg, var(--dark));
+    }
+
+    &::before,
+    &::after {
+      left: var(--left);
+      border-left-color: var(--border-color);
+      transform: translate(0px, -50%);
     }
   }
 

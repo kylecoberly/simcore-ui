@@ -8,7 +8,7 @@
       <div class="sim-timepicker--display-date">
         <span>{{ displayDate }} <br /><b>{{ displayTotalTimeBlockHours }}</b></span>
         <span v-if="countTimeBlockHours > 0" class="sim-timepicker--remove-blocks" @click="removeAllTimeBlocks">
-          <SimIconText icon="fa-times"></SimIconText>
+          <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
         </span>
       </div>
       <div class="sim-timepicker--next-day" @click="nextDay">
@@ -17,27 +17,23 @@
     </div>
 
     <div class="sim-timepicker--inner" :class="timelineClasses">
-      <ul>
-        <li v-for="segment in totalSegments" @mousedown="createTimeBlock($event, segment-1)" :class="setHourClasses(segment-1)">
-          <div v-if="segment === 13" class="sim-timepicker--time sim-timepicker--noon">
-            <SimIconText icon="fa-sun-o"></SimIconText>
-          </div>
-          <div v-else-if="segment === 1 || segment === 25" class="sim-timepicker--time sim-timepicker--midnight">
-            <SimIconText icon="fa-moon-o"></SimIconText>
-          </div>
-          <div v-else-if="isWholeNumber(segment)" class="sim-timepicker--time">
-            {{ displayHour(segment-1) }}
-          </div>
-        </li>
-      </ul>
 
-      <SimTimeBlock v-for="(block, index) in currentUserAvailabilityBlocks"
+      <SimTimeLines :mode="timelineMode"
+                    :start="startTime"
+                    :end="endTime"
+                    :action="timelineAction"
+                    :show-half-hour-ticks="showHalfHourTicks"
+                    @create-time-block="createTimeBlock"
+                    />
+      <SimTimeBlock v-for="(block, index) in currentBlocks"
                     :key="index"
                     :block="block"
                     :index="index"
                     :date="date"
                     :orientation="orientation"
-                    :variables="blockVariables"
+                    :theme="blockTheme"
+                    :variables="timeBlockVariables"
+                    :settings="timeBlockSettings"
                     @remove-time-block="removeTimeBlock"
                     @is-moving="setMovingState"
                     @is-stretching="setStretchingState"
@@ -52,12 +48,14 @@
   import moment from 'moment'
   import SimIconText from './IconText'
   import SimTimeBlock from './TimeBlock'
+  import SimTimeLines from './TimeLines'
 
   export default {
     name: 'sim-timepicker',
     components: {
       SimIconText,
       SimTimeBlock,
+      SimTimeLines,
     },
     props: {
       date: {
@@ -67,9 +65,38 @@
         type: Boolean,
         default: false,
       },
+      timelineAction: {
+        type: String,
+        default: null
+      },
+      timelineMode: {
+        type: String,
+        default: 'hours',
+      },
+      showHalfHourTicks: {
+        type: Boolean,
+        default: true,
+      },
+      blockTheme: {
+        type: String,
+        default: 'default',
+      },
+      blockSettings: {
+        type: Object,
+        default() {
+          return {
+            showBlockHours: true,
+            showBlockTime: true,
+            canRemoveBlock: true,
+            canResizeBlockStart: true,
+            canResizeBlockEnd: true,
+            canMoveBlock: true,
+          }
+        },
+      },
       orientation: {
         type: String,
-        default: 'x',
+        default: 'y',
       },
       startTime: {
         type: Number,
@@ -86,6 +113,9 @@
       timeBlockDefaultDuration: {
         type: Number,
         default: 1,
+      },
+      durationFilterBlocks: {
+        type: Array,
       },
       initialEventBlocks: {
         type: Array,
@@ -104,6 +134,7 @@
       return {
         isMoving: false,
         isStretching: false,
+        currentBlocks: [],
         eventBlocks: [],
         pendingEventBlocks: [],
         currentUserAvailabilityBlocks: [],
@@ -112,10 +143,20 @@
       }
     },
     computed: {
-      blockVariables() {
+      timeBlockVariables() {
         return {
           maximumDuration: this.totalHoursInterger,
           startTime: this.startTime,
+        }
+      },
+      timeBlockSettings() {
+        return {
+          showBlockHours: this.blockSettings.showBlockHours,
+          showBlockTime: this.blockSettings.showBlockTime,
+          canRemoveBlock: this.blockSettings.canRemoveBlock,
+          canResizeBlockStart: this.blockSettings.canResizeBlockStart,
+          canResizeBlockEnd: this.blockSettings.canResizeBlockEnd,
+          canMoveBlock: this.blockSettings.canMoveBlock,
         }
       },
       totalSegments() {
@@ -136,7 +177,8 @@
           .format('dddd, MMM D')
       },
       countTimeBlockHours() {
-        return this.currentUserAvailabilityBlocks
+        // return this.currentUserAvailabilityBlocks
+        return this.currentBlocks
           .map((block) => { return block.duration })
           .reduce((sum, value) => sum + value, 0)
       },
@@ -147,8 +189,18 @@
 
         return `${output} ${(this.countTimeBlockHours > 0 && this.countTimeBlockHours <= 1 ? 'hour' : 'hours')}`
       },
+      blockLimitReached() {
+        // return this.currentUserAvailabilityBlocks.length === this.timeBlockLimit
+        return this.currentBlocks.length === this.timeBlockLimit
+      },
       timelineClasses() {
         const classes = []
+        if (this.timeBlockSettings.canMoveBlock) {
+          classes.push('is-moveable')
+        }
+        if (this.blockLimitReached) {
+          classes.push('is-at-block-limit')
+        }
         if (this.isMoving) {
           classes.push('is-moving')
         }
@@ -160,51 +212,29 @@
     },
     methods: {
       // UI Management Methods
-      isWholeNumber(value) {
-        return Math.ceil(parseFloat(value)) === parseInt(value)
-      },
       setMovingState(bool) {
         this.isMoving = bool
       },
       setStretchingState(bool) {
         this.isStretching = bool
       },
-      displayHour(hour) {
-        hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour)
-
-        return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
-      },
-      setHourClasses(hour) {
-        const classes = []
-
-        if (hour >= 6 && hour <= 17.5) {
-          classes.push('is-daytime')
-        } else {
-          classes.push('is-nighttime')
-        }
-
-        if (this.isWholeNumber(hour)) {
-          classes.push(`is-hour is-hour-${hour}`)
-        } else {
-          classes.push(`is-half-hour is-hour-${Math.floor(hour)}-half`)
-        }
-
-        return classes
-      },
 
       // Time Block Methods.
-      updateBlocks() {
+      emitUpdateBlocks() {
         this.sortBlocks()
 
-        this.$emit('blocksWereUpdated', { blocks: this.currentUserAvailabilityBlocks, date: this.date })
+        // this.$emit('blocksWereUpdated', { blocks: this.currentUserAvailabilityBlocks, date: this.date })
+        this.$emit('blocksWereUpdated', { blocks: this.currentBlocks, date: this.date })
       },
       sortBlocks() {
-        this.currentUserAvailabilityBlocks.sort((a, b) => {
-          return parseFloat(a.start) - parseFloat(b.start)
+        // this.currentUserAvailabilityBlocks.sort((a, b) => {
+        this.currentBlocks.sort((a, b) => {
+          return parseFloat(a.startTime) - parseFloat(b.startTime)
         })
       },
-      createTimeBlock(event, hour) {
-        if (event.which === 1 && this.currentUserAvailabilityBlocks.length < this.timeBlockLimit) {
+      createTimeBlock(hour) {
+        // if (this.currentUserAvailabilityBlocks.length < this.timeBlockLimit) {
+        if (this.currentBlocks.length < this.timeBlockLimit) {
           let useModifier = false
           const modifiedDuration = (this.endTime - hour)
 
@@ -218,23 +248,25 @@
 
           const maxDuration = useModifier ? modifiedDuration : this.timeBlockDefaultDuration
 
-          this.currentUserAvailabilityBlocks.push({ start: hour, duration: maxDuration })
-          this.updateBlocks()
+          // this.currentUserAvailabilityBlocks.push({ startTime: hour, duration: maxDuration })
+          this.currentBlocks.push({ startTime: hour, duration: maxDuration })
+          this.emitUpdateBlocks()
         }
-
       },
       removeTimeBlock(index) {
-        this.currentUserAvailabilityBlocks.splice(index, 1)
+        // this.currentUserAvailabilityBlocks.splice(index, 1)
+        this.currentBlocks.splice(index, 1)
 
-        this.updateBlocks()
+        this.emitUpdateBlocks()
       },
       removeAllTimeBlocks() {
-        this.currentUserAvailabilityBlocks.splice(0, this.currentUserAvailabilityBlocks.length)
+        // this.currentUserAvailabilityBlocks.splice(0, this.currentUserAvailabilityBlocks.length)
+        this.currentBlocks.splice(0, this.currentBlocks.length)
 
-        this.updateBlocks()
+        this.emitUpdateBlocks()
       },
       blockWasUpdated() {
-        this.updateBlocks()
+        this.emitUpdateBlocks()
       },
       // Date Management Methods.
       nextDay() {
@@ -251,31 +283,49 @@
       },
     },
     mounted() {
-      if (this.initialEventBlocks) {
-        this.eventBlocks = this.initialEventBlocks
+      // if (this.initialEventBlocks) {
+      //   this.eventBlocks = this.initialEventBlocks
+      // }
+      // if (this.initialPendingEventBlocks) {
+      //   this.pendingEventBlocks = this.initialPendingEventBlocks
+      // }
+      // if (this.initialCurrentUserAvailabilityBlocks) {
+      //   this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
+      // }
+      // if (this.initialAggregateAvailabilityBlocks) {
+      //   this.aggregateAvailabilityBlocks = this.initialAggregateAvailabilityBlocks
+      // }
+      if (this.durationFilterBlocks) {
+        this.currentBlocks = this.durationFilterBlocks
       }
-      if (this.initialPendingEventBlocks) {
-        this.pendingEventBlocks = this.initialPendingEventBlocks
+      else if (this.initialEventBlocks) {
+        this.currentBlocks = this.initialEventBlocks
       }
-      if (this.initialCurrentUserAvailabilityBlocks) {
-        this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
+      else if (this.initialPendingEventBlocks) {
+        this.currentBlocks = this.initialPendingEventBlocks
       }
-      if (this.initialAggregateAvailabilityBlocks) {
-        this.aggregateAvailabilityBlocks = this.initialAggregateAvailabilityBlocks
+      else if (this.initialCurrentUserAvailabilityBlocks) {
+        this.currentBlocks = this.initialCurrentUserAvailabilityBlocks
+      }
+      else if (this.initialAggregateAvailabilityBlocks) {
+        this.currentBlocks = this.initialAggregateAvailabilityBlocks
       }
     },
     watch: {
+      durationFilterBlocks() {
+        this.currentBlocks = this.durationFilterBlocks
+      },
       initialEventBlocks() {
-        this.eventBlocks = this.initialEventBlocks
+        this.currentBlocks = this.initialEventBlocks
       },
       initialPendingEventBlocks() {
-        this.pendingEventBlocks = this.initialPendingEventBlocks
+        this.currentBlocks = this.initialPendingEventBlocks
       },
       initialCurrentUserAvailabilityBlocks() {
-        this.currentUserAvailabilityBlocks = this.initialCurrentUserAvailabilityBlocks
+        this.currentBlocks = this.initialCurrentUserAvailabilityBlocks
       },
       initialAggregateAvailabilityBlocks() {
-        this.aggregateAvailabilityBlocks = this.initialAggregateAvailabilityBlocks
+        this.currentBlocks = this.initialAggregateAvailabilityBlocks
       },
     },
   }

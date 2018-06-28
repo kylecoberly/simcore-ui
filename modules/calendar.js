@@ -16,14 +16,15 @@ const calendar = {
       day_names: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       weekend_days: [0, 6],
     },
-    display_mode: 'month',
+    expand_week: false,
   },
   mutations: {
-    setCalendarDisplayModeToWeek(state) {
-      state.display_mode = 'week'
-    },
-    setCalendarDisplayModeToMonth(state) {
-      state.display_mode = 'month'
+    setCalendarExpandWeek(state, shouldBeExpanded) {
+      if (shouldBeExpanded !== undefined) {
+        state.expand_week = shouldBeExpanded
+      } else {
+        state.expand_week = !state.expand_week
+      }
     },
   },
 }

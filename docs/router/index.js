@@ -28,6 +28,8 @@ import DocTag from '../pages/components/Tag'
 import DocTimePicker from '../pages/components/TimePicker'
 import DocTooltip from '../pages/components/Tooltip'
 
+import Tests from '../../tests/unit/components/Beanstalker'
+
 // Docs: Styles
 import GuideIntro from '../pages/styles/GuideIntro'
 import GuideLogo from '../pages/styles/Logo'
@@ -290,6 +292,26 @@ export default new Router({
           label: 'Intro',
           components: {
             details: ExtrasIntro,
+          },
+        },
+      ],
+    },
+    {
+      path: '/tests',
+      label: 'Tests',
+      icon: 'fa-code fa-fw',
+      component: TestLibrary,
+      children: [
+        {
+          path: '',
+          redirect: 'beanstalker',
+        },
+        {
+          path: 'beanstalker',
+          name: 'the tests',
+          label: 'The Tests',
+          components: {
+            details: Tests,
           },
         },
       ],

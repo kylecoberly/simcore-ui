@@ -117,7 +117,7 @@
       SimIconText,
       Directory,
     },
-    data () {
+    data() {
       return {
         menu: [],
         shouldAppNavBeOpen: false,

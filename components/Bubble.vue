@@ -5,7 +5,8 @@
         <slot></slot>
       </div>
       <div class="sim-bubble--dismiss" @click="dismiss">
-        <SimIconText icon="fa-times fa-lg"></SimIconText>
+        <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
+        <!-- <SimIconText icon="fa-times fa-lg"></SimIconText> -->
       </div>
     </div>
   </transition>
@@ -16,7 +17,7 @@
 
   export default {
     name: 'sim-bubble',
-    props: {},
+    props: ['target'],
     components: {
       SimIconText,
     },
@@ -40,9 +41,9 @@
       },
       setStyles() {
         const styles = []
-        styles.push(`--x: ${parseInt(this.bubblePosition.x)}`)
-        styles.push(`--y: ${parseInt(this.bubblePosition.y)}`)
-        styles.push(`--dink-y: ${parseInt(this.bubblePosition.dinkY - this.metrics.top)}`)
+        styles.push(`--x: ${parseInt(this.bubblePosition.x, 10)}`)
+        styles.push(`--y: ${parseInt(this.bubblePosition.y, 10)}`)
+        styles.push(`--dink-y: ${parseInt(this.bubblePosition.dinkY - this.metrics.top, 10)}`)
 
         return styles.join(';')
       },

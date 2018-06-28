@@ -1,5 +1,6 @@
 .sim-switch {
-  display: inline-block;
+  --switch-ms: 80ms;
+  display: inline-flex;
   label {
     display: inline-flex;
     align-items: center;
@@ -20,7 +21,7 @@
     outline: 0;
     border-radius: 1em;
     will-change: transform, background;
-    transition: all var(--ms, var(--default-ms)) ease-out;
+    transition: all var(--switch-ms, var(--default-ms)) ease-out;
     background: var(--switch-color, var(--light-grey));
     &:active {
       transform: scale(.9);
@@ -36,7 +37,7 @@
       box-shadow: 0 0 0 1px;
       transform: translate(-100%, -50%);
       background: var(--switch-handle-color, var(--lightest));
-      transition: transform var(--ms, var(--default-ms)) ease-out;
+      transition: transform var(--switch-ms, var(--default-ms)) ease-out;
     }
     &:checked {
       background: var(--switch-color-active, var(--action));

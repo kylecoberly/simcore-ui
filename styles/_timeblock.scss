@@ -1,23 +1,37 @@
+@keyframes timeblockTooltips {
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1);
+  }
+}
+
 .sim-timeblock {
   --color: var(--timeblock-color, var(--dark));
+  --tooltip-shift-x: -50%;
+  --tooltip-dink-x: 50%;
+  --segment-size: 4.1667;
   background: var(--color);
   opacity: 1;
-  border-radius: .2em;
+  border-radius: 0;
   position: absolute;
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: var(--timeblock-cursor, move);
+  cursor: var(--timeblock-cursor, default);
 
   // states
+  &.is-moveable {
+    --timeblock-cursor: move;
+  }
+
   &.is-display-only {
     cursor: inherit;
   }
 
   &.is-moving,
   &.is-stretching {
-    transition: 60ms linear;
+    transition: 50ms linear;
 
     .sim-timeblock--info--time {
       display: block;
@@ -59,6 +73,12 @@
         transform: translate(var(--remover-x-end), var(--remover-y-end));
         transition-delay: 600ms;
       }
+
+      .sim-timeblock--tooltip {
+        opacity: .85;
+        transform: translate(var(--tooltip-shift-x, -50%), calc(-100% - .5em)) scale(1);
+        transition-delay: var(--default-ms, 300ms);
+      }
     }
   }
 
@@ -88,8 +108,9 @@
 
   &--remover {
     position: absolute;
-    width: 1.5em;
-    height: 1.5em;
+    font-size: 80%;
+    width: 2em;
+    height: 2em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -146,13 +167,62 @@
     }
   }
 
+  &--icon {
+    opacity: .5;
+    line-height: 0;
+    svg {
+      width: 1.3em;
+      height: 1.3em;
+    }
+  }
+
+  &--tooltip {
+    // display: none;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    top: 0;
+    left: 50%;
+    color: var(--lighter);
+    background: var(--dark);
+    border-radius: .3em;
+    padding: .65em;
+    white-space: nowrap;
+    transform: translate(var(--tooltip-shift-x, -50%), calc(0% - .5em)) scale(.5);
+    transition: calc(var(--ms, var(--default-ms)) / 2) ease-out 0ms;
+    transform-origin: 50% 50%;
+    &::after {
+      content: '';
+      position: absolute;
+      left: var(--tooltip-dink-x, 50%);
+      top: 100%;
+      border: .5em solid transparent;
+      border-top-color: var(--dark);
+      transform: translate(-50%, -1px);
+    }
+
+    &--icon {
+      opacity: 1;
+      margin-right: .5em;
+    }
+  }
+
+  > .sim-timeblock--icon {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, .5em);
+  }
+
   // contexts
   &--x {
     --remover-x-end: 50%;
     --remover-y-end: -50%;
     top: 50%;
-    left: calc(var(--start, 8) * var(--segment-size, 4.1667) * 1%);
-    width: calc(var(--duration, 8) * var(--segment-size, 4.1667) * 1%);
+    left: calc(var(--start, 8) * var(--segment-size) * 1%);
+    width: calc(var(--duration, 8) * var(--segment-size) * 1%);
     height: 2.5em;
     transform: translateY(-50%);
 
@@ -185,10 +255,10 @@
   &--y {
     --remover-x-end: 50%;
     --remover-y-end: -50%;
-    top: calc(var(--start) * var(--segment-size, 4.1667) * 1%);
-    left: 0;
+    top: calc(var(--start) * var(--segment-size) * 1%);
+    right: 0;
     width: 100%;
-    height: calc(var(--duration) * var(--segment-size, 4.1667) * 1%);
+    height: calc(var(--duration) * var(--segment-size) * 1%);
 
     &.is-moving {
       transform: translateY(-.1em);
@@ -222,41 +292,73 @@
 // block themes
 .sim-timeblock--theme {
   &--default,
-  &--available {
+  &--available,
+  &--blue {
     --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
+    border-radius: .2em;
   }
 
-  &--pending-event {
-    --timeblock-color: var(--orange) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--orange) 90%);
-  }
-
-  &--event {
-    --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--red-film) 0%, var(--purple) 90%);
-  }
-
-  &--aggregate {
-    --timeblock-color: var(--green)  radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--green) 90%);
-    opacity: .5;
+  &--aggregate,
+  &--alt-blue {
+    --timeblock-color: var(--blue-lighter); // radial-gradient(ellipse at 0% -100%, var(--blue-film) 0%, var(--blue-lighter) 90%);
     cursor: pointer;
 
-    &::before {
-      content: '';
-      position: absolute;
-      pointer-events: none;
-      background: var(--green);
-      border-radius: .2em;
-      width: calc(300% + 3em);
-      top: 0;
-      bottom: 0;
-      opacity: .35;
+    &:hover {
+      mix-blend-mode: color-burn;
+      // --timeblock-color: var(--orange-film) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--orange) 90%);
+      // box-shadow: 0 0 0 1px var(--dusk) inset, 0 .3em .5em -.3em var(--shadow);
     }
   }
 
-  &--empty {
-    --timeblock-color: var(--shade);
+  &--specific,
+  &--alt-green {
+    --timeblock-color: var(--green-lighter); // radial-gradient(ellipse at 0% -100%, var(--green-film) 0%, var(--green-lighter) 90%);
+    cursor: pointer;
+  }
 
-    &::before {
-      display: none;
+  &--green {
+    --timeblock-color: var(--green) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--green) 90%);
+    cursor: pointer;
+  }
+
+  &--pending-event,
+  &--orange {
+    --timeblock-color: var(--orange); // linear-gradient(180deg, var(--orange) 50%, var(--yellow-film) 100%);
+    box-shadow: 0 .4em 1em -.4em;
+    border-radius: .3em;
+  }
+
+  &--duration,
+  &--alt-orange {
+    --timeblock-color: var(--orange) radial-gradient(ellipse at 0% -100%, var(--yellow-film) 0%, var(--orange-lighter) 90%);
+  }
+
+  &--event,
+  &--purple {
+    --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--red-film) 0%, var(--purple) 90%);
+  }
+
+  &--empty,
+  &--none,
+  &--grey,
+  &--gray {
+    --timeblock-color: var(--mist) radial-gradient(ellipse at 0% -100%, var(--dust) 0%, var(--shade) 90%);
+    box-shadow: 0 0 0 1px var(--shade) inset;
+    max-width: 2.5em;
+
+    .sim-timeblock--icon {
+      opacity: 1;
+    }
+  }
+
+  &--null,
+  &--red {
+    --timeblock-color: var(--red-film-lighter) repeating-linear-gradient(45deg, transparent 0px, transparent 5px, var(--red-film-light) 5px, var(--red-film-light) 7px);
+    box-shadow: 0 0 0 1px var(--red-film-light) inset;
+    max-width: 2.5em;
+
+    .sim-timeblock--icon {
+      opacity: 1;
     }
   }
 }
@@ -292,7 +394,7 @@
 // context overrides
 .sim-timepicker--y {
   .sim-timeblock {
-    --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
+    // --timeblock-color: var(--aqua) radial-gradient(ellipse at 0% -100%, var(--aqua-film) 0%, var(--blue) 90%);
     box-shadow: 0 .1em 1em -.3em var(--twilight);
 
     &.is-moving,
@@ -342,6 +444,7 @@
   }
 }
 
+// timeblock info hud for far-right calendar days
 .day-5,
 .day-6 {
   .sim-timeblock--y {
@@ -351,6 +454,17 @@
         left: auto;
         right: 100%;
       }
+    }
+  }
+}
+
+// tooltip override for timeblocks in a far-right calendar day
+.day-6 {
+  .sim-timeblock {
+    --tooltip-shift-x: -85%;
+    --tooltip-dink-x: 85%;
+    &--tooltip {
+      transform-origin: 85% 50%;
     }
   }
 }
