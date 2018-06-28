@@ -1,7 +1,7 @@
 <template lang="html">
   <article>
 
-    <h2 class="library-section-title">{{ msg }}</h2>
+    <h2 class="library--section-title">{{ msg }}</h2>
 
     <demobox :open="true" class="typography-demo">
 
@@ -9,12 +9,22 @@
           Normal / Default
         </template>
 
-        <template slot="view">          
-          <section class="module-section module-section--font-family">
-            <h3 class="module-label" id="font-family">Font Family</h3>
+        <template slot="view">
+          <section class="module-section module-section--font-demo module-section--primary-font">
+            <h3 class="module-label" id="primary-font">Primary Font</h3>
             <div class="module module--demo">
               <div class="module--demo--item">
                 <p class="h2">Montserrat 300</p>
+              </div>
+              <div class="module--demo--info">
+                <p>AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz</p>
+                <p>0123456789</p>
+                <p>‘​‌?​‌’​‌“​‌!​‌”​‌(​‌%​‌)​‌[​‌#​‌]​‌{​‌@​‌}​‌/​‌&amp;​‌\​‌&lt;​‌-​‌+​‌÷​‌×​‌=​‌&gt;​‌®​‌©​‌$​‌€​‌£​‌¥​‌¢​‌:​‌;​‌,​‌.​‌*</p>
+              </div>
+            </div>
+            <div class="module module--demo">
+              <div class="module--demo--item">
+                <p class="h2">Montserrat 400</p>
               </div>
               <div class="module--demo--info">
                 <p>AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz</p>
@@ -32,9 +42,12 @@
                 <p>‘​‌?​‌’​‌“​‌!​‌”​‌(​‌%​‌)​‌[​‌#​‌]​‌{​‌@​‌}​‌/​‌&amp;​‌\​‌&lt;​‌-​‌+​‌÷​‌×​‌=​‌&gt;​‌®​‌©​‌$​‌€​‌£​‌¥​‌¢​‌:​‌;​‌,​‌.​‌*</p>
               </div>
             </div>
+          </section>
+          <section class="module-section module-section--font-demo module-section--headline-font">
+            <h3 class="module-label" id="headline-font">Headline Font</h3>
             <div class="module module--demo">
               <div class="module--demo--item">
-                <p class="h2">Montserrat 700</p>
+                <p class="h2">DIN Condensed Bold</p>
               </div>
               <div class="module--demo--info">
                 <p>AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz</p>
@@ -42,7 +55,33 @@
                 <p>‘​‌?​‌’​‌“​‌!​‌”​‌(​‌%​‌)​‌[​‌#​‌]​‌{​‌@​‌}​‌/​‌&amp;​‌\​‌&lt;​‌-​‌+​‌÷​‌×​‌=​‌&gt;​‌®​‌©​‌$​‌€​‌£​‌¥​‌¢​‌:​‌;​‌,​‌.​‌*</p>
               </div>
             </div>
-          </section>          
+          </section>
+          <section class="module-section module-section--font-demo module-section--base-font">
+            <h3 class="module-label" id="base-font-stack">Base Font Stack</h3>
+            <div class="module module--demo">
+              <div class="module--demo--item">
+                <p class="h2">-apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif</p>
+              </div>
+              <div class="module--demo--info">
+                <p>AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz</p>
+                <p>0123456789</p>
+                <p>‘​‌?​‌’​‌“​‌!​‌”​‌(​‌%​‌)​‌[​‌#​‌]​‌{​‌@​‌}​‌/​‌&amp;​‌\​‌&lt;​‌-​‌+​‌÷​‌×​‌=​‌&gt;​‌®​‌©​‌$​‌€​‌£​‌¥​‌¢​‌:​‌;​‌,​‌.​‌*</p>
+              </div>
+            </div>
+          </section>
+          <section class="module-section module-section--font-demo module-section--serif-font">
+            <h3 class="module-label" id="base-font-stack">Serif Font Stack</h3>
+            <div class="module module--demo">
+              <div class="module--demo--item">
+                <p class="h2">'Garamond', 'Cambria', Georgia, serif</p>
+              </div>
+              <div class="module--demo--info">
+                <p>AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz</p>
+                <p>0123456789</p>
+                <p>‘​‌?​‌’​‌“​‌!​‌”​‌(​‌%​‌)​‌[​‌#​‌]​‌{​‌@​‌}​‌/​‌&amp;​‌\​‌&lt;​‌-​‌+​‌÷​‌×​‌=​‌&gt;​‌®​‌©​‌$​‌€​‌£​‌¥​‌¢​‌:​‌;​‌,​‌.​‌*</p>
+              </div>
+            </div>
+          </section>
           <section class="module-section module-section--headings">
             <span id="type-headings"></span>
             <h3 class="module-label">Headings</h3>
@@ -52,12 +91,12 @@
               </div>
               <div class="module--demo--info" pre-label="html">
  <pre v-highlightjs><code class="html">&lt;h1>Heading h1&lt;/h1>
-   
+
 &lt;p class="h1">Heading h1&lt;/p></code></pre>
 </div>
-              <div class="module--demo--info" pre-label="scss">                
+              <div class="module--demo--info" pre-label="scss">
 <pre v-highlightjs><code class="scss">h1,.h1 {
-  font-size: 3.25rem;          
+  font-size: 3.25rem;
   font-weight: 700;
 }
 </code></pre>
@@ -70,12 +109,12 @@
               </div>
               <div class="module--demo--info" pre-label="html">
  <pre v-highlightjs><code class="html">&lt;h2>Heading h2&lt;/h2>
-   
+
 &lt;p class="h2">Heading h2&lt;/p></code></pre>
 </div>
-              <div class="module--demo--info" pre-label="scss">                
+              <div class="module--demo--info" pre-label="scss">
 <pre v-highlightjs><code class="scss">h2,.h2 {
-  font-size: 2.75rem;          
+  font-size: 2.75rem;
   font-weight: 700;
 }
 </code></pre>
@@ -88,12 +127,12 @@
               </div>
               <div class="module--demo--info" pre-label="html">
  <pre v-highlightjs><code class="html">&lt;h3>Heading h3&lt;/h3>
-   
+
 &lt;p class="h3">Heading h3&lt;/p></code></pre>
 </div>
-              <div class="module--demo--info" pre-label="scss">                
+              <div class="module--demo--info" pre-label="scss">
 <pre v-highlightjs><code class="scss">h3,.h3 {
-  font-size: 2.25rem;          
+  font-size: 2.25rem;
   font-weight: 700;
 }
 </code></pre>
@@ -110,7 +149,7 @@
               </div>
               <div class="module--demo--info" pre-label="scss">
  <pre v-highlightjs><code class="scss">h4,.h4 {
-  font-size: 1.5rem;          
+  font-size: 1.5rem;
   font-weight: 500;
 }
 </code></pre>
@@ -122,12 +161,12 @@
               </div>
               <div class="module--demo--info" pre-label="html">
  <pre v-highlightjs><code class="html">&lt;h5>Heading h5&lt;/h5>
-   
+
 &lt;p class="h5">Heading h5&lt;/p></code></pre>
               </div>
               <div class="module--demo--info" pre-label="scss">
 <pre v-highlightjs><code class="scss">h5,.h5 {
-  font-size: 1.25rem;          
+  font-size: 1.25rem;
   font-weight: 500;
 }
 </code></pre>
@@ -139,12 +178,12 @@
               </div>
               <div class="module--demo--info" pre-label="html">
  <pre v-highlightjs><code class="html">&lt;h6>Heading h6&lt;/h6>
-   
+
 &lt;p class="h6">Heading h6&lt;/p></code></pre>
 </div>
-              <div class="module--demo--info" pre-label="scss">                
+              <div class="module--demo--info" pre-label="scss">
 <pre v-highlightjs><code class="scss">h6,.h6 {
-  font-size: .875rem;          
+  font-size: .875rem;
   font-weight: 500;
 }
 </code></pre>
@@ -161,7 +200,7 @@
               <div class="module--demo--info" pre-label="html">
  <pre v-highlightjs><code class="html">&lt;p>This is a paragraph. We use these all over the place.&lt;/p></code></pre>
 </div>
-              <div class="module--demo--info" pre-label="scss">                
+              <div class="module--demo--info" pre-label="scss">
 <pre v-highlightjs><code class="scss">p {
 
   line-height: 1.6;
@@ -195,7 +234,7 @@
             <div class="module module--demo">
               <div class="module--demo--item">
                 <p><a href="#0">This is a paragraph link</a>.</p>
-              </div>            
+              </div>
               <div class="module--demo--info" pre-label="html">
                 <pre v-highlightjs><code class="html">&lt;p>&lt;a href="#0">This is a paragraph link.&lt;/a>&lt;/p></code></pre>
               </div>
@@ -233,7 +272,7 @@ p a {
               <div class="module--demo--info" pre-label="scss">
 <pre v-highlightjs><code class="scss">u {
   text-decoration: underline;
-  text-decoration-skip: ink; 
+  text-decoration-skip: ink;
 }</code></pre>
               </div>
             </div>
@@ -285,7 +324,7 @@ p a {
   padding: 1rem;
 }</code></pre>
               </div>
-            </div> 
+            </div>
           </section>
         </template>
 
@@ -297,7 +336,7 @@ p a {
 
         <template slot="scss">
           <pre v-highlightjs><code class="scss">$var-name: #333;</code></pre>
-        </template> 
+        </template>
 
         <template slot="js">
           <pre v-highlightjs><code class="javascript"></code></pre>
@@ -311,7 +350,7 @@ p a {
 <script>
   import Demobox from '../../utility/Demobox'
   import SimIconText from '../../../components/IconText'
-  
+
 export default {
   name: 'guide-typography',
   components: {
@@ -329,4 +368,3 @@ export default {
 <style lang="scss">
   @import '../../../docs/assets/sass/typography';
 </style>
-

@@ -2,7 +2,7 @@
   <article>
       <h2>{{ msg }}</h2>
 
-      <demobox>
+      <demobox :open="true">
         <template slot="intro">
           Normal / Default
         </template>
@@ -11,10 +11,12 @@
           <input type="text" v-model="example" />
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+<pre v-highlightjs><code class="html" v-pre>&lt;p>&lt;SimBadge :badge="BadgeValue">Some text&lt;/SimBadge>Some more text&lt;/p></code></pre>
         </template>
         <template slot="js">
-          <pre><code class="javascript"></code></pre>
+          <div pre-label="Javascript">
+            <pre v-highlightjs><code class="javascript">BadgeValue = {{ badge }}</code></pre>
+          </div>
         </template>
       </demobox>
 
@@ -39,7 +41,12 @@
     },
     computed: {
       badge() {
-        return this.example // common.getRandomInt(0, 100)
+        return this.example
+      },
+    },
+    methods: {
+      randomizeBadge() {
+        this.example = Math.round(Math.random() * 100)
       },
     },
   }

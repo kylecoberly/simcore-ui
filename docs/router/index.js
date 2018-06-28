@@ -1,6 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+// Nav
+import Hello from '../Hello'
+import GettingStarted from '../GettingStarted'
+import ComponentLibrary from '../ComponentLibrary'
+import StyleLibrary from '../StyleLibrary'
+import Extras from '../Extras'
+
 // Docs: Components
 import DocAutocomplete from '../pages/components/Autocomplete'
 import DocBadges from '../pages/components/Badge'
@@ -21,22 +28,16 @@ import DocTag from '../pages/components/Tag'
 import DocTimePicker from '../pages/components/TimePicker'
 import DocTooltip from '../pages/components/Tooltip'
 
-import Tests from '../../tests/unit/components/Beanstalker'
-
-// Nav
-import Hello from '../Hello'
-import GettingStarted from '../GettingStarted'
-import ComponentLibrary from '../ComponentLibrary'
-import StyleLibrary from '../StyleLibrary'
-import TestLibrary from '../TestLibrary'
-import Extras from '../Extras'
-
 // Docs: Styles
-import GuideIntro from '../pages/styles/Intro'
+import GuideIntro from '../pages/styles/GuideIntro'
+import GuideLogo from '../pages/styles/Logo'
 import GuideColor from '../pages/styles/Color'
 import GuideGrid from '../pages/styles/Grid'
 import GuideTypography from '../pages/styles/Typography'
 import GuideButtons from '../pages/styles/Buttons'
+
+// Docs: Extras
+import ExtrasIntro from '../pages/extras/ExtrasIntro'
 
 Vue.use(Router)
 
@@ -215,20 +216,28 @@ export default new Router({
     },
     {
       path: '/styles',
-      label: 'Style Guide',
+      label: 'Guidelines',
       icon: 'fa-paint-brush fa-fw',
       component: StyleLibrary,
       children: [
         {
           path: '',
-          redirect: 'intro',
+          redirect: 'guide-intro',
         },
         {
-          path: 'intro',
-          name: 'intro',
+          path: 'guide-intro',
+          name: 'guide-intro',
           label: 'Intro',
           components: {
             details: GuideIntro,
+          },
+        },
+        {
+          path: 'logo',
+          name: 'logo',
+          label: 'Brand Logo',
+          components: {
+            details: GuideLogo,
           },
         },
         {
@@ -267,27 +276,20 @@ export default new Router({
     },
     {
       path: '/extras',
-      name: 'extras',
-      icon: 'fa-code fa-fw',
       label: 'Other Things',
-      component: Extras,
-    },
-    {
-      path: '/tests',
-      label: 'Tests',
       icon: 'fa-code fa-fw',
-      component: TestLibrary,
+      component: Extras,
       children: [
         {
           path: '',
-          redirect: 'beanstalker',
+          redirect: 'extras-intro',
         },
         {
-          path: 'beanstalker',
-          name: 'the tests',
-          label: 'The Tests',
+          path: 'extras-intro',
+          name: 'extras-intro',
+          label: 'Intro',
           components: {
-            details: Tests,
+            details: ExtrasIntro,
           },
         },
       ],

@@ -5,7 +5,15 @@
   color: var(--dark);
 }
 
-// spacing
-.mb-sm {
-  margin-bottom: .5rem;
+.fa-events-icons-failed {
+  .fa {
+    display: none;
+  }
+  .sr-only {
+    position: relative;
+    height: auto;
+    width: auto;
+    margin: initial;
+    padding: initial;
+  }
 }

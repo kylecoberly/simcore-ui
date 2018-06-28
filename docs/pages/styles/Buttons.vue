@@ -1,6 +1,6 @@
 <template lang="html">
   <article>
-    <h2 class="library-section-title">{{ msg }}</h2>
+    <h2 class="library--section-title">{{ msg }}</h2>
     <demobox :open="true">
 
         <template slot="intro">

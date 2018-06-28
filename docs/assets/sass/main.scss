@@ -1,5 +1,7 @@
 // base
+@import 'fonts/fonts';
 @import 'vars';
+@import 'reset';
 @import 'base';
 @import 'transitions';
 @import 'demobox';
@@ -8,17 +10,12 @@
 // @import 'input';
 @import '../../../styles/form-elements';
 
-// layout
-@import 'layout';
-@import 'header';
-@import 'nav';
-
 // style guide content
 @import 'intro';
-@import 'color-swatch';
 
 // modules
 @import 'module';
+@import 'brand-logo';
 
 // theme styles
 @import 'color';
@@ -26,5 +23,10 @@
 @import 'typography';
 @import 'buttons';
 
-// ovverides
+// layout
+@import 'nav';
+@import 'header';
+@import 'layout';
+
+// overrides
 @import 'overrides';

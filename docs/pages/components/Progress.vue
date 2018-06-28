@@ -1,19 +1,24 @@
 <template lang="html">
   <article>
       <h2>{{ msg }}</h2>
-
-      <demobox>
+      <demobox :open="true">
         <template slot="intro">
           Normal / Default
         </template>
         <template slot="view">
-          <p>Progress component</p>
+          <SimProgress :percent="percent"></SimProgress>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+        <pre v-highlightjs><code class="html">&lt;SimProgress :percent="myPercentValue">&lt;/SimProgress></code></pre>
         </template>
         <template slot="js">
-          <pre><code class="javascript"></code></pre>
+          <div class="flex-center-between">
+            <pre>
+              <code class="javascript">let myPercentValue = {{ percent }}</code>
+            </pre>
+            <button @click="randomizePercent">randomize</button>
+          </div>
+
         </template>
       </demobox>
 
@@ -33,9 +38,13 @@
     data() {
       return {
         msg: 'Progress',
+        percent: 29,
       }
     },
-    computed: {
+    methods: {
+      randomizePercent() {
+        this.percent = Math.round(Math.random() * 100)
+      },
     },
   }
 </script>

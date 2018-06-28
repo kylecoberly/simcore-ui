@@ -5,9 +5,11 @@
     <demobox>
       <template slot="view">
         <p v-for="item in items">
-          <sim-selection :item="item" :disabled="item.disabled" :selected-items="selectedItems">
-            {{ item.name }}
-          </sim-selection>
+          <SimSelection 
+            :item="item"
+            :disabled="item.disabled" :selected-items="selectedItems"
+            >{{ item.name }}
+            </SimSelection>
         </p>
       </template>
       <template slot="js">
@@ -18,9 +20,12 @@
       </template>
       <template slot="html">
         <pre v-highlightjs><code class="html" v-pre>&lt;p v-for="item in items">
-  &lt;sim-selection :item="item" :disabled="item.disabled" :selected-items="selectedItems">
-    {{ item.name }}
-  &lt;/sim-selection>
+  &lt;SimSelection
+    :item="item"
+    :disabled="item.disabled"
+    :selected-items="selectedItems"
+    >{{ item.name }}
+    &lt;/SimSelection>
 &lt;/p></code></pre>
       </template>
     </demobox>

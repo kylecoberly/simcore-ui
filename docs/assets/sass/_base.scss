@@ -1,26 +1,11 @@
 // base styles
 
-:root {
-  box-sizing: border-box;
-
-  --calc-pt25: calc(1vw + .25em);
-  --calc-pt5: calc(1vw + .5em);
-  --calc-pt75: calc(1vw + .75em);
-  --calc-1: calc(1vw + 1em);
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
 body {
   background: var(--base-bg);
   color: var(--base-color);
-  font-family: var(--base-font-family);
+  font-family: var(--base-font);
   -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;  
+  -webkit-font-smoothing: antialiased;
 }
 
 h1,.h1,
@@ -31,14 +16,19 @@ h5,.h5,
 h6,.h6 {
   line-height: 1.4;
   margin-top: 0;
+
+  small {
+    font-size: 60%;
+  }
 }
 
 p {
   line-height: 1.6;
   margin-top: 0;
-  margin-bottom: 0;   
+  margin-bottom: 0;
+
   & + * {
-    margin-top: 1.5rem;
+        margin-top: 1.5rem;
   }
 }
 
@@ -54,6 +44,10 @@ a {
   svg {
     line-height: 0;
   }
+}
+
+img {
+  max-width: 100%;
 }
 
 .accent {
@@ -79,45 +73,60 @@ pre {
   -webkit-font-smoothing: initial;
 }
 
+::selection {
+  background: var(--blue-film-heavy);
+  color: var(--lightest);
+}
+
+::-moz-selection {
+  background: var(--blue-film-heavy);
+  color: var(--lightest);
+}
+
 // buttons
 
 button,
 .button {
-  --color: var(--action);
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 0 0 1px rgba(#777, .5) inset;
-  padding: .4em .7em;
+  background: var(--color);
+  border: 0;
   border-radius: .2em;
-  color: inherit;
+  box-shadow: 0 0 0 1px var(--line) inset;
+  color: var(--light);
+  cursor: pointer;
   font-family: inherit;
   font-size: 1rem;
-  background: var(--color);
-  color: #fff;
   outline: none;
-  will-change: transform;
+  padding: .4em .7em;
   transition: transform .15s ease-out;
+  will-change: transform;
+
   &:active {
     transform: scale(.95);
   }
+
   &:active,
   &:focus {
-    box-shadow: 0 0 0 1px rgba(#777, .5) inset, 0 0 2px 1px var(--action);
+    box-shadow: 0 0 0 1px var(--line) inset, 0 0 2px 1px var(--action);
   }
+
   &.secondary {
+    background: var(--edge);
     color: var(--action);
-    background: rgba(#777, .1);
+
     &:hover {
-      background: rgba(#777, .05);
+      background: var(--dust);
     }
   }
+
   &.link {
-    color: var(--action);
     background: transparent;
+    color: var(--action);
+
     &:not(:focus):not(:active) {
       box-shadow: none;
     }
   }
+
   &.danger {
     --color: var(--danger);
     // background: var(--danger);

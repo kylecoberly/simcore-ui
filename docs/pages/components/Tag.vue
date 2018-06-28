@@ -2,18 +2,32 @@
   <article>
       <h2>{{ msg }}</h2>
 
-      <demobox>
+      <demobox :open="true">
         <template slot="intro">
           Normal / Default
         </template>
         <template slot="view">
-          <p>Tag component</p>
+          <SimTag
+            :icon="tag"
+            :text="vuejs"
+            ></SimTag>
+            <SimTag
+            :icon="tag"
+            :text="sass"
+            ></SimTag>
+            <SimTag
+            :icon="tag"
+            :text="flexbox"
+            ></SimTag>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+          <pre v-highlightjs><code class="html">&lt;SimTag :icon="iconName" :text="tagName">&lt;/SimTag></code></pre>
         </template>
         <template slot="js">
-          <pre><code class="javascript"></code></pre>
+          <pre v-highlightjs><code class="javascript">icon: 'iconName'
+
+text: 'tagName'
+            </code></pre>
         </template>
       </demobox>
 
@@ -33,9 +47,15 @@
     data() {
       return {
         msg: 'Tag',
+
+        // icon
+        tag: 'fa-tag',
+
+        // text
+        vuejs: 'Vuejs',
+        sass: 'Sass',
+        flexbox: 'Flexbox',
       }
-    },
-    computed: {
     },
   }
 </script>

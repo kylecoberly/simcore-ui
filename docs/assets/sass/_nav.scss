@@ -1,53 +1,224 @@
-.app-nav {
-  display: flex;
-  align-items: center;
-  a {
-    padding: 1em;
-    transition: calc(var(--ms)/2) linear;
-    color: var(--action);
-    &:hover {
-      box-shadow: 0 -.1em 0 0 var(--lighter) inset;
-    }
-    &.router-link-active {
-      color: var(--light);
-      background: var(--accent);
-    }
-  }
-}
 nav {
   margin: 0;
   padding: 0;
-  display: flex;
+
+  ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+
   li {
     list-style: none;
+  }
+}
+
+.app-nav {
+  display: flex;
+  flex-grow: 1;
+
+  nav {
+    display: flex;
+    flex-grow: 1;
+    justify-content: flex-end;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  li {
+    display: flex;
+    padding: 0;
+  }
+
+  a {
+    background: transparent;
+    color: var(--action-light);
+    display: flex;
+    padding: 1em;
+    transition: .35s ease;
+
+    &:hover,
+    &:focus,
+    &.router-link-active {
+      background: var(--lightest);
+      //box-shadow: 0 -.25em 0 0 var(--hover, var(--action)) inset;
+      box-shadow: 0 .2em 0 0 var(--hover, var(--action)) inset;
+      color: var(--active);
+      outline: 0;
+    }
+    // &.router-link-active {
+    //   background: var(--lightest);
+    //   box-shadow: 0 .2em 0 0 var(--hover, var(--action)) inset;
+    //   color: var(--active);
+    // }
+  }
+
+  @media (max-width: 41.25em) {
+    flex: 1 0 100%;
+
+    ul {
+      flex-direction: column;
+    }
+
+    li a {
+      flex-grow: 1;
+    }
+  }
+
+  @media (max-width: 62.75em) {
+    ul {
+      flex-grow: 1;
+    }
+  }
+
+  @media (min-width: 62.75em) {
+    display: flex !important;
+  }
+
+  @media (min-width: 100em) {
+    li:last-child {
+      //margin-left: auto;
+    }
   }
 }
 
 // app menu
 
 .app-menu {
-  font-size: .875em;
-  ul {
-    margin: 0;
-    padding: 0;
-    li {
-      list-style: none;
-      padding: .5em 0;
-    }
+  margin: 0;
+  padding-top: 1em;
+  padding-right: 0;
+  padding-bottom: 1.5em;
+  padding-left: 0;
+
+  li {
+    list-style: none;
+    padding: .5em .5em .5em 1em;
   }
+
   a {
     color: var(--action);
+
     &.router-link-exact-active {
       color: var(--medium-grey);
     }
   }
+
   header {
-    padding: .5em 1em;
-    color: var(--light);
     background: var(--medium-grey);
-    margin: 0 -1em;
+    color: var(--light);
+    padding: .5em 1em;
   }
+
   section li {
-    padding: .25em 0 .25em 1.8em;
+    padding: .5em 0 .5em 2.875em;
+  }
+}
+
+.toggle-button {
+  background: transparent;
+  border-radius: 0;
+  padding: 1em 1.25em;
+
+  .fa {
+    font-size: 1.125em;
+    transition: transform .35s ease;
+  }
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+    outline: 0;
+    transform: none;
+  }
+
+  &--main-menu {
+    color: var(--light);
+
+    &:hover,
+    &:focus {
+      background: var(--ghost);
+      color: var(--light-grey);
+    }
+
+    @media (min-width: 62.75em) {
+      display: none;
+    }
+  }
+
+  &--sidebar {
+    background: var(--lighter);
+    box-shadow: 0 -1px 0 var(--edge) inset;
+    color: var(--grey);
+    display: flex;
+    flex: 1 0 auto;
+    // grid-column: span 3;
+    grid-row: 1 / 1;
+    justify-content: space-between;
+    text-transform: uppercase;
+    // position: sticky;
+    // top: 3.125em;
+    // z-index: 1;
+
+    &:hover,
+    &:focus,
+    &.target-is-visible {
+      //background: var(--light);
+      //background: transparent;
+      //color: var(--light);
+      box-shadow: 0 -1px 0 var(--edge) inset;
+      transform: none;
+    }
+
+    .fa {
+      font-size: 2em;
+      line-height: .55;
+    }
+
+    span:not(.fa) {
+      font-size: .9em;
+      font-weight: 600;
+    }
+
+    &.target-is-visible .fa {
+      transform: rotate(180deg);
+    }
+
+    @media (min-width: 18.75em) {
+      //justify-content: flex-end;
+    }
+
+    @media (min-width: 40em) {
+      display: none;
+    }
+  }
+}
+
+.skip-link {
+  align-items: center;
+  background: var(--action);
+  color: var(--light);
+  display: flex;
+  font-size: 2.5rem;
+  justify-content: center;
+  line-height: 1;
+  max-height: 0;
+  outline: none;
+  overflow: hidden;
+  position: sticky;
+  text-align: center;
+  transition: .35s ease;
+  width: 100%;
+  z-index: 1001;
+
+  &:focus {
+    box-shadow: none;
+    color: #FFF;
+    max-height: 100px;
+    padding-top: .5em;
+    padding-bottom: .5em;
   }
 }

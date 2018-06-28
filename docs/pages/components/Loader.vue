@@ -7,13 +7,19 @@
           Normal / Default
         </template>
         <template slot="view">
-          <p>Loader component</p>
+          <div v-if="isLoading" class="sim-loader--shield">
+            <SimLoader :is-loading="true"></SimLoader>
+          </div>
         </template>
-        <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+        <template slot="html"><pre v-highlightjs><code class="html" v-pre>&lt;div v-if="isLoading" class="sim-loader--shield">
+  &lt;SimLoader :is-loading="true">&lt;/SimLoader>
+&lt;/div></code></pre>
         </template>
-        <template slot="js">
-          <pre><code class="javascript"></code></pre>
+        <template slot="js"><pre v-highlightjs><code class="javascript">data() {
+  return {
+    isLoading: true,
+  }
+},</code></pre>
         </template>
       </demobox>
 
@@ -33,9 +39,14 @@
     data() {
       return {
         msg: 'Loader',
+        isLoading: true,
       }
     },
     computed: {
     },
   }
 </script>
+
+<style lang="scss" scoped>
+  
+</style>

@@ -2,26 +2,51 @@
   <article>
       <h2>{{ msg }}</h2>
 
-      <demobox :open="true">
+      <demobox>
         <template slot="intro">
           Normal / Default
         </template>
         <template slot="view">
           <p>
-            Never gonna give you up
-            <sim-tooltip pop="up">
-              <span slot="text">Never gonna let you down</span>
-            </sim-tooltip>
+            Never give up
+            <SimTooltip pop="up">
+              <span slot="text">
+                It always seems impossible until it's done.
+              </span>
+            </SimTooltip>
           </p>
           <p>
-            Never gonna make you cry
-            <sim-tooltip pop="down">
-              <span slot="text">Never gonna say goodbye</span>
-            </sim-tooltip>
+            Never surrender
+            <SimTooltip pop="down">
+              <span slot="text">When something really matters, you should never give up or give in.</span>
+            </SimTooltip>
           </p>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html">&lt;sim-icontext icon="fa-star" text="Getting Started" /></code></pre>
+          <pre v-highlightjs><code class="html">&lt;SimTooltip pop="up">
+    &lt;span slot="text">It always seems impossible until it's done.&lt;/span>
+  &lt;/SimTooltip>
+
+  &lt;SimTooltip pop="down">
+    &lt;span slot="text">When something really matters, you should never give up or give in.&lt;/span>
+  &lt;/SimTooltip></code></pre>
+        </template>
+        <template slot="js">
+          <pre v-highlightjs><code class="javascript">props: {
+  pop: {
+    type: String,
+    default: 'up',
+  },
+  shift: {
+    type: String,
+    default: 'none',
+  },
+},
+computed: {
+  popTo() {
+    return `sim-tooltip__bubble--${this.pop}`
+  },
+},</code></pre>
         </template>
       </demobox>
 

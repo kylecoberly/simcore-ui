@@ -8,7 +8,7 @@
         </template>
         <template slot="view">
 
-          <sim-datalist :items="items">
+          <SimDatalist :items="items">
             <template slot="header">
               Datalist Header
             </template>
@@ -30,11 +30,11 @@
             <template slot="footer">
               Datalist Footer
             </template>
-          </sim-datalist>
+          </SimDatalist>
 
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html" v-pre>&lt;sim-datalist :items="items">
+          <pre v-highlightjs><code class="html" v-pre>&lt;SimDatalist :items="items">
   &lt;template slot="header">
     Datalist Header
   &lt;/template>
@@ -56,7 +56,7 @@
   &lt;template slot="footer">
     Datalist Footer
   &lt;/template>
-&lt;/sim-datalist></code></pre>
+&lt;/SimDatalist></code></pre>
         </template>
         <template slot="js">
           <pre v-highlightjs><code class="javascript">items: {{ items }}</code></pre>

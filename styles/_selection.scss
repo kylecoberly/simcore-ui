@@ -24,11 +24,8 @@
     align-items: center;
     justify-content: center;
     &::before {
-      content: var(--selection-unchecked-icon, var(--icon-circle-thin, '\f1db'));
-      font-family: var(--icon-font-family, 'FontAwesome');
-      transform: scale(1.5);
-      will-change: transform;
-      transition: transform var(--ms, var(--default-ms, 350ms)) ease-out;
+      content: var(--selection-unchecked-icon);
+      font-family: var(--icon-font, 'FontAwesome');
     }
     &:active:not(:disabled)::before {
       transform: scale(.9);

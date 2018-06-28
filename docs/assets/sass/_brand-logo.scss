@@ -1,0 +1,81 @@
+.module-section--brand-logo {
+
+  .grid {
+    grid-gap: 4rem;
+
+    .module--demo {
+      margin-top: 3rem;
+    }
+  }
+
+  .module--demo {
+    align-content: end;
+    display: grid;
+
+    &--info pre {
+      font-size: .875em;
+    }
+
+  }
+
+  .alt-logos {
+
+    .brand-logo:not(.brand-logo--icon) {
+      max-width: 15em;
+    }
+  }
+
+}
+
+
+.module--demo--logo {
+  padding: 0 1em;
+}
+
+
+.brand-logo {
+  margin: 0 auto;
+  max-width: 80em;
+  padding: 2em;
+
+  img {
+    display: block;
+    margin: 0 auto;
+  }
+
+  &--horizontal img {
+    max-width: 20em;
+  }
+
+  &--icon img {
+    max-width: 10em;
+  }
+
+  &--vertical img {
+    max-width: 15em;
+  }
+
+  &--icon,
+  &--primary {
+    padding: .75em;
+  }
+
+  // &--horizontal,
+  // &--vertical,
+  // &--text {
+  //   padding: 2em;
+  // }
+
+  &--text img {
+    max-width: 25em;
+  }
+
+  &--light {
+    background: var(--color-brand-grey-dark, var(--dark));
+  }
+
+}
+
+.brand-gradient {
+  background: linear-gradient(to right, var(--color-brand-green) 20%, var(--color-brand-green-dark), 50%, var(--color-brand-green-faded) 68%, var(--color-brand-grey) 85%);
+}

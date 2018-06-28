@@ -1,4 +1,4 @@
-.library-page-title {
+.library--page-title {
   font-size: 1.25rem;
 }
 
@@ -7,11 +7,13 @@
   padding-bottom: 2rem;
 }
 
-.module-label.module-label { // I know. I will fix later
+ // I know. I will fix later
+ // this avoids using !important
+.module-label.module-label {
   border-bottom: 3px solid var(--light);
-  color: var(--medium-grey);
+  color: var(--grey);
   display: inline-block;
-  font-family: var(--base-font-family);
+  font-family: var(--base-font);
   font-size: .875rem;
   font-weight: 700;
   letter-spacing: .1ch;
@@ -20,7 +22,7 @@
   position: relative;
   padding-bottom: .125rem;
   text-transform: uppercase;
-  
+
   &::before {
     color: var(--action);
     content: "#";
@@ -44,19 +46,22 @@
 
     &--item {
       flex-grow: 1;
-      
+
     }
-    
+
     &--info {
       flex-grow: 0;
     }
-    
+
     &--info {
       background: var(--snow);
       display: flex;
       flex-direction: column;
       margin-top: 1rem;
-      padding: .5em 3.5em .5em .5em;
+      padding: .5em;
+      &[pre-label] {
+        padding-right: 3.5em;
+      }
       > * {
         margin: 0;
         padding: .125rem;
@@ -66,10 +71,10 @@
       }
       p {
         color: var(--grey);
-        //font-family: var(--base-font-family);
+        //font-family: var(--base-font);
         font-family: monospace;
         font-size: 1rem;
-        font-weight: 500;
+        font-weight: 600;
         margin-top: 0;
       }
     }

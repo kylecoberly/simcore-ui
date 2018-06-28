@@ -4,15 +4,34 @@
   font-size: 1em;
   a {
     color: var(--light);
+    //padding: 1em .5em 1em 1em;
   }
   .greeting {
     opacity: .6;
+    padding-top: .25em;
+    padding-left: .25em;
+    @media (max-width: 24em) {
+      display: none;
+    }
   }
 }
 
-.logo {
-  line-height: 0;
+.app-logo--wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @media (max-width: 62.75em) {
+    flex: 1 0 100%;
+  }
+}
+
+.app-logo {
+  flex-grow: 1;
   padding: 1em;
+}
+
+.logo {
+  //line-height: 0;
   svg {
     width: 9.5em;
     height: 2em;

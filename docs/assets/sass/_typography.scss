@@ -1,15 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:300,500,700');
-
-:root {
-  --theme-font-family: 'Montserrat', var(--base-font-family);
-}
-
 .typography {
 
-  &-demo {      
-    font-family: var(--theme-font-family);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  &-demo {
+    font-family: var(--primary-font-regular);
+    // -webkit-font-smoothing: antialiased;
+    // -moz-osx-font-smoothing: grayscale;
 
     h1,.h1,
     h2,.h2,
@@ -17,44 +11,45 @@
     h4,.h4,
     h5,.h5,
     h6,.h6 {
+      font-family: var(--headline-font);
       margin-bottom: 0;
     }
-        
+
 
     h1,.h1 {
-      font-size: 3.25em;
+      font-size: 3.25rem;
       font-weight: 700;
     }
-    
+
     h2,.h2 {
-      font-size: 2.75em;
+      font-size: 2.75rem;
       font-weight: 700;
     }
-    
+
     h3,.h3 {
-      font-size: 2.25em;
+      font-size: 2.25rem;
       font-weight: 700;
     }
-    
+
     h4,.h4 {
-      font-size: 1.75em;
+      font-size: 1.75rem;
       font-weight: 500;
     }
-    
+
     h5,.h5 {
-      font-size: 1.25em;
+      font-size: 1.25rem;
       font-weight: 500;
     }
-    
+
     h6,.h6 {
-      font-size: .875em;
+      font-size: .875rem;
       font-weight: 500;
     }
-    
+
     p a,
     u {
       text-decoration: underline;
-      text-decoration-skip: ink; 
+      text-decoration-skip: ink;
     }
 
   }
@@ -63,32 +58,17 @@
 
 .module-section {
 
-  &--font-family {    
-    
+  &--font-demo {
+
     font-size: .75em;
 
     p {
       margin-bottom: 0;
     }
 
-    .module:nth-of-type(1),
-    .module:nth-of-type(1) .h2 {
-      font-weight: 300;
-    }
-
-    .module:nth-of-type(2),
-    .module:nth-of-type(2) .h2 {
-      font-weight: 500;
-    }
-
-    .module:nth-of-type(3),
-    .module:nth-of-type(3) .h2 {
-      font-weight: 700;
-    }
-
     .module--demo--info {
       background: transparent;
-      border-top: 1px solid var(--light-grey); 
+      border-top: 1px solid var(--light-grey);
       display: block;
       margin-top: 0;
       padding-top: 10px;
@@ -102,7 +82,7 @@
         max-width: 34rem;
         word-break: break-all;
       }
-      p:nth-child(2) { 
+      p:nth-child(2) {
         padding: 0;
       }
     }
@@ -110,18 +90,66 @@
 
   }
 
-  &--headings {
+  &--primary-font {
+
+    .module:nth-of-type(1),
+    .module:nth-of-type(1) .h2 {
+      font-family: var(--primary-font-light);
+    }
+
+    .module:nth-of-type(2),
+    .module:nth-of-type(2) .h2 {
+      font-family: var(--primary-font-regular);
+    }
+
+    .module:nth-of-type(3),
+    .module:nth-of-type(3) .h2 {
+      font-family: var(--primary-font-medium);
+    }
 
   }
 
-  &--copy {
-    
+  &--headline-font {
+
+    .module,
+    .module .h2 {
+      font-family: var(--headline-font);
+    }
+  }
+
+  &--base-font {
+
+    .module,
+    .module .h2 {
+      font-family: var(--base-font);
+    }
+
+    .module .h2 {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &--serif-font {
+
+    .module {
+      font-family: var(--serif-font);
+    }
+
+    .module .h2 {
+      font-family: var(--base-font);
+      font-size: 1rem;
+      font-weight: normal;
+      margin-bottom: 1rem;
+    }
   }
 
 }
 
 .drop-caps {
   clear: both;
+
   &:first-letter {
     color: var(--red);
     float: left;
@@ -131,9 +159,11 @@
     padding-right: .5rem;
     padding-left: .125rem;
   }
+
   &--serif {
-    &:first-letter {
-      font-family: var(--serif-font-family);
+
+    &::first-letter {
+      font-family: var(--serif-font);
     }
   }
 }
@@ -147,7 +177,7 @@
 blockquote {
   background: var(--lighter);
   border-left: 4px solid var(--red-film);
-  font-family: var(--serif-font-family);
+  font-family: var(--serif-font);
   font-style: italic;
   margin-top: 1rem;
   margin-right: auto;

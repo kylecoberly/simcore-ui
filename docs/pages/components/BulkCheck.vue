@@ -10,10 +10,32 @@
           <p><SimBulkCheck :items="items" @toggle="setSelectedItems"></SimBulkCheck> {{ selectedItems}} selected items</p>
         </template>
         <template slot="html">
-          <pre v-highlightjs><code class="html"></code></pre>
+          <pre v-highlightjs><code class="html" v-pre>&lt;p>
+  &lt;SimBulkCheck
+    :items="items"
+    @toggle="setSelectedItems"
+    >&lt;/SimBulkCheck>
+  {{ selectedItems}} selected items
+&lt;/p></code></pre>
         </template>
         <template slot="js">
-          <pre><code class="javascript"></code></pre>
+          <pre v-highlightjs><code class="javascript">data() {
+  return {
+    msg: 'Bulk Check',
+    items: [{id:1},{id:2},{id:3},{id:4},{id:5}],
+    selectedItems: [],
+  }
+},
+computed: {
+  badge() {
+    return this.example
+  },
+},
+methods: {
+  setSelectedItems (items) {
+    this.selectedItems = items
+  }
+},</code></pre>
         </template>
       </demobox>
 
@@ -25,7 +47,7 @@
   import SimBulkCheck from '../../../components/BulkCheck'
 
   export default {
-    name: 'badge-doc',
+    name: 'bulkcheck-doc',
     components: {
       Demobox,
       SimBulkCheck,
