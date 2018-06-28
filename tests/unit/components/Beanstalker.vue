@@ -1,21 +1,32 @@
 <template lang="html">
-  <article style="flex: 1">
-    <h2>{{ title }}</h2>
+  <article>
+    <h2 class="library--section-title">{{ msg }}</h2>
 
     <demobox>
-      <template slot="intro">
-        Normal / Default
-      </template>
-      <template slot="view">
 
-      </template>
-      <template slot="html">
-        <pre v-highlightjs><code class="html"></code></pre>
-      </template>
-      <template slot="js">
-        <pre><code class="javascript"></code></pre>
-      </template>
-    </demobox>
+        <template slot="intro">
+          Normal / Default
+        </template>
+
+        <template slot="view">
+
+        </template>
+
+        <template slot="html">
+          <pre v-highlightjs><code class="html"></code></pre>
+        </template>
+
+        <template slot="scss">
+          <pre v-highlightjs><code class="scss"></code></pre>
+        </template>
+
+        <template slot="js">
+          <pre v-highlightjs><code class="javascript"></code></pre>
+        </template>
+
+      </demobox>
+
+
 
   </article>
 </template>
@@ -24,15 +35,15 @@
   import Demobox from '../../../docs/utility/Demobox'
 
   export default {
+    name: 'beanstalker',
+
     components: {
       Demobox,
     },
     data() {
       return {
-        title: 'Tests',
+        msg: 'Tests',
       }
-    },
-    mounted() {
     },
   }
 </script>

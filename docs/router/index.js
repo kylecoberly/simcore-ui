@@ -7,6 +7,7 @@ import GettingStarted from '../GettingStarted'
 import ComponentLibrary from '../ComponentLibrary'
 import StyleLibrary from '../StyleLibrary'
 import Extras from '../Extras'
+import TestLibrary from '../TestLibrary'
 
 // Docs: Components
 import DocAutocomplete from '../pages/components/Autocomplete'
@@ -28,8 +29,6 @@ import DocTag from '../pages/components/Tag'
 import DocTimePicker from '../pages/components/TimePicker'
 import DocTooltip from '../pages/components/Tooltip'
 
-import Tests from '../../tests/unit/components/Beanstalker'
-
 // Docs: Styles
 import GuideIntro from '../pages/styles/GuideIntro'
 import GuideLogo from '../pages/styles/Logo'
@@ -40,6 +39,7 @@ import GuideButtons from '../pages/styles/Buttons'
 
 // Docs: Extras
 import ExtrasIntro from '../pages/extras/ExtrasIntro'
+import Tests from '../../tests/unit/components/Beanstalker'
 
 Vue.use(Router)
 
@@ -299,7 +299,7 @@ export default new Router({
     {
       path: '/tests',
       label: 'Tests',
-      icon: 'fa-code fa-fw',
+      icon: 'fa-edit fa-fw',
       component: TestLibrary,
       children: [
         {
@@ -308,7 +308,7 @@ export default new Router({
         },
         {
           path: 'beanstalker',
-          name: 'the tests',
+          name: 'beanstalker',
           label: 'The Tests',
           components: {
             details: Tests,
