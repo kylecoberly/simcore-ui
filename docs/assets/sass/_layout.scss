@@ -1,12 +1,6 @@
-:root {
-  --grid-gap-size: 1rem;
-  display: grid;
-  height: 100vh;
-}
-
 body {
   display: flex;
-  flex-direction: column;
+  margin: 0;
 }
 
 #app {
@@ -18,7 +12,7 @@ body {
   display: flex;
   flex: 1;
   flex-direction: column;
-
+  min-height: 100vh;
   > header {
     flex: none;
 
@@ -39,15 +33,14 @@ body {
 
 .app-content {
   display: flex;
-  flex-direction: row-reverse;
-  flex-wrap: wrap;
+  flex-direction: column;
   position: relative;
   transition: all calc(var(--ms) / 2) ease-out;
   z-index: 0;
 
-  @media (min-width: 40em) {
+  @media (min-width: 40em) {    
     display: grid;
-
+    flex-direction: row;
     // this sets the .app-sidebar grid-column to:
     // grow with content up to 20rem
     // grid-template-columns: fit-content(20rem) 1fr;
