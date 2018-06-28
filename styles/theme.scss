@@ -1,4 +1,24 @@
 :root {
+  --default-ms: 350ms;
+  --panel-width: 30em;
+
+  --base-bg: var(--lightest);
+  --base-color: var(--dark);
+  --base-link-color: var(--action);
+  --base-radius: .2em;
+
+  --header-bg: var(--darker);
+  --header-fg: var(--light);
+
+  --menu-bg: var(--light);
+  --menu-fg: var(--dark);
+
+  --calc-pt25: calc(1vw + .25em);
+  --calc-pt5: calc(1vw + .5em);
+  --calc-pt75: calc(1vw + .75em);
+  --calc-1: calc(1vw + 1em);
+  
+  // colors
   --darkest: #000;
   --darker: #222;
   --dark: #333;
@@ -11,47 +31,51 @@
   --lighter: #fafafa;
   --lightest: #fff;
 
-  // colors
   --blue: #4A93B9;
   --blue-light: #76BADF;
-  --blue-film: rgba(#4A93B9, .5);
-  --blue-film-heavy: rgba(#0E6796, .9);
+  --blue-film: rgba(74, 147, 185, .5);
+  --blue-film-heavy: rgba(14, 103, 150, .9);
   --red: #CA1E34;
-  --red-film: rgba(#CA1E34, .5);
+  --red-film: rgba(202, 30, 52, .5);
   --orange: #FF7042;
-  --orange-film: rgba(#FF7042, .5);
+  --orange-film: rgba(255, 112, 66, .5);
   --yellow: #FFC929;
-  --yellow-film: rgba(#ffc929, .5);
+  --yellow-film: rgba(255, 201, 41, .5);
   --green: #9CCC66;
-  --green-film: rgba(#9CCC66, .5);
+  --green-film: rgba(156, 204, 102, .5);
   --aqua: #00C1D9;
-  --aqua-film: rgba(#00C1D9, .5);
+  --aqua-film: rgba(0, 193, 217, .5);
   --purple: #AB47BD;
-  --purple-film: rgba(#AB47BD, .5);
+  --purple-film: rgba(171, 71, 189, .5);
 
   --accent: var(--medium-grey);
+  --accent-text: #fff;
   --action: var(--blue);
   --action-light: var(--blue-light);
   --active: var(--blue-film-heavy);
   --focus: var(--aqua);
-  
+
   --success: var(--green);
   --danger: var(--red);
   --warning: var(--orange);
   --alert: var(--yellow);
   --royal: var(--purple);
+  --helper: #ff6300;
 
-  --shadow: rgba(#000, .8);
-  --twilight: rgba(#000, .5);
-  --dusk: rgba(#000, .3);
-  --shade: rgba(#000, .05);
-  --dust: rgba(#777, .05);
-  --edge: rgba(#777, .15);
-  --line: rgba(#777, .5);
-  --ghost: rgba(#808080, .5); // middle grey, middle opacity
-  --mist: rgba(#fff, .2);
-  --fog: rgba(#fff, .5);
-  --frost: rgba(#fff, .8);
+  --base: #257AA5;
+  --snow: #fafafa;
+  --cloud: #dadadc;
+  --shadow: rgba(0,0,0, .8);
+  --twilight: rgba(0,0,0, .5);
+  --dusk: rgba(0,0,0, .3);
+  --shade: rgba(0,0,0, .05);
+  --dust: rgba(119,119,119, .05);
+  --edge: rgba(119,119,119, .15);
+  --line: rgba(119,119,119, .5);
+  --ghost: rgba(128,128,128, .5); // middle grey, middle opacity
+  --mist: rgba(255,255,255, .2);
+  --fog: rgba(255,255,255, .5);
+  --frost: rgba(255,255,255, .8);
 
   --default-ms: 350ms;
 
@@ -69,9 +93,22 @@
   --light-gray: var(--light-grey);
   --lighter-gray: var(--lighter-grey);
 
+  --color-brand-grey: #53565a;
+  --color-brand-grey-dark: #403C3D;
+  --color-brand-green: #78d64b;
+  --color-brand-green-faded: #91d6ac;
+  --color-brand-green-dark: #007377;
+
+  // base fonts
   --base-font: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --serif-font: 'Garamond', 'Cambria', Georgia, serif;
-  
+
+  // brand fonts
+  --headline-font: 'din-condensed', var(--base-font);
+  --primary-font-light: 'montserrat-300', var(--base-font);
+  --primary-font-regular: 'montserrat-400', var(--base-font);
+  --primary-font-medium: 'montserrat-500', var(--base-font);
+
 }
 
 .text {
