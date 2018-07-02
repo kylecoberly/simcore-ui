@@ -17,7 +17,6 @@
       background: var(--autocomplete-input-bg, transparent);
       border: 0;
       box-shadow: none;
-      width: auto;
       z-index: 1;
     }
 
@@ -64,16 +63,27 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    z-index: 1;
+    z-index: 2;
+
+    > ul {
+      list-style-type: none;
+      margin-left: 0;
+      padding-left: 0;
+    }
+
   }
 
 
   li {
-    padding: .5em;
+    padding: .75em;
 
     &.highlighted {
       color: var(--autocomplete-highlight-fg, var(--blue));
       background: var(--autocomplete-highlight-bg, var(--shade));
+    }
+
+    p {
+      margin-bottom: 0;
     }
   }
 }

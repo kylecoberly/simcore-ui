@@ -19,7 +19,7 @@
     </template>
     <template slot="html">
       <pre v-highlightjs><code class="html">
-&lt;!-- Filter List (< 30 items) -->
+&lt;!-- Filter List (< 15 items) -->
 
 &lt;div class="sim-filter sim-accordion">
 &lt;div class="sim-filter--header sim-accordion--label">Filter List&lt;/div>
@@ -41,7 +41,7 @@
     </template>
     <template slot="html">
       <pre v-highlightjs><code class="html">
-&lt;!-- Filter Search (> 30 items)-->
+&lt;!-- Filter Search (>= 15 items)-->
 
 &lt;div class="sim-filter sim-accordion">
 &lt;div class="sim-filter--header sim-accordion--label">Filter Search&lt;/div>
@@ -98,7 +98,7 @@
     data() {
       return {
         msg: 'FilterBy',
-        dummyData: _.take(dummyData(), 20),
+        dummyData: _.take(dummyData(), 14),
         bigDummyData: dummyData(),
       }
     },
