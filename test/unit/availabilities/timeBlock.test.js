@@ -1,5 +1,5 @@
 // ---- DURATION/SEGMENT CONVERSIONS ----
-import * as timeBlock from '../../data/availabilities/timeBlock'
+import * as timeBlock from '../../../data/availabilities/timeBlock'
 
 test('convertingAnEvenWholeNumberToDecimalReturnsHalfTheOriginalWholeNumber', () => {
   const wholeNumber     = 6

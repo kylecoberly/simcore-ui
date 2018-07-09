@@ -2,7 +2,7 @@
 /* eslint quote-props: 0 */
 /* eslint comma-dangle: 0 */
 
-import * as transformers from '../../data/availabilities/transformers'
+import * as transformers from '../../../data/availabilities/transformers'
 
 test('returnContiguousTimeBlocksForUsersInADay', () => {
   const userAvailabilitiesForADate =

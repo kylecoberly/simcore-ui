@@ -4,7 +4,7 @@
 
 import * as mock from './mock'
 
-import * as cleansers from '../../data/availabilities/cleansers'
+import * as cleansers from '../../../data/availabilities/cleansers'
 
 // TODO: REFACTOR - Isolate the actual filter. Currently this works as a loop. - Chad
 // TODO: Rename for what's being tested, not the function being called. - Chad

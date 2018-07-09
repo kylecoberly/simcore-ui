@@ -7,7 +7,7 @@ import _ from 'lodash'
 import * as mock from './mock'
 import * as mockLarge from './mock-large'
 
-import * as filters from '../../data/availabilities/filters'
+import * as filters from '../../../data/availabilities/filters'
 
 test('onlyInstructorsInTheFilterShouldReturnAvailabilityTimes', () => {
   const instructorIdsToFilter = [7475, 4112, 7755, 'any', 'any']
