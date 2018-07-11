@@ -234,6 +234,7 @@
         default: false,
         required: true,
       },
+      isLoading: Boolean
     },
     data() {
       return {
@@ -504,9 +505,6 @@
       thereAreOnlySpecificInstructors() {
         return (this.specificInstructorCount === this.activeInstructorCount)
       },
-      isLoading() {
-        return this.$store.state.availabilities.isLoading // || this.calendarIsUpdating
-      }
     },
     watch: {
       activeMoment(newDate, oldDate) {
