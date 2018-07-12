@@ -260,7 +260,8 @@
       },
       calendarIsUpdating: Boolean,
       date: {
-        required: false
+        type: Object,
+        required: true
       },
       dayNames: Array,
       showExpandedWeek: Boolean,
@@ -321,26 +322,18 @@
     },
     computed: {
       currentDay() {
-        const defaultCurrentDay = {
-          eventBlocks: [],
-          pendingEventBlocks: [],
-          currentUserAvailabilityBlocks: [],
-          aggregateUserAvailabilityBlocks: [],
-          allBlocks: [],
-          aggregateUserAvailabilitySegments: [],
-          allSegments: [],
-        }
-
-        let currentDay;
-        if (this.date){
-          currentDay = this.monthDays[this.date.format(this.dateFormat)]
-        }
-
-        if (currentDay === undefined) {
-          currentDay = defaultCurrentDay
-        }
-
-        return currentDay
+        const matchedDay = this.monthDays[this.date.format(this.dateFormat)]
+        return (matchedDay)
+          ? matchedDay
+          : {
+            eventBlocks: [],
+            pendingEventBlocks: [],
+            currentUserAvailabilityBlocks: [],
+            aggregateUserAvailabilityBlocks: [],
+            allBlocks: [],
+            aggregateUserAvailabilitySegments: [],
+            allSegments: [],
+          }
       },
       componentClasses() {
         const classes = [`is-${this.contextLabel}-context`]
@@ -377,8 +370,7 @@
         return this.activeMoment.year()
       },
       isCurrentMonth() {
-        return moment()
-          .isSame([this.activeYear, this.activeMonth, 1], 'month')
+        return moment(this.date).isSame([this.activeYear, this.activeMonth, 1], 'month')
       },
       startOffset() {
         return moment([this.activeYear, this.activeMonth, 1]).day()
