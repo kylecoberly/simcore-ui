@@ -4,7 +4,7 @@ const dateFormatRaw = 'YYYY-MM-DD'
 
 const activeDate = {
   state: {
-    date: moment().format(dateFormatRaw),
+    date: moment(),
   },
   getters: {
     getActiveDate: (state) => () => { return state.date },
