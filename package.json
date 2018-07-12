@@ -12,6 +12,7 @@
     "test": "npm run test:unit",
     "test:unit": "mocha-webpack --recursive test/unit",
     "test:integration": "mocha-webpack -r test/integration-setup.js --webpack-config build/webpack.test.conf.js --recursive test/integration",
+    "test:integration:watch": "mocha-webpack -r test/integration-setup.js --webpack-config build/webpack.test.conf.js --recursive -wG test/integration",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e"
   },
   "dependencies": {

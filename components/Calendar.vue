@@ -259,7 +259,9 @@
         default: () => [],
       },
       calendarIsUpdating: Boolean,
-      date: Object,
+      date: {
+        required: false
+      },
       dayNames: Array,
       showExpandedWeek: Boolean,
       dateFormat: String,
@@ -275,8 +277,12 @@
       allInstructorAvailabilitySegments: Array,
       activeMoment: {
         type: Object,
-        default: () => moment(0)
-      }
+        required: true
+      },
+      monthDays: {
+        type: Object,
+        default: () => ({}),
+      },
     },
     data() {
       return {
@@ -308,11 +314,9 @@
           canResizeBlockEnd: true,
           canMoveBlock: false,
         },
-        monthDays: {},
       }
     },
     mounted() {
-      this.setTheActiveDateToToday()
       this.addSlotToActiveInstructorsList()
     },
     computed: {
@@ -327,7 +331,10 @@
           allSegments: [],
         }
 
-        let currentDay = this.monthDays[this.date]
+        let currentDay;
+        if (this.date){
+          currentDay = this.monthDays[this.date.format(this.dateFormat)]
+        }
 
         if (currentDay === undefined) {
           currentDay = defaultCurrentDay
@@ -389,10 +396,10 @@
         const activeMonthDays = this.setDays(startOfMonth, monthLimit)
         const activeWeekDays = this.setDays(startOfWeek, weekLimit)
 
-        this.monthDays = {}
+        this.$emit('resetMonthDays')
 
         _.each(activeMonthDays, (day) => {
-          this.monthDays[day] = {
+          this.$emit('setMonthDays', day, {
             date: day,
             isInActiveWeek: activeWeekDays.includes(day),
             currentUserAvailabilityBlocks: this.currentUserAvailabilityBlocks[day] || [],
@@ -402,7 +409,7 @@
             allSegments: this.allSegments[day] || [],
             eventBlocks: this.eventBlocks[day] || [],
             pendingEventBlocks: this.pendingEventBlocks[day] || [],
-          }
+          })
         })
 
         return activeMonthDays
@@ -616,9 +623,7 @@
         this.$emit('setActiveDate', date)
       },
       setTheActiveDateToToday() {
-        const date = moment().format(this.dateFormat)
-        this.closeBubble()
-        this.$emit('setActiveDate', date)
+        this.$emit('setTheActiveDateToToday')
       },
       applyFilter(type, data) {
           this.filters.find((filter) => filter.type === type).items = data
