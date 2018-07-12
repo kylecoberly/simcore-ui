@@ -63,6 +63,7 @@
     "cross-spawn": "^5.0.1",
     "css-loader": "^0.28.7",
     "cssnano": "^3.10.0",
+    "cypress": "^3.0.2",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.3.2",
     "eslint-friendly-formatter": "^3.0.0",
