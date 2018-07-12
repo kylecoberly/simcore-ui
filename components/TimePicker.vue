@@ -59,7 +59,7 @@
     },
     props: {
       date: {
-        type: String,
+        type: [String, Object],
       },
       shouldShowDate: {
         type: Boolean,

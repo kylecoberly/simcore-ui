@@ -14,7 +14,7 @@
     :date="date"
     :dayNames="this.$store.state.calendar.settings.day_names"
     :showExpandedWeek="this.$store.state.calendar.expand_week"
-    :dateFormat="this.$store.state.calendar.settings.date_format.raw"
+    :dateFormat="dateFormat"
     :displayMonthName="displayMonthName"
     :displayYear="displayYear"
     :displayDate="displayDate"
@@ -26,6 +26,7 @@
     :filteredSegments="this.$store.state.availabilities.filteredSegments"
     :allInstructorAvailabilitySegments="this.$store.state.availabilities.allInstructorAvailabilitySegments"
     :inactiveInstructors="inactiveInstructors"
+    :monthDays="monthDays"
     @fetchInstructorAvailabilitySegments="fetchInstructorAvailabilitySegments"
     @fetchCurrentUserAvailabilities="fetchCurrentUserAvailabilities"
     @setActiveDate="setActiveDate"
@@ -33,6 +34,7 @@
     @setCalendarExpandWeek="setCalendarExpandWeek"
     @toggleBubbleVisibility="toggleBubbleVisibility"
     @setActiveDate="setActiveDate"
+    @setTheActiveDateToToday="setTheActiveDateToToday"
     @setUserAvailabilityBlocksForDay="setUserAvailabilityBlocksForDay"
     @resetMonthDays="resetMonthDays"
     @setMonthDays="setMonthDays"
@@ -61,6 +63,7 @@ export default {
       instructors: this.$store.state.user.instructors,
       monthDays: {},
       currentUserAvailabilityBlocks: this.$store.state.user.availabilities
+      dateFormat: this.$store.state.calendar.settings.date_format.raw
     }
   }
   created() {
@@ -140,6 +143,11 @@ export default {
     },
   },
   methods {
+    setTheActiveDateToToday() {
+      const date = moment().format(this.dateFormat)
+      this.toggleBubbleVisibility(false)
+      this.setActiveDate(date)
+    },
     fetchInstructorAvailabilitySegments(date, filterEventLength, activeInstructorIds, activeInstructors) {
       const firstDayOfTheMonth = moment(date).startOf('month').format('YYYY-MM-DD 00:00:00')
       const lastDayOfTheMonth = moment(date).endOf('month').format('YYYY-MM-DD 23:59:59')
