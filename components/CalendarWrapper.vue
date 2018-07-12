@@ -33,7 +33,6 @@
     @filterInstructorAvailabilityBlocks="filterInstructorAvailabilityBlocks"
     @setCalendarExpandWeek="setCalendarExpandWeek"
     @toggleBubbleVisibility="toggleBubbleVisibility"
-    @setActiveDate="setActiveDate"
     @setTheActiveDateToToday="setTheActiveDateToToday"
     @setUserAvailabilityBlocksForDay="setUserAvailabilityBlocksForDay"
     @resetMonthDays="resetMonthDays"
@@ -50,6 +49,7 @@ import currentUser from '../external/currentUser'
 import Calendar from './Calendar'
 
 import _ from 'lodash'
+import moment from 'moment'
 
 export default {
   components: {
@@ -62,10 +62,10 @@ export default {
       inactiveInstructors: [],
       instructors: this.$store.state.user.instructors,
       monthDays: {},
-      currentUserAvailabilityBlocks: this.$store.state.user.availabilities
-      dateFormat: this.$store.state.calendar.settings.date_format.raw
+      currentUserAvailabilityBlocks: this.$store.state.user.availabilities,
+      dateFormat: this.$store.state.calendar.settings.date_format.raw,
     }
-  }
+  },
   created() {
     this.$store.commit('setSlideTemplates', eventEditorSlides)
     this.$store.commit('setAllUsers', users.users())
@@ -125,7 +125,7 @@ export default {
       }
     })
   },
-  computed {
+  computed: {
     isLoading() {
       return this.$store.state.availabilities.isLoading
     },
@@ -142,7 +142,7 @@ export default {
       return `${this.displayMonthName} ${this.displayYear}`
     },
   },
-  methods {
+  methods: {
     setTheActiveDateToToday() {
       const date = moment().format(this.dateFormat)
       this.toggleBubbleVisibility(false)
@@ -204,10 +204,10 @@ export default {
     },
     resetMonthDays(){
       this.monthDays = {};
-    }
+    },
     setMonthDays(key, value){
       this.$set(this.monthDays, key, value)
-    }
+    },
   }
 }
 </script>

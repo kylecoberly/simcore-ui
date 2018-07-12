@@ -114,6 +114,21 @@ describe('Calendar', () => {
       assert.equal(this.component.vm.componentClasses, 'is-instructor-context is-current-month is-expanded')
     })
   })
+  describe('#filterContainerClasses', () => {
+    before(() => {
+      this.component = shallowMount(Calendar, {
+        propsData: {
+          activeMoment: moment('1970-01-01'),
+          monthDays: this.monthDays,
+          dateFormat: 'YYYY-MM-DD',
+          date: moment('1970-01-01'),
+        },
+      })
+    })
+    xit('returns an empty string if no filters are active', () => {
+      assert.equal(this.component.vm.filterContainerClasses, '')
+    })
+  })
   describe('#isCurrentMonth', () => {
     before(() => {
       this.component = shallowMount(Calendar, {
@@ -136,6 +151,24 @@ describe('Calendar', () => {
         date: moment('1970-02-01'),
       })
       assert.ok(!this.component.vm.isCurrentMonth)
+    })
+  })
+  xdescribe('#isInstructorContext', () => {
+    before(() => {
+      this.component = shallowMount(Calendar, {
+        propsData: {
+          activeMoment: moment('1970-01-01'),
+          monthDays: this.monthDays,
+          dateFormat: 'YYYY-MM-DD',
+          date: moment('1970-01-01'),
+        },
+      })
+    })
+    it('returns true when it\'s an instructor context', () => {
+      assert.ok(this.component.vm.isInstructorContext)
+    })
+    it('returns false when it\'s not an instructor context', () => {
+      assert.ok(!this.component.vm.isInstructorContext)
     })
   })
 })

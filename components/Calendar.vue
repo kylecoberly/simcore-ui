@@ -231,32 +231,32 @@
       },
       isLoading: Boolean,
       eventBlocks: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => ({}),
       },
       pendingEventBlocks: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => ({}),
       },
       currentUserAvailabilityBlocks: {
         type: Array,
         default: () => [],
       },
       aggregateUserAvailabilityBlocks: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => ({}),
       },
       allBlocks: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => ({}),
       },
       aggregateUserAvailabilitySegments: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => ({}),
       },
       allSegments: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => ({}),
       },
       calendarIsUpdating: Boolean,
       date: {
@@ -271,11 +271,11 @@
       displayDate: String,
       bubbleIsOpen: Boolean,
       baseUrl: String,
-      currentUserId: String,
-      filteredBlocks: Array,
-      allInstructorAvailabilityBlocks: Array,
-      filteredSegments: Array,
-      allInstructorAvailabilitySegments: Array,
+      currentUserId: Number,
+      filteredBlocks: Object,
+      allInstructorAvailabilityBlocks: Object,
+      filteredSegments: Object,
+      allInstructorAvailabilitySegments: Object,
       activeMoment: {
         type: Object,
         required: true
