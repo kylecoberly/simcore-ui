@@ -24,7 +24,7 @@
 
 <script>
   import Demobox from '../../utility/Demobox'
-  import SimCalendar from '../../../components/Calendar'
+  import SimCalendar from '../../../components/CalendarWrapper'
 
   export default {
     name: 'calendar-doc',
