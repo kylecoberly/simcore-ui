@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://localhost:8080",
+  "integrationFolder": "test/e2e/integration",
+  "video": false,
+  "screenshotsFolder": "test/e2e/screenshots",
+  "fixturesFolder": "test/e2e/fixtures"
+}
