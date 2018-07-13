@@ -1,5 +1,5 @@
 describe('Calendar', function() {
-  describe('My Availability', function() {
+  xdescribe('My Availability', function() {
     before(function() {
       cy.server()
 
@@ -126,7 +126,7 @@ describe('Calendar', function() {
         cy.get('@day-control-panel').find('.sim-timeblock > .sim-timeblock--handle--up')
           .trigger('mousedown', {which: 1})
           .trigger('mousemove', {clientY: 85})
-          .trigger('mouseup', {force: true})
+          .trigger('mouseup')
         cy.get('@hours').contains('4 hours')
       })
       it('contracts the block from 4 hours to 2 by adjusting the start time', function() {
@@ -167,6 +167,85 @@ describe('Calendar', function() {
         it('backward')
         it('forward')
       })
+    })
+  })
+  describe('Schedule Events', function() {
+    describe('happy path', function() {
+      before(function() {
+        cy.server()
+
+        cy.fixture('purview_users').as('purviewUsers')
+        cy.fixture('purview_availabilities').as('purviewAvailabilities')
+        cy.fixture('availabilities').as('availabilities')
+
+        cy.route(/.*\/purview_users.*/, '@purviewUsers').as('purviewUsersRoute')
+        cy.route(/.*\/purview_availabilities.*/, '@purviewAvailabilities').as('purviewAvailabilitiesRoute')
+        cy.route(/.*\/availabilities.*/, '@availabilities').as('availabilitiesRoute')
+
+        cy.visit('/components/calendar')
+
+        cy.wait(['@purviewUsersRoute', '@purviewAvailabilitiesRoute', '@availabilitiesRoute'])
+      })
+      it('navigates to Schedule Events', function() {
+        cy.get('.sim-calendar--filters').should('not.be.visible')
+        cy.get('.sim-switch input').click()
+        cy.get('.sim-calendar--filters').should('be.visible')
+      })
+      it('changes the duration from 1 hour to 2 hours', function() {
+        cy.get('.sim-calendar--filters').as('filters')
+          .find('.sim-timeblock--info--hours').as('hours').contains('1 hour')
+        cy.get('@filters').find('.sim-timeblock > .sim-timeblock--handle--down')
+          .trigger('mousedown', {which: 1})
+          .trigger('mousemove', {clientY: 55})
+          .trigger('mouseup')
+        cy.get('@hours').contains('2 hours')
+      })
+      it('changes the duration from 2 hours to 1.5 hours', function() {
+        cy.get('.sim-calendar--filters').as('filters')
+          .find('.sim-timeblock--info--hours').as('hours').contains('2 hours')
+        cy.get('@filters').find('.sim-timeblock > .sim-timeblock--handle--down')
+          .trigger('mousedown', {which: 1})
+          .trigger('mousemove', {clientY: -20})
+          .trigger('mouseup')
+        cy.get('@hours').contains('1½ hours')
+      })
+      it('adds a specific instructor', function() {
+        cy.get('.sim-datalist > ul').as('instructors-list')
+          .find('li').as('instructors').should('have.length', 2)
+        cy.get('@instructors-list')
+          .find('[placeholder="Any Available Instructor"]').as('instructor-entry').type('alesh{enter}')
+        cy.get('@instructors').should('have.length', 2)
+        cy.get('@instructor-entry').should('have.value', 'Aleshin MIA MIA, Igor2')
+      })
+      it('adds an available instructor', function() {
+        cy.get('.sim-datalist > ul').as('instructors-list')
+          .find('li').as('instructors').should('have.length', 2)
+        cy.get('@instructors')
+          .eq(1)
+          .find('.control--add-item').click()
+        cy.get('@instructors-list').find('li').should('have.length', 3)
+        cy.get('@instructors-list').find('li').eq(1)
+          .find('input').should('have.attr', 'placeholder', 'Any Available Instructor')
+      })
+      it('removes an available instructor', function() {
+        cy.get('.sim-datalist > ul').as('instructors-list')
+          .find('li').as('instructors').should('have.length', 3)
+        cy.get('@instructors')
+          .eq(2)
+          .find('.control--add-item').click()
+        cy.get('@instructors-list').find('li').should('have.length', 4)
+        cy.get('@instructors-list').find('li').eq(2)
+          .find('input').should('have.attr', 'placeholder', 'Any Available Instructor')
+
+        cy.get('@instructors-list').find('li').eq(2)
+          .find('.sim-autofinder--remove-item').click()
+        cy.get('@instructors-list').find('li').should('have.length', 3)
+      })
+      it('expands an approprate day')
+      it('clicks on 1pm')
+      it('chooses one of the available instructors')
+      // No booking capability right now
+      it('books an event')
     })
   })
 })
