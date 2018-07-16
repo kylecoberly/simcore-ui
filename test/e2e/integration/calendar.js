@@ -1,5 +1,5 @@
 describe('Calendar', function() {
-  xdescribe('My Availability', function() {
+  describe('My Availability', function() {
     before(function() {
       cy.server()
 
@@ -241,11 +241,15 @@ describe('Calendar', function() {
           .find('.sim-autofinder--remove-item').click()
         cy.get('@instructors-list').find('li').should('have.length', 3)
       })
-      it('expands an approprate day')
-      it('clicks on 1pm')
-      it('chooses one of the available instructors')
+      // Timeslots won't show up until time is injected in
+      xit('selects a timeslot', function() {
+        cy.get('.sim-calendar--grid').as('grid')
+          .find('.sim-timeblock [style="--start:7; --duration:0.5"]').as('7am').click()
+        cy.get('@grid').find('.sim-timeblock--info').contains('1 hour')
+      })
+      xit('chooses one of the available instructors')
       // No booking capability right now
-      it('books an event')
+      xit('books an event')
     })
   })
 })
