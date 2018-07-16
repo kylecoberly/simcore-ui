@@ -239,8 +239,8 @@
         default: () => ({}),
       },
       currentUserAvailabilityBlocks: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => ({}),
       },
       aggregateUserAvailabilityBlocks: {
         type: Object,
@@ -265,12 +265,27 @@
       },
       dayNames: Array,
       showExpandedWeek: Boolean,
-      dateFormat: String,
-      displayMonthName: String,
-      displayYear: String,
-      displayDate: String,
+      dateFormat: {
+        type: String,
+        required: true,
+      },
+      displayMonthName: {
+        type: String,
+        required: true,
+      },
+      displayYear: {
+        type: String,
+        required: true,
+      },
+      displayDate: {
+        type: String,
+        required: true,
+      },
       bubbleIsOpen: Boolean,
-      baseUrl: String,
+      baseUrl: {
+        type: String,
+        required: true,
+      },
       currentUserId: Number,
       filteredBlocks: Object,
       allInstructorAvailabilityBlocks: Object,

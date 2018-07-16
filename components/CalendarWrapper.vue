@@ -1,30 +1,30 @@
 <template>
   <Calendar
     :isLoading="isLoading"
-    :eventBlocks="this.$store.state.events.blocks"
-    :pendingEventBlocks="this.$store.state.events.pendingBlocks"
+    :eventBlocks="eventBlocks"
+    :pendingEventBlocks="pendingEventBlocks"
     :currentUserAvailabilityBlocks="currentUserAvailabilityBlocks"
-    :aggregateUserAvailabilityBlocks="this.$store.state.availabilities.filteredBlocks"
-    :allBlocks="this.$store.state.availabilities.allInstructorAvailabilityBlocks"
-    :aggregateUserAvailabilitySegments="this.$store.state.availabilities.filteredSegments"
-    :allSegments="this.$store.state.availabilities.allInstructorAvailabilitySegments"
+    :aggregateUserAvailabilityBlocks="aggregateUserAvailabilityBlocks"
+    :allBlocks="allBlocks"
+    :aggregateUserAvailabilitySegments="aggregateUserAvailabilitySegments"
+    :allSegments="allSegments"
     :instructors="instructors"
     :activeMoment="activeMoment"
     :calendarIsUpdating="calendarIsUpdating"
     :date="date"
-    :dayNames="this.$store.state.calendar.settings.day_names"
-    :showExpandedWeek="this.$store.state.calendar.expand_week"
+    :dayNames="dayNames"
+    :showExpandedWeek="showExpandedWeek"
     :dateFormat="dateFormat"
     :displayMonthName="displayMonthName"
     :displayYear="displayYear"
     :displayDate="displayDate"
-    :bubbleIsOpen="this.$store.state.bubble.is_open"
-    :baseUrl="this.$store.state.base_url"
-    :currentUserId="this.$store.state.currentUser.id"
-    :filteredBlocks="this.$store.state.availabilities.filteredBlocks"
-    :allInstructorAvailabilityBlocks="this.$store.state.availabilities.allInstructorAvailabilityBlocks"
-    :filteredSegments="this.$store.state.availabilities.filteredSegments"
-    :allInstructorAvailabilitySegments="this.$store.state.availabilities.allInstructorAvailabilitySegments"
+    :bubbleIsOpen="bubbleIsOpen"
+    :baseUrl="baseUrl"
+    :currentUserId="currentUserId"
+    :filteredBlocks="filteredBlocks"
+    :allInstructorAvailabilityBlocks="allInstructorAvailabilityBlocks"
+    :filteredSegments="filteredSegments"
+    :allInstructorAvailabilitySegments="allInstructorAvailabilitySegments"
     :inactiveInstructors="inactiveInstructors"
     :monthDays="monthDays"
     @fetchInstructorAvailabilitySegments="fetchInstructorAvailabilitySegments"
@@ -64,9 +64,24 @@ export default {
       monthDays: {},
       currentUserAvailabilityBlocks: this.$store.state.user.availabilities,
       dateFormat: this.$store.state.calendar.settings.date_format.raw,
+      eventBlocks: this.$store.state.events.blocks,
+      pendingEventBlocks: this.$store.state.events.pendingBlocks,
+      aggregateUserAvailabilityBlocks: this.$store.state.availabilities.filteredBlocks,
+      allBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks,
+      aggregateUserAvailabilitySegments: this.$store.state.availabilities.filteredSegments,
+      allSegments: this.$store.state.availabilities.allInstructorAvailabilitySegments,
+      dayNames: this.$store.state.calendar.settings.day_names,
+      showExpandedWeek: this.$store.state.calendar.expand_week,
+      bubbleIsOpen: this.$store.state.bubble.is_open,
+      baseUrl: this.$store.state.base_url,
+      currentUserId: this.$store.state.currentUser.id,
+      filteredBlocks: this.$store.state.availabilities.filteredBlocks,
+      allInstructorAvailabilityBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks,
+      filteredSegments: this.$store.state.availabilities.filteredSegments,
+      allInstructorAvailabilitySegments: this.$store.state.availabilities.allInstructorAvailabilitySegments,
     }
   },
-  created() {
+  created () {
     this.$store.commit('setSlideTemplates', eventEditorSlides)
     this.$store.commit('setAllUsers', users.users())
     this.$store.commit('setAggregateEventBlocks', events.events())
@@ -84,8 +99,8 @@ export default {
       this.$store.state.base_url,
       this.$store.state.currentUser.id,
     )
-    instructorsPromise.then((response) => {
-      this.$store.commit('setInstructors', response.data.users.list)
+    return instructorsPromise.then((response) => {
+      return this.$store.commit('setInstructors', response.data.users.list)
     })
   },
   mounted(){
@@ -146,13 +161,13 @@ export default {
     setTheActiveDateToToday() {
       const date = moment().format(this.dateFormat)
       this.toggleBubbleVisibility(false)
-      this.setActiveDate(date)
+      return this.setActiveDate(date)
     },
     fetchInstructorAvailabilitySegments(date, filterEventLength, activeInstructorIds, activeInstructors) {
       const firstDayOfTheMonth = moment(date).startOf('month').format('YYYY-MM-DD 00:00:00')
       const lastDayOfTheMonth = moment(date).endOf('month').format('YYYY-MM-DD 23:59:59')
 
-      this.$store.dispatch('getInstructorAvailabilitySegments', {
+      return this.$store.dispatch('getInstructorAvailabilitySegments', {
         baseUrl: this.$store.state.base_url,
         userId: this.$store.state.currentUser.id,
         startDate: firstDayOfTheMonth,
@@ -176,37 +191,38 @@ export default {
         firstDayOfTheMonth,
         lastDayOfTheMonth,
       )
-      userAvailabilitiesPromise.then((response) => {
-        this.$store.commit('setCurrentUserAvailabilities', { blocks: response.data.dates, date: this.date })
+      return userAvailabilitiesPromise.then((response) => {
         this.calendarIsUpdating = false
+        return this.$store.commit('setCurrentUserAvailabilities', { blocks: response.data.dates, date: this.date })
       })
     },
     setActiveDate(date) {
-      this.$store.commit('setActiveDate', date)
+      return this.$store.commit('setActiveDate', date)
     },
     filterInstructorAvailabilityBlocks(filter) {
-      this.$store.dispatch('filterInstructorAvailabilityBlocks', filter)
+      return this.$store.dispatch('filterInstructorAvailabilityBlocks', filter)
     },
     setCalendarExpandWeek(status) {
-      this.$store.commit('setCalendarExpandWeek', status)
+      return this.$store.commit('setCalendarExpandWeek', status)
     },
     toggleBubbleVisibility(status) {
-      this.$store.commit('toggleBubbleVisibility', status)
+      return this.$store.commit('toggleBubbleVisibility', status)
     },
     setActiveDate(date) {
-      this.$store.commit('setActiveDate', date)
+      return this.$store.commit('setActiveDate', date)
     },
     setUserAvailabilityBlocksForDay(blocksToUpdate) {
-      this.$store.commit('setUserAvailabilityBlocksForDay', blocksToUpdate)
+      return this.$store.commit('setUserAvailabilityBlocksForDay', blocksToUpdate)
     },
     resetInactiveInstructors() {
-      this.inactiveInstructors = _.sortBy([...this.instructors], ['lastname', 'firstname'])
+      console.log('inst', this.instructors)
+      return this.inactiveInstructors = _.sortBy([...this.instructors], ['lastname', 'firstname'])
     },
     resetMonthDays(){
-      this.monthDays = {};
+      return this.monthDays = {};
     },
     setMonthDays(key, value){
-      this.$set(this.monthDays, key, value)
+      return this.$set(this.monthDays, key, value)
     },
   }
 }
