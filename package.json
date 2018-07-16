@@ -12,7 +12,7 @@
     "test": "npm run test:unit",
     "test:unit": "mocha-webpack --recursive test/unit",
     "test:integration": "mocha-webpack -r test/integration-setup.js --webpack-config build/webpack.test.conf.js --recursive test/integration",
-    "test:e2e": "cypress run --config watchForFileChanges=false",
+    "test:e2e": "cypress run",
     "test:e2e:watch": "cypress run --config watchForFileChanges=true --reporter min",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e"
   },
