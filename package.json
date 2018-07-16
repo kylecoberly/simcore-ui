@@ -12,12 +12,7 @@
     "test": "npm run test:unit",
     "test:unit": "mocha-webpack --recursive test/unit",
     "test:integration": "mocha-webpack -r test/integration-setup.js --webpack-config build/webpack.test.conf.js --recursive test/integration",
-<<<<<<< HEAD
     "test:integration:watch": "mocha-webpack -r test/integration-setup.js --webpack-config build/webpack.test.conf.js --recursive -wG test/integration",
-    "test:e2e": "cypress run --config watchForFileChanges=false",
-=======
-    "test:e2e": "cypress run",
->>>>>>> Adding e2e tests
     "test:e2e:watch": "cypress run --config watchForFileChanges=true --reporter min",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e"
   },
@@ -104,6 +99,7 @@
     "mocha-webpack": "^1.1.0",
     "nightwatch": "^0.9.19",
     "node-sass": "^4.9.2",
+    "nodemon": "^1.18.2",
     "opn": "^5.1.0",
     "optimize-css-assets-webpack-plugin": "^2.0.0",
     "ora": "^1.2.0",

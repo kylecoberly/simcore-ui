@@ -267,24 +267,19 @@
       showExpandedWeek: Boolean,
       dateFormat: {
         type: String,
-        required: true,
       },
       displayMonthName: {
         type: String,
-        required: true,
       },
       displayYear: {
         type: String,
-        required: true,
       },
       displayDate: {
         type: String,
-        required: true,
       },
       bubbleIsOpen: Boolean,
       baseUrl: {
         type: String,
-        required: true,
       },
       currentUserId: Number,
       filteredBlocks: Object,
@@ -551,7 +546,6 @@
         this.$emit('fetchCurrentUserAvailabilities', date)
       },
       toggleExpandedWeek() {
-        this.showExpandedWeek = !this.showExpandedWeek
         this.$emit('setCalendarExpandWeek', this.showExpandedWeek)
       },
       addSlotToActiveInstructorsList() {

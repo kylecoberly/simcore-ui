@@ -60,25 +60,25 @@ export default {
       calendarIsUpdating: false,
       date: this.$store.state.activeDate.date,
       inactiveInstructors: [],
-      instructors: this.$store.state.user.instructors,
+      instructors: this.$store.state.user.instructors || [],
       monthDays: {},
-      currentUserAvailabilityBlocks: this.$store.state.user.availabilities,
+      currentUserAvailabilityBlocks: this.$store.state.user.availabilities || {},
       dateFormat: this.$store.state.calendar.settings.date_format.raw,
-      eventBlocks: this.$store.state.events.blocks,
-      pendingEventBlocks: this.$store.state.events.pendingBlocks,
-      aggregateUserAvailabilityBlocks: this.$store.state.availabilities.filteredBlocks,
-      allBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks,
-      aggregateUserAvailabilitySegments: this.$store.state.availabilities.filteredSegments,
-      allSegments: this.$store.state.availabilities.allInstructorAvailabilitySegments,
+      eventBlocks: this.$store.state.events.blocks || {},
+      pendingEventBlocks: this.$store.state.events.pendingBlocks || {},
+      aggregateUserAvailabilityBlocks: this.$store.state.availabilities.filteredBlocks || {},
+      allBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks || {},
+      aggregateUserAvailabilitySegments: this.$store.state.availabilities.filteredSegments || {},
+      allSegments: this.$store.state.availabilities.allInstructorAvailabilitySegments || {},
       dayNames: this.$store.state.calendar.settings.day_names,
       showExpandedWeek: this.$store.state.calendar.expand_week,
       bubbleIsOpen: this.$store.state.bubble.is_open,
       baseUrl: this.$store.state.base_url,
       currentUserId: this.$store.state.currentUser.id,
-      filteredBlocks: this.$store.state.availabilities.filteredBlocks,
-      allInstructorAvailabilityBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks,
-      filteredSegments: this.$store.state.availabilities.filteredSegments,
-      allInstructorAvailabilitySegments: this.$store.state.availabilities.allInstructorAvailabilitySegments,
+      filteredBlocks: this.$store.state.availabilities.filteredBlocks || {},
+      allInstructorAvailabilityBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks || {},
+      filteredSegments: this.$store.state.availabilities.filteredSegments || {},
+      allInstructorAvailabilitySegments: this.$store.state.availabilities.allInstructorAvailabilitySegments || {},
     }
   },
   created () {
@@ -91,52 +91,63 @@ export default {
     this.$store.commit('setDepartments', currentUser.departments())
     this.$store.commit('setProfessionalTitles', currentUser.professionalTitles())
     this.$store.commit('setInstructors', users.users())
+    console.log("all commits done")
 
     this.fetchInstructorAvailabilitySegments(this.activeMoment)
     this.fetchCurrentUserAvailabilities(this.activeMoment)
+    console.log("all fetches fired")
 
     const instructorsPromise = users.getUsers(
       this.$store.state.base_url,
       this.$store.state.currentUser.id,
     )
+    console.log("promise generated")
     return instructorsPromise.then((response) => {
+      console.log("promise resolved")
       return this.$store.commit('setInstructors', response.data.users.list)
     })
   },
   mounted(){
+    console.log("resetInactiveInstructors")
     this.resetInactiveInstructors()
 
     // When the week/month is updated, refresh this day's currentUserAvailabilityBlocks.
     this.$store.watch(this.$store.getters.getActiveDate, () => {
+      console.log("getActiveDate")
       this.date = this.$store.state.activeDate.date
     })
     this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilityBlocks, () => {
+      console.log("getLastUpdate... Blocks")
       this.$set(this, 'aggregateUserAvailabilityBlocks', this.filteredBlocks)
       this.$set(this, 'allBlocks', this.allInstructorAvailabilityBlocks)
 
       this.$forceUpdate()
     })
     this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilitySegments, () => {
+      console.log("getLastUpdate... Segments")
       this.$set(this, 'aggregateUserAvailabilitySegments', this.filteredSegments)
       this.$set(this, 'allSegments', this.allInstructorAvailabilitySegments)
 
       this.$forceUpdate()
     })
     this.$store.watch(this.$store.getters.getInstructorsLastUpdated, () => {
+      console.log("getInstructorsLastUpdated")
       this.resetInactiveInstructors()
     })
     // When a time block is added, updated, or deleted, check to see if it belongs to this date.
     // If so, refresh this day's time blocks.
     this.$store.watch(this.$store.getters.getLastUpdatedCurrentUserAvailabilityBlocks, (date) => {
+      console.log("date 1", date)
       if (date === this.date) {
         this.$set(this.currentUserAvailabilityBlocks, [date], this.currentUserAvailabilityBlocks[date])
-        this.$set(this.monthDays[date], 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
+        //this.$set(this.monthDays[date], 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
       }
     })
     this.$store.watch(this.$store.getters.getLastUpdatedPendingEventBlocks, (date) => {
+      console.log("date 2", date)
       if (date === this.date) {
         this.$set(this.pendingEventBlocks, [date], this.pendingEventBlocks[date])
-        this.$set(this.monthDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
+        //this.$set(this.monthDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
       }
     })
   },
@@ -174,9 +185,9 @@ export default {
         endDate: lastDayOfTheMonth,
         mock: this.$store.state.mock,
         filtersToApply: {
-          eventLength: this.filterEventLength,
-          specificInstructorIds: this.activeInstructorIds,
-          nonspecificInstructorIds: _.map(this.activeInstructors, (instructor) => instructor.id),
+          eventLength: filterEventLength,
+          specificInstructorIds: activeInstructorIds,
+          nonspecificInstructorIds: _.map(activeInstructors, (instructor) => instructor.id),
         },
       })
     },
@@ -203,6 +214,7 @@ export default {
       return this.$store.dispatch('filterInstructorAvailabilityBlocks', filter)
     },
     setCalendarExpandWeek(status) {
+      this.showExpandedWeek = !this.showExpandedWeek
       return this.$store.commit('setCalendarExpandWeek', status)
     },
     toggleBubbleVisibility(status) {
