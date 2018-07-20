@@ -2,19 +2,20 @@
 /* eslint */
 import { mount } from '@vue/test-utils'
 import assert from 'assert'
+import moment from 'moment'
 import CalendarHeader from '../../components/CalendarHeader'
 
 describe('CalendarHeader', () => {
   beforeEach(() => {
     this.component = mount(CalendarHeader, {
       propsData: {
-        displayDate: 'Friday, July 13th',
+        selectedDate: moment('2018-07-13'),
         canScheduleEvents: true,
       },
     })
   })
   it('displays the date', () => {
-    assert.equal(this.component.find('.current-month').text(), 'Friday, July 13th')
+    assert.equal(this.component.find('.current-month').text(), 'July 2018')
   })
   it('goes to the previous month', () => {
     this.component.find('.load-previous-month').trigger('click')
@@ -26,11 +27,11 @@ describe('CalendarHeader', () => {
   })
   it('goes to the previous day', () => {
     this.component.find('.load-previous-day').trigger('click')
-    assert.ok(this.component.emitted().loadPrevDay[0])
+    assert.ok(this.component.emitted().loadPreviousDay[0])
   })
   it('goes to the current day', () => {
     this.component.find('.load-today').trigger('click')
-    assert.ok(this.component.emitted().setTheActiveDateToToday[0])
+    assert.ok(this.component.emitted().loadToday[0])
   })
   it('goes to the next day', () => {
     this.component.find('.load-next-day').trigger('click')
@@ -43,7 +44,7 @@ describe('CalendarHeader', () => {
   it('hides the toggle if the user can\'t schedule events', () => {
     const component = mount(CalendarHeader, {
       propsData: {
-        displayDate: 'Friday, July 13th',
+        selectedDate: moment('2018-07-13'),
         canScheduleEvents: false,
       },
     })

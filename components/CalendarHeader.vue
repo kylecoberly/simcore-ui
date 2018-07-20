@@ -43,12 +43,15 @@
       }
     },
     props: {
-      selectedDate: Object,
+      selectedDate: {
+        type: Object,
+        required: true,
+      },
       canScheduleEvents: Boolean,
     },
     computed: {
       displayDate(){
-        return this.selectedDate.format('MMMM')
+        return this.selectedDate.format('MMMM YYYY')
       }
     },
     methods: {
