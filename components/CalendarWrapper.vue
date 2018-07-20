@@ -1,6 +1,8 @@
 <template>
   <Calendar
-    :isLoading="isLoading"
+    :canScheduleEvents="true"
+    :date="date"
+    :dateFormat="dateFormat"
     :eventBlocks="eventBlocks"
     :pendingEventBlocks="pendingEventBlocks"
     :currentUserAvailabilityBlocks="currentUserAvailabilityBlocks"
@@ -9,34 +11,37 @@
     :aggregateUserAvailabilitySegments="aggregateUserAvailabilitySegments"
     :allSegments="allSegments"
     :instructors="instructors"
-    :activeMoment="activeMoment"
-    :calendarIsUpdating="calendarIsUpdating"
-    :date="date"
-    :dayNames="dayNames"
-    :showExpandedWeek="showExpandedWeek"
-    :dateFormat="dateFormat"
-    :displayMonthName="displayMonthName"
-    :displayYear="displayYear"
-    :displayDate="displayDate"
-    :bubbleIsOpen="bubbleIsOpen"
-    :baseUrl="baseUrl"
-    :currentUserId="currentUserId"
-    :filteredBlocks="filteredBlocks"
-    :allInstructorAvailabilityBlocks="allInstructorAvailabilityBlocks"
-    :filteredSegments="filteredSegments"
-    :allInstructorAvailabilitySegments="allInstructorAvailabilitySegments"
-    :inactiveInstructors="inactiveInstructors"
     :monthDays="monthDays"
-    @fetchInstructorAvailabilitySegments="fetchInstructorAvailabilitySegments"
-    @fetchCurrentUserAvailabilities="fetchCurrentUserAvailabilities"
-    @setActiveDate="setActiveDate"
-    @filterInstructorAvailabilityBlocks="filterInstructorAvailabilityBlocks"
-    @setCalendarExpandWeek="setCalendarExpandWeek"
-    @toggleBubbleVisibility="toggleBubbleVisibility"
-    @setTheActiveDateToToday="setTheActiveDateToToday"
-    @setUserAvailabilityBlocksForDay="setUserAvailabilityBlocksForDay"
+    :isLoading="false"
+    :bubbleIsOpen="bubbleIsOpen"
+    :lastUpdated="lastUpdated"
+    :filterEventLength="filterEventLength"
+    :activeInstructors="activeInstructors"
+    :inactiveInstructors="inactiveInstructors"
+    :showExpandedWeek="showExpandedWeek"
+    @setDate="setDate"
     @resetMonthDays="resetMonthDays"
-    @setMonthDays="setMonthDays"
+    @setMonthDay="setMonthDay"
+    @setMonthDayProperty="setMonthDayProperty"
+    @setInstructors="setInstructors"
+    @setActiveDate="setActiveDate"
+    @setSelectedDate="setSelectedDate"
+    @setUserAvailabilityBlocksForDay="setUserAvailabilityBlocksForDay"
+    @toggleBubbleVisibility="toggleBubbleVisibility"
+    @setLastUpdatedToNow="setLastUpdatedToNow"
+    @toggleExpandedWeek="toggleExpandedWeek"
+    @fetchCurrentUserAvailabilities="fetchCurrentUserAvailabilities"
+    @fetchInstructorAvailabilitySegments="fetchInstructorAvailabilitySegments"
+    @removeFromInactiveInstructorsList="removeFromInactiveInstructorsList"
+    @restoreItemToInactiveInstructorsList="restoreItemToInactiveInstructorsList"
+    @addItemToActiveInstructorsList="addItemToActiveInstructorsList"
+    @clearItemFromActiveInstructorsList="clearItemFromActiveInstructorsList"
+    @removeFromActiveInstructorsList="removeFromActiveInstructorsList"
+
+    :today="today"
+    :selectedDate="selectedDate"
+    :user="user"
+    @updateAvailabilities="updateAvailabilities"
   />
 </template>
 
@@ -45,6 +50,7 @@ import eventEditorSlides from '../external/eventEditorSlides'
 import users from '../external/users'
 import events from '../external/events'
 import currentUser from '../external/currentUser'
+import newAvailabilities from '../test/e2e/fixtures/availabilities'
 
 import Calendar from './Calendar'
 
@@ -59,7 +65,6 @@ export default {
     return {
       calendarIsUpdating: false,
       date: this.$store.state.activeDate.date,
-      inactiveInstructors: [],
       instructors: this.$store.state.user.instructors || [],
       monthDays: {},
       currentUserAvailabilityBlocks: this.$store.state.user.availabilities || {},
@@ -70,7 +75,6 @@ export default {
       allBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks || {},
       aggregateUserAvailabilitySegments: this.$store.state.availabilities.filteredSegments || {},
       allSegments: this.$store.state.availabilities.allInstructorAvailabilitySegments || {},
-      dayNames: this.$store.state.calendar.settings.day_names,
       showExpandedWeek: this.$store.state.calendar.expand_week,
       bubbleIsOpen: this.$store.state.bubble.is_open,
       baseUrl: this.$store.state.base_url,
@@ -79,6 +83,18 @@ export default {
       allInstructorAvailabilityBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks || {},
       filteredSegments: this.$store.state.availabilities.filteredSegments || {},
       allInstructorAvailabilitySegments: this.$store.state.availabilities.allInstructorAvailabilitySegments || {},
+      filterEventLength: 1,
+      lastUpdated: Date.now(),
+      activeInstructors: [],
+      inactiveInstructors: [],
+      activeInstructorIds: [],
+
+      today: moment('2018-07-13'),
+      selectedDate: moment('2018-07-13'),
+      user: {
+        canScheduleEvents: true,
+        availabilitiesForCurrentMonth: newAvailabilities.dates,
+      },
     }
   },
   created () {
@@ -91,63 +107,70 @@ export default {
     this.$store.commit('setDepartments', currentUser.departments())
     this.$store.commit('setProfessionalTitles', currentUser.professionalTitles())
     this.$store.commit('setInstructors', users.users())
-    console.log("all commits done")
-
-    this.fetchInstructorAvailabilitySegments(this.activeMoment)
-    this.fetchCurrentUserAvailabilities(this.activeMoment)
-    console.log("all fetches fired")
 
     const instructorsPromise = users.getUsers(
       this.$store.state.base_url,
       this.$store.state.currentUser.id,
     )
-    console.log("promise generated")
-    return instructorsPromise.then((response) => {
-      console.log("promise resolved")
-      return this.$store.commit('setInstructors', response.data.users.list)
+    instructorsPromise.then((response) => {
+      this.$store.commit('setInstructors', response.data.users.list)
     })
+
   },
   mounted(){
-    console.log("resetInactiveInstructors")
+    this.addSlotToActiveInstructorsList()
     this.resetInactiveInstructors()
+    this.setTheActiveDateToToday()
 
     // When the week/month is updated, refresh this day's currentUserAvailabilityBlocks.
     this.$store.watch(this.$store.getters.getActiveDate, () => {
-      console.log("getActiveDate")
-      this.date = this.$store.state.activeDate.date
+      this.setDate(this.$store.state.activeDate.date)
     })
-    this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilityBlocks, () => {
-      console.log("getLastUpdate... Blocks")
-      this.$set(this, 'aggregateUserAvailabilityBlocks', this.filteredBlocks)
-      this.$set(this, 'allBlocks', this.allInstructorAvailabilityBlocks)
 
-      this.$forceUpdate()
-    })
-    this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilitySegments, () => {
-      console.log("getLastUpdate... Segments")
-      this.$set(this, 'aggregateUserAvailabilitySegments', this.filteredSegments)
-      this.$set(this, 'allSegments', this.allInstructorAvailabilitySegments)
-
-      this.$forceUpdate()
-    })
     this.$store.watch(this.$store.getters.getInstructorsLastUpdated, () => {
-      console.log("getInstructorsLastUpdated")
+      this.setInstructors(this.$store.state.user.instructors)
       this.resetInactiveInstructors()
     })
+
+    this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilityBlocks, () => {
+      this.$set(this, 'aggregateUserAvailabilityBlocks', this.$store.state.availabilities.filteredBlocks)
+      this.$set(this, 'allBlocks', this.$store.state.availabilities.allInstructorAvailabilityBlocks)
+
+      this.$forceUpdate()
+    })
+
+    this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilitySegments, () => {
+      this.$set(this, 'aggregateUserAvailabilitySegments', this.$store.state.availabilities.filteredSegments)
+      this.$set(this, 'allSegments', this.$store.state.availabilities.allInstructorAvailabilitySegments)
+
+      this.$forceUpdate()
+    })
+
     // When a time block is added, updated, or deleted, check to see if it belongs to this date.
     // If so, refresh this day's time blocks.
     this.$store.watch(this.$store.getters.getLastUpdatedCurrentUserAvailabilityBlocks, (date) => {
-      console.log("date 1", date)
+      this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
+
       if (date === this.date) {
-        this.$set(this.currentUserAvailabilityBlocks, [date], this.currentUserAvailabilityBlocks[date])
-        //this.$set(this.monthDays[date], 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
+        this.$set(
+          this.currentUserAvailabilityBlocks,
+          [date],
+          this.$store.state.user.availabilities[date],
+        )
+
+        this.setMonthDayProperty(date, 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
       }
     })
+
     this.$store.watch(this.$store.getters.getLastUpdatedPendingEventBlocks, (date) => {
-      console.log("date 2", date)
       if (date === this.date) {
-        this.$set(this.pendingEventBlocks, [date], this.pendingEventBlocks[date])
-        //this.$set(this.monthDays[date], 'pendingEventBlocks', this.pendingEventBlocks[date])
+        this.$set(
+          this.pendingEventBlocks,
+          [date],
+          this.$store.state.events.pendingBlocks[date],
+        )
+
+        this.setMonthDayProperty(date, 'pendingEventBlocks', this.pendingEventBlocks[date])
       }
     })
   },
@@ -155,26 +178,31 @@ export default {
     isLoading() {
       return this.$store.state.availabilities.isLoading
     },
-    activeMoment() {
-      return moment(this.$store.state.activeDate.date)
-    },
-    displayMonthName() {
-      return this.activeMoment.format(this.$store.state.calendar.settings.date_format.month_name)
-    },
-    displayYear() {
-      return this.activeMoment.format(this.$store.state.calendar.settings.date_format.year)
-    },
-    displayDate() {
-      return `${this.displayMonthName} ${this.displayYear}`
-    },
   },
   methods: {
     setTheActiveDateToToday() {
-      const date = moment().format(this.dateFormat)
+      const date = moment(this.$store.state.activeDate.today).format(this.dateFormat)
       this.toggleBubbleVisibility(false)
       return this.setActiveDate(date)
     },
-    fetchInstructorAvailabilitySegments(date, filterEventLength, activeInstructorIds, activeInstructors) {
+    saveUpdatedBlocksFromACalendarDay() {
+        // TODO: Normalize this for setting any type of block. - Chad
+        this.setUserAvailabilityBlocksForDay(blocksToUpdate)
+
+        currentUser.saveAvailabilities(
+          this.$store.state.base_url,
+          this.$store.state.currentUser.id,
+          blocksToUpdate,
+        )
+    },
+    updateAvailabilities(date, availabilities) {
+      this.$set(this.user.availabilitiesForCurrentMonth, date.format('YYYY-MM-DD'), availabilities)
+    },
+    toggleExpandedWeek() {
+      this.showExpandedWeek = !this.showExpandedWeek
+      this.$store.commit('setCalendarExpandWeek', this.showExpandedWeek)
+    },
+    fetchInstructorAvailabilitySegments(date) {
       const firstDayOfTheMonth = moment(date).startOf('month').format('YYYY-MM-DD 00:00:00')
       const lastDayOfTheMonth = moment(date).endOf('month').format('YYYY-MM-DD 23:59:59')
 
@@ -185,9 +213,9 @@ export default {
         endDate: lastDayOfTheMonth,
         mock: this.$store.state.mock,
         filtersToApply: {
-          eventLength: filterEventLength,
-          specificInstructorIds: activeInstructorIds,
-          nonspecificInstructorIds: _.map(activeInstructors, (instructor) => instructor.id),
+          eventLength: this.filterEventLength,
+          specificInstructorIds: this.activeInstructorIds,
+          nonspecificInstructorIds: this.activeInstructors.map(instructor => instructor.id),
         },
       })
     },
@@ -207,8 +235,21 @@ export default {
         return this.$store.commit('setCurrentUserAvailabilities', { blocks: response.data.dates, date: this.date })
       })
     },
+    addSlotToActiveInstructorsList() {
+      this.activeInstructors.push(
+        {
+          seat: this.currentSeat, // Doesn't refer to anything?
+          firstname: '',
+          lastname: '',
+        })
+
+      this.currentSeat++
+    },
     setActiveDate(date) {
       return this.$store.commit('setActiveDate', date)
+    },
+    setSelectedDate(date) {
+      this.selectedDate = moment(date)
     },
     filterInstructorAvailabilityBlocks(filter) {
       return this.$store.dispatch('filterInstructorAvailabilityBlocks', filter)
@@ -227,15 +268,95 @@ export default {
       return this.$store.commit('setUserAvailabilityBlocksForDay', blocksToUpdate)
     },
     resetInactiveInstructors() {
-      console.log('inst', this.instructors)
       return this.inactiveInstructors = _.sortBy([...this.instructors], ['lastname', 'firstname'])
     },
     resetMonthDays(){
-      return this.monthDays = {};
+      return this.monthDays = {}
     },
-    setMonthDays(key, value){
-      return this.$set(this.monthDays, key, value)
+    setDate(date){
+      this.selectedDate = date
     },
-  }
+    setMonthDay(day, value){
+      this.monthDays[day] = value
+    },
+    setMonthDayProperty(day, key, value){
+      this.$set(this.monthDays[day], key, value)
+    },
+    setInstructors(instructors){
+      this.instructors = instructors
+    },
+    updateFilterEventLength(length){
+      // TODO: Update Vuex available instructors here. - Chad
+      this.filterEventLength = this.durationFilterBlocks[0].duration
+    },
+    setLastUpdatedToNow(){
+      this.lastUpdated = Date.now()
+    },
+    setDays(start, limit) {
+      const dateStrings = [start.format(this.dateFormat)]
+
+      for (let i = 1; i < limit; i++) {
+        dateStrings.push(start.add(1, 'day').format(this.dateFormat))
+      }
+
+      return dateStrings
+    },
+    removeFromInactiveInstructorsList(item) {
+      this.inactiveInstructors = this.inactiveInstructors.filter((element) => element.id !== item.id)
+    },
+    restoreItemToInactiveInstructorsList(item) {
+      if (item.seat) {
+        delete item.seat
+      }
+
+      if (!this.inactiveInstructors.includes(item)) {
+        this.inactiveInstructors.push(item)
+        _.sortBy(this.inactiveInstructors, ['lastname', 'firstname'])
+      }
+    },
+    addItemToActiveInstructorsList(item, index) {
+      this.activeInstructors.splice(index, 1, item)
+      this.removeFromInactiveInstructorsList(item)
+    },
+    clearItemFromActiveInstructorsList(item) {
+      if (this.activeInstructors.includes(item)) {
+        this.activeInstructors.splice(this.activeInstructors.indexOf(item), 1, {
+          seat: item.seat,
+          firstname: '',
+          lastname: '',
+        })
+        this.restoreItemToInactiveInstructorsList(item)
+      }
+    },
+    removeFromActiveInstructorsList(item) {
+      this.activeInstructors = this.activeInstructors.filter((element) => element.seat !== item.seat)
+      if (item.id) {
+        this.restoreItemToInactiveInstructorsList(item)
+      }
+    },
+  },
+  watch: {
+    filterEventLength() {
+      this.setLastUpdatedToNow()
+
+      this.$store.dispatch('filterInstructorAvailabilityBlocks', {
+        eventLength: this.filterEventLength,
+        date: this.lastUpdated,
+        specificInstructorIds: this.activeInstructorIds,
+        nonspecificInstructorIds: this.activeInstructors.map(instructor => instructor.id),
+      })
+    },
+    activeInstructors() {
+      this.activeInstructorIds = this.activeInstructors.map(instructor => instructor.id)
+      this.setLastUpdatedToNow()
+      this.$store.dispatch('filterInstructorAvailabilityBlocks', {
+        eventLength: this.filterEventLength,
+        date: this.lastUpdated,
+        specificInstructorIds: this.activeInstructorIds,
+        nonspecificInstructorIds: this.activeInstructors.map(instructor => instructor.id),
+      })
+      return this.activeInstructors
+    },
+  },
 }
 </script>

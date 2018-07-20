@@ -3,16 +3,10 @@
     <ul class="sim-timelines">
       <li v-for="segment in segments"
         :class="getHourClasses(segment)"
-        @mousedown="createTimeBlock($event, segment)"
+        @mousedown="createTimeblock($event, segment)"
       >
-        <div v-if="segment === 12" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--noon">
-          <SimIconText icon="fa-sun-o"></SimIconText>
-        </div>
-        <div v-else-if="segment === 0 || segment === 24" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--midnight">
-          <SimIconText icon="fa-moon-o"></SimIconText>
-        </div>
-        <div v-else-if="segment % 1 === 0" class="sim-timeline--time">
-          {{ displayHour(segment) }}
+        <div v-if="isWholeNumber(segment)" class="sim-timeline--time">
+          {{ segment }}
         </div>
       </li>
     </ul>
@@ -20,32 +14,19 @@
 </template>
 
 <script>
-  import SimIconText from './IconText'
-
   export default {
-    components: {
-      SimIconText,
-    },
-    props: {
-      showHalfHourTicks: {
-        type: Boolean,
-        default: true,
-      },
-    },
     computed: {
       segments() {
-        const segments = []
-        for (let index = 0; index <= 24; index += this.showHalfHourTicks ? 0.5 : 1) {
+        let segments = []
+        for (let index = 0; index <= 24; index += 0.5) {
           segments.push(index)
         }
         return segments
       },
     },
     methods: {
-      displayHour(hour) {
-        hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour)
-
-        return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
+      isWholeNumber(value) {
+        return Math.ceil(parseFloat(value)) === parseInt(value)
       },
       getHourClasses(hour) {
         const classes = []
@@ -63,7 +44,7 @@
               : ''
         )
         classes.push(
-          hour % 1 === 0
+          this.isWholeNumber(hour)
             ? `is-hour is-hour-${hour}`
             : `is-half-hour is-hour-${Math.floor(hour)}-half`
         )
@@ -72,7 +53,7 @@
       },
       createTimeBlock(event, hour) {
         if (event.which === 1) {
-          this.$emit('createTimeBlock', hour)
+          this.$emit('createTimeblock', hour)
         }
       },
     },
@@ -80,6 +61,7 @@
 </script>
 
 <style lang="scss">
+  // @import '../styles/timelines';
   .fade-enter-active, .fade-leave-active {
     transition: opacity 300ms ease-out;
   }
@@ -87,3 +69,4 @@
     opacity: 0;
   }
 </style>
+
