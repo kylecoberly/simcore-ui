@@ -71,10 +71,6 @@
     props: {
       block: Object,
       index: Number,
-      theme: {
-        type: String,
-        default: 'default',
-      },
     },
     computed: {
       segmentSize() {
@@ -90,7 +86,7 @@
         return dateFormatter.formatBlockHoursForDisplay(this.block.duration)
       },
       blockClasses() {
-        const classes = [`sim-timeblock sim-timeblock--theme--${this.theme} sim-timeblock--${this.index} sim-timeblock--${this.orientation} is-moveable`]
+        const classes = [`sim-timeblock sim-timeblock--theme--default sim-timeblock--${this.index} sim-timeblock--${this.orientation} is-moveable`]
         if (this.isMoving) {
           classes.push('is-moving')
         }
