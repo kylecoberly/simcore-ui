@@ -4,24 +4,10 @@
       <span><b>Filters</b></span>
     </div>
     <div class="sim-calendar--aside--body" @click="closeBubble">
-      <section class="sim-flex--1 sim-flex--column filter-molecule filter--duration">
-        <header class="filter-molecule--heading text--orange--lighter"><SimIconText icon="#icon--event-duration" icon-type="svg" text="Duration"></SimIconText></header>
-        <div class="filter-molecule--options sim-flex--handoff">
-          <SimTimePicker orientation="y"
-                        timeline-mode="numbers"
-                        block-theme="duration"
-                        :show-block-time="false"
-                        :time-block-limit="1"
-                        :time-block-default-duration="1"
-                        :start-time="0"
-                        :end-time="6"
-                        :block-settings="durationFilterBlockSettings"
-                        :duration-filter-blocks="durationFilterBlocks"
-                        :date="date"
-                        @blocksWereUpdated="updateFilterEventLength"
-          />
-        </div>
-      </section>
+      <TimeMeter
+         :duration="duration"
+         @setDuration="setDuration"
+      />
 
       <div class="sim-flex--2">
         <section class="filter-molecule filter--instructors sim-filter">
@@ -74,6 +60,7 @@
   import SimDatalist from './Datalist'
   import SimIconText from './IconText'
   import SimAutofinder from './Autofinder'
+  import TimeMeter from './TimeMeter'
 
   export default {
     components: {
@@ -82,15 +69,33 @@
       SimDatalist,
       SimIconText,
       SimAutofinder,
+      TimeMeter,
+    },
+    data(){
+      return {
+        duration: 1,
+      }
     },
     props: {
-      filterContainerClasses: String,
       durationFilterBlockSettings: Object,
       durationFilterBlocks: Array,
       date: Object,
       activeInstructorCount: Number,
       activeInstructors: Array,
       inactiveInstructors: Array,
+    },
+    computed: {
+      filterContainerClasses() {
+        const classes = []
+
+        classes.push('sim-calendar--filters')
+
+        if (this.bubbleIsOpen) {
+          classes.push('sim-calendar--filters--disabled')
+        }
+
+        return classes.join(' ')
+      },
     },
     methods: {
       closeBubble(){
@@ -113,6 +118,9 @@
       },
       applyFilter(type, data){
         this.$emit('applyFilter', type, data)
+      },
+      setDuration(duration){
+        this.duration = duration;
       },
     }
   }
