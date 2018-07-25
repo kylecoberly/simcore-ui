@@ -1,62 +1,42 @@
-<template lang="html">
-  <div class="sim-autofinder" :class="{'sim-autofinder--visible-options': isOpen}">
+<template>
+  <div class="sim-autofinder sim-autofinder--visible-options">
     <label class="sim-autofinder--search">
       <SimIconText :icon="icon" icon-type="svg"></SimIconText>
-      <input type="text"
-            class="sim-autofinder--search--input"
-            v-model="search"
-            :placeholder="placeholder"
-            :disabled="isDisabled"
-            @blur="blur"
-            @focus="focus"
-            @keydown.down="moveDown"
-            @keydown.up="moveUp"
-            @keydown.enter="select"
-            @keydown.tab="selectAndAddAnother"
-            @keyup.esc="blur"
-            @input="onInput"
-            />
-      <div class="sim-autofinder--remove-item" @click="removeItem" v-if="shouldShowRemoveItemCue">
+      <input type="text" class="sim-autofinder--search--input"
+        ref="input"
+        :placeholder="placeholder"
+        :value="inputValue"
+        @input="updateInput"
+        @blur="blur"
+        @keydown.down="highlightPrevious"
+        @keydown.up="highlightNext"
+        @keydown.enter="select"
+        @keydown.tab="select"
+        @keyup.esc="blur"
+      />
+      <div v-if="canRemove" class="sim-autofinder--remove-item" @click="remove">
         <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
       </div>
     </label>
-    <div class="sim-autofinder--options" v-if="isOpen">
-      <transition-group appear name="list" tag="ul" mode="in-out">
-        <li v-for="(option, optionIndex) in foundOptions"
-            :key="optionIndex"
-            :class="{highlighted: optionIndex === position}"
-            @mouseenter="position = optionIndex"
-            @mousedown="clickSelect"
-            >
-          <slot name="option" :option="option"></slot>
-        </li>
-        <li key="no-results" v-if="noOptions">
-          <i class="ghost">No results for "{{search}}"</i>
-        </li>
-      </transition-group>
-    </div>
+    <AutoFinderOptions v-if="optionsOpen"
+      :searchTerm="searchTerm"
+      :matchingOptions="matchingOptions"
+      @selectOption="select"
+      @setHighlightedOption="setHighlightedOption"
+    />
   </div>
 </template>
 
 <script>
   import SimIconText from './IconText'
+  import AutoFinderOptions from './AutoFinderOptions'
 
   export default {
-    name: 'sim-autofinder',
     components: {
       SimIconText,
+      AutoFinderOptions,
     },
     props: {
-      item: {
-        type: Object,
-      },
-      index: {
-        type: Number,
-      },
-      isAlone: {
-        type: Boolean,
-        default: true,
-      },
       options: {
         type: Array,
         required: true,
@@ -65,111 +45,97 @@
         type: String,
         default: 'find...',
       },
-      shouldBeDisabled: {
-        type: Boolean,
-        default: false,
+      canRemove: Boolean,
+      isFocused: Boolean,
+      selectedItem: Object,
+      index: Number,
+    },
+    mounted(){
+      if (this.selectedItem.isFocused){
+        this.$refs.input.focus()
       }
+      this.highlightedId = this.firstId
     },
     data() {
       return {
-        isOpen: false,
-        position: 0,
-        search: '',
-        foundItem: null,
-        previousValueLength: 0,
+        searchTerm: '',
+        highlightedId: -1,
       }
     },
     computed: {
+      inputValue(){
+        return this.foundItem
+          ? this.selectedItem.label
+          : this.searchTerm
+      },
       icon() {
         return this.foundItem ? '#icon--checkbox--checked' : '#icon--checkbox--available'
       },
-      foundOptions() {
+      optionsOpen() {
+        return this.searchTerm.length > 0 && !this.foundItem
+      },
+      foundItem(){
+        return this.selectedItem.id > 0
+      },
+      firstId() {
+        return this.matchingOptions[0]
+          ? this.matchingOptions[0].id
+          : -1
+      },
+      currentIndex(){
+        return this.matchingOptions.map(option => option.id).indexOf(this.highlightedId)
+      },
+      nextIndex(){
+        return this.currentIndex < this.matchingOptions.length - 1
+          ? this.currentIndex + 1
+          : this.currentIndex
+      },
+      previousIndex(){
+        return this.currentIndex > 0
+          ? this.currentIndex - 1
+          : this.currentIndex
+      },
+      matchingOptions() {
         return this.options.filter((option) => {
-          return `${option.lastname}, ${option.firstname}`.toLowerCase().includes(this.search.toLowerCase())
+          return option.label.toLowerCase().includes(this.searchTerm.toLowerCase())
+        }).map(option => {
+          option.isHighlighted = option.id == this.highlightedId
+          return option
         })
       },
-      noOptions() {
-        return !this.foundOptions.length
-      },
-      isDisabled() {
-        return this.shouldBeDisabled
-      },
-      shouldShowRemoveItemCue() {
-        return !this.isAlone || this.search.length || this.foundItem
-      },
-    },
-    mounted() {
-      if (this.item && this.item.lastname) {
-        this.foundItem = this.item
-        this.search = `${this.foundItem.lastname}, ${this.foundItem.firstname}`
-      }
     },
     methods: {
-      onInput() {
-        this.isOpen = (this.search.length > 0)
-        this.position = 0
-
-        // @NOTE if we have an item in context AND subtract-altering the search string, reset the input - Jase
-        if (this.foundItem && this.search.length <= this.previousValueLength) {
-          this.$emit('clear', this.foundItem)
-          this.search = ''
-          this.previousValueLength = this.search.length
-          this.foundItem = null
-          this.isOpen = false
-        }
-
-        this.previousValueLength = this.search.length
+      setHighlightedOption(id){
+        this.highlightedId = id
       },
-      moveDown() {
-        if (!this.isOpen) {
-          return
-        }
-
-        this.position = (this.position + 1) % this.foundOptions.length
+      highlightPrevious() {
+        this.highlightedId = this.matchingOptions[this.previousIndex].id
       },
-      moveUp() {
-        if (!this.isOpen) {
-          return
-        }
-
-        this.position = (this.position - 1 < 0 ? this.foundOptions.length - 1 : this.position - 1)
-      },
-      select() {
-        if (this.isOpen && this.foundOptions.length) {
-          this.foundItem = Object.assign(this.item, this.foundOptions[this.position])
-          this.$emit('select', this.foundItem, this.index)
-          this.search = `${this.foundItem.lastname}, ${this.foundItem.firstname}`
-          this.previousValueLength = this.search.length
-
-          this.isOpen = false
-        }
-      },
-      selectAndAddAnother() {
-        if (this.isOpen && this.foundOptions.length) {
-          this.$emit('add-another')
-          this.select()
-        }
-      },
-      clickSelect() {
-        this.select()
-      },
-      removeItem() {
-        if (this.isAlone) {
-          this.onInput()
-        } else {
-          this.$emit('remove', (this.foundItem ? this.foundItem : this.item))
-        }
+      highlightNext() {
+        this.highlightedId = this.matchingOptions[this.nextIndex].id
       },
       blur() {
         if (!this.foundItem) {
-          this.search = ''
+          this.searchTerm = ''
         }
-
-        this.isOpen = false
       },
-      focus() {
-        this.isOpen = (!this.foundItem && this.foundOptions.length && this.search.length > 2 ? true : false)
-        this.previousValueLength = this.search.length
+      updateInput(event) {
+        if (this.foundItem){
+          this.$emit('clear')
+          this.highlightedId = -1
+        }
+        this.searchTerm = event.target.value
+      },
+      select() {
+        if (this.foundItem) {
+          this.$emit('focusNextItem')
+        } else if (this.highlightedId > 0) {
+          this.$emit('select', this.index, this.highlightedId)
+          this.$emit('focusNextItem')
+        }
+      },
+      remove(){
+        this.$emit('remove')
       },
     },
   }

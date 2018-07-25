@@ -30,20 +30,12 @@
         @toggleExpandedWeek="toggleExpandedWeek"
       />
       <CoordinatorSidebar v-if="isCoordinatorContext"
-        :filterContainerClass="filterContainerClasses"
-        :durationFilterBlockSettings="durationFilterBlockSettings"
-        :durationFilterBlocks="durationFilterBlocks"
-        :date="date"
-        :activeInstructorCount="activeInstructorCount"
-        :activeInstructors="activeInstructors"
-        :inactiveInstructors="inactiveInstructors"
-        @closeBubble="closeBubble"
-        @updateFilterEventLength="updateFilterEventLength"
-        @addItemToActiveInstructorsList="addItemToActiveInstructorsList"
-        @clearItemFromActiveInstructorsList="clearItemFromActiveInstructorsList"
-        @removeFromActiveInstructorsList="removeFromActiveInstructorsList"
-        @addSlotToActiveInstructorsList="addSlotToActiveInstructorsList"
-        @applyFilter="applyFilter"
+        :availableInstructors="availableInstructors"
+        :selectedInstructors="selectedInstructors"
+        @addInstructor="addInstructor"
+        @removeInstructor="removeInstructor"
+        @selectInstructor="selectInstructor"
+        @clearInstructor="clearInstructor"
       />
       <InstructorSidebar v-else-if="isInstructorContext"
         :userAvailabilities="selectedDateAvailabilities"
@@ -59,6 +51,7 @@
 
 <script>
   import moment from 'moment'
+  import Vue from 'vue'
 
   import { lodestar } from '../utilities/animations'
 
@@ -105,6 +98,7 @@
       today: Object,
       selectedDate: Object,
       user: Object,
+      instructors: Array,
     },
     data() {
       return {
@@ -122,6 +116,7 @@
           canMoveBlock: false,
         },
         showExpandedWeek: false,
+        selectedInstructors: [{id: -1}],
       }
     },
     computed: {
@@ -170,8 +165,31 @@
       activeInstructorCount() {
         return this.activeInstructors.length
       },
+      availableInstructors(){
+        const selectedInstructorIds = this.selectedInstructors.map(instructor => instructor.id)
+        return this.instructors.filter(instructor => !selectedInstructorIds.includes(instructor.id))
+      }
     },
     methods: {
+      addInstructor(id){
+        const instructor = this.instructors.find(instructor => instructor.id == id)
+        this.selectedInstructors.push(instructor || {
+          id: -1
+        })
+      },
+      clearInstructor(index){
+        Vue.set(this.selectedInstructors, index, {
+          id: -1
+        })
+      },
+      removeInstructor(index){
+        this.selectedInstructors.splice(index, 1)
+      },
+      selectInstructor(index, id){
+        const instructor = this.instructors.find(instructor => instructor.id == id)
+        // also need to take them out of the available array
+        Vue.set(this.selectedInstructors, index, instructor)
+      },
       updateFilterEventLength() {
         this.$emit('filterEventLength', this.durationFilterBlocks[0].duration)
       },
