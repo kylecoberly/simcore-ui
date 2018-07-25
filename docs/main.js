@@ -18,6 +18,8 @@ import slideDeck from '../modules/slideDeck'
 import user from '../modules/user'
 import users from '../modules/users'
 
+import availabilitiesStub from '../test/e2e/fixtures/availabilities.json'
+
 import BubbleTrigger from '../directives/BubbleTrigger'
 
 Vue.directive('bubble-trigger', BubbleTrigger)
