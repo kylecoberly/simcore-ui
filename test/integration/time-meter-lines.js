@@ -9,7 +9,7 @@ describe('TimeMeterLines', () => {
   beforeEach(() => {
     this.component = shallowMount(TimeMeterLines, {
       propsData: {
-        maxDuration: 6,
+        maximumDuration: 6,
       },
     })
   })

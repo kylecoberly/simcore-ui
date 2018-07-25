@@ -10,7 +10,7 @@
     :allBlocks="allBlocks"
     :aggregateUserAvailabilitySegments="aggregateUserAvailabilitySegments"
     :allSegments="allSegments"
-    :instructors="instructors"
+    :xinstructors="instructors"
     :monthDays="monthDays"
     :isLoading="false"
     :bubbleIsOpen="bubbleIsOpen"
@@ -41,6 +41,7 @@
     :today="today"
     :selectedDate="selectedDate"
     :user="user"
+    :instructors="instructors"
     @updateAvailabilities="updateAvailabilities"
   />
 </template>
@@ -50,7 +51,8 @@ import eventEditorSlides from '../external/eventEditorSlides'
 import users from '../external/users'
 import events from '../external/events'
 import currentUser from '../external/currentUser'
-import newAvailabilities from '../test/e2e/fixtures/availabilities'
+import availabilities from '../test/e2e/fixtures/availabilities'
+import instructors from '../test/e2e/fixtures/purview_users'
 
 import Calendar from './Calendar'
 
@@ -93,8 +95,9 @@ export default {
       selectedDate: moment('2018-07-13'),
       user: {
         canScheduleEvents: true,
-        availabilitiesForCurrentMonth: newAvailabilities.dates,
+        availabilitiesForCurrentMonth: availabilities.dates,
       },
+      allInstructors: instructors.list,
     }
   },
   created () {

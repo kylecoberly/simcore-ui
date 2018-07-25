@@ -1,32 +1,29 @@
-<template lang="html">
+<template>
   <div class="sim-datalist">
     <header>
       <slot name="header"></slot>
     </header>
-    <transition-group
-      v-if="animate"
+    <transition-group v-if="animate"
       name="sim-datalist"
       tag="ul"
       mode="out-in"
-      >
-        <slot name="static-before"></slot>
-        <slot
-          v-for="(item, index) in items"
-          name="item"
-          :item="item"
-          :index="index"
-          ></slot>
-        <slot name="static-after"></slot>
+    >
+      <slot name="static-before"></slot>
+      <slot v-for="(item, index) in items"
+        name="item"
+        :item="item"
+        :index="index"
+      ></slot>
+      <slot name="static-after"></slot>
     </transition-group>
     <ul v-else>
-        <slot name="static-before"></slot>
-        <slot
-          v-for="(item, index) in items"
-          name="item"
-          :item="item"
-          :index="index"
-          ></slot>
-        <slot name="static-after"></slot>
+      <slot name="static-before"></slot>
+      <slot v-for="(item, index) in items"
+        name="item"
+        :item="item"
+        :index="index"
+      ></slot>
+      <slot name="static-after"></slot>
     </ul>
     <footer>
       <slot name="footer"></slot>
