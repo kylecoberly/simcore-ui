@@ -1,3 +1,5 @@
+import users from '../test/e2e/fixtures/availabilities.json'
+import availabilities from '../test/e2e/fixtures/availabilities.json'
 import axios from 'axios'
 axios.defaults.crossDomain = true
 
@@ -16,10 +18,14 @@ export default {
     return user
   },
   availabilities(baseUrl, userId, startDate, endDate) {
-    return axios.get(`${baseUrl}${endpoint}/${userId}/availabilities?start_date=${startDate}&end_date=${endDate}`)
+   // return axios.get(`${baseUrl}${endpoint}/${userId}/availabilities?start_date=${startDate}&end_date=${endDate}`)
+      return Promise.resolve().then(() => {
+        return {data: availabilities}
+      })
   },
   saveAvailabilities(baseUrl, userId, availabilities) {
-    return axios.post(`${baseUrl}${endpoint}/${userId}/availabilities`, { dates: { [availabilities.date]: availabilities.blocks } })
+    console.log(baseUrl, userId, availabilities)
+    //return axios.post(`${baseUrl}${endpoint}/${userId}/availabilities`, { dates: { [availabilities.date]: availabilities.blocks } })
   },
   userType() { return 'institution' },
   instructors() {},

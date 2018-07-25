@@ -5,6 +5,8 @@ import moment from 'moment'
 import filter from '../data/availabilities/index'
 import * as cleansers from '../data/availabilities/cleansers'
 
+import purviewAvailabilities from '../test/e2e/fixtures/purview_availabilities.json'
+
 const endpoint = 'users'
 const action = 'purview_availabilities'
 
@@ -129,8 +131,13 @@ const availabilities = {
     },
     getInstructorAvailabilitySegments({ commit, state }, { baseUrl, userId, startDate, endDate, mock, filtersToApply }) {
       commit('setIsLoading', true)
-      axios.get(`${baseUrl}${endpoint}/${userId}/${action}?start_date=${startDate}&end_date=${endDate}&key_by=user_id&mock=${mock}`)
-        .then((response) => {
+      //axios.get(`${baseUrl}${endpoint}/${userId}/${action}?start_date=${startDate}&end_date=${endDate}&key_by=user_id&mock=${mock}`)
+        //.then((response) => {
+      Promise.resolve()
+        .then(() => {
+          const response = {
+            data: purviewAvailabilities
+          }
           const allInstructorAvailabilityBlocks             = response.data.users
           const allSegmentsFromInstructorAvailabilityBlocks =
             cleansers.groupByDateAndStartTime(allInstructorAvailabilityBlocks)
