@@ -42,6 +42,7 @@
     :selectedDate="selectedDate"
     :user="user"
     :instructors="instructors"
+    :totalAvailabilities="totalAvailabilities"
     @updateAvailabilities="updateAvailabilities"
   />
 </template>
@@ -53,11 +54,18 @@ import events from '../external/events'
 import currentUser from '../external/currentUser'
 import availabilities from '../test/e2e/fixtures/availabilities'
 import instructors from '../test/e2e/fixtures/purview_users'
+import purviewAvailabilities from '../test/e2e/fixtures/purview_availabilities'
+
+import {normalize} from '../utilities/filter-availabilities'
 
 import Calendar from './Calendar'
 
 import _ from 'lodash'
 import moment from 'moment'
+
+function totalAvailabilities(){
+  return normalize(purviewAvailabilities.users)
+}
 
 export default {
   components: {
@@ -98,6 +106,7 @@ export default {
         availabilitiesForCurrentMonth: availabilities.dates,
       },
       allInstructors: instructors.list,
+      totalAvailabilities: totalAvailabilities(),
     }
   },
   created () {

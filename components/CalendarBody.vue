@@ -11,18 +11,33 @@
       <div class="sim-calendar--grid--body">
         <div class="sim-calendar--grid--days" @click.meta="toggleExpandedWeek">
           <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
-          <CalendarDay v-for="day in daysInCurrentMonth"
-             :key="day.format('YYYY-MM-DD')"
-             :day="day"
-             :availabilities="getAvailabilitiesForDay(day)"
-             :today="today"
-             :isSelected="isSelected(day)"
-             :isInActiveWeek="isInActiveWeek(day)"
-             :showExpandedWeek="showExpandedWeek"
-             @updateAvailabilities="updateAvailabilities"
-             @click.native="setDate(day)"
-             @toggleExpandedWeek="toggleExpandedWeek"
-          />
+          <template v-if="context">
+            <EventCalendarDay v-for="day in daysInCurrentMonth"
+               :key="day.format('YYYY-MM-DD')"
+               :day="day"
+               :availabilities="getEventAvailabilitiesForDay(day)"
+               :today="today"
+               :isSelected="isSelected(day)"
+               :isInActiveWeek="isInActiveWeek(day)"
+               :showExpandedWeek="showExpandedWeek"
+               @click.native="setDate(day)"
+               @toggleExpandedWeek="toggleExpandedWeek"
+            />
+          </template>
+          <template v-else>
+            <CalendarDay v-for="day in daysInCurrentMonth"
+               :key="day.format('YYYY-MM-DD')"
+               :day="day"
+               :availabilities="getAvailabilitiesForDay(day)"
+               :today="today"
+               :isSelected="isSelected(day)"
+               :isInActiveWeek="isInActiveWeek(day)"
+               :showExpandedWeek="showExpandedWeek"
+               @updateAvailabilities="updateAvailabilities"
+               @click.native="setDate(day)"
+               @toggleExpandedWeek="toggleExpandedWeek"
+            />
+          </template>
           <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
         </div>
 
@@ -39,14 +54,17 @@
 
 <script>
   import moment from 'moment'
+  import {filterAvailabilities} from '../utilities/filter-availabilities'
 
   import CalendarDay from './CalendarDay'
+  import EventCalendarDay from './EventCalendarDay'
   import SimBubble from './Bubble'
   import SimSlidePresenter from './SlidePresenter'
   import SimLoader from './Loader'
 
   export default {
     components: {
+      EventCalendarDay,
       CalendarDay,
       SimBubble,
       SimSlidePresenter,
@@ -71,6 +89,9 @@
         required: true,
       },
       today: Object,
+      context: Boolean,
+      totalAvailabilities: Array,
+      filters: Object,
     },
     computed: {
       startOffset(){
@@ -90,6 +111,9 @@
         }
         const currentMonthString = this.selectedDate.format('YYYY-MM-')
         return daysInMonth.map(day => moment(`${currentMonthString}${day}`))
+      },
+      filteredAvailabilities(){
+        return filterAvailabilities([...this.totalAvailabilities], this.filters)
       }
     },
     methods: {
@@ -104,6 +128,9 @@
       },
       getAvailabilitiesForDay(date){
         return this.availabilities[date.format('YYYY-MM-DD')] || []
+      },
+      getEventAvailabilitiesForDay(date){
+        return this.filteredAvailabilities.find(day => date.isSame(day.date, 'day')).availabilities
       },
       isSelected(day){
         return day.isSame(this.selectedDate, 'day')
