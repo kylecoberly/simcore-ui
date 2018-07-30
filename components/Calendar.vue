@@ -25,6 +25,9 @@
         :availabilities="user.availabilitiesForCurrentMonth"
         :selectedDate="selectedDate"
         :today="today"
+        :context="contextSwitch"
+        :totalAvailabilities="totalAvailabilities"
+        :filters="filters"
         @updateAvailabilities="updateAvailabilities"
         @setDate="setDate"
         @toggleExpandedWeek="toggleExpandedWeek"
@@ -32,10 +35,12 @@
       <CoordinatorSidebar v-if="isCoordinatorContext"
         :availableInstructors="availableInstructors"
         :selectedInstructors="selectedInstructors"
+        :duration="duration"
         @addInstructor="addInstructor"
         @removeInstructor="removeInstructor"
         @selectInstructor="selectInstructor"
         @clearInstructor="clearInstructor"
+        @setDuration="setDuration"
       />
       <InstructorSidebar v-else-if="isInstructorContext"
         :userAvailabilities="selectedDateAvailabilities"
@@ -99,6 +104,7 @@
       selectedDate: Object,
       user: Object,
       instructors: Array,
+      totalAvailabilities: Array,
     },
     data() {
       return {
@@ -116,7 +122,9 @@
           canMoveBlock: false,
         },
         showExpandedWeek: false,
+
         selectedInstructors: [{id: -1}],
+        duration: 1,
       }
     },
     computed: {
@@ -152,6 +160,13 @@
         }
 
         return classes.join(' ')
+      },
+      filters() {
+        return {
+          duration: this.duration,
+          instructors: this.selectedInstructors.filter(instructor => instructor.id > 0),
+          instructorCount: this.selectedInstructors.length,
+        }
       },
       isInstructorContext() {
         return this.contextSwitch === false
@@ -239,20 +254,15 @@
       updateAvailabilities(date, availabilities) {
         this.$emit('updateAvailabilities', date, availabilities)
       },
-      applyFilter(type, data) {
-          this.filters.find((filter) => filter.type === type).items = data
-          this.filteredUsers = this.users.filter((item) => {
-            return (this.userTypeIsClient && this.filters[0].items.length ? this.filters[0].items.includes(item[this.filters[0].type]) : true)
-                && (this.filters[1].items.length ? this.filters[1].items.includes(item[this.filters[1].type]) : true)
-                && (this.filters[2].items.length ? this.filters[2].items.includes(item[this.filters[2].type]) : true)
-          })
-      },
       setDate(date){
         this.$emit("setDate", date)
       },
       toggleContext() {
         this.contextSwitch = !this.contextSwitch
       },
+      setDuration(duration) {
+        this.duration = duration
+      }
     },
   }
 </script>

@@ -31,18 +31,14 @@
       TimeMeter,
       InstructorPicker,
     },
-    data(){
-      return {
-        duration: 1,
-      }
-    },
     props: {
       selectedInstructors: Array,
       availableInstructors: Array,
+      duration: Number,
     },
     methods: {
       setDuration(duration){
-        this.duration = duration;
+        this.$emit('setDuration', duration)
       },
       addInstructor(){
         this.$emit('addInstructor')
