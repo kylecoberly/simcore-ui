@@ -1,8 +1,6 @@
-<template lang="html">
+<template>
   <div class="sim-slide sim-slide--with-list">
-
     <SimSlideHeader :title="slide.title" />
-
     <SimSlideIntro :content="slide.intro" />
 
     <div class="sim-slide--content">
@@ -18,7 +16,7 @@
         </header>
         <SimDatalist :items="specificItems" :animate="false">
           <li slot="item" slot-scope="props" :key="props.item.id" :class="`instructor-${props.item.id}`">
-            <SimIconText :icon="specificItemIcon(props.item.id)" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
+            <SimIconText icon="#icon--checkbox--checked" icon-type="svg" :text="`${props.item.id}: ${props.item.lastname}, ${props.item.firstname}`"></SimIconText>
           </li>
         </SimDatalist>
       </section>
@@ -36,7 +34,6 @@
               :item="props.item"
               :item-id="props.item.id"
               :disabled="props.item.disabled"
-              :should-be-selected="isItemSelected(props.item.id)"
               @toggle="toggleItemInSelectedItems"
             >
               {{props.item.id}}: {{ props.item.lastname }}, {{ props.item.firstname }}
@@ -58,54 +55,6 @@
   import SimSlideHeader from './SlideHeader'
   import SimSlideIntro from './SlideIntro'
 
-  // @FIXME should be using common.unique(...) | jase
-  const unique = (array) => {
-    if (array && array.length) {
-      const t = {}
-      return array.filter((item) => {
-        if (Object.prototype.hasOwnProperty.call(t, item)) {
-          return false
-        }
-        return (t[item] = true)
-      })
-    }
-    return []
-  }
-
-  // #FIXME should be using common.sortByKey(...)
-  const sortByKey = (list, key, direction) => {
-    if (list && list.length) {
-      const newList = list.sort((a, b) => {
-        if (a[key] < b[key]) {
-          return -1
-        } else if (a[key] > b[key]) {
-          return 1
-        }
-        return 0
-      })
-
-      if (direction === 'desc') {
-        return newList.reverse()
-      }
-
-      return newList
-    }
-
-    return []
-  }
-
-  // @FIXME should be using common.getListFromIds(...) | jase
-  const getListFromIds = (array, source, sortKey) => {
-    if (array && array.length) {
-      const list = _.filter(source, (item) => unique(array).find((id) => item.id == id))
-      if (sortKey) {
-        return sortByKey(list, sortKey)
-      }
-      return list
-    }
-    return []
-  }
-
   export default {
     name: 'sim-slide-with-a-list',
     components: {
@@ -115,52 +64,29 @@
       SimSlideHeader,
       SimSlideIntro,
     },
+    mounted(){
+      console.log(this.slide)
+    },
     data() {
       return {
         selectedItems: [],
-        slide: this.$store.getters.currentSlide(),
       }
     },
-    mounted() {
-      this.$store.watch(this.$store.getters.currentSlide, (currentSlide) => {
-        this.$set(this, 'slide', currentSlide)
-      })
-    },
-    updated() {
-      // @FIXME: keep this around for now - Jase
-      // This allows the backbutton to repopulate the selected items
-      // but breaks the selected items when scrubbing
-      // this.selectedItems = this.slide.content.selectedItems
+    props: {
+      slide: Object,
     },
     computed: {
       departments() {
         return this.$store.state.user.departments
       },
       segmentItems() {
-        // let items
-        // let user_ids = []
-        // for (let iterator = this.slide.content.segment_start; iterator <= this.slide.content.segment_end; iterator++) {
-        //   user_ids = this.slide.content.segments[iterator].user_ids
-        //   items = items ? _.intersection(items, user_ids) : user_ids
-        // }
-        //
-        // return items
         return []
       },
       specificItems() {
-        return this.slide.content.specificItems
-          ? getListFromIds(this.slide.content.specificItems, this.$store.state.user.instructors, 'lastname')
-          : []
+        return this.slide.content.items
       },
       items() {
-        let items = null
-        if (this.slide.content.items) {
-          items = this.slide.content.items.filter((item) => !this.slide.content.specificItems.includes(parseInt(item, 10)))
-        }
-
-        return items
-          ? getListFromIds(items, this.$store.state.user.instructors, 'lastname')
-          : []
+        return this.slide.content.items
       },
       specificItemCount() {
         return this.specificItems.length
@@ -175,19 +101,10 @@
         return (this.itemCount > 0)
       },
       showOtherItems() {
-        return !this.thereAreSpecificItems || (this.slide.content.items.length !== this.specificItemCount)
-      },
-      minimumItemsNeeded() {
-        // @FIXME: This is a hack to keep the next button from working when we arent ready for it yet - Jase
-        return 1000 // this.$store.state.availabilities.availabilityInstructors.totalCount - this.specificItemCount
+        return true
       },
       labelForAvailableInstructors() {
         return `Available Instructors: ${this.itemCount}`
-      },
-    },
-    watch: {
-      segmentItems() {
-        this.selectedItems = _.intersection(this.items, this.selectedItems)
       },
     },
     methods: {

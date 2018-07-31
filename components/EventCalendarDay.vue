@@ -9,13 +9,20 @@
       />
       <div class="sim-calendar--grid--date">{{ day.format('D') }}</div>
       <div class="local--day--blocks local--day--event-blocks"></div>
-      <div class="local--day--blocks local--day--pending-blocks"></div>
+      <div class="local--day--blocks local--day--pending-blocks">
+        <PendingEventBlock v-if="pendingEvent"
+          :block="pendingEvent"
+          @updatePosition="updateBlockPosition"
+          @updatePendingEvent="updatePendingEvent"
+          @clearPendingEvent="$emit('clearPendingEvent')"
+        />
+      </div>
       <div v-if="!isBeforeToday" class="local--day--blocks local--day--aggregate-blocks">
         <template v-for="(block, index) in availabilities">
           <EventAvailabilityBlock
             :index="index"
             :block="block"
-            @click.native="addPendingEvent(block)"
+            @click.native="createPendingEvent(block)"
           />
         </template>
       </div>
@@ -32,12 +39,14 @@
   import SimIconText from './IconText'
   import SimTimeLines from './TimeLines'
   import EventAvailabilityBlock from './EventAvailabilityBlock'
+  import PendingEventBlock from './PendingEventBlock'
 
   export default {
     components: {
       SimIconText,
       SimTimeLines,
       EventAvailabilityBlock,
+      PendingEventBlock,
     },
     props: {
       today: Object,
@@ -46,6 +55,7 @@
       availabilities: [Array, Object],
       isSelected: Boolean,
       showExpandedWeek: Boolean,
+      pendingEvent: Object,
     },
     computed: {
       isBeforeToday() {
@@ -92,9 +102,16 @@
       toggleExpandedWeek() {
         this.$emit('toggleExpandedWeek')
       },
-      addPendingEvent(block) {
-        console.log(block)
-      }
+      createPendingEvent(block) {
+        block.day = this.day
+        this.$emit('createPendingEvent', block)
+      },
+      updateBlockPosition(position) {
+        this.$emit('updateBlockPosition', position)
+      },
+      updatePendingEvent(block) {
+        this.$emit('updatePendingEvent', block)
+      },
     },
   }
 </script>

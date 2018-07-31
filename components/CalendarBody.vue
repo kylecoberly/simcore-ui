@@ -13,15 +13,20 @@
           <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
           <template v-if="context">
             <EventCalendarDay v-for="day in daysInCurrentMonth"
-               :key="day.format('YYYY-MM-DD')"
-               :day="day"
-               :availabilities="getEventAvailabilitiesForDay(day)"
-               :today="today"
-               :isSelected="isSelected(day)"
-               :isInActiveWeek="isInActiveWeek(day)"
-               :showExpandedWeek="showExpandedWeek"
-               @click.native="setDate(day)"
-               @toggleExpandedWeek="toggleExpandedWeek"
+              :key="day.format('YYYY-MM-DD')"
+              :day="day"
+              :availabilities="getEventAvailabilitiesForDay(day)"
+              :today="today"
+              :isSelected="isSelected(day)"
+              :isInActiveWeek="isInActiveWeek(day)"
+              :showExpandedWeek="showExpandedWeek"
+              :pendingEvent="isPendingEventToday(pendingEvent, day)"
+              @click.native="setDate(day)"
+              @toggleExpandedWeek="toggleExpandedWeek"
+              @createPendingEvent="createPendingEvent"
+              @clearPendingEvent="clearPendingEvent"
+              @updateBlockPosition="updateBlockPosition(...arguments, day)"
+              @updatePendingEvent="updatePendingEvent"
             />
           </template>
           <template v-else>
@@ -41,8 +46,14 @@
           <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
         </div>
 
-        <SimBubble v-if="bubbleIsOpen">
-          <SimSlidePresenter :should-hide-navigation-controls="hideSlideNavigationControls"></SimSlidePresenter>
+        <SimBubble v-if="pendingEvent"
+          :style="bubbleStyles"
+          :position="position"
+          ref="bubble"
+          @keydown.esc="clearPendingEvent"
+          @dismiss="clearPendingEvent"
+        >
+          <SimSlidePresenter :slides="slides"></SimSlidePresenter>
         </SimBubble>
         <div class="sim-loader--shield" v-if="isLoading">
           <SimLoader :is-loading="true"></SimLoader>
@@ -74,6 +85,7 @@
       return {
         hideSlideNavigationControls: false,
         dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        position: {},
       }
     },
     props: {
@@ -92,6 +104,8 @@
       context: Boolean,
       totalAvailabilities: Array,
       filters: Object,
+      pendingEvent: Object,
+      slides: Array,
     },
     computed: {
       startOffset(){
@@ -114,7 +128,10 @@
       },
       filteredAvailabilities(){
         return filterAvailabilities([...this.totalAvailabilities], this.filters)
-      }
+      },
+      bubbleStyles(){
+        return this.getStyles(this.position)
+      },
     },
     methods: {
       toggleExpandedWeek(){
@@ -137,6 +154,57 @@
       },
       isInActiveWeek(day){
         return day.isSame(this.selectedDate, 'week')
+      },
+      createPendingEvent(block){
+        this.$emit('createPendingEvent', block)
+      },
+      clearPendingEvent(){
+        this.$emit('clearPendingEvent')
+      },
+      getStyles(position) {
+        const top = this.$refs.bubble
+          ? this.$refs.bubble.$el.getBoundingClientRect().top
+          : 0
+        const styles = []
+        styles.push(`--x: ${parseInt(position.x, 10)}`)
+        styles.push(`--y: ${parseInt(position.y, 10)}`)
+        styles.push(`--dink-y: ${parseInt(position.dinkY - top, 10)}`)
+
+        return styles.join(';')
+      },
+      updateBlockPosition(position, day){
+        position.offset.x = day.day() + 1
+        this.position = this.getBubblePosition(position)
+      },
+      getBubblePosition({ domPosition, offset }) {
+        const position = {}
+        position.dinkY = domPosition.top + domPosition.height / 2
+        position.dinkX = domPosition.left + domPosition.width / 2
+
+        position.x = offset.x
+        position.y = offset.y
+
+        if (this.position && position.x > this.position.x && position.x > 2) {
+          position.orientation = 'right'
+        } else if (this.position && this.x < this.position.x && position.x < 6) {
+          position.orientation = 'left'
+        } else if (this.position.orientation) {
+          position.orientation = this.position.orientation
+        } else {
+          position.orientation = 'right'
+        }
+
+        return position
+      },
+      updatePendingEvent(block){
+        this.$emit('updatePendingEvent', block)
+      },
+      isPendingEventToday(pendingEvent, day){
+        return pendingEvent
+          ? day.isSame(pendingEvent.day, 'day')
+            ? pendingEvent
+            : undefined
+          : undefined
       }
     },
   }
