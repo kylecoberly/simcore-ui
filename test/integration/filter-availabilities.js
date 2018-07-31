@@ -10,7 +10,7 @@ describe('#filterAvailabilities', () => {
       instructorCount: 1,
     }
     const users = {
-      '1': [{
+      1: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 1,
@@ -22,8 +22,8 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 1,
-        users: [1]
-      }]
+        users: [1],
+      }],
     }])
   })
   it('adds multiple matching availabilities to the total availabilities', () => {
@@ -32,7 +32,7 @@ describe('#filterAvailabilities', () => {
       instructorCount: 1,
     }
     const users = {
-      '1': [{
+      1: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 1,
@@ -49,15 +49,15 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 1,
-        users: [1]
-      }]
+        users: [1],
+      }],
     }, {
       date: '2018-07-02',
       availabilities: [{
         startTime: 1,
         duration: 1,
-        users: [1]
-      }]
+        users: [1],
+      }],
     }])
   })
   it('adds matching availabilities from multiple users to the total availabilities', () => {
@@ -66,13 +66,13 @@ describe('#filterAvailabilities', () => {
       instructorCount: 1,
     }
     const users = {
-      '1': [{
+      1: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 1,
         },
       }],
-      '2': [{
+      2: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 1,
@@ -84,8 +84,8 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 1,
-        users: [1, 2]
-      }]
+        users: [1, 2],
+      }],
     }])
   })
   it('adds matching availabilities from multiple users and days to the total availabilities', () => {
@@ -94,7 +94,7 @@ describe('#filterAvailabilities', () => {
       instructorCount: 1,
     }
     const users = {
-      '1': [{
+      1: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 1,
@@ -105,7 +105,7 @@ describe('#filterAvailabilities', () => {
           duration: 1,
         },
       }],
-      '2': [{
+      2: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 1,
@@ -122,15 +122,15 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 1,
-        users: [1, 2]
-      }]
+        users: [1, 2],
+      }],
     }, {
       date: '2018-07-02',
       availabilities: [{
         startTime: 1,
         duration: 1,
-        users: [1, 2]
-      }]
+        users: [1, 2],
+      }],
     }])
   })
   it('filters out durations that are too short', () => {
@@ -139,7 +139,7 @@ describe('#filterAvailabilities', () => {
       instructorCount: 1,
     }
     const users = {
-      '1': [{
+      1: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 1,
@@ -148,7 +148,7 @@ describe('#filterAvailabilities', () => {
     }
     assert.deepEqual(filterAvailabilities(users, filter), [{
       date: '2018-07-01',
-      availabilities: []
+      availabilities: [],
     }])
   })
   it('splits durations that are longer than needed', () => {
@@ -157,7 +157,7 @@ describe('#filterAvailabilities', () => {
       instructorCount: 1,
     }
     const users = {
-      '1': [{
+      1: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 2,
@@ -169,16 +169,16 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 1,
-        users: [1]
+        users: [1],
       }, {
         startTime: 1.5,
         duration: 1,
-        users: [1]
+        users: [1],
       }, {
         startTime: 2,
         duration: 1,
-        users: [1]
-      }]
+        users: [1],
+      }],
     }])
   })
   it('returns nothing if there aren\'t enough instructors', () => {
@@ -187,7 +187,7 @@ describe('#filterAvailabilities', () => {
       instructorCount: 2,
     }
     const users = {
-      '1': [{
+      1: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 1,
@@ -196,7 +196,7 @@ describe('#filterAvailabilities', () => {
     }
     assert.deepEqual(filterAvailabilities(users, filter), [{
       date: '2018-07-01',
-      availabilities: []
+      availabilities: [],
     }])
   })
   it('returns nothing if a required instructor isn\'t available', () => {
@@ -206,7 +206,7 @@ describe('#filterAvailabilities', () => {
       instructorCount: 1,
     }
     const users = {
-      '1': [{
+      1: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 1,
@@ -215,7 +215,7 @@ describe('#filterAvailabilities', () => {
     }
     assert.deepEqual(filterAvailabilities(users, filter), [{
       date: '2018-07-01',
-      availabilities: []
+      availabilities: [],
     }])
   })
   it('returns a complex set of multi-day matches', () => {
@@ -225,7 +225,7 @@ describe('#filterAvailabilities', () => {
       instructorCount: 2,
     }
     const users = {
-      '1': [{
+      1: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 2.5,
@@ -236,7 +236,7 @@ describe('#filterAvailabilities', () => {
           duration: 2,
         },
       }],
-      '2': [{
+      2: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 3,
@@ -247,7 +247,7 @@ describe('#filterAvailabilities', () => {
           duration: 2,
         },
       }],
-      '3': [{
+      3: [{
         '2018-07-01 01:00:00': {
           startTime: 1,
           duration: 2,
@@ -264,22 +264,22 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 2,
-        users: [1, 2, 3]
+        users: [1, 2, 3],
       }, {
         startTime: 1.5,
         duration: 2,
-        users: [1, 2]
-      }]
+        users: [1, 2],
+      }],
     }, {
       date: '2018-07-02',
-      availabilities: []
+      availabilities: [],
     }, {
       date: '2018-07-03',
       availabilities: [{
         startTime: 1,
         duration: 2,
-        users: [1, 2]
-      }]
+        users: [1, 2],
+      }],
     }])
   })
 })

@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <article class="sim-slide-presenter" :style="`--step: ${currentStep}`">
     <section v-if="slideDeck" class="sim-slide-presenter--slides">
       <component class="sim-slide-presenter--slide"
@@ -7,7 +7,7 @@
         :slide="slide"
         :is="slide.componentType"
         @theSlideHasAnUpdate="receiveTheUpdateFromTheSlide"
-        />
+      />
     </section>
     <footer v-if="showNavigationControls">
       <button class="sim-button--cancel back" @click="previousSlide" :disabled="thePreviousControlShouldBeDisabled">Back</button>
@@ -26,7 +26,6 @@
   import SimSlideWithHTML from './SlideWithHTML'
 
   export default {
-    name: 'sim-slide-presenter',
     components: {
       SimSlide,
       SimSlideWithAList,
@@ -36,7 +35,9 @@
       SimSlideWithFilterMessage,
       SimSlideWithHTML,
     },
-    props: ['shouldHideNavigationControls'],
+    props: {
+      slides: Array,
+    },
     data() {
       return {
         slideDeck: this.$store.state.slideDeck,
@@ -46,23 +47,11 @@
       }
     },
     computed: {
-      slides() {
-        return this.slideDeck.slideHistory.slides
-      },
       showNavigationControls() {
-        let willShowNavigationControls = true
-
-        if (this.shouldHideNavigationControls || this.slideDeck.slideHistory.size < 1) {
-          willShowNavigationControls = false
-        }
-
-        return willShowNavigationControls
+        return true
       },
       currentStep() {
-        this.makeTheNextControlDisabledIf()
-        this.makeThePreviousControlDisabledIf()
-
-        return this.slideDeck.slideHistory.size - 1
+        return 0
       },
     },
     destroyed() {

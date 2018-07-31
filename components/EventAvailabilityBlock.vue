@@ -1,6 +1,5 @@
 <template>
-  <div :class="`sim-timeblock sim-timeblock--theme--aggregate sim-timeblock--${this.index} sim-timeblock--${this.orientation}`" :style="blockStyles">
-  </div>
+  <div :class="`sim-timeblock sim-timeblock--theme--aggregate sim-timeblock--${this.index} sim-timeblock--${this.orientation}`" :style="blockStyles"></div>
 </template>
 
 <script>
