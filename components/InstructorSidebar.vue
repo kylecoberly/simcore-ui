@@ -8,8 +8,8 @@
         :userAvailabilities="userAvailabilities"
         :selectedDate="selectedDate"
         @updateAvailabilities="updateAvailabilities"
-        @loadPreviousDay="$emit('loadPreviousDay')"
-        @loadNextDay="$emit('loadNextDay')"
+        @loadPreviousDay="loadPreviousDay"
+        @loadNextDay="loadNextDay"
       />
     </div>
   </aside>
@@ -25,11 +25,23 @@
     props: {
       userAvailabilities: Array,
       selectedDate: Object,
+      today: Object,
     },
     methods: {
       updateAvailabilities(date, availabilities){
         this.$emit('updateAvailabilities', date, availabilities)
-      }
+      },
+      loadNextDay() {
+        const date = this.selectedDate.add(1, 'day')
+        this.$emit('setSelectedDate', date)
+      },
+      loadPreviousDay() {
+        const date = this.selectedDate.subtract(1, 'day')
+        this.$emit('setSelectedDate', date)
+      },
+      loadToday() {
+        this.$emit('setSelectedDate', this.today)
+      },
     }
   }
 </script>
