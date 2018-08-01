@@ -25,7 +25,6 @@
     props: {
       userAvailabilities: Array,
       selectedDate: Object,
-      today: Object,
     },
     methods: {
       updateAvailabilities(date, availabilities){
@@ -38,9 +37,6 @@
       loadPreviousDay() {
         const date = this.selectedDate.subtract(1, 'day')
         this.$emit('setSelectedDate', date)
-      },
-      loadToday() {
-        this.$emit('setSelectedDate', this.today)
       },
     }
   }

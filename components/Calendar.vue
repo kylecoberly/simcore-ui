@@ -8,9 +8,10 @@
     <CalendarHeader
        :selectedDate="selectedDate"
        :today="today"
-       :context="contextSwitch"
+       :context="isCoordinator"
        :canScheduleEvents="user.canScheduleEvents"
        @setSelectedDate="setSelectedDate"
+       @toggleContext="toggleContext"
      />
     <div class="sim-calendar--body">
       <CalendarBody
@@ -20,7 +21,7 @@
          :availabilities="user.availabilitiesForCurrentMonth"
          :selectedDate="selectedDate"
          :today="today"
-         :context="contextSwitch"
+         :context="isCoordinator"
          :totalAvailabilities="totalAvailabilities"
          :filters="filters"
          :pendingEvent="pendingEvent"
@@ -32,7 +33,7 @@
          @clearPendingEvent="clearPendingEvent"
          @updatePendingEvent="updatePendingEvent"
        />
-      <CoordinatorSidebar v-if="isCoordinatorContext"
+      <CoordinatorSidebar v-if="isCoordinator"
         :availableInstructors="availableInstructors"
         :selectedInstructors="selectedInstructors"
         :duration="duration"
@@ -42,10 +43,9 @@
         @clearInstructor="clearInstructor"
         @setDuration="setDuration"
       />
-      <InstructorSidebar v-else-if="isInstructorContext"
+      <InstructorSidebar v-else
         :userAvailabilities="selectedDateAvailabilities"
         :selectedDate="selectedDate"
-        :today="today"
         @updateAvailabilities="updateAvailabilities"
         @setSelectedDate="setSelectedDate"
       />
@@ -89,7 +89,7 @@ export default {
   },
   data() {
     return {
-      contextSwitch: false,
+      isCoordinator: false,
       showExpandedWeek: false,
       selectedDate: moment('2018-07-13'),
       selectedInstructors: [{id: -1}],
@@ -160,13 +160,13 @@ export default {
     filterContainerClasses() {
       const classes = []
 
-      if (this.isCoordinatorContext) {
+      if (this.isCoordinator) {
         classes.push('sim-calendar--filters')
 
         if (this.bubbleIsOpen) {
           classes.push('sim-calendar--filters--disabled')
         }
-      } else if (this.isInstructorContext) {
+      } else {
         classes.push('sim-calendar--day-control-panel')
       }
 
@@ -179,14 +179,8 @@ export default {
         instructorCount: this.selectedInstructors.length,
       }
     },
-    isInstructorContext() {
-      return this.contextSwitch === false
-    },
-    isCoordinatorContext() {
-      return this.contextSwitch === true
-    },
     contextLabel() {
-      return this.isInstructorContext ? 'instructor' : 'coordinator'
+      return this.isCoordinator ? 'coordinator' : 'instructor'
     },
     activeInstructorCount() {
       return this.activeInstructors.length
@@ -220,14 +214,13 @@ export default {
       this.showExpandedWeek = !this.showExpandedWeek
     },
     setSelectedDate(date) {
-      console.log('called', date)
       this.selectedDate = moment(date)
     },
     updateAvailabilities(date, availabilities) {
       this.$emit('updateAvailabilities', date, availabilities)
     },
     toggleContext() {
-      this.contextSwitch = !this.contextSwitch
+      this.isCoordinator = !this.isCoordinator
     },
     setDuration(duration) {
       this.duration = duration
