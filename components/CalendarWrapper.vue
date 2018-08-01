@@ -1,41 +1,24 @@
 <template>
   <Calendar
-    :date="date"
     :isLoading="false"
-    :bubbleIsOpen="bubbleIsOpen"
     @setDate="setDate"
-    @resetMonthDays="resetMonthDays"
-    @setMonthDay="setMonthDay"
-    @setMonthDayProperty="setMonthDayProperty"
     @setInstructors="setInstructors"
     @setActiveDate="setActiveDate"
     @setSelectedDate="setSelectedDate"
-    @setUserAvailabilityBlocksForDay="setUserAvailabilityBlocksForDay"
     @toggleBubbleVisibility="toggleBubbleVisibility"
     @setLastUpdatedToNow="setLastUpdatedToNow"
     @toggleExpandedWeek="toggleExpandedWeek"
-    @fetchCurrentUserAvailabilities="fetchCurrentUserAvailabilities"
-    @fetchInstructorAvailabilitySegments="fetchInstructorAvailabilitySegments"
-    @removeFromInactiveInstructorsList="removeFromInactiveInstructorsList"
-    @restoreItemToInactiveInstructorsList="restoreItemToInactiveInstructorsList"
-    @addItemToActiveInstructorsList="addItemToActiveInstructorsList"
-    @clearItemFromActiveInstructorsList="clearItemFromActiveInstructorsList"
-    @removeFromActiveInstructorsList="removeFromActiveInstructorsList"
 
     :today="today"
     :selectedDate="selectedDate"
     :user="user"
-    :instructors="instructors"
+    :instructors="allInstructors"
     :totalAvailabilities="totalAvailabilities"
     @updateAvailabilities="updateAvailabilities"
   />
 </template>
 
 <script>
-import eventEditorSlides from '../external/eventEditorSlides'
-import users from '../external/users'
-import events from '../external/events'
-import currentUser from '../external/currentUser'
 import availabilities from '../test/e2e/fixtures/availabilities'
 import instructors from '../test/e2e/fixtures/purview_users'
 import purviewAvailabilities from '../test/e2e/fixtures/purview_availabilities'
@@ -57,28 +40,7 @@ export default {
   },
   data() {
     return {
-      calendarIsUpdating: false,
-      date: this.$store.state.activeDate.date,
-      instructors: this.$store.state.user.instructors || [],
-      monthDays: {},
-      currentUserAvailabilityBlocks: this.$store.state.user.availabilities || {},
-      dateFormat: this.$store.state.calendar.settings.date_format.raw,
-      eventBlocks: this.$store.state.events.blocks || {},
-      pendingEventBlocks: this.$store.state.events.pendingBlocks || {},
-      aggregateUserAvailabilityBlocks: this.$store.state.availabilities.filteredBlocks || {},
-      allBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks || {},
-      aggregateUserAvailabilitySegments: this.$store.state.availabilities.filteredSegments || {},
-      allSegments: this.$store.state.availabilities.allInstructorAvailabilitySegments || {},
-      showExpandedWeek: this.$store.state.calendar.expand_week,
-      bubbleIsOpen: this.$store.state.bubble.is_open,
-      baseUrl: this.$store.state.base_url,
-      currentUserId: this.$store.state.currentUser.id,
-      filteredBlocks: this.$store.state.availabilities.filteredBlocks || {},
-      allInstructorAvailabilityBlocks: this.$store.state.availabilities.allInstructorAvailabilityBlocks || {},
-      filteredSegments: this.$store.state.availabilities.filteredSegments || {},
-      allInstructorAvailabilitySegments: this.$store.state.availabilities.allInstructorAvailabilitySegments || {},
       filterEventLength: 1,
-      lastUpdated: Date.now(),
       activeInstructors: [],
       inactiveInstructors: [],
       activeInstructorIds: [],
@@ -93,82 +55,8 @@ export default {
       totalAvailabilities: totalAvailabilities(),
     }
   },
-  created () {
-    this.$store.commit('setSlideTemplates', eventEditorSlides)
-    this.$store.commit('setAllUsers', users.users())
-    this.$store.commit('setAggregateEventBlocks', events.events())
-
-    this.$store.commit('setCurrentUser', currentUser.user())
-    this.$store.commit('setInstitutions', currentUser.institutions())
-    this.$store.commit('setDepartments', currentUser.departments())
-    this.$store.commit('setProfessionalTitles', currentUser.professionalTitles())
-    this.$store.commit('setInstructors', users.users())
-
-    const instructorsPromise = users.getUsers(
-      this.$store.state.base_url,
-      this.$store.state.currentUser.id,
-    )
-    instructorsPromise.then((response) => {
-      this.$store.commit('setInstructors', response.data.users.list)
-    })
-
-  },
   mounted(){
-    this.addSlotToActiveInstructorsList()
-    this.resetInactiveInstructors()
     this.setTheActiveDateToToday()
-
-    // When the week/month is updated, refresh this day's currentUserAvailabilityBlocks.
-    this.$store.watch(this.$store.getters.getActiveDate, () => {
-      this.setDate(this.$store.state.activeDate.date)
-    })
-
-    this.$store.watch(this.$store.getters.getInstructorsLastUpdated, () => {
-      this.setInstructors(this.$store.state.user.instructors)
-      this.resetInactiveInstructors()
-    })
-
-    this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilityBlocks, () => {
-      this.$set(this, 'aggregateUserAvailabilityBlocks', this.$store.state.availabilities.filteredBlocks)
-      this.$set(this, 'allBlocks', this.$store.state.availabilities.allInstructorAvailabilityBlocks)
-
-      this.$forceUpdate()
-    })
-
-    this.$store.watch(this.$store.getters.getLastUpdatedAggregateAvailabilitySegments, () => {
-      this.$set(this, 'aggregateUserAvailabilitySegments', this.$store.state.availabilities.filteredSegments)
-      this.$set(this, 'allSegments', this.$store.state.availabilities.allInstructorAvailabilitySegments)
-
-      this.$forceUpdate()
-    })
-
-    // When a time block is added, updated, or deleted, check to see if it belongs to this date.
-    // If so, refresh this day's time blocks.
-    this.$store.watch(this.$store.getters.getLastUpdatedCurrentUserAvailabilityBlocks, (date) => {
-      this.currentUserAvailabilityBlocks = this.$store.state.user.availabilities
-
-      if (date === this.date) {
-        this.$set(
-          this.currentUserAvailabilityBlocks,
-          [date],
-          this.$store.state.user.availabilities[date],
-        )
-
-        this.setMonthDayProperty(date, 'currentUserAvailabilityBlocks', this.currentUserAvailabilityBlocks[date])
-      }
-    })
-
-    this.$store.watch(this.$store.getters.getLastUpdatedPendingEventBlocks, (date) => {
-      if (date === this.date) {
-        this.$set(
-          this.pendingEventBlocks,
-          [date],
-          this.$store.state.events.pendingBlocks[date],
-        )
-
-        this.setMonthDayProperty(date, 'pendingEventBlocks', this.pendingEventBlocks[date])
-      }
-    })
   },
   computed: {
     isLoading() {

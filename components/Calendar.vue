@@ -89,8 +89,8 @@ export default {
   props: {
     date: {
       type: Object,
-      default: {},
-      required: true,
+      default: () => ({}),
+      required: false,
     },
     isLoading: Boolean,
     displayDate: String,
