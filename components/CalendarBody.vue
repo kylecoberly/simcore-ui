@@ -127,7 +127,13 @@
         return daysInMonth.map(day => moment(`${currentMonthString}${day}`))
       },
       filteredAvailabilities(){
-        return filterAvailabilities([...this.totalAvailabilities], this.filters)
+        // Clean this up
+        const filters = this.deepClone(this.filters)
+        filters.instructorCount = filters.instructors.length
+        filters.instructors = filters.instructors
+          .map(instructor => instructor.id)
+          .filter(id => id > 0)
+        return filterAvailabilities([...this.totalAvailabilities], filters)
       },
       bubbleStyles(){
         return this.getStyles(this.position)
@@ -205,6 +211,9 @@
             ? pendingEvent
             : undefined
           : undefined
+      },
+      deepClone(object){
+        return JSON.parse(JSON.stringify(object))
       }
     },
   }
