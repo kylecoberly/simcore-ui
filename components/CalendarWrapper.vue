@@ -2,11 +2,9 @@
   <Calendar
     :isLoading="false"
     :today="today"
-    :selectedDate="selectedDate"
     :user="user"
     :instructors="instructors"
     :totalAvailabilities="totalAvailabilities"
-    @setSelectedDate="setSelectedDate"
     @updateAvailabilities="updateAvailabilities"
   />
 </template>
@@ -20,9 +18,7 @@ import {normalize} from '../utilities/filter-availabilities'
 
 import Calendar from './Calendar'
 
-import _ from 'lodash'
 import moment from 'moment'
-
 
 export default {
   components: {
@@ -31,7 +27,6 @@ export default {
   data() {
     return {
       today: moment('2018-07-13'),
-      selectedDate: moment('2018-07-13'),
       user: {
         canScheduleEvents: true,
         availabilitiesForCurrentMonth: availabilities.dates,
@@ -43,10 +38,7 @@ export default {
   methods: {
     updateAvailabilities(date, availabilities) {
       this.$set(this.user.availabilitiesForCurrentMonth, date.format('YYYY-MM-DD'), availabilities)
-    },
-    setSelectedDate(date) {
-      this.selectedDate = moment(date)
-    },
+    }
   },
 }
 </script>
