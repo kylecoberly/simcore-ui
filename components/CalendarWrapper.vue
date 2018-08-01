@@ -31,7 +31,7 @@ export default {
         canScheduleEvents: true,
         availabilitiesForCurrentMonth: availabilities.dates,
       },
-      instructors: instructors.list,
+      instructors: instructors.users.list,
       totalAvailabilities: normalize(purviewAvailabilities.users),
     }
   },

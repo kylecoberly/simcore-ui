@@ -57,7 +57,6 @@
     },
     methods: {
       toggleContext(){
-        this.context = !this.context
         this.$emit('toggleContext')
       },
       loadNextMonth() {
