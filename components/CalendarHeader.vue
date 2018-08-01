@@ -11,8 +11,8 @@
         <SimIconText icon="fa-arrow-right fa-fw"></SimIconText>
       </span>
     </div>
-    <div class="sim-calendar--header--mode" v-if="canScheduleEvents">
-      <SimSwitch :value="context" @change="toggleContext" left-label="My Availability" right-label="Schedule Events"/>
+    <div class="sim-calendar--header--mode" v-if="true">
+      <SimSwitch :value="isCoordinator" @change="$emit('toggleContext')" left-label="My Availability" right-label="Schedule Events"/>
     </div>
     <div class="sim-calendar--header--controls sim-calendar--header--controls--days">
       <span class="load-previous-day" @click="loadPreviousDay">
@@ -37,18 +37,13 @@
       SimIconText,
       SimSwitch
     },
-    data(){
-      return {
-        context: false,
-      }
-    },
     props: {
       selectedDate: {
         type: Object,
         required: true,
       },
       today: Object,
-      canScheduleEvents: Boolean,
+      isCoordinator: Boolean,
     },
     computed: {
       displayDate(){
@@ -56,9 +51,6 @@
       }
     },
     methods: {
-      toggleContext(){
-        this.$emit('toggleContext')
-      },
       loadNextMonth() {
         const date = this.selectedDate.add(1, 'month')
         this.$emit('setSelectedDate', date)

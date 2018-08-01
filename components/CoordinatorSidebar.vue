@@ -5,17 +5,14 @@
     </div>
     <div class="sim-calendar--aside--body">
       <TimeMeter
-         :duration="duration"
-         @setDuration="setDuration"
+        :duration="filters.duration"
+        @setDuration="setDuration"
       />
       <div class="sim-flex--2">
         <InstructorPicker
-          :availableInstructors="availableInstructors"
-          :selectedInstructors="selectedInstructors"
-          @addInstructor="addInstructor"
-          @removeInstructor="removeInstructor"
-          @selectInstructor="selectInstructor"
-          @clearInstructor="clearInstructor"
+          :instructors="instructors"
+          :selectedInstructors="filters.instructors"
+          @setInstructors="setInstructors"
         />
       </div>
     </div>
@@ -32,26 +29,23 @@
       InstructorPicker,
     },
     props: {
-      selectedInstructors: Array,
-      availableInstructors: Array,
-      duration: Number,
+      filters: Object,
+      instructors: Array,
     },
     methods: {
-      setDuration(duration){
-        this.$emit('setDuration', duration)
+      setDuration(duration) {
+        const filters = this.deepClone(this.filters)
+        filters.duration = duration
+        this.$emit('updateFilters', filters)
       },
-      addInstructor(){
-        this.$emit('addInstructor')
+      setInstructors(instructors) {
+        const filters = this.deepClone(this.filters)
+        filters.instructors = instructors
+        this.$emit('updateFilters', filters)
       },
-      removeInstructor(index){
-        this.$emit('removeInstructor', index)
+      deepClone(object){
+        return JSON.parse(JSON.stringify(object))
       },
-      clearInstructor(index){
-        this.$emit('clearInstructor', index)
-      },
-      selectInstructor(index, id){
-        this.$emit('selectInstructor', index, id)
-      }
-    }
+    },
   }
 </script>

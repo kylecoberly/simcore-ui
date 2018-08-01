@@ -10,20 +10,20 @@
           tag="ul"
           mode="out-in"
         >
-          <li :key="`general-${index}`" :class="`instructor-${instructor}`" v-for="(instructor, index) in selectedInstructorsWithFocus">
+          <li :key="`general-${index}`" :class="`instructor-${instructor}`" v-for="(instructor, index) in selectedInstructors">
             <SimAutofinder
-              :index="index"
-              :options="instructorsWithLabel"
-              :canRemove="selectedInstructors.length > 1"
+              :options="availableInstructors"
               :selectedItem="instructor"
+              :canRemove="selectedInstructors.length > 1"
+              :isFocused="index === selectedInstructors.length - 1"
               placeholder="Any Available Instructor"
-              @select="selectInstructor"
-              @add="addInstructor"
-              @remove="removeInstructor(index)"
+              @select="selectInstructor(index, ...arguments)"
               @clear="clearInstructor(index)"
+              @remove="removeInstructor(index)"
               @focusNextItem="focusNextItem(index)"
-            >
-            </SimAutofinder>
+              @keyup.shift.tab="focusPreviousItem(index)"
+              @click.native="focusItem(index)"
+            />
           </li>
           <li key="add">
             <span class="control--add-item" @click="addInstructor">
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import SimIconText from './IconText'
   import SimAutofinder from './Autofinder'
 
@@ -47,48 +48,52 @@
     },
     data(){
       return {
-        currentlySelectedIndex: 0,
+        currentlyFocusedField: 0,
       }
     },
     props: {
-      availableInstructors: Array,
+      instructors: Array,
       selectedInstructors: Array,
     },
     computed: {
-      instructorsWithLabel(){
-        return this.availableInstructors.map(instructor => {
-          instructor.label = `${instructor.lastname}, ${instructor.firstname}`
-          return instructor
-        })
-      },
       selectedInstructorCount(){
         return this.selectedInstructors.length
       },
-      selectedInstructorsWithFocus(){
-        return this.selectedInstructors.map((instructor, index) => {
-          instructor.isFocused = index == this.currentlySelectedIndex
-          return instructor
-        })
-      }
+      availableInstructors(){
+        const selectedInstructorIds = this.selectedInstructors.map(instructor => instructor.id)
+        return this.instructors.filter(instructor => !selectedInstructorIds.includes(instructor.id))
+      },
     },
     methods: {
-      addInstructor(){
-        this.$emit('addInstructor')
+      addInstructor(instructor){
+        this.selectedInstructors.push({ id: -1 })
+        this.$emit('setInstructors', this.selectedInstructors)
       },
       removeInstructor(index){
-        this.$emit('removeInstructor', index)
-      },
-      selectInstructor(index, id){
-        this.$emit('selectInstructor', index, id)
+        this.selectedInstructors.splice(index, 1)
+        this.$emit('setInstructors', this.selectedInstructors)
       },
       clearInstructor(index){
-        this.$emit('clearInstructor', index)
+        Vue.set(this.selectedInstructors, index, { id: -1 })
+        this.$emit('setInstructors', this.selectedInstructors)
+      },
+      selectInstructor(index, instructor){
+        Vue.set(this.selectedInstructors, index, instructor)
+        this.$emit('setInstructors', this.selectedInstructors)
+      },
+      focusPreviousItem(index){
+        if (index > 0){
+          this.currentlyFocusedField = index - 1
+        }
+      },
+      focusItem(index){
+        this.currentlyFocusedField = index
       },
       focusNextItem(index){
-        this.currentlySelectedIndex = index + 1
-        if (this.currentlySelectedIndex >= this.selectedInstructorCount - 1){
+        if (this.currentlyFocusedField + 1 >= this.selectedInstructorCount){
           this.addInstructor()
         }
+        this.currentlyFocusedField = index + 1
       },
     }
   }
