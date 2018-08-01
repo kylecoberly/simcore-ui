@@ -101,6 +101,7 @@ export default {
       selectedInstructors: [{id: -1}],
       duration: 1,
       pendingEvent: null,
+      bubbleIsOpen: false,
     }
   },
   computed: {
@@ -223,24 +224,6 @@ export default {
     },
     toggleExpandedWeek() {
       this.showExpandedWeek = !this.showExpandedWeek
-    },
-    addSlotToActiveInstructorsList() {
-      this.$emit('addSlotToActiveInstructorsList')
-    },
-    addItemToActiveInstructorsList(item, index) {
-      this.$emit('addItemToActiveInstructorsList', item)
-    },
-    clearItemFromActiveInstructorsList(item) {
-      this.$emit('clearItemFromActiveInstructorsList', item)
-    },
-    removeFromActiveInstructorsList(item) {
-      this.$emit('removeFromActiveInstructorsList', item)
-    },
-    removeFromInactiveInstructorsList(item) {
-      this.$emit('removeFromInactiveInstructorsList', item)
-    },
-    restoreItemToInactiveInstructorsList(item) {
-      this.$emit('restoreItemToInactiveInstructorsList', item)
     },
     loadNextMonth() {
       const date = this.selectedDate.add(1, 'month')

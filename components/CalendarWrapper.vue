@@ -23,9 +23,6 @@ import Calendar from './Calendar'
 import _ from 'lodash'
 import moment from 'moment'
 
-function totalAvailabilities(){
-  return normalize(purviewAvailabilities.users)
-}
 
 export default {
   components: {
@@ -33,11 +30,6 @@ export default {
   },
   data() {
     return {
-      filterEventLength: 1,
-      activeInstructors: [],
-      inactiveInstructors: [],
-      activeInstructorIds: [],
-
       today: moment('2018-07-13'),
       selectedDate: moment('2018-07-13'),
       user: {
@@ -45,7 +37,7 @@ export default {
         availabilitiesForCurrentMonth: availabilities.dates,
       },
       instructors: instructors.list,
-      totalAvailabilities: totalAvailabilities(),
+      totalAvailabilities: normalize(purviewAvailabilities.users),
     }
   },
   methods: {
@@ -54,16 +46,6 @@ export default {
     },
     setSelectedDate(date) {
       this.selectedDate = moment(date)
-    },
-    filterInstructorAvailabilityBlocks(filter) {
-      return this.$store.dispatch('filterInstructorAvailabilityBlocks', filter)
-    },
-    setCalendarExpandWeek(status) {
-      this.showExpandedWeek = !this.showExpandedWeek
-      return this.$store.commit('setCalendarExpandWeek', status)
-    },
-    setDate(date){
-      this.selectedDate = date
     },
   },
 }
