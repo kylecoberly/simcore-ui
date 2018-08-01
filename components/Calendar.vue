@@ -30,7 +30,7 @@
          :pendingEvent="pendingEvent"
          :slides="slides"
          @updateAvailabilities="updateAvailabilities"
-         @setDate="setDate"
+         @setDate="setSelectedDate"
          @toggleExpandedWeek="toggleExpandedWeek"
          @createPendingEvent="createPendingEvent"
          @clearPendingEvent="clearPendingEvent"
@@ -75,7 +75,6 @@ import InstructorSidebar from './InstructorSidebar'
 import CoordinatorSidebar from './CoordinatorSidebar'
 
 export default {
-  name: 'sim-calendar',
   components: {
     EventDurationIcon,
     InstructorIcon,
@@ -87,15 +86,7 @@ export default {
     CoordinatorSidebar,
   },
   props: {
-    date: {
-      type: Object,
-      default: () => ({}),
-      required: false,
-    },
     isLoading: Boolean,
-    displayDate: String,
-    bubbleIsOpen: Boolean,
-
     today: Object,
     selectedDate: Object,
     user: Object,
@@ -105,18 +96,6 @@ export default {
   data() {
     return {
       contextSwitch: false,
-      durationFilterBlocks: [{
-        startTime: 0,
-        duration: 1,
-      }],
-      durationFilterBlockSettings: {
-        showBlockHours: true,
-        showBlockTime: false,
-        canRemoveBlock: false,
-        canResizeBlockStart: false,
-        canResizeBlockEnd: true,
-        canMoveBlock: false,
-      },
       showExpandedWeek: false,
 
       selectedInstructors: [{id: -1}],
@@ -242,9 +221,6 @@ export default {
       // also need to take them out of the available array
       Vue.set(this.selectedInstructors, index, instructor)
     },
-    updateFilterEventLength() {
-      this.$emit('filterEventLength', this.durationFilterBlocks[0].duration)
-    },
     toggleExpandedWeek() {
       this.showExpandedWeek = !this.showExpandedWeek
     },
@@ -265,9 +241,6 @@ export default {
     },
     restoreItemToInactiveInstructorsList(item) {
       this.$emit('restoreItemToInactiveInstructorsList', item)
-    },
-    closeBubble() {
-      this.$emit('toggleBubbleVisibility', false)
     },
     loadNextMonth() {
       const date = this.selectedDate.add(1, 'month')
@@ -291,8 +264,8 @@ export default {
     updateAvailabilities(date, availabilities) {
       this.$emit('updateAvailabilities', date, availabilities)
     },
-    setDate(date){
-      this.$emit("setDate", date)
+    setSelectedDate(date){
+      this.$emit("setSelectedDate", date)
     },
     toggleContext() {
       this.contextSwitch = !this.contextSwitch
