@@ -91,7 +91,7 @@ export default {
     return {
       isCoordinator: false,
       showExpandedWeek: false,
-      selectedDate: moment('2018-07-13'),
+      selectedDate: moment(this.today),
       selectedInstructors: [{id: -1}],
       duration: 1,
       pendingEvent: null,
@@ -126,32 +126,6 @@ export default {
           }
         }]
         : []
-/*
-      const block = this.block
-      const startingSegment = (block.startTime * 2)
-      const items = this.$store.state.availabilities.filteredSegments[this.$store.state.activeDate.date][startingSegment]
-        ? this.$store.state.availabilities.filteredSegments[this.$store.state.activeDate.date][startingSegment].user_ids
-        : []
-      const meta = {}
-      meta.initialEventDuration = parseFloat(this.block.duration)
-      this.$store.commit('addASlide',
-        {
-          content: {
-            items: items,
-            specificItems: this.$store.state.availabilities.availabilityInstructors.specific,
-            selectedItems: [],
-            foundItems: [],
-            itemSearch: '',
-            start_time: block.startTime,
-            end_time: block.startTime + block.duration,
-            segment_start: (block.startTime * 2),
-            segment_end: (((block.startTime + block.duration) * 2) - 1),
-            segments: block.segments,
-          },
-          meta,
-        }
-      )
-*/
     },
     selectedDateAvailabilities() {
       const selectedDate = this.selectedDate.format('YYYY-MM-DD')
