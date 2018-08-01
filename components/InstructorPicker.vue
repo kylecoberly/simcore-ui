@@ -10,7 +10,7 @@
           tag="ul"
           mode="out-in"
         >
-          <li :key="`general-${index}`" :class="`instructor-${instructor}`" v-for="(instructor, index) in selectedInstructors">
+          <li :key="`general-${index}`" :class="`instructor-${instructor.id}`" v-for="(instructor, index) in selectedInstructors">
             <SimAutofinder
               :options="availableInstructors"
               :selectedItem="instructor"

@@ -19,7 +19,7 @@ describe('Calendar', function() {
     it('loads the component', function() {
       cy.get('h2').should('have.text', 'Calendar')
     })
-    xdescribe('grid', function() {
+    describe('grid', function() {
       it('shows the hour grid', function() {
         cy.get('.is-today').as('today').find('.sim-timelines').should('not.exist')
         cy.get('@today').find('.sim-calendar--grid--tools svg').click({force: true})
@@ -87,7 +87,7 @@ describe('Calendar', function() {
         cy.get('@today').find('.sim-timelines').should('not.exist')
       })
     })
-    xdescribe('day-control panel', function() {
+    describe('day-control panel', function() {
       it('adds a block from 6am to 7am', function() {
         cy.get('.sim-calendar--day-control-panel').as('day-control-panel').find('.sim-timeblock').should('have.length', 1)
         cy.get('@day-control-panel').find('.is-hour-6').click()
@@ -156,7 +156,7 @@ describe('Calendar', function() {
         cy.get('@day-control-panel').find('.sim-timeblock').should('not.exist')
       })
     })
-    xdescribe('navigation', function() {
+    describe('navigation', function() {
       describe('month', function() {
         it('navigates backward', function() {
           cy.get('.sim-timepicker--display-date').contains('Friday, Jul 13')
@@ -248,29 +248,27 @@ describe('Calendar', function() {
         cy.get('@instructors').should('have.length', 2)
         cy.get('@instructor-entry').should('have.value', 'Aleshin MIA MIA, Igor2')
       })
-      xit('adds an available instructor', function() {
-        cy.get('.sim-datalist > ul').as('instructors-list')
-          .find('li').as('instructors').should('have.length', 2)
-        cy.get('@instructors')
-          .eq(1)
-          .find('.control--add-item').click()
-        cy.get('@instructors-list').find('li').should('have.length', 3)
-        cy.get('@instructors-list').find('li').eq(1)
-          .find('input').should('have.attr', 'placeholder', 'Any Available Instructor')
-      })
-      xit('removes an available instructor', function() {
+      it('adds an available instructor', function() {
         cy.get('.sim-datalist > ul').as('instructors-list')
           .find('li').as('instructors').should('have.length', 3)
-        cy.get('@instructors')
-          .eq(2)
+        cy.get('@instructors-list')
           .find('.control--add-item').click()
         cy.get('@instructors-list').find('li').should('have.length', 4)
         cy.get('@instructors-list').find('li').eq(2)
           .find('input').should('have.attr', 'placeholder', 'Any Available Instructor')
+      })
+      it('removes an available instructor', function() {
+        cy.get('.sim-datalist > ul').as('instructors-list')
+          .find('li').as('instructors').should('have.length', 4)
+        cy.get('@instructors-list')
+          .find('.control--add-item').click()
+        cy.get('@instructors-list').find('li').should('have.length', 5)
+        cy.get('@instructors-list').find('li').eq(3)
+          .find('input').should('have.attr', 'placeholder', 'Any Available Instructor')
 
-        cy.get('@instructors-list').find('li').eq(2)
+        cy.get('@instructors-list').find('li').eq(3)
           .find('.sim-autofinder--remove-item').click()
-        cy.get('@instructors-list').find('li').should('have.length', 3)
+        cy.get('@instructors-list').find('li').should('have.length', 4)
       })
       // Timeslots won't show up until time is injected in
       xit('selects a timeslot', function() {
