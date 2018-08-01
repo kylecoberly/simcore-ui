@@ -3,9 +3,9 @@
     <transition-group appear name="list" tag="ul" mode="in-out">
       <li v-for="(option, index) in matchingOptions"
         :key="index"
-        :class="{highlighted: option.isHighlighted}"
-        @mouseenter="setHighlightedOption(option.id)"
-        @mousedown="selectOption(option.id)"
+        :class="{highlighted: isHighlightedOption(option)}"
+        @mouseenter="setHighlightedOption(option)"
+        @mousedown="selectOption(option)"
       >
         <p>{{ option.label }}</p>
       </li>
@@ -24,7 +24,7 @@
     },
     data(){
       return {
-        position: 0,
+        highlightedOption: null,
       }
     },
     computed: {
@@ -33,17 +33,20 @@
       }
     },
     created(){
-      if (this.matchingOptions.length > 0){
-        this.setHighlightedOption(this.matchingOptions[0].id)
+      if (this.hasMatchingOptions){
+        this.setHighlightedOption(this.matchingOptions[0])
       }
     },
     methods: {
       setHighlightedOption(option){
-        this.$emit('setHighlightedOption', option)
+        this.highlightedOption = option
       },
-      selectOption(optionId){
-        this.$emit('selectOption', optionId)
+      selectOption(option){
+        this.$emit('selectOption', option)
       },
+      isHighlightedOption(option){
+        return option.id === this.highlightedOption.id
+      }
     }
   }
 </script>

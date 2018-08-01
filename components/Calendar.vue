@@ -8,8 +8,7 @@
     <CalendarHeader
        :selectedDate="selectedDate"
        :today="today"
-       :context="isCoordinator"
-       :canScheduleEvents="user.canScheduleEvents"
+       :isCoordinator="isCoordinator"
        @setSelectedDate="setSelectedDate"
        @toggleContext="toggleContext"
      />
@@ -34,14 +33,9 @@
          @updatePendingEvent="updatePendingEvent"
        />
       <CoordinatorSidebar v-if="isCoordinator"
-        :availableInstructors="availableInstructors"
-        :selectedInstructors="selectedInstructors"
-        :duration="duration"
-        @addInstructor="addInstructor"
-        @removeInstructor="removeInstructor"
-        @selectInstructor="selectInstructor"
-        @clearInstructor="clearInstructor"
-        @setDuration="setDuration"
+        :instructors="instructors"
+        :filters="filters"
+        @updateFilters="updateFilters"
       />
       <InstructorSidebar v-else
         :userAvailabilities="selectedDateAvailabilities"
@@ -92,10 +86,15 @@ export default {
       isCoordinator: false,
       showExpandedWeek: false,
       selectedDate: moment(this.today),
-      selectedInstructors: [{id: -1}],
       duration: 1,
       pendingEvent: null,
       bubbleIsOpen: false,
+      filters: {
+        duration: 1,
+        instructors: [{
+          id: -1
+        }]
+      }
     }
   },
   computed: {
@@ -146,58 +145,28 @@ export default {
 
       return classes.join(' ')
     },
-    filters() {
-      return {
-        duration: this.duration,
-        instructors: this.selectedInstructors.filter(instructor => instructor.id > 0),
-        instructorCount: this.selectedInstructors.length,
-      }
-    },
     contextLabel() {
       return this.isCoordinator ? 'coordinator' : 'instructor'
     },
     activeInstructorCount() {
       return this.activeInstructors.length
     },
-    availableInstructors(){
-      const selectedInstructorIds = this.selectedInstructors.map(instructor => instructor.id)
-      return this.instructors.filter(instructor => !selectedInstructorIds.includes(instructor.id))
-    }
   },
   methods: {
-    addInstructor(id){
-      const instructor = this.instructors.find(instructor => instructor.id == id)
-      this.selectedInstructors.push(instructor || {
-        id: -1
-      })
-    },
-    clearInstructor(index){
-      Vue.set(this.selectedInstructors, index, {
-        id: -1
-      })
-    },
-    removeInstructor(index){
-      this.selectedInstructors.splice(index, 1)
-    },
-    selectInstructor(index, id){
-      const instructor = this.instructors.find(instructor => instructor.id == id)
-      // also need to take them out of the available array
-      Vue.set(this.selectedInstructors, index, instructor)
-    },
     toggleExpandedWeek() {
       this.showExpandedWeek = !this.showExpandedWeek
     },
     setSelectedDate(date) {
       this.selectedDate = moment(date)
     },
+    updateFilters(filters) {
+      this.filters = filters
+    },
     updateAvailabilities(date, availabilities) {
       this.$emit('updateAvailabilities', date, availabilities)
     },
     toggleContext() {
       this.isCoordinator = !this.isCoordinator
-    },
-    setDuration(duration) {
-      this.duration = duration
     },
     createPendingEvent(block) {
       this.pendingEvent = {

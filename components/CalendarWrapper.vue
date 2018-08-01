@@ -28,10 +28,12 @@ export default {
     return {
       today: moment('2018-07-13'),
       user: {
-        canScheduleEvents: true,
         availabilitiesForCurrentMonth: availabilities.dates,
       },
-      instructors: instructors.users.list,
+      instructors: instructors.users.list.map(instructor => {
+        instructor.label = `${instructor.lastname}, ${instructor.firstname}`
+        return instructor
+      }),
       totalAvailabilities: normalize(purviewAvailabilities.users),
     }
   },
