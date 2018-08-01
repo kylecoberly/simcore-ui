@@ -7,14 +7,10 @@
 
     <CalendarHeader
        :selectedDate="selectedDate"
+       :today="today"
        :context="contextSwitch"
        :canScheduleEvents="user.canScheduleEvents"
-       @loadPreviousMonth="loadPreviousMonth"
-       @loadNextMonth="loadNextMonth"
-       @loadPreviousDay="loadPreviousDay"
-       @loadToday="loadToday"
-       @loadNextDay="loadNextDay"
-       @toggleContext="toggleContext"
+       @setSelectedDate="setSelectedDate"
      />
     <div class="sim-calendar--body">
       <CalendarBody
@@ -49,10 +45,9 @@
       <InstructorSidebar v-else-if="isInstructorContext"
         :userAvailabilities="selectedDateAvailabilities"
         :selectedDate="selectedDate"
+        :today="today"
         @updateAvailabilities="updateAvailabilities"
-        @loadPreviousDay="loadPreviousDay"
-        @loadToday="loadToday"
-        @loadNextDay="loadNextDay"
+        @setSelectedDate="setSelectedDate"
       />
     </div>
   </div>
@@ -225,26 +220,8 @@ export default {
       this.showExpandedWeek = !this.showExpandedWeek
     },
     setSelectedDate(date) {
+      console.log('called', date)
       this.selectedDate = moment(date)
-    },
-    loadNextMonth() {
-      const date = this.selectedDate.add(1, 'month')
-      this.setSelectedDate(date)
-    },
-    loadPreviousMonth() {
-      const date = this.selectedDate.subtract(1, 'month')
-      this.setSelectedDate(date)
-    },
-    loadNextDay() {
-      const date = this.selectedDate.add(1, 'day')
-      this.setSelectedDate(date)
-    },
-    loadPreviousDay() {
-      const date = this.selectedDate.subtract(1, 'day')
-      this.setSelectedDate(date)
-    },
-    loadToday() {
-      this.setSelectedDate(this.today)
     },
     updateAvailabilities(date, availabilities) {
       this.$emit('updateAvailabilities', date, availabilities)
