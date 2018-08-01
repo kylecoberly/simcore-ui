@@ -15,7 +15,7 @@
 
 <script>
   import SimIconText from './IconText'
-  import * as dateFormatter from '../data/date'
+  import {formatTimesForDisplay, formatBlockHoursForDisplay} from '../data/date'
 
   const _cap = (num, previous, min, max) => {
     return (num < min ? min : (num > max - previous ? max - previous : num))
@@ -80,10 +80,10 @@
         return this.startTime
       },
       displayBlockTime() {
-        return dateFormatter.formatTimesForDisplay(this.block.startTime, this.block.duration)
+        return formatTimesForDisplay(this.block.startTime, this.block.duration)
       },
       displayBlockHours() {
-        return dateFormatter.formatBlockHoursForDisplay(this.block.duration)
+        return formatBlockHoursForDisplay(this.block.duration)
       },
       blockClasses() {
         const classes = [`sim-timeblock sim-timeblock--theme--default sim-timeblock--${this.index} sim-timeblock--${this.orientation} is-moveable`]
