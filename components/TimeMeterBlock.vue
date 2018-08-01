@@ -8,6 +8,8 @@
 </template>
 
 <script>
+  import {formatBlockHoursForDisplay} from '../data/date'
+
   export default {
     data() {
       return {
@@ -22,10 +24,7 @@
     },
     computed: {
       displayDuration() {
-        const suffix = this.duration > 1
-          ? 'hours'
-          : 'hour'
-        return `${this.duration} ${suffix}`
+        return formatBlockHoursForDisplay(this.duration)
       },
       segmentSize() {
         return (100 / this.maximumDuration)
