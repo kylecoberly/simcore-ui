@@ -88,7 +88,6 @@ export default {
   props: {
     isLoading: Boolean,
     today: Object,
-    selectedDate: Object,
     user: Object,
     instructors: Array,
     totalAvailabilities: Array,
@@ -97,7 +96,7 @@ export default {
     return {
       contextSwitch: false,
       showExpandedWeek: false,
-
+      selectedDate: moment('2018-07-13'),
       selectedInstructors: [{id: -1}],
       duration: 1,
       pendingEvent: null,
@@ -225,30 +224,30 @@ export default {
     toggleExpandedWeek() {
       this.showExpandedWeek = !this.showExpandedWeek
     },
+    setSelectedDate(date) {
+      this.selectedDate = moment(date)
+    },
     loadNextMonth() {
       const date = this.selectedDate.add(1, 'month')
-      this.$emit('setSelectedDate', date)
+      this.setSelectedDate(date)
     },
     loadPreviousMonth() {
       const date = this.selectedDate.subtract(1, 'month')
-      this.$emit('setSelectedDate', date)
+      this.setSelectedDate(date)
     },
     loadNextDay() {
       const date = this.selectedDate.add(1, 'day')
-      this.$emit('setSelectedDate', date)
+      this.setSelectedDate(date)
     },
     loadPreviousDay() {
       const date = this.selectedDate.subtract(1, 'day')
-      this.$emit('setSelectedDate', date)
+      this.setSelectedDate(date)
     },
     loadToday() {
-      this.$emit('setSelectedDate', this.today)
+      this.setSelectedDate(this.today)
     },
     updateAvailabilities(date, availabilities) {
       this.$emit('updateAvailabilities', date, availabilities)
-    },
-    setSelectedDate(date){
-      this.$emit("setSelectedDate", date)
     },
     toggleContext() {
       this.contextSwitch = !this.contextSwitch
