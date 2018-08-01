@@ -62,7 +62,6 @@
 import moment from 'moment'
 import Vue from 'vue'
 
-import { lodestar } from '../utilities/animations'
 import { formatTimesForDisplay, formatBlockHoursForDisplay } from '../data/date'
 
 import EventDurationIcon from './EventDurationIcon'
@@ -88,11 +87,6 @@ export default {
     CoordinatorSidebar,
   },
   props: {
-    canScheduleEvents: {
-      type: Boolean,
-      default: false,
-      required: true,
-    },
     date: {
       type: Object,
       default: {},
@@ -101,9 +95,6 @@ export default {
     isLoading: Boolean,
     displayDate: String,
     bubbleIsOpen: Boolean,
-    filterEventLength: Number,
-    activeInstructors: Array,
-    inactiveInstructors: Array,
 
     today: Object,
     selectedDate: Object,
