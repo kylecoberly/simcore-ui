@@ -9,15 +9,6 @@ import App from './App'
 import router from './router'
 import common from './mixins'
 
-import activeDate from '../modules/activeDate'
-import availabilities from '../modules/availabilities'
-import calendar from '../modules/calendar'
-import bubble from '../modules/bubble'
-import events from '../modules/events'
-import slideDeck from '../modules/slideDeck'
-import user from '../modules/user'
-import users from '../modules/users'
-
 import services from '../modules/services'
 
 import availabilitiesStub from '../test/e2e/fixtures/availabilities.json'
@@ -28,6 +19,21 @@ Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueHighlightJS)
 
+/*
+Endpoints:
+My Availabilities:
+GET https://dev.simcoretech.com/api/v1/users/912/availabilities?start_date=2018-07-01&end_date=2018-07-31&mock=true,
+POST https://dev.simcoretech.com/api/v1/users/912/availabilities
+{
+  dates: {
+    [availabilities.date]: availabilities.blocks
+  }
+}
+Purview Availabilities:
+GET https://dev.simcoretech.com/api/v1/users/912/purview_availabilities?start_date=2018-07-01&end_date=2018-07-31&key_by=user_id&mock=true,
+Purview Users Instructors:
+GET https://dev.simcoretech.com/api/v1/users/912/purview_users?scope=canInstruct
+*/
 const store = new Vuex.Store({
   state: {
     shouldBeAbleToScheduleEvents: true,
@@ -36,14 +42,6 @@ const store = new Vuex.Store({
     mock: true,
   },
   modules: {
-    activeDate,
-    availabilities,
-    calendar,
-    events,
-    bubble,
-    slideDeck,
-    user,
-    users,
     services,
   },
 })
