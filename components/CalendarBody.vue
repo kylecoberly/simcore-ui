@@ -11,50 +11,17 @@
       <div class="sim-calendar--grid--body">
         <div class="sim-calendar--grid--days" @click.meta="toggleExpandedWeek">
           <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
-          <template v-if="context">
-            <EventCalendarDay v-for="day in daysInCurrentMonth"
-              :key="day.format('YYYY-MM-DD')"
-              :day="day"
-              :availabilities="getEventAvailabilitiesForDay(day)"
-              :today="today"
-              :isSelected="isSelected(day)"
-              :isInActiveWeek="isInActiveWeek(day)"
-              :showExpandedWeek="showExpandedWeek"
-              :pendingEvent="isPendingEventToday(pendingEvent, day)"
-              @click.native="setDate(day)"
-              @toggleExpandedWeek="toggleExpandedWeek"
-              @createPendingEvent="createPendingEvent"
-              @clearPendingEvent="clearPendingEvent"
-              @updateBlockPosition="updateBlockPosition(...arguments, day)"
-              @updatePendingEvent="updatePendingEvent"
-            />
-          </template>
-          <template v-else>
-            <CalendarDay v-for="day in daysInCurrentMonth"
-               :key="day.format('YYYY-MM-DD')"
-               :day="day"
-               :availabilities="getAvailabilitiesForDay(day)"
-               :today="today"
-               :isSelected="isSelected(day)"
-               :isInActiveWeek="isInActiveWeek(day)"
-               :showExpandedWeek="showExpandedWeek"
-               @updateAvailabilities="updateAvailabilities"
-               @click.native="setDate(day)"
-               @toggleExpandedWeek="toggleExpandedWeek"
-            />
-          </template>
+          <CalendarDay v-for="(day, index) in daysInCurrentMonth"
+             :key="index"
+             :day="day"
+             :availabilities="getAvailabilitiesForDay(day)"
+             :showExpandedWeek="showExpandedWeek"
+             @updateAvailabilities="updateAvailabilities"
+             @click.native="setDate(day)"
+             @toggleExpandedWeek="toggleExpandedWeek"
+          />
           <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
         </div>
-
-        <SimBubble v-if="pendingEvent"
-          :style="bubbleStyles"
-          :position="position"
-          ref="bubble"
-          @keydown.esc="clearPendingEvent"
-          @dismiss="clearPendingEvent"
-        >
-          <SimSlidePresenter :slides="slides"></SimSlidePresenter>
-        </SimBubble>
         <div class="sim-loader--shield" v-if="isLoading">
           <SimLoader :is-loading="true"></SimLoader>
         </div>
@@ -65,49 +32,37 @@
 
 <script>
   import moment from 'moment'
-  import {filterAvailabilities} from '../utilities/filter-availabilities'
 
   import CalendarDay from './CalendarDay'
-  import EventCalendarDay from './EventCalendarDay'
-  import SimBubble from './Bubble'
-  import SimSlidePresenter from './SlidePresenter'
   import SimLoader from './Loader'
 
   export default {
     components: {
-      EventCalendarDay,
       CalendarDay,
-      SimBubble,
-      SimSlidePresenter,
-      SimLoader,
     },
     data(){
       return {
-        hideSlideNavigationControls: false,
         dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-        position: {},
       }
     },
     props: {
       isLoading: Boolean,
       showExpandedWeek: Boolean,
-      bubbleIsOpen: Boolean,
       availabilities: {
         type: Object,
         default: () => ({}),
       },
-      selectedDate: {
-        type: Object,
-        required: true,
-      },
-      today: Object,
-      context: Boolean,
-      totalAvailabilities: Array,
-      filters: Object,
-      pendingEvent: Object,
-      slides: Array,
     },
     computed: {
+      dateService(){
+        return this.$store.state.services.date
+      },
+      today(){
+        return this.dateService.today
+      },
+      selectedDate(){
+        return this.dateService.selectedDate
+      },
       startOffset(){
         return moment(this.selectedDate).startOf('month').day()
       },
@@ -126,46 +81,19 @@
         const currentMonthString = this.selectedDate.format('YYYY-MM-')
         return daysInMonth.map(day => moment(`${currentMonthString}${day}`))
       },
-      filteredAvailabilities(){
-        // Clean this up
-        const filters = this.deepClone(this.filters)
-        filters.instructorCount = filters.instructors.length
-        filters.instructors = filters.instructors
-          .map(instructor => instructor.id)
-          .filter(id => id > 0)
-        return filterAvailabilities([...this.totalAvailabilities], filters)
-      },
-      bubbleStyles(){
-        return this.getStyles(this.position)
-      },
     },
     methods: {
       toggleExpandedWeek(){
         this.$emit('toggleExpandedWeek')
       },
       setDate(date){
-        this.$emit('setDate', date)
+        this.$store.dispatch('services/date/setDate', date)
       },
       updateAvailabilities(date, availabilities){
         this.$emit('updateAvailabilities', date, availabilities)
       },
       getAvailabilitiesForDay(date){
         return this.availabilities[date.format('YYYY-MM-DD')] || []
-      },
-      getEventAvailabilitiesForDay(date){
-        return this.filteredAvailabilities.find(day => date.isSame(day.date, 'day')).availabilities
-      },
-      isSelected(day){
-        return day.isSame(this.selectedDate, 'day')
-      },
-      isInActiveWeek(day){
-        return day.isSame(this.selectedDate, 'week')
-      },
-      createPendingEvent(block){
-        this.$emit('createPendingEvent', block)
-      },
-      clearPendingEvent(){
-        this.$emit('clearPendingEvent')
       },
       getStyles(position) {
         const top = this.$refs.bubble
@@ -182,39 +110,6 @@
         position.offset.x = day.day() + 1
         this.position = this.getBubblePosition(position)
       },
-      getBubblePosition({ domPosition, offset }) {
-        const position = {}
-        position.dinkY = domPosition.top + domPosition.height / 2
-        position.dinkX = domPosition.left + domPosition.width / 2
-
-        position.x = offset.x
-        position.y = offset.y
-
-        if (this.position && position.x > this.position.x && position.x > 2) {
-          position.orientation = 'right'
-        } else if (this.position && this.x < this.position.x && position.x < 6) {
-          position.orientation = 'left'
-        } else if (this.position.orientation) {
-          position.orientation = this.position.orientation
-        } else {
-          position.orientation = 'right'
-        }
-
-        return position
-      },
-      updatePendingEvent(block){
-        this.$emit('updatePendingEvent', block)
-      },
-      isPendingEventToday(pendingEvent, day){
-        return pendingEvent
-          ? day.isSame(pendingEvent.day, 'day')
-            ? pendingEvent
-            : undefined
-          : undefined
-      },
-      deepClone(object){
-        return JSON.parse(JSON.stringify(object))
-      }
     },
   }
 </script>

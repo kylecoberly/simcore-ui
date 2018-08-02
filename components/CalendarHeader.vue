@@ -38,14 +38,18 @@
       SimSwitch
     },
     props: {
-      selectedDate: {
-        type: Object,
-        required: true,
-      },
-      today: Object,
       isCoordinator: Boolean,
     },
     computed: {
+      dateService(){
+        return this.$store.state.services.date
+      },
+      today(){
+        return this.dateService.today
+      },
+      selectedDate(){
+        return this.dateService.selectedDate
+      },
       displayDate(){
         return this.selectedDate.format('MMMM YYYY')
       }
@@ -53,22 +57,22 @@
     methods: {
       loadNextMonth() {
         const date = this.selectedDate.add(1, 'month')
-        this.$emit('setSelectedDate', date)
+        this.$store.dispatch('services/date/setDate', date)
       },
       loadPreviousMonth() {
         const date = this.selectedDate.subtract(1, 'month')
-        this.$emit('setSelectedDate', date)
+        this.$store.dispatch('services/date/setDate', date)
       },
       loadNextDay() {
         const date = this.selectedDate.add(1, 'day')
-        this.$emit('setSelectedDate', date)
+        this.$store.dispatch('services/date/setDate', date)
       },
       loadPreviousDay() {
         const date = this.selectedDate.subtract(1, 'day')
-        this.$emit('setSelectedDate', date)
+        this.$store.dispatch('services/date/setDate', date)
       },
       loadToday() {
-        this.$emit('setSelectedDate', this.today)
+        this.$store.dispatch('services/date/setDate', this.today)
       },
     },
   }

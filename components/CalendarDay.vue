@@ -43,11 +43,8 @@
       SimTimeBlock,
     },
     props: {
-      today: Object,
-      isInActiveWeek: Boolean,
       day: Object,
       availabilities: Array,
-      isSelected: Boolean,
       showExpandedWeek: Boolean,
     },
     data() {
@@ -56,6 +53,18 @@
       }
     },
     computed: {
+      dateService(){
+        return this.$store.state.services.date
+      },
+      today(){
+        return this.dateService.today
+      },
+      isSelected(){
+        return this.dateService.selectedDate.isSame(this.day, 'day')
+      },
+      isInActiveWeek(){
+        return this.dateService.selectedDate.isSame(this.day, 'week')
+      },
       isBeforeToday() {
         return this.today.isAfter(this.day, 'day')
       },

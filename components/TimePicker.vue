@@ -1,15 +1,12 @@
 <template>
   <div class="sim-timepicker sim-timepicker--y">
     <TimePickerControls
-       :selectedDate="selectedDate"
-       :userAvailabilities="userAvailabilities"
-       @loadPreviousDay="$emit('loadPreviousDay')"
-       @loadNextDay="$emit('loadNextDay')"
+       :availabilities="availabilities"
        @removeAllTimeBlocks="removeAllTimeBlocks"
     />
     <div class="sim-timepicker--inner" :class="timelineClasses">
       <SimTimeLines @createTimeBlock="createTimeBlock" />
-      <SimTimeBlock v-for="(block, index) in userAvailabilities"
+      <SimTimeBlock v-for="(block, index) in availabilities"
         :key="index"
         :index="index"
         :block="block"
@@ -35,8 +32,7 @@
       TimePickerControls,
     },
     props: {
-      userAvailabilities: Array,
-      selectedDate: Object,
+      availabilities: Array,
     },
     data() {
       return {
@@ -46,6 +42,12 @@
       }
     },
     computed: {
+      dateService(){
+        return this.$store.state.services.date
+      },
+      selectedDate(){
+        return this.dateService.selectedDate
+      },
       timelineClasses() {
         const classes = ['is-moveable']
         if (this.isMoving) {
@@ -69,22 +71,22 @@
           startTime: hour,
           duration: this.timeBlockDefaultDuration
         }
-        const userAvailabilities = [...this.userAvailabilities]
-        userAvailabilities.push(newBlock)
-        this.$emit('updateAvailabilities', this.selectedDate, userAvailabilities)
+        const availabilities = [...this.availabilities]
+        availabilities.push(newBlock)
+        this.$emit('updateAvailabilities', this.selectedDate, availabilities)
       },
       removeTimeBlock(index) {
-        const userAvailabilities = [...this.userAvailabilities]
-        userAvailabilities.splice(index, 1)
-        this.$emit('updateAvailabilities', this.selectedDate, userAvailabilities)
+        const availabilities = [...this.availabilities]
+        availabilities.splice(index, 1)
+        this.$emit('updateAvailabilities', this.selectedDate, availabilities)
       },
       removeAllTimeBlocks() {
         this.$emit('updateAvailabilities', this.selectedDate, [])
       },
       updateTimeBlock(index, value){
-        const userAvailabilities = [...this.userAvailabilities]
-        userAvailabilities[index] = value
-        this.$emit('updateAvailabilities', this.selectedDate, userAvailabilities)
+        const availabilities = [...this.availabilities]
+        availabilities[index] = value
+        this.$emit('updateAvailabilities', this.selectedDate, availabilities)
       },
     },
   }
