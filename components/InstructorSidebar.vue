@@ -5,11 +5,8 @@
     </div>
     <div class="sim-calendar--aside--body">
       <SimTimePicker
-        :userAvailabilities="userAvailabilities"
-        :selectedDate="selectedDate"
+        :availabilities="availabilities"
         @updateAvailabilities="updateAvailabilities"
-        @loadPreviousDay="loadPreviousDay"
-        @loadNextDay="loadNextDay"
       />
     </div>
   </aside>
@@ -23,20 +20,11 @@
       SimTimePicker
     },
     props: {
-      userAvailabilities: Array,
-      selectedDate: Object,
+      availabilities: Array,
     },
     methods: {
       updateAvailabilities(date, availabilities){
         this.$emit('updateAvailabilities', date, availabilities)
-      },
-      loadNextDay() {
-        const date = this.selectedDate.add(1, 'day')
-        this.$emit('setSelectedDate', date)
-      },
-      loadPreviousDay() {
-        const date = this.selectedDate.subtract(1, 'day')
-        this.$emit('setSelectedDate', date)
       },
     }
   }

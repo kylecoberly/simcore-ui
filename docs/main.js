@@ -18,6 +18,8 @@ import slideDeck from '../modules/slideDeck'
 import user from '../modules/user'
 import users from '../modules/users'
 
+import services from '../modules/services'
+
 import availabilitiesStub from '../test/e2e/fixtures/availabilities.json'
 
 Vue.config.productionTip = false
@@ -42,6 +44,7 @@ const store = new Vuex.Store({
     slideDeck,
     user,
     users,
+    services,
   },
 })
 

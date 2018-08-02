@@ -6,43 +6,37 @@
     <ControlIcon />
 
     <CalendarHeader
-       :selectedDate="selectedDate"
-       :today="today"
-       :isCoordinator="isCoordinator"
-       @setSelectedDate="setSelectedDate"
-       @toggleContext="toggleContext"
-     />
+      :isCoordinator="isCoordinator"
+      @toggleContext="toggleContext"
+    />
     <div class="sim-calendar--body">
-      <CalendarBody
-         :isLoading="isLoading"
-         :bubbleIsOpen="bubbleIsOpen"
-         :showExpandedWeek="showExpandedWeek"
-         :availabilities="user.availabilitiesForCurrentMonth"
-         :selectedDate="selectedDate"
-         :today="today"
-         :context="isCoordinator"
-         :totalAvailabilities="totalAvailabilities"
-         :filters="filters"
-         :pendingEvent="pendingEvent"
-         :slides="slides"
-         @updateAvailabilities="updateAvailabilities"
-         @setDate="setSelectedDate"
-         @toggleExpandedWeek="toggleExpandedWeek"
-         @createPendingEvent="createPendingEvent"
-         @clearPendingEvent="clearPendingEvent"
-         @updatePendingEvent="updatePendingEvent"
-       />
-      <CoordinatorSidebar v-if="isCoordinator"
-        :instructors="instructors"
-        :filters="filters"
-        @updateFilters="updateFilters"
-      />
-      <InstructorSidebar v-else
-        :userAvailabilities="selectedDateAvailabilities"
-        :selectedDate="selectedDate"
-        @updateAvailabilities="updateAvailabilities"
-        @setSelectedDate="setSelectedDate"
-      />
+      <template v-if="isCoordinator">
+        <EventCalendarBody
+          :filteredAvailabilities="filteredAvailabilities"
+          :isLoading="isLoading"
+          :bubbleIsOpen="bubbleIsOpen"
+          :showExpandedWeek="showExpandedWeek"
+          @toggleExpandedWeek="toggleExpandedWeek"
+        />
+        <CoordinatorSidebar
+          :instructors="instructors"
+          :filters="filters"
+          @updateFilters="updateFilters"
+        />
+      </template>
+      <template v-else>
+        <CalendarBody
+          :availabilities="user.availabilitiesForCurrentMonth"
+          :isLoading="isLoading"
+          :showExpandedWeek="showExpandedWeek"
+          @updateAvailabilities="updateAvailabilities"
+          @toggleExpandedWeek="toggleExpandedWeek"
+        />
+        <InstructorSidebar
+          :availabilities="selectedDateAvailabilities"
+          @updateAvailabilities="updateAvailabilities"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -52,6 +46,8 @@ import moment from 'moment'
 import Vue from 'vue'
 
 import { formatTimesForDisplay, formatBlockHoursForDisplay } from '../data/date'
+import { filterAvailabilities } from '../utilities/filter-availabilities'
+import { deepClone } from '../utilities/deep-clone'
 
 import EventDurationIcon from './EventDurationIcon'
 import InstructorIcon from './InstructorIcon'
@@ -60,6 +56,7 @@ import ControlIcon from './ControlIcon'
 
 import CalendarHeader from './CalendarHeader'
 import CalendarBody from './CalendarBody'
+import EventCalendarBody from './EventCalendarBody'
 import InstructorSidebar from './InstructorSidebar'
 import CoordinatorSidebar from './CoordinatorSidebar'
 
@@ -71,12 +68,12 @@ export default {
     ControlIcon,
     CalendarHeader,
     CalendarBody,
+    EventCalendarBody,
     InstructorSidebar,
     CoordinatorSidebar,
   },
   props: {
     isLoading: Boolean,
-    today: Object,
     user: Object,
     instructors: Array,
     totalAvailabilities: Array,
@@ -85,7 +82,6 @@ export default {
     return {
       isCoordinator: false,
       showExpandedWeek: false,
-      selectedDate: moment(this.today),
       duration: 1,
       pendingEvent: null,
       bubbleIsOpen: false,
@@ -98,6 +94,15 @@ export default {
     }
   },
   computed: {
+    dateService(){
+      return this.$store.state.services.date
+    },
+    today(){
+      return this.dateService.today
+    },
+    selectedDate(){
+      return this.dateService.selectedDate
+    },
     componentClasses() {
       const classes = [`is-${this.contextLabel}-context`]
       const isCurrentMonth = this.selectedDate.isSame(this.today, 'month')
@@ -112,19 +117,14 @@ export default {
 
       return classes.join(' ')
     },
-    slides(){
-      return this.pendingEvent
-        ? [{
-          title: this.pendingEvent.day.format('dddd, MMMM Do'),
-          subtitle: `${formatBlockHoursForDisplay(this.pendingEvent.duration)} • ${formatTimesForDisplay(this.pendingEvent.startTime, this.pendingEvent.duration)}`,
-          componentType: 'SimSlideWithAList',
-          content: {
-            segment_start: (this.pendingEvent.startTime * 2),
-            segment_end: (((this.pendingEvent.startTime + this.pendingEvent.duration) * 2) - 1),
-            items: this.pendingEvent.instructors
-          }
-        }]
-        : []
+    filteredAvailabilities(){
+      // Clean this up
+      const filters = deepClone(this.filters)
+      filters.instructorCount = filters.instructors.length
+      filters.instructors = filters.instructors
+        .map(instructor => instructor.id)
+        .filter(id => id > 0)
+      return filterAvailabilities([...this.totalAvailabilities], filters)
     },
     selectedDateAvailabilities() {
       const selectedDate = this.selectedDate.format('YYYY-MM-DD')
@@ -156,9 +156,6 @@ export default {
     toggleExpandedWeek() {
       this.showExpandedWeek = !this.showExpandedWeek
     },
-    setSelectedDate(date) {
-      this.selectedDate = moment(date)
-    },
     updateFilters(filters) {
       this.filters = filters
     },
@@ -167,22 +164,6 @@ export default {
     },
     toggleContext() {
       this.isCoordinator = !this.isCoordinator
-    },
-    createPendingEvent(block) {
-      this.pendingEvent = {
-        day: block.day,
-        instructors: block.users.map(id => {
-          return this.instructors.find(instructor => instructor.id == id)
-        }),
-        startTime: block.startTime,
-        duration: block.duration,
-      }
-    },
-    updatePendingEvent(block){
-      this.pendingEvent = block
-    },
-    clearPendingEvent() {
-      this.pendingEvent = null
     },
   },
 }
