@@ -228,9 +228,6 @@
 <script>
   import _ from 'lodash'
 
-  import currentUser from '../external/currentUser'
-  import scenarios from '../external/scenarios'
-
   import SimSlideHeader from './SlideHeader'
   import SimSlideIntro from './SlideIntro'
   import SimDatalist from './Datalist'

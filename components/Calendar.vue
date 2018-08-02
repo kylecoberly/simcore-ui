@@ -13,7 +13,6 @@
       <template v-if="isCoordinator">
         <EventCalendarBody
           :filteredAvailabilities="filteredAvailabilities"
-          :isLoading="isLoading"
           :bubbleIsOpen="bubbleIsOpen"
           :showExpandedWeek="showExpandedWeek"
           @toggleExpandedWeek="toggleExpandedWeek"
@@ -27,7 +26,6 @@
       <template v-else>
         <CalendarBody
           :availabilities="user.availabilitiesForCurrentMonth"
-          :isLoading="isLoading"
           :showExpandedWeek="showExpandedWeek"
           @updateAvailabilities="updateAvailabilities"
           @toggleExpandedWeek="toggleExpandedWeek"
@@ -73,7 +71,6 @@ export default {
     CoordinatorSidebar,
   },
   props: {
-    isLoading: Boolean,
     user: Object,
     instructors: Array,
     totalAvailabilities: Array,
