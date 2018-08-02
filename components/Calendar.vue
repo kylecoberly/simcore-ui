@@ -45,7 +45,7 @@
 import moment from 'moment'
 import Vue from 'vue'
 
-import { formatTimesForDisplay, formatBlockHoursForDisplay } from '../data/date'
+import { formatTimesForDisplay, formatBlockHoursForDisplay } from '../utilities/date'
 import { filterAvailabilities } from '../utilities/filter-availabilities'
 import { deepClone } from '../utilities/deep-clone'
 

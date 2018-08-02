@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import {formatBlockHoursForDisplay} from '../data/date'
+  import {formatBlockHoursForDisplay} from '../utilities/date'
 
   export default {
     data() {

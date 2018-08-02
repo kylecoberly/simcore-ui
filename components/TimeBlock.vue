@@ -15,7 +15,7 @@
 
 <script>
   import SimIconText from './IconText'
-  import {formatTimesForDisplay, formatBlockHoursForDisplay} from '../data/date'
+  import {formatTimesForDisplay, formatBlockHoursForDisplay} from '../utilities/date'
 
   const _cap = (num, previous, min, max) => {
     return (num < min ? min : (num > max - previous ? max - previous : num))
