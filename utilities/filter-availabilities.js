@@ -1,8 +1,8 @@
-function filterAvailabilities(users, filters){
-  if (!(users instanceof Array)){
-    users = normalize(users)
+function filterAvailabilities(instructors, filters) {
+  if (!(instructors instanceof Array)){
+    instructors = normalize(instructors)
   }
-  return deepClone(users)
+  return deepClone(instructors)
     .map(filterDuration(filters.duration))
     .map(splitLongDurations(filters.duration))
     .reduce(aggregateDays, [])
@@ -10,12 +10,12 @@ function filterAvailabilities(users, filters){
     .map(filterRequiredInstructors(filters.instructors))
 }
 
-function deepClone(object){
+function deepClone(object) {
   return JSON.parse(JSON.stringify(object))
 }
 
 // Reorganizes the API response to something workable
-function normalize(unnormalizedUsers){
+function normalize(unnormalizedUsers) {
   return Object.keys(unnormalizedUsers).map(id => {
     return {
       id: +id,
@@ -34,7 +34,7 @@ function normalize(unnormalizedUsers){
   })
 }
 
-function groupUserDays(groupedAvailabilities, availability){
+function groupUserDays(groupedAvailabilities, availability) {
   groupedAvailabilities[availability.date]
     ? groupedAvailabilities[availability.date].availabilities.push({
       startTime: availability.startTime,
@@ -43,7 +43,7 @@ function groupUserDays(groupedAvailabilities, availability){
     : groupedAvailabilities[availability.date] = initializeAvailabilityDate(availability)
   return groupedAvailabilities
 
-  function initializeAvailabilityDate(availability){
+  function initializeAvailabilityDate(availability) {
     return {
       date: availability.date,
       availabilities: [{
@@ -54,7 +54,7 @@ function groupUserDays(groupedAvailabilities, availability){
   }
 }
 
-function filterDuration(duration){
+function filterDuration(duration) {
   return function(user){
     user.days = user.days.map(day => {
       day.availabilities = day.availabilities
@@ -75,34 +75,34 @@ function splitLongDurations(duration){
   }
 }
 
-function filterEnoughInstructors(count){
+function filterEnoughInstructors(count) {
   return function(day){
     day.availabilities = day.availabilities
-      .filter(availability => availability.users.length >= count)
+      .filter(availability => availability.instructors.length >= count)
     return day
   }
 }
 
-function filterRequiredInstructors(instructors){
+function filterRequiredInstructors(instructors) {
   return function(day){
     if (!instructors || instructors.length < 1) return day
     day.availabilities = day.availabilities
       .filter(availability => instructors
-        .every(instructor => availability.users.includes(instructor))
+        .every(instructor => availability.instructors.includes(instructor))
       )
     return day
   }
 }
 
 // Utilities
-function stripKeys(object){
+function stripKeys(object) {
   return Object.keys(object).reduce((array, key) => {
     array.push(object[key])
     return array
   }, [])
 }
 
-function stripTime(datetime){
+function stripTime(datetime) {
   return datetime.split(' ')[0]
 }
 
@@ -113,7 +113,7 @@ function expandAvailabilitiesByDuration(availabilities, duration){
   }, [])
 }
 
-function expandAvailability(availability, duration){
+function expandAvailability(availability, duration) {
   const endTime = availability.startTime + availability.duration
   const availabilities = []
   for (let startTime = availability.startTime; startTime + duration <= endTime; startTime += 0.5){
@@ -122,7 +122,7 @@ function expandAvailability(availability, duration){
   return availabilities
 }
 
-function aggregateDays(aggregateDays, user){
+function aggregateDays(aggregateDays, user) {
   return user.days.reduce((aggregateDays, userDay) => {
     const aggregateDay = findOrAdd(aggregateDays, userDay, 'date')
     userDay.availabilities.reduce(foldUserAvailabilityIntoAggregateDay(user.id), aggregateDay)
@@ -139,17 +139,17 @@ function foldUserAvailabilityIntoAggregateDay(userId){
     return aggregateDay
   }
 
-  function addUserToAvailability(userId){
+  function addUserToAvailability(userId) {
     return function addToAvailability(availability){
-      availability.users
-        ? availability.users.push(userId)
-        : availability.users = [userId]
+      availability.instructors
+        ? availability.instructors.push(userId)
+        : availability.instructors = [userId]
       return availability
     }
   }
 }
 
-function findOrAdd(list, item, property){
+function findOrAdd(list, item, property) {
   let currentItem = list.find(existingItem => existingItem[property] === item[property])
   if (!currentItem){
     currentItem = item
@@ -158,7 +158,7 @@ function findOrAdd(list, item, property){
   }
   return currentItem
 
-  function sortTimeBy(list, property){
+  function sortTimeBy(list, property) {
     const moment = require('moment')
     return list.sort((a, b) => {
       let sortOrder

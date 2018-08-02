@@ -5,7 +5,7 @@ import assert from 'assert'
 import moment from 'moment'
 import CalendarHeader from '../../components/CalendarHeader'
 
-describe('CalendarHeader', () => {
+xdescribe('CalendarHeader', () => {
   beforeEach(() => {
     this.component = mount(CalendarHeader, {
       propsData: {
