@@ -22,7 +22,8 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 1,
-        instructors: [1],
+        specificInstructors: [],
+        generalInstructors: [1],
       }],
     }])
   })
@@ -49,14 +50,16 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 1,
-        instructors: [1],
+        specificInstructors: [],
+        generalInstructors: [1],
       }],
     }, {
       date: '2018-07-02',
       availabilities: [{
         startTime: 1,
         duration: 1,
-        instructors: [1],
+        specificInstructors: [],
+        generalInstructors: [1],
       }],
     }])
   })
@@ -84,7 +87,8 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 1,
-        instructors: [1, 2],
+        specificInstructors: [],
+        generalInstructors: [1, 2],
       }],
     }])
   })
@@ -122,14 +126,16 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 1,
-        instructors: [1, 2],
+        specificInstructors: [],
+        generalInstructors: [1, 2],
       }],
     }, {
       date: '2018-07-02',
       availabilities: [{
         startTime: 1,
         duration: 1,
-        instructors: [1, 2],
+        specificInstructors: [],
+        generalInstructors: [1, 2],
       }],
     }])
   })
@@ -169,15 +175,18 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 1,
-        instructors: [1],
+        specificInstructors: [],
+        generalInstructors: [1],
       }, {
         startTime: 1.5,
         duration: 1,
-        instructors: [1],
+        specificInstructors: [],
+        generalInstructors: [1],
       }, {
         startTime: 2,
         duration: 1,
-        instructors: [1],
+        specificInstructors: [],
+        generalInstructors: [1],
       }],
     }])
   })
@@ -216,6 +225,30 @@ describe('#filterAvailabilities', () => {
     assert.deepEqual(filterAvailabilities(instructors, filter), [{
       date: '2018-07-01',
       availabilities: [],
+    }])
+  })
+  it('adds a required matching availability to the total availabilities', () => {
+    const filter = {
+      duration: 1,
+      instructorCount: 1,
+      instructors: [1],
+    }
+    const instructors = {
+      1: [{
+        '2018-07-01 01:00:00': {
+          startTime: 1,
+          duration: 1,
+        },
+      }],
+    }
+    assert.deepEqual(filterAvailabilities(instructors, filter), [{
+      date: '2018-07-01',
+      availabilities: [{
+        startTime: 1,
+        duration: 1,
+        specificInstructors: [1],
+        generalInstructors: [],
+      }],
     }])
   })
   it('returns a complex set of multi-day matches', () => {
@@ -264,11 +297,13 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 2,
-        instructors: [1, 2, 3],
+        specificInstructors: [2],
+        generalInstructors: [1, 3],
       }, {
         startTime: 1.5,
         duration: 2,
-        instructors: [1, 2],
+        specificInstructors: [2],
+        generalInstructors: [1],
       }],
     }, {
       date: '2018-07-02',
@@ -278,7 +313,8 @@ describe('#filterAvailabilities', () => {
       availabilities: [{
         startTime: 1,
         duration: 2,
-        instructors: [1, 2],
+        specificInstructors: [2],
+        generalInstructors: [1],
       }],
     }])
   })

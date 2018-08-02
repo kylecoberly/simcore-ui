@@ -49,7 +49,6 @@
       PendingEventBlock,
     },
     props: {
-      isInActiveWeek: Boolean,
       day: Object,
       availabilities: [Array, Object],
       showExpandedWeek: Boolean,

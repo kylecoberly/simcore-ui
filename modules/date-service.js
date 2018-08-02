@@ -9,7 +9,6 @@ export default {
   mutations: {
     setDate(state, date){
       state.selectedDate = moment(date)
-      console.log('in the store', state.selectedDate.format('YYYY MM DD'))
     },
   },
   actions: {

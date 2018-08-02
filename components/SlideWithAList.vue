@@ -25,7 +25,7 @@
         <header class="text--blue--lighter">
           <SimIconText icon="#icon--instructors-exist" icon-type="svg" :text="labelForAvailableInstructors"></SimIconText>
         </header>
-        <SimDatalist :items="items" :animate="true" style="--selection-color: var(--green)">
+        <SimDatalist :items="generalItems" :animate="true" style="--selection-color: var(--green)">
           <li slot="static-before" key="static-before" v-if="!thereAreItems">
             <SimIconText icon="#icon--checkbox--warning" icon-type="svg" text="No results found for this time span"></SimIconText>
           </li>
@@ -56,7 +56,6 @@
   import SimSlideIntro from './SlideIntro'
 
   export default {
-    name: 'sim-slide-with-a-list',
     components: {
       SimDatalist,
       SimIconText,
@@ -76,17 +75,14 @@
       slide: Object,
     },
     computed: {
-      departments() {
-        return this.$store.state.user.departments
-      },
       segmentItems() {
         return []
       },
       specificItems() {
-        return this.slide.content.items
+        return this.slide.content.specificItems
       },
-      items() {
-        return this.slide.content.items
+      generalItems() {
+        return this.slide.content.generalItems
       },
       specificItemCount() {
         return this.specificItems.length
@@ -95,7 +91,7 @@
         return (this.specificItemCount > 0)
       },
       itemCount() {
-        return this.items.length
+        return this.slide.content.generalItems.length + this.slide.content.specificItems.length
       },
       thereAreItems() {
         return (this.itemCount > 0)
@@ -109,7 +105,7 @@
     },
     methods: {
       specificItemIcon(itemId) {
-        return this.slide.content.items.includes(`${itemId}`) ? '#icon--checkbox--checked' : '#icon--checkbox--warning'
+        return this.slide.content.specificItems.includes(`${itemId}`) ? '#icon--checkbox--checked' : '#icon--checkbox--warning'
       },
       isItemSelected(itemId) {
         return this.selectedItems.find((item) => item.id === itemId) ? true : false
@@ -137,7 +133,6 @@
         let nextSlide = null
 
         if (this.selectedItems.length >= this.minimumItemsNeeded) {
-          nextSlide = this.$store.state.slideDeck.slideTemplates.event_form
           nextSlide.selectedItems = this.selectedItems
           nextSlide.specificItems = this.specificItems
           nextSlide.title = this.slide.title
