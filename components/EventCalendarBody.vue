@@ -68,7 +68,6 @@
       }
     },
     props: {
-      isLoading: Boolean,
       showExpandedWeek: Boolean,
       bubbleIsOpen: Boolean,
       filteredAvailabilities: Array,
@@ -79,6 +78,12 @@
       },
       selectedDate(){
         return this.dateService.selectedDate
+      },
+      loadingService(){
+        return this.$store.state.services.loading
+      },
+      isLoading(){
+        return this.loadingService.isLoading
       },
       startOffset(){
         return moment(this.selectedDate).startOf('month').day()

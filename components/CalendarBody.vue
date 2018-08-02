@@ -39,6 +39,7 @@
   export default {
     components: {
       CalendarDay,
+      SimLoader,
     },
     data(){
       return {
@@ -46,7 +47,6 @@
       }
     },
     props: {
-      isLoading: Boolean,
       showExpandedWeek: Boolean,
       availabilities: {
         type: Object,
@@ -62,6 +62,12 @@
       },
       selectedDate(){
         return this.dateService.selectedDate
+      },
+      loadingService(){
+        return this.$store.state.services.loading
+      },
+      isLoading(){
+        return this.loadingService.isLoading
       },
       startOffset(){
         return moment(this.selectedDate).startOf('month').day()

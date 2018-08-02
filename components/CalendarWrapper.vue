@@ -1,7 +1,5 @@
 <template>
   <Calendar
-    :isLoading="false"
-    :today="today"
     :user="user"
     :instructors="instructors"
     :totalAvailabilities="totalAvailabilities"
@@ -18,15 +16,12 @@ import {normalize} from '../utilities/filter-availabilities'
 
 import Calendar from './Calendar'
 
-import moment from 'moment'
-
 export default {
   components: {
     Calendar
   },
   data() {
     return {
-      today: moment('2018-07-13'),
       user: {
         availabilitiesForCurrentMonth: availabilities.dates,
       },
