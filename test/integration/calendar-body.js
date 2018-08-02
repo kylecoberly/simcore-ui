@@ -5,7 +5,7 @@ import assert from 'assert'
 import moment from 'moment'
 import CalendarBody from '../../components/CalendarBody'
 
-describe('CalendarBody', () => {
+xdescribe('CalendarBody', () => {
   beforeEach(() => {
     this.component = shallowMount(CalendarBody, {
       propsData: {
