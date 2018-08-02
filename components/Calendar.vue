@@ -13,6 +13,7 @@
       <template v-if="isCoordinator">
         <EventCalendarBody
           :filteredAvailabilities="filteredAvailabilities"
+          :instructors="instructors"
           :bubbleIsOpen="bubbleIsOpen"
           :showExpandedWeek="showExpandedWeek"
           @toggleExpandedWeek="toggleExpandedWeek"
@@ -43,7 +44,6 @@
 import moment from 'moment'
 import Vue from 'vue'
 
-import { formatTimesForDisplay, formatBlockHoursForDisplay } from '../utilities/date'
 import { filterAvailabilities } from '../utilities/filter-availabilities'
 import { deepClone } from '../utilities/deep-clone'
 

@@ -5,7 +5,7 @@ function filterAvailabilities(instructors, filters) {
   return deepClone(instructors)
     .map(filterDuration(filters.duration))
     .map(splitLongDurations(filters.duration))
-    .reduce(aggregateDays, [])
+    .reduce(aggregateDaysWithSpecificUsers(filters.instructors), [])
     .map(filterEnoughInstructors(filters.instructorCount))
     .map(filterRequiredInstructors(filters.instructors))
 }
@@ -75,10 +75,16 @@ function splitLongDurations(duration){
   }
 }
 
-function filterEnoughInstructors(count) {
+function filterEnoughInstructors(requiredCount) {
   return function(day){
     day.availabilities = day.availabilities
-      .filter(availability => availability.instructors.length >= count)
+      .filter(availability => {
+        const instructorCount = [
+          availability.specificInstructors,
+          availability.generalInstructors,
+        ].reduce((instructorCount, instructors) => instructorCount += instructors.length || 0, 0)
+        return instructorCount >= requiredCount
+      })
     return day
   }
 }
@@ -88,7 +94,7 @@ function filterRequiredInstructors(instructors) {
     if (!instructors || instructors.length < 1) return day
     day.availabilities = day.availabilities
       .filter(availability => instructors
-        .every(instructor => availability.instructors.includes(instructor))
+        .every(instructor => availability.specificInstructors.includes(instructor))
       )
     return day
   }
@@ -122,28 +128,37 @@ function expandAvailability(availability, duration) {
   return availabilities
 }
 
-function aggregateDays(aggregateDays, user) {
-  return user.days.reduce((aggregateDays, userDay) => {
-    const aggregateDay = findOrAdd(aggregateDays, userDay, 'date')
-    userDay.availabilities.reduce(foldUserAvailabilityIntoAggregateDay(user.id), aggregateDay)
+// What were the specific instructors?
+function aggregateDaysWithSpecificUsers(specificInstructors){
+  return function aggregateDays(aggregateDays, user) {
+    return user.days.reduce((aggregateDays, userDay) => {
+      const aggregateDay = findOrAdd(aggregateDays, userDay, 'date')
+      userDay.availabilities.reduce(foldUserAvailabilityIntoAggregateDay(specificInstructors, user.id), aggregateDay)
 
-    return aggregateDays
-  }, aggregateDays)
+      return aggregateDays
+    }, aggregateDays)
+  }
 }
 
-function foldUserAvailabilityIntoAggregateDay(userId){
+// What were the specific instructors?
+function foldUserAvailabilityIntoAggregateDay(specificInstructors, userId){
   return function foldAvailabilityIntoAggregateDay(aggregateDay, userAvailability){
     const currentAvailability = findOrAdd(aggregateDay.availabilities, userAvailability, 'startTime')
-    addUserToAvailability(userId)(currentAvailability)
+    addUserToAvailability(specificInstructors, userId)(currentAvailability)
 
     return aggregateDay
   }
 
-  function addUserToAvailability(userId) {
+  // general or specific?
+  function addUserToAvailability(specificInstructors = [], userId) {
     return function addToAvailability(availability){
-      availability.instructors
-        ? availability.instructors.push(userId)
-        : availability.instructors = [userId]
+      if (!(availability.specificInstructors && availability.generalInstructors)){
+        availability.generalInstructors = []
+        availability.specificInstructors = []
+      }
+      specificInstructors.includes(userId)
+        ? availability.specificInstructors.push(userId)
+        : availability.generalInstructors.push(userId)
       return availability
     }
   }
@@ -178,6 +193,6 @@ module.exports = {
   filterAvailabilities,
   expandAvailabilitiesByDuration,
   expandAvailability,
-  aggregateDays,
+  aggregateDaysWithSpecificUsers,
   normalize,
 };

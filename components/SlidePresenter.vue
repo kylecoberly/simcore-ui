@@ -40,7 +40,7 @@
     },
     data() {
       return {
-        slideDeck: this.$store.state.slideDeck,
+        slideDeck: [],
         nextControl: { slide: null, text: 'Next' },
         theNextControlShouldBeDisabled: this.makeTheNextControlDisabledIf,
         thePreviousControlShouldBeDisabled: this.makeThePreviousControlDisabledIf,
@@ -53,9 +53,6 @@
       currentStep() {
         return 0
       },
-    },
-    destroyed() {
-      this.$store.commit('resetHistory')
     },
     methods: {
       makeTheNextControlDisabledIf() {
@@ -82,15 +79,10 @@
 
         this.thePreviousControlShouldBeDisabled = conditionsHaveBeenMet
       },
-      previousSlide() {
-        this.$store.commit('navigateToThePreviousSlide')
+      previousSlide(){
       },
       nextSlide() {
         if (this.nextControl.slide) {
-          this.$store.commit(
-            'addASlide',
-            this.nextControl.slide,
-          )
         }
       },
       receiveTheUpdateFromTheSlide(update) {

@@ -52,6 +52,8 @@
   import SimSlidePresenter from './SlidePresenter'
   import SimLoader from './Loader'
 
+  import { formatTimesForDisplay, formatBlockHoursForDisplay } from '../utilities/date'
+
   export default {
     components: {
       EventCalendarDay,
@@ -63,7 +65,6 @@
       return {
         dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         position: {},
-        slides: [],
         pendingEvent: null,
       }
     },
@@ -71,6 +72,7 @@
       showExpandedWeek: Boolean,
       bubbleIsOpen: Boolean,
       filteredAvailabilities: Array,
+      instructors: Array,
     },
     computed: {
       dateService(){
@@ -112,7 +114,8 @@
             content: {
               segment_start: (this.pendingEvent.startTime * 2),
               segment_end: (((this.pendingEvent.startTime + this.pendingEvent.duration) * 2) - 1),
-              items: this.pendingEvent.instructors
+              generalItems: this.pendingEvent.generalInstructors,
+              specificItems: this.pendingEvent.specificInstructors,
             }
           }]
           : []
@@ -137,7 +140,10 @@
       createPendingEvent(block) {
         this.pendingEvent = {
           day: block.day,
-          instructors: block.users.map(id => {
+          specificInstructors: block.specificInstructors.map(id => {
+            return this.instructors.find(instructor => instructor.id == id)
+          }),
+          generalInstructors: block.generalInstructors.map(id => {
             return this.instructors.find(instructor => instructor.id == id)
           }),
           startTime: block.startTime,
