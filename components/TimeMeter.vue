@@ -42,12 +42,12 @@
       duration: Number,
     },
     methods: {
-      setStretching(value){
+      setStretching(value) {
         this.isStretching = value
       },
-      setDuration(value){
+      setDuration(value) {
         this.$emit('setDuration', value)
-      }
-    }
+      },
+    },
   }
 </script>

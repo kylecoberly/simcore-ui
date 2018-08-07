@@ -2,14 +2,14 @@
 /* eslint */
 import { mount } from '@vue/test-utils'
 import assert from 'assert'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import CalendarHeader from '../../components/CalendarHeader'
 
 xdescribe('CalendarHeader', () => {
   beforeEach(() => {
     this.component = mount(CalendarHeader, {
       propsData: {
-        selectedDate: moment('2018-07-13'),
+        selectedDate: dayjs('2018-07-13'),
         canScheduleEvents: true,
       },
     })
@@ -44,7 +44,7 @@ xdescribe('CalendarHeader', () => {
   it('hides the toggle if the user can\'t schedule events', () => {
     const component = mount(CalendarHeader, {
       propsData: {
-        selectedDate: moment('2018-07-13'),
+        selectedDate: dayjs('2018-07-13'),
         canScheduleEvents: false,
       },
     })

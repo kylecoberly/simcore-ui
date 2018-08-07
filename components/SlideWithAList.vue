@@ -47,8 +47,6 @@
 </template>
 
 <script>
-  import _ from 'lodash'
-
   import SimDatalist from './Datalist'
   import SimIconText from './IconText'
   import SimSelection from './Selection'
@@ -63,7 +61,7 @@
       SimSlideHeader,
       SimSlideIntro,
     },
-    mounted(){
+    mounted() {
       console.log(this.slide)
     },
     data() {
@@ -108,13 +106,14 @@
         return this.slide.content.specificItems.includes(`${itemId}`) ? '#icon--checkbox--checked' : '#icon--checkbox--warning'
       },
       isItemSelected(itemId) {
-        return this.selectedItems.find((item) => item.id === itemId) ? true : false
+        return this.selectedItems
+          .find(item => item.id === itemId)
       },
       getDepartmentName(id) {
-          const department = this.departments.find((item) => item.id === id)
-          if(department && department.hasOwnProperty('name')) {
-              return department.name
-          }
+        const department = this.departments.find((item) => item.id === id)
+        return department && department.name
+          ? department.name
+          : ''
       },
       toggleItemInSelectedItems(itemId, value) {
         let selectedItemsWasUpdated = false
@@ -130,7 +129,7 @@
           selectedItemsWasUpdated = true
         }
 
-        let nextSlide = null
+        const nextSlide = {}
 
         if (this.selectedItems.length >= this.minimumItemsNeeded) {
           nextSlide.selectedItems = this.selectedItems
@@ -151,7 +150,7 @@
           this.$emit('theSlideHasAnUpdate', {
             currentSlide,
             nextSlide,
-            nextControl: {text: 'Next'},
+            nextControl: { text: 'Next' },
           })
         }
       },

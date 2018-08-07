@@ -20,7 +20,6 @@
 </template>
 
 <script>
-  import moment from 'moment'
   import SimTimeBlock from './TimeBlock'
   import SimTimeLines from './TimeLines'
   import TimePickerControls from './TimePickerControls'
@@ -42,10 +41,10 @@
       }
     },
     computed: {
-      dateService(){
+      dateService() {
         return this.$store.state.services.date
       },
-      selectedDate(){
+      selectedDate() {
         return this.dateService.selectedDate
       },
       timelineClasses() {
@@ -69,7 +68,7 @@
       createTimeBlock(hour) {
         const newBlock = {
           startTime: hour,
-          duration: this.timeBlockDefaultDuration
+          duration: this.timeBlockDefaultDuration,
         }
         const availabilities = [...this.availabilities]
         availabilities.push(newBlock)
@@ -83,7 +82,7 @@
       removeAllTimeBlocks() {
         this.$emit('updateAvailabilities', this.selectedDate, [])
       },
-      updateTimeBlock(index, value){
+      updateTimeBlock(index, value) {
         const availabilities = [...this.availabilities]
         availabilities[index] = value
         this.$emit('updateAvailabilities', this.selectedDate, availabilities)

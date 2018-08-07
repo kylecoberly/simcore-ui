@@ -8,7 +8,8 @@
 </template>
 
 <script>
-  import {formatBlockHoursForDisplay} from '../utilities/date'
+  /* eslint no-nested-ternary: 0 */
+  import { formatBlockHoursForDisplay } from '../utilities/date'
 
   export default {
     data() {
@@ -31,7 +32,7 @@
       },
       blockStyles() {
         const styles = [
-          `--start: 0`,
+          '--start: 0',
           `--duration: ${this.duration}`,
           `--segment-size: ${this.segmentSize}`,
         ]
@@ -56,7 +57,7 @@
           (this.metrics.axis[this.orientation]
           + mouseCoordinate
           - this.metrics.start[this.orientation])
-            / this.metrics.segment[this.orientation]
+          / this.metrics.segment[this.orientation],
         ) / 2
 
         this.$emit('setDuration', this.boundDuration(currentDuration, this.minimumDuration, this.maximumDuration))

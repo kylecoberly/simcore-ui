@@ -1,6 +1,6 @@
 /* global describe, before, it */
 /* eslint */
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { shallowMount } from '@vue/test-utils'
 import assert from 'assert'
 import Calendar from '../../components/Calendar'
@@ -17,9 +17,9 @@ xdescribe('Calendar', () => {
     before(() => {
       this.component = shallowMount(Calendar, {
         propsData: {
-          activeMoment: moment('1970-01-01'),
+          activeMoment: dayjs('1970-01-01'),
           monthDays: this.monthDays,
-          date: moment('1970-02-01'),
+          date: dayjs('1970-02-01'),
           dateFormat: 'YYYY-MM-DD',
         },
       })
@@ -29,7 +29,7 @@ xdescribe('Calendar', () => {
     })
     it('returns a class string with the current month when its the current month', () => {
       this.component.setProps({
-        date: moment('1970-01-01'),
+        date: dayjs('1970-01-01'),
         showExpandedWeek: false,
         bubbleIsOpen: false,
       })
@@ -37,7 +37,7 @@ xdescribe('Calendar', () => {
     })
     it('returns a class string with an expansion when showExpandedWeek is true', () => {
       this.component.setProps({
-        date: moment('1970-02-01'),
+        date: dayjs('1970-02-01'),
         showExpandedWeek: true,
         bubbleIsOpen: false,
       })
@@ -45,7 +45,7 @@ xdescribe('Calendar', () => {
     })
     it('returns a class string with an expansion when bubbleIsOpen is true', () => {
       this.component.setProps({
-        date: moment('1970-02-01'),
+        date: dayjs('1970-02-01'),
         showExpandedWeek: false,
         bubbleIsOpen: true,
       })
@@ -53,7 +53,7 @@ xdescribe('Calendar', () => {
     })
     it('returns a class string with an expansion and the current when both match', () => {
       this.component.setProps({
-        date: moment('1970-01-01'),
+        date: dayjs('1970-01-01'),
         showExpandedWeek: true,
         bubbleIsOpen: false,
       })
@@ -64,10 +64,10 @@ xdescribe('Calendar', () => {
     before(() => {
       this.component = shallowMount(Calendar, {
         propsData: {
-          activeMoment: moment('1970-01-01'),
+          activeMoment: dayjs('1970-01-01'),
           monthDays: this.monthDays,
           dateFormat: 'YYYY-MM-DD',
-          date: moment('1970-01-01'),
+          date: dayjs('1970-01-01'),
         },
       })
     })
@@ -79,22 +79,22 @@ xdescribe('Calendar', () => {
     before(() => {
       this.component = shallowMount(Calendar, {
         propsData: {
-          activeMoment: moment('1970-01-01'),
+          activeMoment: dayjs('1970-01-01'),
           monthDays: this.monthDays,
           dateFormat: 'YYYY-MM-DD',
-          date: moment('1970-01-01'),
+          date: dayjs('1970-01-01'),
         },
       })
     })
     it('returns true when it is the current month', () => {
       this.component.setProps({
-        date: moment('1970-01-01'),
+        date: dayjs('1970-01-01'),
       })
       assert.ok(this.component.vm.isCurrentMonth)
     })
     it('returns false when it isn\'t the current month', () => {
       this.component.setProps({
-        date: moment('1970-02-01'),
+        date: dayjs('1970-02-01'),
       })
       assert.ok(!this.component.vm.isCurrentMonth)
     })
@@ -103,10 +103,10 @@ xdescribe('Calendar', () => {
     before(() => {
       this.component = shallowMount(Calendar, {
         propsData: {
-          activeMoment: moment('1970-01-01'),
+          activeMoment: dayjs('1970-01-01'),
           monthDays: this.monthDays,
           dateFormat: 'YYYY-MM-DD',
-          date: moment('1970-01-01'),
+          date: dayjs('1970-01-01'),
         },
       })
     })

@@ -79,11 +79,9 @@
 
         this.thePreviousControlShouldBeDisabled = conditionsHaveBeenMet
       },
-      previousSlide(){
+      previousSlide() {
       },
       nextSlide() {
-        if (this.nextControl.slide) {
-        }
       },
       receiveTheUpdateFromTheSlide(update) {
         if (update.nextSlide || update.nextSlide === null) {

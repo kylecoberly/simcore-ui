@@ -12,44 +12,8 @@
 
 <script>
   import SimIconText from './IconText'
-
-  const _cap = (num, previous, min, max) => {
-    return (num < min ? min : (num > max - previous ? max - previous : num))
-  }
-
-  const _getMetrics = (event, element, boundary) => {
-    const blockMetrics = element.getBoundingClientRect()
-    const pickerMetrics = element.parentElement.getBoundingClientRect()
-
-    return {
-      start: {
-        x: event.clientX,
-        y: event.clientY,
-      },
-      axis: {
-        x: blockMetrics.width,
-        y: blockMetrics.height,
-      },
-      offset: {
-        x: blockMetrics.x,
-        y: blockMetrics.y,
-      },
-      max: {
-        x: pickerMetrics.width,
-        y: pickerMetrics.height,
-      },
-      offset_parent: {
-        x: pickerMetrics.x,
-        y: pickerMetrics.y,
-      },
-      segment: {
-        x: pickerMetrics.width / boundary / 2,
-        y: pickerMetrics.height / boundary / 2,
-      },
-      durationValue: parseFloat(element.style.getPropertyValue('--duration')),
-      startValue: parseFloat(element.style.getPropertyValue('--start')),
-    }
-  }
+  import { formatTimesForDisplay } from '../utilities/date'
+  import { cap, getMetrics } from '../utilities/box-metrics'
 
   export default {
     components: {
@@ -88,20 +52,17 @@
         return this.startTime
       },
       label() {
-        const suffix = this.block.duration > 1
-          ? 'hours'
-          : 'hour'
-        return `${this.block.duration} ${suffix}`
+        return formatTimesForDisplay(this.block.startTime, this.block.duration)
       },
     },
     mounted() {
       this.updatePosition()
     },
     methods: {
-      updatePendingEvent(block){
+      updatePendingEvent(block) {
         this.$emit('updatePendingEvent', block)
       },
-      updatePosition(){
+      updatePosition() {
         this.$emit('updatePosition', {
           domPosition: this.$el.getBoundingClientRect(),
           offset: {
@@ -114,7 +75,7 @@
         if (event.which === 1) {
           event.preventDefault()
           this.isMoving = true
-          this.metrics = _getMetrics(event, this.$el, this.maximumDuration)
+          this.metrics = getMetrics(event, this.$el, this.maximumDuration)
           this.$emit('setMoving', true)
           addEventListener('mousemove', this.move)
           addEventListener('mouseup', this.doneMoving)
@@ -122,18 +83,29 @@
       },
       move(event) {
         const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
-        const calc            = (this.metrics.offset[this.orientation] + mouseCoordinate - this.metrics.start[this.orientation] - this.metrics.offset_parent[this.orientation])
-        const currentStart    = _cap(calc, this.metrics.axis[this.orientation], 0, this.metrics.max[this.orientation])
+        const calc = this.metrics.offset[this.orientation]
+          + mouseCoordinate
+          - this.metrics.start[this.orientation]
+          - this.metrics.offset_parent[this.orientation]
+        const currentStart = cap(
+          calc,
+          this.metrics.axis[this.orientation],
+          0,
+          this.metrics.max[this.orientation],
+        )
 
-        let startTime = (Math.round((currentStart) / this.metrics.segment[this.orientation]) / 2) + this.timeShiftOffset
+        let startTime = (
+          Math.round(
+            currentStart
+            / this.metrics.segment[this.orientation],
+          ) / 2
+        ) + this.timeShiftOffset
 
         if (this.block.limits && this.block.limits.starting && this.block.limits.ending) {
-          startTime = _cap(startTime, 0, this.block.limits.starting, this.block.limits.ending)
+          startTime = cap(startTime, 0, this.block.limits.starting, this.block.limits.ending)
         }
 
-        const newBlock = Object.assign({}, this.block, { startTime })
-        this.updatePendingEvent(newBlock)
-        this.updatePosition()
+        this.block.startTime = startTime
       },
       doneMoving() {
         this.updatePosition()

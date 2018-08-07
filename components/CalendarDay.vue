@@ -53,16 +53,16 @@
       }
     },
     computed: {
-      dateService(){
+      dateService() {
         return this.$store.state.services.date
       },
-      today(){
+      today() {
         return this.dateService.today
       },
-      isSelected(){
+      isSelected() {
         return this.dateService.selectedDate.isSame(this.day, 'day')
       },
-      isInActiveWeek(){
+      isInActiveWeek() {
         return this.dateService.selectedDate.isSame(this.day, 'week')
       },
       isBeforeToday() {
@@ -79,13 +79,13 @@
           classes.push('is-before-today')
         } else if (isToday) {
           classes.push('is-today')
-        } else if (isAfterToday){
+        } else if (isAfterToday) {
           classes.push('is-after-today')
         }
 
-        [0, 6].includes(dayOfWeek)
-          ? classes.push('is-weekend')
-          : classes.push('is-weekday')
+        const weekdayClassName = [0, 6].includes(dayOfWeek) ? 'is-weekend' : 'is-weekday'
+        classes.push(weekdayClassName)
+
         if (this.isInActiveWeek) {
           classes.push('is-in-active-week')
         }
@@ -112,13 +112,13 @@
       createTimeBlock(hour) {
         const newBlock = {
           startTime: hour,
-          duration: this.timeBlockDefaultDuration
+          duration: this.timeBlockDefaultDuration,
         }
         const availabilities = [...this.availabilities]
         availabilities.push(newBlock)
         this.updateAvailabilities(this.day, availabilities)
       },
-      updateAvailabilities(date, availabilities){
+      updateAvailabilities(date, availabilities) {
         this.$emit('updateAvailabilities', date, availabilities)
       },
       removeTimeBlock(index) {
@@ -126,7 +126,7 @@
         availabilities.splice(index, 1)
         this.updateAvailabilities(this.day, availabilities)
       },
-      updateTimeBlock(index, value){
+      updateTimeBlock(index, value) {
         const availabilities = [...this.availabilities]
         availabilities[index] = value
         this.updateAvailabilities(this.day, availabilities)

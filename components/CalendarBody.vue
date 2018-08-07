@@ -12,18 +12,18 @@
         <div class="sim-calendar--grid--days" @click.meta="toggleExpandedWeek">
           <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
           <CalendarDay v-for="(day, index) in daysInCurrentMonth"
-             :key="index"
-             :day="day"
-             :availabilities="getAvailabilitiesForDay(day)"
-             :showExpandedWeek="showExpandedWeek"
-             @updateAvailabilities="updateAvailabilities"
-             @click.native="setDate(day)"
-             @toggleExpandedWeek="toggleExpandedWeek"
+            :key="index"
+            :day="day"
+            :availabilities="getAvailabilitiesForDay(day)"
+            :showExpandedWeek="showExpandedWeek"
+            @updateAvailabilities="updateAvailabilities"
+            @click.native="setDate(day)"
+            @toggleExpandedWeek="toggleExpandedWeek"
           />
           <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
         </div>
         <div class="sim-loader--shield" v-if="isLoading">
-          <SimLoader :is-loading="true"></SimLoader>
+          <Loader :isLoading="true" />
         </div>
       </div>
     </div>
@@ -31,17 +31,17 @@
 </template>
 
 <script>
-  import moment from 'moment'
+  import dayjs from 'dayjs'
 
   import CalendarDay from './CalendarDay'
-  import SimLoader from './Loader'
+  import Loader from './Loader'
 
   export default {
     components: {
       CalendarDay,
-      SimLoader,
+      Loader,
     },
-    data(){
+    data() {
       return {
         dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       }
@@ -54,30 +54,28 @@
       },
     },
     computed: {
-      dateService(){
+      dateService() {
         return this.$store.state.services.date
       },
-      today(){
+      today() {
         return this.dateService.today
       },
-      selectedDate(){
+      selectedDate() {
         return this.dateService.selectedDate
       },
-      loadingService(){
-        return this.$store.state.services.loading
+      isLoading() {
+        return this.$store.getters['services/loading/isLoading']
       },
-      isLoading(){
-        return this.loadingService.isLoading
+      startOffset() {
+        return dayjs(this.selectedDate).startOf('month').day()
       },
-      startOffset(){
-        return moment(this.selectedDate).startOf('month').day()
+      endOffset() {
+        return 6 - dayjs(this.selectedDate).endOf('month').day()
       },
-      endOffset(){
-        return 6 - moment(this.selectedDate).endOf('month').day()
-      },
-      daysInCurrentMonth(){
+      daysInCurrentMonth() {
         const daysInMonth = []
-        for (let day = 1, count = this.selectedDate.daysInMonth(); day <= count; day++){
+        let day, count
+        for (day = 1, count = this.selectedDate.daysInMonth(); day <= count; day += 1) {
           let dayString = day.toString()
           if (day < 10) {
             dayString = `0${dayString}`
@@ -85,20 +83,20 @@
           daysInMonth.push(dayString)
         }
         const currentMonthString = this.selectedDate.format('YYYY-MM-')
-        return daysInMonth.map(day => moment(`${currentMonthString}${day}`))
+        return daysInMonth.map(day => dayjs(`${currentMonthString}${day}`))
       },
     },
     methods: {
-      toggleExpandedWeek(){
+      toggleExpandedWeek() {
         this.$emit('toggleExpandedWeek')
       },
-      setDate(date){
+      setDate(date) {
         this.$store.dispatch('services/date/setDate', date)
       },
-      updateAvailabilities(date, availabilities){
+      updateAvailabilities(date, availabilities) {
         this.$emit('updateAvailabilities', date, availabilities)
       },
-      getAvailabilitiesForDay(date){
+      getAvailabilitiesForDay(date) {
         return this.availabilities[date.format('YYYY-MM-DD')] || []
       },
       getStyles(position) {
@@ -112,7 +110,7 @@
 
         return styles.join(';')
       },
-      updateBlockPosition(position, day){
+      updateBlockPosition(position, day) {
         position.offset.x = day.day() + 1
         this.position = this.getBubblePosition(position)
       },

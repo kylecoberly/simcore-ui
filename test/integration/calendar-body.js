@@ -2,14 +2,14 @@
 /* eslint */
 import { shallowMount } from '@vue/test-utils'
 import assert from 'assert'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import CalendarBody from '../../components/CalendarBody'
 
 xdescribe('CalendarBody', () => {
   beforeEach(() => {
     this.component = shallowMount(CalendarBody, {
       propsData: {
-        selectedDate: moment('2018-07-01'),
+        selectedDate: dayjs('2018-07-01'),
       },
     })
   })

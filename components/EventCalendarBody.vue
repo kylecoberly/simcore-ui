@@ -11,8 +11,8 @@
       <div class="sim-calendar--grid--body">
         <div class="sim-calendar--grid--days" @click.meta="toggleExpandedWeek">
           <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
-          <EventCalendarDay v-for="day in daysInCurrentMonth"
-            :key="day.format('YYYY-MM-DD')"
+          <EventCalendarDay v-for="(day, index) in daysInCurrentMonth"
+            :key="index"
             :day="day"
             :availabilities="getEventAvailabilitiesForDay(day)"
             :showExpandedWeek="showExpandedWeek"
@@ -45,7 +45,8 @@
 </template>
 
 <script>
-  import moment from 'moment'
+  /* eslint no-nested-ternary: 0 */
+  import dayjs from 'dayjs'
 
   import EventCalendarDay from './EventCalendarDay'
   import SimBubble from './Bubble'
@@ -61,7 +62,7 @@
       SimSlidePresenter,
       SimLoader,
     },
-    data(){
+    data() {
       return {
         dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         position: {},
@@ -75,27 +76,27 @@
       instructors: Array,
     },
     computed: {
-      dateService(){
+      dateService() {
         return this.$store.state.services.date
       },
-      selectedDate(){
+      selectedDate() {
         return this.dateService.selectedDate
       },
-      loadingService(){
+      loadingService() {
         return this.$store.state.services.loading
       },
-      isLoading(){
+      isLoading() {
         return this.loadingService.isLoading
       },
-      startOffset(){
-        return moment(this.selectedDate).startOf('month').day()
+      startOffset() {
+        return dayjs(this.selectedDate).startOf('month').day()
       },
-      endOffset(){
-        return 6 - moment(this.selectedDate).endOf('month').day()
+      endOffset() {
+        return 6 - dayjs(this.selectedDate).endOf('month').day()
       },
-      daysInCurrentMonth(){
+      daysInCurrentMonth() {
         const daysInMonth = []
-        for (let day = 1, count = this.selectedDate.daysInMonth(); day <= count; day++){
+        for (let day = 1, count = this.selectedDate.daysInMonth(); day <= count; day += 1) {
           let dayString = day.toString()
           if (day < 10) {
             dayString = `0${dayString}`
@@ -103,9 +104,9 @@
           daysInMonth.push(dayString)
         }
         const currentMonthString = this.selectedDate.format('YYYY-MM-')
-        return daysInMonth.map(day => moment(`${currentMonthString}${day}`))
+        return daysInMonth.map(day => dayjs(`${currentMonthString}${day}`))
       },
-      slides(){
+      slides() {
         return this.pendingEvent
           ? [{
             title: this.pendingEvent.day.format('dddd, MMMM Do'),
@@ -116,41 +117,41 @@
               segment_end: (((this.pendingEvent.startTime + this.pendingEvent.duration) * 2) - 1),
               generalItems: this.pendingEvent.generalInstructors,
               specificItems: this.pendingEvent.specificInstructors,
-            }
+            },
           }]
           : []
       },
-      bubbleStyles(){
+      bubbleStyles() {
         return this.getStyles(this.position)
       },
     },
     methods: {
-      toggleExpandedWeek(){
+      toggleExpandedWeek() {
         this.$emit('toggleExpandedWeek')
       },
-      updateAvailabilities(date, availabilities){
+      updateAvailabilities(date, availabilities) {
         this.$emit('updateAvailabilities', date, availabilities)
       },
-      getAvailabilitiesForDay(date){
+      getAvailabilitiesForDay(date) {
         return this.availabilities[date.format('YYYY-MM-DD')] || []
       },
-      getEventAvailabilitiesForDay(date){
+      getEventAvailabilitiesForDay(date) {
         return this.filteredAvailabilities.find(day => date.isSame(day.date, 'day')).availabilities
       },
       createPendingEvent(block) {
         this.pendingEvent = {
           day: block.day,
           specificInstructors: block.specificInstructors.map(id => {
-            return this.instructors.find(instructor => instructor.id == id)
+            return this.instructors.find(instructor => +instructor.id === +id)
           }),
           generalInstructors: block.generalInstructors.map(id => {
-            return this.instructors.find(instructor => instructor.id == id)
+            return this.instructors.find(instructor => +instructor.id === +id)
           }),
           startTime: block.startTime,
           duration: block.duration,
         }
       },
-      updatePendingEvent(block){
+      updatePendingEvent(block) {
         this.pendingEvent = block
       },
       clearPendingEvent() {
@@ -167,7 +168,7 @@
 
         return styles.join(';')
       },
-      updateBlockPosition(position, day){
+      updateBlockPosition(position, day) {
         position.offset.x = day.day() + 1
         this.position = this.getBubblePosition(position)
       },
@@ -191,14 +192,14 @@
 
         return position
       },
-      isPendingEventToday(pendingEvent, day){
+      isPendingEventToday(pendingEvent, day) {
         return pendingEvent
           ? day.isSame(pendingEvent.day, 'day')
             ? pendingEvent
             : undefined
           : undefined
       },
-      setDate(date){
+      setDate(date) {
         this.$store.dispatch('services/date/setDate', date)
       },
     },

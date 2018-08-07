@@ -20,7 +20,9 @@
 </template>
 
 <script>
+  /* eslint no-nested-ternary: 0, comma-dangle: 0 */
   import SimIconText from './IconText'
+  import { formatHoursAsMeridians } from '../utilities/date'
 
   export default {
     components: {
@@ -43,20 +45,18 @@
     },
     methods: {
       displayHour(hour) {
-        hour = hour === 0 || hour === 24 ? 'Midnight' : (hour === 12 ? 'Noon' : hour)
-
-        return hour > 12 ? `${hour - 12}p` : (parseInt(hour) ? `${hour}a` : hour)
+        return formatHoursAsMeridians(hour)
       },
       getHourClasses(hour) {
         const classes = []
 
         classes.push(
-          (hour >= 6 && hour <= 17.5)
+          hour >= 6 && hour <= 17.5
             ? 'is-daytime'
             : 'is-nighttime'
         )
         classes.push(
-          (hour === 0 || hour === 24)
+          hour === 0 || hour === 24
             ? 'is-midnight'
             : (hour === 12)
               ? 'is-noon'
