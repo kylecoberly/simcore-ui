@@ -1,23 +1,25 @@
 /* global describe, before, it, cy */
 /* eslint prefer-arrow-callback: 0, newline-per-chained-call: 0, func-names: 0 */
 
+function initializeServer(){
+  cy.server()
+
+  cy.fixture('purview_users').as('purviewUsers')
+  cy.fixture('purview_availabilities').as('purviewAvailabilities')
+  cy.fixture('availabilities').as('availabilities')
+
+  cy.route(/\/purview_users/, '@purviewUsers').as('purviewUsersRoute')
+  cy.route(/\/purview_availabilities/, '@purviewAvailabilities').as('purviewAvailabilitiesRoute')
+  cy.route(/\/availabilities/, '@availabilities').as('availabilitiesRoute')
+}
+
 describe('Calendar', function () {
-  describe('My Availability', function () {
-    before(function () {
-      cy.server()
-
-      cy.fixture('purview_users').as('purviewUsers')
-      cy.fixture('purview_availabilities').as('purviewAvailabilities')
-      cy.fixture('availabilities').as('availabilities')
-
-      cy.route(/\/purview_users/, '@purviewUsers').as('purviewUsersRoute')
-      cy.route(/\/purview_availabilities/, '@purviewAvailabilities').as('purviewAvailabilitiesRoute')
-      cy.route(/\/availabilities/, '@availabilities').as('availabilitiesRoute')
-
-      cy.visit('/components/calendar')
-
-      cy.wait(['@purviewUsersRoute', '@purviewAvailabilitiesRoute', '@availabilitiesRoute'])
-    })
+  before(function () {
+    initializeServer()
+    cy.visit('/components/calendar')
+    cy.wait(['@purviewUsersRoute', '@purviewAvailabilitiesRoute', '@availabilitiesRoute'])
+  })
+  xdescribe('My Availability', function () {
     it('loads the component', function () {
       cy.get('h2').should('have.text', 'Calendar')
     })
@@ -89,7 +91,7 @@ describe('Calendar', function () {
         cy.get('@today').find('.sim-timelines').should('not.exist')
       })
     })
-    describe('day-control panel', function () {
+    xdescribe('day-control panel', function () {
       it('adds a block from 6am to 7am', function () {
         cy.get('.sim-calendar--day-control-panel').as('day-control-panel').find('.sim-timeblock').should('have.length', 1)
         cy.get('@day-control-panel').find('.is-hour-6').click()
@@ -158,7 +160,7 @@ describe('Calendar', function () {
         cy.get('@day-control-panel').find('.sim-timeblock').should('not.exist')
       })
     })
-    describe('navigation', function () {
+    xdescribe('navigation', function () {
       describe('month', function () {
         it('navigates backward', function () {
           cy.get('.sim-timepicker--display-date').contains('Friday, Jul 13')
@@ -202,28 +204,13 @@ describe('Calendar', function () {
       })
     })
   })
-  describe('Schedule Events', function () {
-    describe('happy path', function () {
-      before(function () {
-        cy.server()
-
-        cy.fixture('purview_users').as('purviewUsers')
-        cy.fixture('purview_availabilities').as('purviewAvailabilities')
-        cy.fixture('availabilities').as('availabilities')
-
-        cy.route(/.*\/purview_users.*/, '@purviewUsers').as('purviewUsersRoute')
-        cy.route(/.*\/purview_availabilities.*/, '@purviewAvailabilities').as('purviewAvailabilitiesRoute')
-        cy.route(/.*\/availabilities.*/, '@availabilities').as('availabilitiesRoute')
-
-        cy.visit('/components/calendar')
-
-        cy.wait(['@purviewUsersRoute', '@purviewAvailabilitiesRoute', '@availabilitiesRoute'])
-      })
-      it('navigates to Schedule Events', function () {
-        cy.get('.sim-calendar--filters').should('not.be.visible')
-        cy.get('.sim-switch input').click()
-        cy.get('.sim-calendar--filters').should('be.visible')
-      })
+  xdescribe('Filter Availabilities', function () {
+    before(() => {
+      cy.get('.sim-calendar--filters').should('not.be.visible')
+      cy.get('.sim-switch input').click()
+      cy.get('.sim-calendar--filters').should('be.visible')
+    })
+    describe('duration filter', function () {
       it('changes the duration from 1 hour to 2 hours', function () {
         cy.get('.sim-calendar--filters').as('filters')
           .find('.sim-timeblock--info--hours').as('hours').contains('1 hour')
@@ -242,13 +229,15 @@ describe('Calendar', function () {
           .trigger('mouseup')
         cy.get('@hours').contains('1½ hours')
       })
+    })
+    describe('instructor filter', function () {
       it('adds a specific instructor', function () {
         cy.get('.sim-datalist > ul').as('instructors-list')
           .find('li').as('instructors').should('have.length', 2)
         cy.get('@instructors-list')
-          .find('[placeholder="Any Available Instructor"]').as('instructor-entry').type('alesh{enter}')
+          .find('[placeholder="Any Available Instructor"]').as('instructor-entry').type('Carr{enter}')
         cy.get('@instructors').should('have.length', 2)
-        cy.get('@instructor-entry').should('have.value', 'Aleshin MIA MIA, Igor2')
+        cy.get('@instructor-entry').should('have.value', 'Dowd, Carrie')
       })
       it('adds an available instructor', function () {
         cy.get('.sim-datalist > ul').as('instructors-list')
@@ -272,13 +261,44 @@ describe('Calendar', function () {
           .find('.sim-autofinder--remove-item').click()
         cy.get('@instructors-list').find('li').should('have.length', 4)
       })
-      // Timeslots won't show up until time is injected in
+    })
+  })
+  describe('Filter Availabilities', function () {
+    before(() => {
+      initializeServer()
+      cy.visit('/components/calendar')
+      cy.wait(['@purviewUsersRoute', '@purviewAvailabilitiesRoute', '@availabilitiesRoute'])
+
+      cy.get('.sim-calendar--filters').should('not.be.visible')
+      cy.get('.sim-switch input').click()
+      cy.get('.sim-calendar--filters').should('be.visible')
+
+      cy.get('.sim-datalist > ul').as('instructors-list')
+        .find('li [placeholder="Any Available Instructor"]').type('Carr{enter}')
+    })
+    describe('event scheduling', function () {
+      it('expands the day', function () {
+        cy.get('.sim-calendar').should('not.have.class', 'is-expanded')
+        cy.get('.sim-calendar-day.is-today .sim-calendar--grid--tools > span').click({ force: true })
+        cy.get('.sim-calendar').should('have.class', 'is-expanded')
+      })
       it('selects a timeslot', function () {
         cy.get('.sim-calendar--grid').as('grid')
-          .find('.sim-timeblock[style="--start:7;--duration:0.5"]').as('7am').click()
-        cy.get('@grid').find('.sim-timeblock--info').contains('1 hour')
+          .find('.sim-timeblock[style="--start:6; --duration:1;"]').eq(0).as('6am').click()
+        cy.get('.local--day--pending-blocks').find('.sim-timeblock--info--hours').contains('6am – 7am')
       })
-      xit('chooses one of the available instructors')
+      it('shows the correct instructor options', function () {
+        cy.get('.sim-slide--content--section--specific .sim-datalist ul > li').as('specific-instructors').should('have.length', 1)
+        cy.get('@specific-instructors').contains('Dowd, Carrie')
+        cy.get('.sim-slide--content--section--general').as('general-instructors').find('.sim-datalist ul > li').as('general-instructor').should('have.length', 1)
+        cy.get('@general-instructor').contains('Birch, Adam')
+        cy.get('@general-instructors').contains('Available Instructors: 1')
+      })
+      it('chooses one of the available instructors', function () {
+        cy.get('.sim-slide--content--section--general .sim-datalist ul > li span').as('general-instructor').should('not.have.class', 'selected')
+        cy.get('@general-instructor').find('input').click()
+        cy.get('@general-instructor').should('have.class', 'selected')
+      })
       // No booking capability right now
       xit('books an event')
     })
