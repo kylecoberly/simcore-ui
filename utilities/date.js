@@ -1,7 +1,26 @@
 import moment from 'moment'
+import dayjs from 'dayjs'
+
+export const getBoundariesOfMonth = (date) => {
+  date = dayjs(date)
+  return {
+    startDate: date.startOf('month').format('YYYY-MM-DD'),
+    endDate: date.endOf('month').format('YYYY-MM-DD'),
+  }
+}
 
 export const formatDateForDisplay = (date, format) => {
-  return moment(date).format(format)
+  return dayjs(date).format(format)
+}
+
+export const formatHoursAsMeridians = (hour) => {
+  hour = hour === 0 || hour === 24
+    ? 'Midnight'
+    : hour === 12
+      ? 'Noon'
+      : hour
+
+  return hour > 12 ? `${hour - 12}p` : (+hour ? `${hour}a` : hour)
 }
 
 export const formatTimeMeridians = (time) => {
@@ -9,7 +28,7 @@ export const formatTimeMeridians = (time) => {
 }
 
 export const formatTimesForDisplay = (start, duration) => {
-  const day = moment().startOf('day')
+  const day = dayjs(0).startOf('day')
 
   const startTime   = day.add(start, 'hours').format('h:mma')
   const endTime     = day.add(duration, 'hours').format('h:mma')

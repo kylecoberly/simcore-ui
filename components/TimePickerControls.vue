@@ -26,10 +26,10 @@
       availabilities: Array,
     },
     computed: {
-      dateService(){
+      dateService() {
         return this.$store.state.services.date
       },
-      selectedDate(){
+      selectedDate() {
         return this.dateService.selectedDate
       },
       displayDate() {
@@ -57,6 +57,6 @@
         const date = this.selectedDate.subtract(1, 'day')
         this.$store.dispatch('services/date/setDate', date)
       },
-    }
-}
+    },
+  }
 </script>

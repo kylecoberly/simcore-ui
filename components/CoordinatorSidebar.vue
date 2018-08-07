@@ -22,6 +22,7 @@
 <script>
   import TimeMeter from './TimeMeter'
   import InstructorPicker from './InstructorPicker'
+  import { deepClone } from '../utilities/deep-clone'
 
   export default {
     components: {
@@ -34,17 +35,14 @@
     },
     methods: {
       setDuration(duration) {
-        const filters = this.deepClone(this.filters)
+        const filters = deepClone(this.filters)
         filters.duration = duration
         this.$emit('updateFilters', filters)
       },
       setInstructors(instructors) {
-        const filters = this.deepClone(this.filters)
+        const filters = deepClone(this.filters)
         filters.instructors = instructors
         this.$emit('updateFilters', filters)
-      },
-      deepClone(object){
-        return JSON.parse(JSON.stringify(object))
       },
     },
   }

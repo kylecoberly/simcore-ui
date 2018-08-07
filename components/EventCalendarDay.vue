@@ -55,16 +55,16 @@
       pendingEvent: Object,
     },
     computed: {
-      dateService(){
+      dateService() {
         return this.$store.state.services.date
       },
-      today(){
+      today() {
         return this.dateService.today
       },
-      isSelected(){
+      isSelected() {
         return this.dateService.selectedDate.isSame(this.day, 'day')
       },
-      isInActiveWeek(){
+      isInActiveWeek() {
         return this.dateService.selectedDate.isSame(this.day, 'week')
       },
       isBeforeToday() {
@@ -81,13 +81,13 @@
           classes.push('is-before-today')
         } else if (isToday) {
           classes.push('is-today')
-        } else if (isAfterToday){
+        } else if (isAfterToday) {
           classes.push('is-after-today')
         }
 
-        [0, 6].includes(dayOfWeek)
-          ? classes.push('is-weekend')
-          : classes.push('is-weekday')
+        const dayOfWeekClassName = [0, 6].includes(dayOfWeek) ? 'is-weekend' : 'is-weekday'
+        classes.push(dayOfWeekClassName)
+
         if (this.isInActiveWeek) {
           classes.push('is-in-active-week')
         }

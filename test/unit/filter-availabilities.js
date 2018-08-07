@@ -11,7 +11,7 @@ const {
   addUserToTotalAvailability,
 } = require('../../utilities/filter-availabilities')
 
-describe('NetAvailabilities', () =>{
+describe('NetAvailabilities', () => {
   // groupUserDays
   xdescribe('#groupUserAvailabilitiesByDate', () => {
     it('returns an empty array if given an empty array', () => {
@@ -19,14 +19,14 @@ describe('NetAvailabilities', () =>{
     })
     it('combines two dates', () => {
       assert.deepEqual(groupUserAvailabilitiesByDate([{
-        "2018-07-01 10:30:00": {
-          "startTime": 10,
-          "duration": 1,
+        '2018-07-01 10:30:00': {
+          'startTime': 10,
+          'duration': 1,
         }
       }, {
-        "2018-07-01 03:00:00": {
-          "startTime": 3,
-          "duration": 1,
+        '2018-07-01 03:00:00': {
+          'startTime': 3,
+          'duration': 1,
         }
       }], {}), [{
         date: '2018-07-01',
@@ -103,7 +103,7 @@ describe('NetAvailabilities', () =>{
         availabilities: [{
           startTime: 10,
           duration: 1,
-        },{
+        }, {
           startTime: 12,
           duration: 0.5,
         }],
@@ -125,7 +125,7 @@ describe('NetAvailabilities', () =>{
         availabilities: [{
           startTime: 10,
           duration: 1,
-        },{
+        }, {
           startTime: 12,
           duration: 0.5,
         }],
@@ -282,37 +282,6 @@ describe('NetAvailabilities', () =>{
           startTime: 1,
           users: [1],
         }],
-      }])
-    })
-  })
-
-  xdescribe('#filterAvailabilitiesByUserCount', () => {
-    it('keeps availabilities that have the same number of users', () => {
-      assert.deepEqual(filterAvailabilitiesByUserCount([{
-        users: [1, 2]
-      }], 2), [{
-        users: [1, 2]
-      }])
-    })
-    it('keeps availabilities that have more than enough users', () => {
-      assert.deepEqual(filterAvailabilitiesByUserCount([{
-        users: [1, 2]
-      }], 1), [{
-        users: [1, 2]
-      }])
-    })
-    it('filters out availabilities that don\' have enough users', () => {
-      assert.deepEqual(filterAvailabilitiesByUserCount([{
-        users: [1, 2]
-      }], 3), [])
-    })
-    it('filters out availabilities that don\' have enough users and keeps ones that do', () => {
-      assert.deepEqual(filterAvailabilitiesByUserCount([{
-        users: [1, 2]
-      }, {
-        users: [1, 2, 3]
-      }], 3), [{
-        users: [1, 2, 3]
       }])
     })
   })

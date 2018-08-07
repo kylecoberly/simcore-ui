@@ -1,16 +1,27 @@
 export default {
   namespaced: true,
   state: {
-    isLoading: false,
+    loadingCount: 0,
+  },
+  getters: {
+    isLoading(state){
+      return state.loadingCount > 0
+    }
   },
   mutations: {
-    setLoading(state, isLoading){
-      state.isLoading = isLoading
-    }
+    pushLoading(state){
+      state.loadingCount += 1
+    },
+    popLoading(state){
+      state.loadingCount -= 1
+    },
   },
   actions: {
-    setLoading(context, isLoading){
-      context.commit('setLoading', isLoading)
-    }
+    pushLoading({commit}){
+      commit('pushLoading')
+    },
+    popLoading({commit}){
+      commit('popLoading')
+    },
   }
 }

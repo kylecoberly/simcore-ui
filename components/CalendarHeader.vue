@@ -35,24 +35,24 @@
   export default {
     components: {
       SimIconText,
-      SimSwitch
+      SimSwitch,
     },
     props: {
       isCoordinator: Boolean,
     },
     computed: {
-      dateService(){
+      dateService() {
         return this.$store.state.services.date
       },
-      today(){
+      today() {
         return this.dateService.today
       },
-      selectedDate(){
+      selectedDate() {
         return this.dateService.selectedDate
       },
-      displayDate(){
+      displayDate() {
         return this.selectedDate.format('MMMM YYYY')
-      }
+      },
     },
     methods: {
       loadNextMonth() {

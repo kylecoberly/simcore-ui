@@ -1,6 +1,6 @@
 <template>
   <Calendar
-    :user="user"
+    :user="currentUser"
     :instructors="instructors"
     :totalAvailabilities="totalAvailabilities"
     @updateAvailabilities="updateAvailabilities"
@@ -8,34 +8,36 @@
 </template>
 
 <script>
-import availabilities from '../test/e2e/fixtures/availabilities'
-import instructors from '../test/e2e/fixtures/purview_users'
-import purviewAvailabilities from '../test/e2e/fixtures/purview_availabilities'
+  import { normalize } from '../utilities/filter-availabilities'
+  import Calendar from './Calendar'
 
-import {normalize} from '../utilities/filter-availabilities'
-
-import Calendar from './Calendar'
-
-export default {
-  components: {
-    Calendar
-  },
-  data() {
-    return {
-      user: {
-        availabilitiesForCurrentMonth: availabilities.dates,
+  export default {
+    components: {
+      Calendar,
+    },
+    created() {
+      this.$store.dispatch('fetchInstructorList')
+      this.$store.dispatch('fetchCurrentUserAvailabilities')
+      this.$store.dispatch('fetchInstructorAvailabilities')
+    },
+    computed: {
+      currentUser() {
+        return this.$store.state.currentUser
       },
-      instructors: instructors.users.list.map(instructor => {
-        instructor.label = `${instructor.lastname}, ${instructor.firstname}`
-        return instructor
-      }),
-      totalAvailabilities: normalize(purviewAvailabilities.users),
-    }
-  },
-  methods: {
-    updateAvailabilities(date, availabilities) {
-      this.$set(this.user.availabilitiesForCurrentMonth, date.format('YYYY-MM-DD'), availabilities)
-    }
-  },
-}
+      instructors() {
+        return this.$store.getters.instructors
+      },
+      totalAvailabilities() {
+        return normalize(this.$store.state.purviewAvailabilities)
+      },
+    },
+    methods: {
+      updateAvailabilities(date, availabilities) {
+        this.$store.dispatch('updateCurrentUserAvailabilities', {
+          date: date.format('YYYY-MM-DD'),
+          availabilities,
+        })
+      },
+    },
+  }
 </script>

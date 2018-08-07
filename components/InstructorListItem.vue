@@ -21,9 +21,9 @@
       instructor: Object,
     },
     methods: {
-      removeSpecificInstructor(){
+      removeSpecificInstructor() {
         this.$emit('removeSpecificInstructor', this.instructor.id)
       },
-    }
+    },
   }
 </script>

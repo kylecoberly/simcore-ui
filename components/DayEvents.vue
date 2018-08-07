@@ -61,7 +61,7 @@
 
   export default {
     components: {
-      SimTimeBlock
+      SimTimeBlock,
     },
     props: {
       events: Array,
@@ -74,12 +74,12 @@
       filteredBlockSettings: Object,
     },
     methods: {
-      removePendingBlock(){
+      removePendingBlock() {
         this.$emit('removePendingBlock')
       },
-      aggregateTimeBlockClicked(block){
+      aggregateTimeBlockClicked(block) {
         this.$emit('removePendingBlock', block)
       },
-    }
+    },
   }
 </script>

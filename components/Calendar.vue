@@ -26,7 +26,7 @@
       </template>
       <template v-else>
         <CalendarBody
-          :availabilities="user.availabilitiesForCurrentMonth"
+          :availabilities="user.availabilities"
           :showExpandedWeek="showExpandedWeek"
           @updateAvailabilities="updateAvailabilities"
           @toggleExpandedWeek="toggleExpandedWeek"
@@ -41,9 +41,6 @@
 </template>
 
 <script>
-import moment from 'moment'
-import Vue from 'vue'
-
 import { filterAvailabilities } from '../utilities/filter-availabilities'
 import { deepClone } from '../utilities/deep-clone'
 
@@ -85,19 +82,19 @@ export default {
       filters: {
         duration: 1,
         instructors: [{
-          id: -1
-        }]
-      }
+          id: -1,
+        }],
+      },
     }
   },
   computed: {
-    dateService(){
+    dateService() {
       return this.$store.state.services.date
     },
-    today(){
+    today() {
       return this.dateService.today
     },
-    selectedDate(){
+    selectedDate() {
       return this.dateService.selectedDate
     },
     componentClasses() {
@@ -114,7 +111,7 @@ export default {
 
       return classes.join(' ')
     },
-    filteredAvailabilities(){
+    filteredAvailabilities() {
       // Clean this up
       const filters = deepClone(this.filters)
       filters.instructorCount = filters.instructors.length
@@ -125,7 +122,7 @@ export default {
     },
     selectedDateAvailabilities() {
       const selectedDate = this.selectedDate.format('YYYY-MM-DD')
-      return this.user.availabilitiesForCurrentMonth[selectedDate] || []
+      return this.user.availabilities[selectedDate] || []
     },
     filterContainerClasses() {
       const classes = []

@@ -10,6 +10,6 @@
     props: {
       title: String,
       subtitle: String,
-    }
+    },
   }
 </script>

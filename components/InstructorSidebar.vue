@@ -4,7 +4,7 @@
       <b>My Availability</b>
     </div>
     <div class="sim-calendar--aside--body">
-      <SimTimePicker
+      <TimePicker
         :availabilities="availabilities"
         @updateAvailabilities="updateAvailabilities"
       />
@@ -13,19 +13,19 @@
 </template>
 
 <script>
-  import SimTimePicker from './TimePicker'
+  import TimePicker from './TimePicker'
 
   export default {
     components: {
-      SimTimePicker
+      TimePicker,
     },
     props: {
       availabilities: Array,
     },
     methods: {
-      updateAvailabilities(date, availabilities){
+      updateAvailabilities(date, availabilities) {
         this.$emit('updateAvailabilities', date, availabilities)
       },
-    }
+    },
   }
 </script>

@@ -33,11 +33,10 @@
 
 <script>
   export default {
-    name: "sim-datalist",
-    props: ["items", "animate"]
-  };
+    props: ['items', 'animate'],
+  }
 </script>
 
 <style lang="scss">
-  @import "../styles/datalist";
+  @import "../styles/datalist"
 </style>

@@ -1,14 +1,14 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 export default {
   namespaced: true,
   state: {
-    today: moment('2018-07-13'),
-    selectedDate: moment('2018-07-13'),
+    today: dayjs('2018-07-13'),
+    selectedDate: dayjs('2018-07-13'),
   },
   mutations: {
     setDate(state, date){
-      state.selectedDate = moment(date)
+      state.selectedDate = dayjs(date)
     },
   },
   actions: {

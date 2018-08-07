@@ -1,3 +1,4 @@
+/* eslint no-nested-ternary=0 */
 <template>
   <transition name="fade">
     <ul class="sim-timelines">
@@ -14,10 +15,12 @@
 </template>
 
 <script>
+  /* eslint no-nested-ternary: 0 */
+
   export default {
     computed: {
       segments() {
-        let segments = []
+        const segments = []
         for (let index = 0; index <= 24; index += 0.5) {
           segments.push(index)
         }
@@ -26,27 +29,19 @@
     },
     methods: {
       isWholeNumber(value) {
-        return Math.ceil(parseFloat(value)) === parseInt(value)
+        return Math.ceil(parseFloat(value)) === +value
       },
       getHourClasses(hour) {
         const classes = []
 
         classes.push(
-          (hour >= 6 && hour <= 17.5)
-            ? 'is-daytime'
-            : 'is-nighttime'
+          hour >= 6 && hour <= 17.5 ? 'is-daytime' : 'is-nighttime',
         )
         classes.push(
-          (hour === 0 || hour === 24)
-            ? 'is-midnight'
-            : (hour === 12)
-              ? 'is-noon'
-              : ''
+          hour === 0 || hour === 24 ? 'is-midnight' : hour === 12 ? 'is-noon' : '',
         )
         classes.push(
-          this.isWholeNumber(hour)
-            ? `is-hour is-hour-${hour}`
-            : `is-half-hour is-hour-${Math.floor(hour)}-half`
+          this.isWholeNumber(hour) ? `is-hour is-hour-${hour}` : `is-half-hour is-hour-${Math.floor(hour)}-half`,
         )
 
         return classes

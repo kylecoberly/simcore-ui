@@ -46,7 +46,7 @@
       SimIconText,
       SimAutofinder,
     },
-    data(){
+    data() {
       return {
         currentlyFocusedField: 0,
       }
@@ -56,46 +56,46 @@
       selectedInstructors: Array,
     },
     computed: {
-      selectedInstructorCount(){
+      selectedInstructorCount() {
         return this.selectedInstructors.length
       },
-      availableInstructors(){
+      availableInstructors() {
         const selectedInstructorIds = this.selectedInstructors.map(instructor => instructor.id)
         return this.instructors.filter(instructor => !selectedInstructorIds.includes(instructor.id))
       },
     },
     methods: {
-      addInstructor(instructor){
+      addInstructor() {
         this.selectedInstructors.push({ id: -1 })
         this.$emit('setInstructors', this.selectedInstructors)
       },
-      removeInstructor(index){
+      removeInstructor(index) {
         this.selectedInstructors.splice(index, 1)
         this.$emit('setInstructors', this.selectedInstructors)
       },
-      clearInstructor(index){
+      clearInstructor(index) {
         Vue.set(this.selectedInstructors, index, { id: -1 })
         this.$emit('setInstructors', this.selectedInstructors)
       },
-      selectInstructor(index, instructor){
+      selectInstructor(index, instructor) {
         Vue.set(this.selectedInstructors, index, instructor)
         this.$emit('setInstructors', this.selectedInstructors)
       },
-      focusPreviousItem(index){
-        if (index > 0){
+      focusPreviousItem(index) {
+        if (index > 0) {
           this.currentlyFocusedField = index - 1
         }
       },
-      focusItem(index){
+      focusItem(index) {
         this.currentlyFocusedField = index
       },
-      focusNextItem(index){
-        if (this.currentlyFocusedField + 1 >= this.selectedInstructorCount){
+      focusNextItem(index) {
+        if (this.currentlyFocusedField + 1 >= this.selectedInstructorCount) {
           this.addInstructor()
         }
         this.currentlyFocusedField = index + 1
       },
-    }
+    },
   }
 </script>
 
