@@ -28,10 +28,10 @@ export const formatTimeMeridians = (time) => {
 }
 
 export const formatTimesForDisplay = (start, duration) => {
-  const day = dayjs(0).startOf('day')
+  const day = dayjs().startOf('day')
 
   const startTime   = day.add(start, 'hours').format('h:mma')
-  const endTime     = day.add(duration, 'hours').format('h:mma')
+  const endTime     = day.add(start + duration, 'hours').format('h:mma')
 
   return `${formatTimeMeridians(startTime)} – ${formatTimeMeridians(endTime)}`
 }

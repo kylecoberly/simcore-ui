@@ -136,7 +136,10 @@
         return this.availabilities[date.format('YYYY-MM-DD')] || []
       },
       getEventAvailabilitiesForDay(date) {
-        return this.filteredAvailabilities.find(day => date.isSame(day.date, 'day')).availabilities
+        const matchingDay = this.filteredAvailabilities.find(day => date.isSame(day.date, 'day'))
+        return matchingDay
+          ? matchingDay.availabilities
+          : []
       },
       createPendingEvent(block) {
         this.pendingEvent = {

@@ -3,32 +3,15 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import axios from 'axios'
+import mockHttpResponses from '../utilities/mock-http-responses'
+if (process.env.NODE_ENV === 'development') {
+  mockHttpResponses(axios)
+}
 
 import { getBoundariesOfMonth } from '../utilities/date'
+import buildUrl from '../utilities/build-url'
 
 import services from '../modules/services'
-
-import purviewAvailabilities from '../test/e2e/fixtures/purview_availabilities.json'
-import instructors from '../test/e2e/fixtures/purview_users.json'
-import availabilities from '../test/e2e/fixtures/availabilities.json'
-
-const baseUrl = 'https://dev.simcoretech.com/api/v1'
-
-function buildAvailabilitiesUrl(userId, { startDate, endDate }) {
-  return `${baseUrl}/users/${userId}/availabilities?state_date=${startDate}&end_date=${endDate}`
-}
-
-function buildPurviewUsersUrl(userId) {
-  return `${baseUrl}/users/${userId}/purview_users?scope=canInstruct`
-}
-
-function buildPurviewAvailabilitiesUrl(userId, { startDate, endDate }) {
-  return `${baseUrl}/users/${userId}/purview_availabilities?start_date=${startDate}&end_date=${endDate}&key_by=user_id&mock=true`
-}
-
-function buildUpdateAvailabilitiesUrl(userId) {
-  return `${baseUrl}/users/${userId}/availabilities`
-}
 
 const store = new Vuex.Store({
   state: {
@@ -63,7 +46,7 @@ const store = new Vuex.Store({
   },
   actions: {
     async updateCurrentUserAvailabilities({dispatch, state, commit}, {date, availabilities}) {
-      const url = buildUpdateAvailabilitiesUrl(state.currentUser.id)
+      const url = buildUrl('updateAvailabilities')(state.currentUser.id)
       const payload = {
         dates: {}
       }
@@ -75,9 +58,11 @@ const store = new Vuex.Store({
     },
     async fetchCurrentUserAvailabilities({dispatch, state, commit}) {
       const {startDate, endDate} = getBoundariesOfMonth(state.services.date.selectedDate)
-      const url = buildAvailabilitiesUrl(state.currentUser.id, {startDate, endDate})
+      const url = buildUrl('availabilities')(state.currentUser.id, {startDate, endDate})
       dispatch('services/loading/pushLoading')
-      let availabilities = await axios.get(url).then(response => response.data.dates)
+      let availabilities = await axios.get(url)
+        .then(response => response.data.dates)
+        .catch(error => console.error(error.message))
       dispatch('services/loading/popLoading')
       if (availabilities instanceof Array){
         availabilities = {}
@@ -86,16 +71,20 @@ const store = new Vuex.Store({
     },
     async fetchInstructorAvailabilities({dispatch, state, commit}) {
       const {startDate, endDate} = getBoundariesOfMonth(state.services.date.selectedDate)
-      const url = buildPurviewAvailabilitiesUrl(state.currentUser.id, {startDate, endDate})
+      const url = buildUrl('purviewAvailabilities')(state.currentUser.id, {startDate, endDate})
       dispatch('services/loading/pushLoading')
-      const availabilities = await axios.get(url).then(response => response.data.users)
+      const availabilities = await axios.get(url)
+        .then(response => response.data.users)
+        .catch(error => console.error(error.message))
       dispatch('services/loading/popLoading')
       return commit('updateInstructorAvailabilities', availabilities)
     },
     async fetchInstructorList({dispatch, state, commit}) {
-      const url = buildPurviewUsersUrl(state.currentUser.id)
+      const url = buildUrl('purviewUsers')(state.currentUser.id)
       dispatch('services/loading/pushLoading')
-      const instructors = await axios.get(url).then(response => response.data.users.list)
+      const instructors = await axios.get(url)
+        .then(response => response.data.users.list)
+        .catch(error => console.error(error.message))
       dispatch('services/loading/popLoading')
       return commit('updateInstructors', instructors)
     },

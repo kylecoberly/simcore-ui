@@ -10,7 +10,7 @@
         </header>
       </section>
 
-      <section v-if="thereAreSpecificItems" class="sim-slide--content--section">
+      <section v-if="thereAreSpecificItems" class="sim-slide--content--section sim-slide--content--section--specific">
         <header class="text--green">
           <SimIconText icon="#icon--instructors-checked" icon-type="svg" text="Specific Instructors"></SimIconText>
         </header>
@@ -21,7 +21,7 @@
         </SimDatalist>
       </section>
 
-      <section v-if="showOtherItems" class="sim-slide--content--section">
+      <section v-if="showOtherItems" class="sim-slide--content--section sim-slide--content--section--general">
         <header class="text--blue--lighter">
           <SimIconText icon="#icon--instructors-exist" icon-type="svg" :text="labelForAvailableInstructors"></SimIconText>
         </header>
@@ -89,7 +89,7 @@
         return (this.specificItemCount > 0)
       },
       itemCount() {
-        return this.slide.content.generalItems.length + this.slide.content.specificItems.length
+        return this.slide.content.generalItems.length
       },
       thereAreItems() {
         return (this.itemCount > 0)
