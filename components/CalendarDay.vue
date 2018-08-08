@@ -12,12 +12,11 @@
       <div class="local--day--blocks local--day--event-blocks"></div>
       <div v-if="!isBeforeToday" class="local--day--blocks local--day--time-blocks">
         <template v-for="(block, index) in availabilities">
-          <SimTimeBlock
+          <AvailabilityBlock
             theme="available"
             :key="index"
-            :index="index"
             :block="block"
-            @removeTimeBlock="removeTimeBlock"
+            @removeTimeBlock="removeTimeBlock(index)"
             @updateTimeBlock="updateTimeBlock"
           />
         </template>
@@ -35,12 +34,14 @@
   import SimIconText from './IconText'
   import SimTimeLines from './TimeLines'
   import SimTimeBlock from './TimeBlock'
+  import AvailabilityBlock from './AvailabilityBlock'
 
   export default {
     components: {
       SimIconText,
       SimTimeLines,
       SimTimeBlock,
+      AvailabilityBlock,
     },
     props: {
       day: Object,
@@ -122,6 +123,7 @@
         this.$emit('updateAvailabilities', date, availabilities)
       },
       removeTimeBlock(index) {
+        console.log('hey', index)
         const availabilities = [...this.availabilities]
         availabilities.splice(index, 1)
         this.updateAvailabilities(this.day, availabilities)

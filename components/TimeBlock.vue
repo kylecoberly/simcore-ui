@@ -1,215 +1,39 @@
 <template>
-  <div :class="blockClasses" :style="blockStyles">
-    <div class="sim-timeblock--remover" @click.stop="$emit('removeTimeBlock', index)">
-      <SimIconText icon="#icon--control--minus" icon-type="svg"></SimIconText>
-    </div>
-    <div class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--up" @mousedown="startStretchUp"></div>
-    <div class="sim-timeblock--mover" @mousedown="startMove"></div>
-    <div class="sim-timeblock--handle sim-timeblock--handle--y sim-timeblock--handle--down" @mousedown="startStretchDown"></div>
-    <div class="sim-timeblock--info">
-      <div class="sim-timeblock--info--hours">{{ displayBlockHours }}</div>
-      <div class="sim-timeblock--info--time">{{ displayBlockTime }}</div>
-    </div>
+  <div class="sim-timeblock" :class="blockClasses">
+    <slot />
   </div>
 </template>
 
 <script>
-  import SimIconText from './IconText'
-  import { formatTimesForDisplay, formatBlockHoursForDisplay } from '../utilities/date'
-  import { cap, getMetrics } from '../utilities/box-metrics'
-
   export default {
-    components: {
-      SimIconText,
-    },
     data() {
       return {
-        isMoving: false,
-        stretchDirection: null,
-        orientation: 'y',
-        startTime: 0,
-        maximumDuration: 24,
+        timeShiftOffset: 0,
       }
     },
     props: {
-      block: Object,
-      index: Number,
+      orientation: {
+        type: String,
+        default: 'y',
+      },
+      theme: String,
+      maximumDuration: {
+        default: 24,
+      },
+      minimumDuration: {
+        type: Number,
+        default: 0.5,
+      },
     },
     computed: {
       segmentSize() {
         return (100 / this.maximumDuration)
       },
-      timeShiftOffset() {
-        return this.startTime
-      },
-      displayBlockTime() {
-        return formatTimesForDisplay(this.block.startTime, this.block.duration)
-      },
-      displayBlockHours() {
-        return formatBlockHoursForDisplay(this.block.duration)
-      },
       blockClasses() {
-        const classes = [`
-          sim-timeblock
-          sim-timeblock--theme--default
-          sim-timeblock--${this.index}
-          sim-timeblock--${this.orientation}
-          is-moveable
-        `]
-        if (this.isMoving) {
-          classes.push('is-moving')
-        }
-        if (this.stretchDirection) {
-          classes.push(`is-stretching is-stretching--${this.stretchDirection}`)
-        }
-
-        return classes.join(' ')
-      },
-      blockStyles() {
-        const styles = []
-
-        styles.push(`--start: ${this.block.startTime - this.timeShiftOffset}`)
-        styles.push(`--duration: ${this.block.duration}`)
-        if (this.maximumDuration < 24) {
-          styles.push(`--segment-size: ${this.segmentSize}`)
-        }
-
-        return styles.join(';')
-      },
-    },
-    methods: {
-      // ---------- For stretching up or left ----------
-      setStretchingStart(event, mouseCoordinate) {
-        const calc = this.metrics.offset[this.orientation]
-          + mouseCoordinate
-          - this.metrics.start[this.orientation]
-          - this.metrics.offset_parent[this.orientation]
-        const currentStart = Math.floor(calc / this.metrics.segment[this.orientation]) / 2
-        this.block.startTime = cap(
-          currentStart,
-          0,
-          0,
-          this.metrics.startValue + this.metrics.durationValue - 0.5,
-        ) + this.timeShiftOffset
-
-        return currentStart
-      },
-      setDurationFromStart(event, mouseCoordinate, currentStart) {
-        const currentDuration = this.metrics.durationValue
-          - Math.floor((mouseCoordinate
-          - this.metrics.start[this.orientation])
-          / this.metrics.segment[this.orientation])
-          / 2
-
-        this.block.duration = cap(currentDuration, 0, 0.5, (
-          currentStart < 0
-            ? this.block.duration
-            : this.maximumDuration
-        ))
-      },
-      // ---------- For stretching down or right ----------
-      setDurationFromEnd(event, mouseCoordinate) {
-        const currentDuration = Math.round(
-          (this.metrics.axis[this.orientation]
-            + mouseCoordinate
-            - this.metrics.start[this.orientation])
-          / this.metrics.segment[this.orientation],
-        ) / 2
-
-        this.block.duration = cap(
-          currentDuration,
-          0,
-          0.5,
-          this.maximumDuration - this.block.startTime + this.timeShiftOffset,
-        )
-      },
-
-      // ---------- Move ----------
-      startMove(event) {
-        if (event.which === 1) {
-          event.preventDefault()
-          this.isMoving = true
-          this.metrics = getMetrics(event, this.$el, this.maximumDuration)
-          this.$emit('setMoving', true)
-          addEventListener('mousemove', this.move)
-          addEventListener('mouseup', this.doneMoving)
-        }
-      },
-      move(event) {
-        const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
-        const calc = this.metrics.offset[this.orientation]
-          + mouseCoordinate
-          - this.metrics.start[this.orientation]
-          - this.metrics.offset_parent[this.orientation]
-        const currentStart = cap(
-          calc,
-          this.metrics.axis[this.orientation],
-          0,
-          this.metrics.max[this.orientation],
-        )
-
-        let startTime = (
-          Math.round(
-            currentStart
-            / this.metrics.segment[this.orientation],
-          ) / 2
-        ) + this.timeShiftOffset
-
-        if (this.block.limits && this.block.limits.starting && this.block.limits.ending) {
-          startTime = cap(startTime, 0, this.block.limits.starting, this.block.limits.ending)
-        }
-
-        this.block.startTime = startTime
-      },
-      doneMoving() {
-        this.isMoving = false
-        this.$emit('setMoving', false)
-        this.$emit('updateTimeblock')
-        removeEventListener('mousemove', this.move)
-        removeEventListener('mouseup', this.doneMoving)
-      },
-      // ---------- Stretch Down ----------
-      startStretchDown(event) {
-        if (event.which === 1) {
-          event.preventDefault()
-          this.stretchDirection = 'down'
-          this.metrics = getMetrics(event, this.$el, this.maximumDuration)
-          this.$emit('setStretching', true)
-          addEventListener('mousemove', this.stretchDown)
-          addEventListener('mouseup', this.doneStretchingDown)
-        }
-      },
-      stretchDown(event) {
-        this.setDurationFromEnd(event, event.clientY)
-      },
-      doneStretchingDown() {
-        this.stretchDirection = null
-        this.$emit('setStretching', false)
-        this.$emit('updateTimeblock')
-        removeEventListener('mousemove', this.stretchDown)
-        removeEventListener('mouseup', this.doneStretchingDown)
-      },
-      // ---------- Stretch Up ----------
-      startStretchUp(event) {
-        if (event.which === 1) {
-          event.preventDefault()
-          this.stretchDirection = 'up'
-          this.metrics = getMetrics(event, this.$el, this.maximumDuration)
-          this.$emit('setStretching', true)
-          addEventListener('mousemove', this.stretchUp)
-          addEventListener('mouseup', this.doneStretchingUp)
-        }
-      },
-      stretchUp(event) {
-        const currentStart = this.setStretchingStart(event, event.clientY)
-        this.setDurationFromStart(event, event.clientY, currentStart)
-      },
-      doneStretchingUp() {
-        this.stretchDirection = null
-        this.$emit('setStretching', false)
-        this.$emit('updateTimeblock')
-        removeEventListener('mousemove', this.stretchUp)
-        removeEventListener('mouseup', this.doneStretchingUp)
+        const classes = {}
+        classes[`sim-timeblock--theme--${this.theme}`] = true
+        classes[`sim-timeblock--${this.orientation}`] = true
+        return classes
       },
     },
   }

@@ -7,13 +7,12 @@
       <div class="sim-timepicker sim-timepicker--y">
         <div class="sim-timepicker--inner" :class="{'is-stretching': isStretching}">
           <TimeMeterLines
-             :maximumDuration="maximumDuration"
+            :maximumDuration="maximumDuration"
           />
           <TimeMeterBlock
-             :duration="duration"
-             :maximumDuration="maximumDuration"
-             @setDuration="setDuration"
-             @setStretching="setStretching"
+            :duration="duration"
+            :maximumDuration="maximumDuration"
+            @setDuration="setDuration"
           />
         </div>
       </div>
@@ -42,9 +41,6 @@
       duration: Number,
     },
     methods: {
-      setStretching(value) {
-        this.isStretching = value
-      },
       setDuration(value) {
         this.$emit('setDuration', value)
       },

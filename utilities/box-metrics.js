@@ -32,10 +32,10 @@ export const getMetrics = (event, element, boundary) => {
   }
 }
 
-export const cap = (num, previous, min, max) => {
-  return num < min
-    ? min
-    : num > max - previous
-      ? max - previous
-      : num
+export const boundDuration = (number, minimum, maximum) => {
+  return number < minimum
+    ? minimum
+    : number > maximum
+      ? maximum
+      : number
 }

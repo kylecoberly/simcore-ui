@@ -1,26 +1,19 @@
 <template>
-  <div :class="`sim-timeblock sim-timeblock--theme--aggregate sim-timeblock--${this.index} sim-timeblock--${this.orientation}`" :style="blockStyles"></div>
+  <TimeBlock theme="aggregate" :style="blockStyles" />
 </template>
 
 <script>
+  import TimeBlock from './TimeBlock'
+
   export default {
-    data() {
-      return {
-        isMoving: false,
-        stretchDirection: null,
-        orientation: 'y',
-        startTime: 0,
-        maximumDuration: 24,
-      }
+    extends: TimeBlock,
+    components: {
+      TimeBlock,
     },
     props: {
       block: Object,
-      index: Number,
     },
     computed: {
-      segmentSize() {
-        return (100 / this.maximumDuration)
-      },
       blockStyles() {
         const styles = []
 
@@ -31,9 +24,6 @@
         }
 
         return styles.join(';')
-      },
-      timeShiftOffset() {
-        return this.startTime
       },
     },
   }

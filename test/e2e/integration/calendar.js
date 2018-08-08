@@ -19,7 +19,7 @@ describe('Calendar', function () {
     cy.visit('/components/calendar')
     cy.wait(['@purviewUsersRoute', '@purviewAvailabilitiesRoute', '@availabilitiesRoute'])
   })
-  xdescribe('My Availability', function () {
+  describe('My Availability', function () {
     it('loads the component', function () {
       cy.get('h2').should('have.text', 'Calendar')
     })
@@ -91,7 +91,7 @@ describe('Calendar', function () {
         cy.get('@today').find('.sim-timelines').should('not.exist')
       })
     })
-    xdescribe('day-control panel', function () {
+    describe('day-control panel', function () {
       it('adds a block from 6am to 7am', function () {
         cy.get('.sim-calendar--day-control-panel').as('day-control-panel').find('.sim-timeblock').should('have.length', 1)
         cy.get('@day-control-panel').find('.is-hour-6').click()
@@ -160,7 +160,7 @@ describe('Calendar', function () {
         cy.get('@day-control-panel').find('.sim-timeblock').should('not.exist')
       })
     })
-    xdescribe('navigation', function () {
+    describe('navigation', function () {
       describe('month', function () {
         it('navigates backward', function () {
           cy.get('.sim-timepicker--display-date').contains('Friday, Jul 13')
@@ -204,7 +204,7 @@ describe('Calendar', function () {
       })
     })
   })
-  xdescribe('Filter Availabilities', function () {
+  describe('Filter Availabilities', function () {
     before(() => {
       cy.get('.sim-calendar--filters').should('not.be.visible')
       cy.get('.sim-switch input').click()
@@ -285,7 +285,7 @@ describe('Calendar', function () {
       it('selects a timeslot', function () {
         cy.get('.sim-calendar--grid').as('grid')
           .find('.sim-timeblock[style="--start:6; --duration:1;"]').eq(0).as('6am').click()
-        cy.get('.local--day--pending-blocks').find('.sim-timeblock--info--hours').contains('6am – 7am')
+        cy.get('.local--day--pending-blocks').find('.sim-timeblock--info--hours').contains('1 hour')
       })
       it('shows the correct instructor options', function () {
         cy.get('.sim-slide--content--section--specific .sim-datalist ul > li').as('specific-instructors').should('have.length', 1)
