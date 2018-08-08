@@ -6,13 +6,11 @@
     />
     <div class="sim-timepicker--inner" :class="timelineClasses">
       <SimTimeLines @createTimeBlock="createTimeBlock" />
-      <SimTimeBlock v-for="(block, index) in availabilities"
+      <AvailabilityBlock v-for="(block, index) in availabilities"
+        theme="available"
         :key="index"
-        :index="index"
         :block="block"
-        @setMoving="setMoving"
-        @setStretching="setStretching"
-        @removeTimeBlock="removeTimeBlock"
+        @removeTimeBlock="removeTimeBlock(index)"
         @updateTimeBlock="updateTimeBlock"
       />
     </div>
@@ -20,13 +18,13 @@
 </template>
 
 <script>
-  import SimTimeBlock from './TimeBlock'
+  import AvailabilityBlock from './AvailabilityBlock'
   import SimTimeLines from './TimeLines'
   import TimePickerControls from './TimePickerControls'
 
   export default {
     components: {
-      SimTimeBlock,
+      AvailabilityBlock,
       SimTimeLines,
       TimePickerControls,
     },
@@ -59,12 +57,6 @@
       },
     },
     methods: {
-      setMoving(state) {
-        this.isMoving = state
-      },
-      setStretching(state) {
-        this.isStretching = state
-      },
       createTimeBlock(hour) {
         const newBlock = {
           startTime: hour,
