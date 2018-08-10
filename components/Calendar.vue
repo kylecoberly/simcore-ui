@@ -21,6 +21,7 @@
         <CoordinatorSidebar
           :instructors="instructors"
           :filters="filters"
+          :isDisabled="isBubbleOpen"
           @updateFilters="updateFilters"
         />
       </template>
@@ -97,6 +98,9 @@ export default {
     selectedDate() {
       return this.dateService.selectedDate
     },
+    bubbleService() {
+      return this.$store.state.services.bubble
+    },
     componentClasses() {
       const classes = [`is-${this.contextLabel}-context`]
       const isCurrentMonth = this.selectedDate.isSame(this.today, 'month')
@@ -144,6 +148,9 @@ export default {
     },
     activeInstructorCount() {
       return this.activeInstructors.length
+    },
+    isBubbleOpen() {
+      return this.bubbleService.isOpen
     },
   },
   methods: {

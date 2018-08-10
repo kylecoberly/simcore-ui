@@ -22,12 +22,21 @@
       target: Object,
       position: Object,
     },
+    mounted() {
+      this.setBubbleOpen(true)
+    },
+    destroyed() {
+      this.setBubbleOpen(false)
+    },
     computed: {
       metrics() {
         return this.$el.getBoundingClientRect()
       },
     },
     methods: {
+      setBubbleOpen(value){
+        this.$store.dispatch('services/bubble/setOpen', value)
+      },
       dismiss() {
         this.$emit('dismiss')
       },

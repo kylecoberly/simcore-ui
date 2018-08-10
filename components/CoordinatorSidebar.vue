@@ -1,5 +1,5 @@
 <template>
-  <aside class="sim-calendar--aside sim-calendar--filters">
+  <aside class="sim-calendar--aside sim-calendar--filters" :class="{'sim-calendar--filters--disabled': isDisabled}">
     <div class="sim-calendar--aside--header">
       <span><b>Filters</b></span>
     </div>
@@ -32,6 +32,7 @@
     props: {
       filters: Object,
       instructors: Array,
+      isDisabled: Boolean,
     },
     methods: {
       setDuration(duration) {
