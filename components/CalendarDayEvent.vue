@@ -11,7 +11,7 @@
     />
     <div class="local--day--blocks local--day--event-blocks"></div>
     <div class="local--day--blocks local--day--pending-blocks">
-      <PendingEventBlock
+      <TimeBlockPendingEvent
         v-if="pendingEvent"
         :block="pendingEvent"
         @updatePosition="updateBlockPosition"
@@ -22,14 +22,14 @@
     <div class="local--day--blocks local--day--aggregate-blocks">
       <template v-if="availabilities.length">
         <div v-for="(block, index) in availabilities">
-          <EventAvailabilityBlock
+          <TimeBlockAggregateAvailability
             :key="index"
             :block="block"
             @click.native="createPendingEvent(block, day)"
           />
         </div>
       </template>
-      <template v-else><NullTimeBlock /></template>
+      <template v-else><TimeBlockNull /></template>
     </div>
   </CalendarDay>
 </template>
@@ -37,17 +37,17 @@
 <script>
   import CalendarDay from './CalendarDay'
   import TimeLines from './TimeLines'
-  import EventAvailabilityBlock from './EventAvailabilityBlock'
-  import PendingEventBlock from './PendingEventBlock'
-  import NullTimeBlock from './NullTimeBlock'
+  import TimeBlockAggregateAvailability from './TimeBlockAggregateAvailability'
+  import TimeBlockPendingEvent from './TimeBlockPendingEvent'
+  import TimeBlockNull from './TimeBlockNull'
 
   export default {
     components: {
       CalendarDay,
       TimeLines,
-      EventAvailabilityBlock,
-      PendingEventBlock,
-      NullTimeBlock,
+      TimeBlockAggregateAvailability,
+      TimeBlockPendingEvent,
+      TimeBlockNull,
     },
     props: {
       day: Object,

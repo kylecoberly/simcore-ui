@@ -1,6 +1,6 @@
 <template>
   <CalendarBody>
-    <AvailabilityCalendarDay v-for="(day, index) in daysInCurrentMonth"
+    <CalendarDayAvailability v-for="(day, index) in daysInCurrentMonth"
       :key="index"
       slot="day"
       :day="day"
@@ -16,12 +16,12 @@
 <script>
   import dayjs from 'dayjs'
 
-  import AvailabilityCalendarDay from './AvailabilityCalendarDay'
+  import CalendarDayAvailability from './CalendarDayAvailability'
   import CalendarBody from './CalendarBody'
 
   export default {
     components: {
-      AvailabilityCalendarDay,
+      CalendarDayAvailability,
       CalendarBody,
     },
     props: {

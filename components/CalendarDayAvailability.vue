@@ -12,7 +12,7 @@
     <div class="local--day--blocks local--day--event-blocks"></div>
     <div class="local--day--blocks local--day--time-blocks">
       <template v-for="(block, index) in availabilities">
-        <AvailabilityBlock
+        <TimeBlockAvailability
           :key="index"
           :block="block"
           @removeTimeBlock="removeTimeBlock(index)"
@@ -25,13 +25,13 @@
 
 <script>
   import TimeLines from './TimeLines'
-  import AvailabilityBlock from './AvailabilityBlock'
+  import TimeBlockAvailability from './TimeBlockAvailability'
   import CalendarDay from './CalendarDay'
 
   export default {
     components: {
       TimeLines,
-      AvailabilityBlock,
+      TimeBlockAvailability,
       CalendarDay,
     },
     props: {

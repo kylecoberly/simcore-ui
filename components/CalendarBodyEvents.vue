@@ -1,6 +1,6 @@
 <template>
   <CalendarBody>
-    <EventCalendarDay slot="day" v-for="(day, index) in daysInCurrentMonth"
+    <CalendarDayEvent slot="day" v-for="(day, index) in daysInCurrentMonth"
       :key="index"
       :day="day"
       :availabilities="getEventAvailabilitiesForDay(day)"
@@ -31,7 +31,7 @@
   import dayjs from 'dayjs'
 
   import CalendarBody from './CalendarBody'
-  import EventCalendarDay from './EventCalendarDay'
+  import CalendarDayEvent from './CalendarDayEvent'
   import Bubble from './Bubble'
   import SlidePresenter from './SlidePresenter'
 
@@ -40,7 +40,7 @@
   export default {
     components: {
       CalendarBody,
-      EventCalendarDay,
+      CalendarDayEvent,
       Bubble,
       SlidePresenter,
     },

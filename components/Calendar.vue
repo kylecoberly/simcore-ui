@@ -1,9 +1,9 @@
 <template>
   <div class="sim-calendar" :class="componentClasses">
-    <EventDurationIcon />
-    <InstructorIcon />
-    <CheckboxIcon />
-    <ControlIcon />
+    <IconEventDuration/>
+    <IconInstructor/>
+    <IconCheckbox/>
+    <IconControl/>
 
     <CalendarHeader
       :isCoordinator="isCoordinator"
@@ -11,14 +11,14 @@
     />
     <div class="sim-calendar--body">
       <template v-if="isCoordinator">
-        <EventCalendarBody
+        <CalendarBodyEvents
           :filteredAvailabilities="filteredAvailabilities"
           :instructors="instructors"
           :bubbleIsOpen="bubbleIsOpen"
           :showExpandedWeek="showExpandedWeek"
           @toggleExpandedWeek="toggleExpandedWeek"
         />
-        <CoordinatorSidebar
+        <SidebarCoordinator
           :instructors="instructors"
           :filters="filters"
           :isDisabled="isBubbleOpen"
@@ -26,13 +26,13 @@
         />
       </template>
       <template v-else>
-        <AvailabilityCalendarBody
+        <CalendarBodyAvailability
           :availabilities="user.availabilities"
           :showExpandedWeek="showExpandedWeek"
           @updateAvailabilities="updateAvailabilities"
           @toggleExpandedWeek="toggleExpandedWeek"
         />
-        <InstructorSidebar
+        <SidebarInstructor
           :availabilities="selectedDateAvailabilities"
           @updateAvailabilities="updateAvailabilities"
         />
@@ -45,28 +45,28 @@
 import { filterAvailabilities } from '../utilities/filter-availabilities'
 import { deepClone } from '../utilities/deep-clone'
 
-import EventDurationIcon from './EventDurationIcon'
-import InstructorIcon from './InstructorIcon'
-import CheckboxIcon from './CheckboxIcon'
-import ControlIcon from './ControlIcon'
+import IconEventDuration from './IconEventDuration'
+import IconInstructor from './IconInstructor'
+import IconCheckbox from './IconCheckbox'
+import IconControl from './IconControl'
 
 import CalendarHeader from './CalendarHeader'
-import AvailabilityCalendarBody from './AvailabilityCalendarBody'
-import EventCalendarBody from './EventCalendarBody'
-import InstructorSidebar from './InstructorSidebar'
-import CoordinatorSidebar from './CoordinatorSidebar'
+import CalendarBodyAvailability from './CalendarBodyAvailability'
+import CalendarBodyEvents from './CalendarBodyEvents'
+import SidebarInstructor from './SidebarInstructor'
+import SidebarCoordinator from './SidebarCoordinator'
 
 export default {
   components: {
-    EventDurationIcon,
-    InstructorIcon,
-    CheckboxIcon,
-    ControlIcon,
+    IconEventDuration,
+    IconInstructor,
+    IconCheckbox,
+    IconControl,
     CalendarHeader,
-    AvailabilityCalendarBody,
-    EventCalendarBody,
-    InstructorSidebar,
-    CoordinatorSidebar,
+    CalendarBodyAvailability,
+    CalendarBodyEvents,
+    SidebarInstructor,
+    SidebarCoordinator,
   },
   props: {
     user: Object,
