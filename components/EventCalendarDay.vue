@@ -8,12 +8,8 @@
       class="sim-calendar--grid--day--timelines"
       :showHalfHourTicks="false"
     />
-    <div
-      class="local--day--blocks local--day--event-blocks"
-    ></div>
-    <div
-      class="local--day--blocks local--day--pending-blocks"
-    >
+    <div class="local--day--blocks local--day--event-blocks"></div>
+    <div class="local--day--blocks local--day--pending-blocks">
       <PendingEventBlock v-if="pendingEvent"
         :block="pendingEvent"
         @updatePosition="updateBlockPosition"
@@ -21,17 +17,19 @@
         @clearPendingEvent="$emit('clearPendingEvent')"
       />
     </div>
-    <div
-      v-if="!isBeforeToday"
-      class="local--day--blocks local--day--aggregate-blocks"
-    >
-      <div v-for="(block, index) in availabilities">
-        <EventAvailabilityBlock
-          :index="index"
-          :block="block"
-          @click.native="createPendingEvent(block)"
-        />
-      </div>
+    <div class="local--day--blocks local--day--aggregate-blocks">
+      <template v-if="availabilities.length">
+        <div v-for="(block, index) in availabilities">
+          <EventAvailabilityBlock
+            :key="index"
+            :block="block"
+            @click.native="createPendingEvent(block)"
+          />
+        </div>
+      </template>
+      <template v-else>
+        <NullTimeBlock />
+      </template>
     </div>
   </CalendarDay>
 </template>
@@ -41,6 +39,7 @@
   import TimeLines from './TimeLines'
   import EventAvailabilityBlock from './EventAvailabilityBlock'
   import PendingEventBlock from './PendingEventBlock'
+  import NullTimeBlock from './NullTimeBlock'
 
   export default {
     components: {
@@ -48,6 +47,7 @@
       TimeLines,
       EventAvailabilityBlock,
       PendingEventBlock,
+      NullTimeBlock,
     },
     props: {
       day: Object,
@@ -64,12 +64,6 @@
       },
       showTimelines() {
         return this.isSelected && this.showExpandedWeek
-      },
-      today() {
-        return this.dateService.today
-      },
-      isBeforeToday() {
-        return this.today.isAfter(this.day, 'day')
       },
     },
     methods: {

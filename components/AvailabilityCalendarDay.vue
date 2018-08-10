@@ -9,16 +9,10 @@
       :showHalfHourTicks="false"
       @createTimeBlock="createTimeBlock"
     />
-    <div
-      class="local--day--blocks local--day--event-blocks"
-    ></div>
-    <div
-      v-if="!isBeforeToday"
-      class="local--day--blocks local--day--time-blocks"
-    >
+    <div class="local--day--blocks local--day--event-blocks"></div>
+    <div class="local--day--blocks local--day--time-blocks">
       <template v-for="(block, index) in availabilities">
         <AvailabilityBlock
-          theme="available"
           :key="index"
           :block="block"
           @removeTimeBlock="removeTimeBlock(index)"
@@ -59,12 +53,6 @@
       },
       showTimelines() {
         return this.isSelected && this.showExpandedWeek
-      },
-      today() {
-        return this.dateService.today
-      },
-      isBeforeToday() {
-        return this.today.isAfter(this.day, 'day')
       },
     },
     methods: {
