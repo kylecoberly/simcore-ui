@@ -25,7 +25,7 @@
         />
       </template>
       <template v-else>
-        <CalendarBody
+        <AvailabilityCalendarBody
           :availabilities="user.availabilities"
           :showExpandedWeek="showExpandedWeek"
           @updateAvailabilities="updateAvailabilities"
@@ -50,7 +50,7 @@ import CheckboxIcon from './CheckboxIcon'
 import ControlIcon from './ControlIcon'
 
 import CalendarHeader from './CalendarHeader'
-import CalendarBody from './CalendarBody'
+import AvailabilityCalendarBody from './AvailabilityCalendarBody'
 import EventCalendarBody from './EventCalendarBody'
 import InstructorSidebar from './InstructorSidebar'
 import CoordinatorSidebar from './CoordinatorSidebar'
@@ -62,7 +62,7 @@ export default {
     CheckboxIcon,
     ControlIcon,
     CalendarHeader,
-    CalendarBody,
+    AvailabilityCalendarBody,
     EventCalendarBody,
     InstructorSidebar,
     CoordinatorSidebar,

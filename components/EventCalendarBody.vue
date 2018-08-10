@@ -1,77 +1,57 @@
 <template>
-  <main class="sim-calendar--main">
-    <div class="sim-calendar--grid">
-      <div class="sim-calendar--grid--header">
-        <div v-for="dayName in dayNames" class="sim-calendar--grid--header--day">
-          <span class="sim-calendar--grid--header--dayname">
-            {{ dayName }}
-          </span>
-        </div>
-      </div>
-      <div class="sim-calendar--grid--body">
-        <div class="sim-calendar--grid--days" @click.meta="toggleExpandedWeek">
-          <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
-          <EventCalendarDay v-for="(day, index) in daysInCurrentMonth"
-            :key="index"
-            :day="day"
-            :availabilities="getEventAvailabilitiesForDay(day)"
-            :showExpandedWeek="showExpandedWeek"
-            :pendingEvent="isPendingEventToday(pendingEvent, day)"
-            @click.native="setDate(day)"
-            @toggleExpandedWeek="toggleExpandedWeek"
-            @createPendingEvent="createPendingEvent"
-            @clearPendingEvent="clearPendingEvent"
-            @updateBlockPosition="updateBlockPosition(...arguments, day)"
-            @updatePendingEvent="updatePendingEvent"
-          />
-          <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
-        </div>
-
-        <SimBubble v-if="pendingEvent"
-          :style="bubbleStyles"
-          :position="position"
-          ref="bubble"
-          @keydown.esc="clearPendingEvent"
-          @dismiss="clearPendingEvent"
-        >
-        <SimSlidePresenter :slides="slides"></SimSlidePresenter>
-        </SimBubble>
-        <div class="sim-loader--shield" v-if="isLoading">
-          <SimLoader :is-loading="true"></SimLoader>
-        </div>
-      </div>
-    </div>
-  </main>
+  <CalendarBody>
+    <EventCalendarDay slot="day" v-for="(day, index) in daysInCurrentMonth"
+      :key="index"
+      :day="day"
+      :availabilities="getEventAvailabilitiesForDay(day)"
+      :showExpandedWeek="showExpandedWeek"
+      :pendingEvent="isPendingEventToday(pendingEvent, day)"
+      @click.native="setDate(day)"
+      @toggleExpandedWeek="toggleExpandedWeek"
+      @createPendingEvent="createPendingEvent"
+      @clearPendingEvent="clearPendingEvent"
+      @updateBlockPosition="updateBlockPosition(...arguments, day)"
+      @updatePendingEvent="updatePendingEvent"
+    />
+    <Bubble v-if="pendingEvent"
+      slot="bubble"
+      :style="getStyles(position)"
+      :position="position"
+      ref="bubble"
+      @keydown.esc="clearPendingEvent"
+      @dismiss="clearPendingEvent"
+    >
+      <SlidePresenter :slides="slides" />
+    </Bubble>
+  </CalendarBody>
 </template>
 
 <script>
   /* eslint no-nested-ternary: 0 */
   import dayjs from 'dayjs'
 
+  import CalendarBody from './CalendarBody'
   import EventCalendarDay from './EventCalendarDay'
-  import SimBubble from './Bubble'
-  import SimSlidePresenter from './SlidePresenter'
-  import SimLoader from './Loader'
+  import Bubble from './Bubble'
+  import SlidePresenter from './SlidePresenter'
 
   import { formatTimesForDisplay, formatBlockHoursForDisplay } from '../utilities/date'
 
   export default {
     components: {
+      CalendarBody,
       EventCalendarDay,
-      SimBubble,
-      SimSlidePresenter,
-      SimLoader,
+      Bubble,
+      SlidePresenter,
     },
     data() {
       return {
-        dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         position: {},
         pendingEvent: null,
       }
     },
     props: {
       showExpandedWeek: Boolean,
-      bubbleIsOpen: Boolean,
       filteredAvailabilities: Array,
       instructors: Array,
     },
@@ -81,18 +61,6 @@
       },
       selectedDate() {
         return this.dateService.selectedDate
-      },
-      loadingService() {
-        return this.$store.state.services.loading
-      },
-      isLoading() {
-        return this.loadingService.isLoading
-      },
-      startOffset() {
-        return dayjs(this.selectedDate).startOf('month').day()
-      },
-      endOffset() {
-        return 6 - dayjs(this.selectedDate).endOf('month').day()
       },
       daysInCurrentMonth() {
         const daysInMonth = []
@@ -121,19 +89,10 @@
           }]
           : []
       },
-      bubbleStyles() {
-        return this.getStyles(this.position)
-      },
     },
     methods: {
       toggleExpandedWeek() {
         this.$emit('toggleExpandedWeek')
-      },
-      updateAvailabilities(date, availabilities) {
-        this.$emit('updateAvailabilities', date, availabilities)
-      },
-      getAvailabilitiesForDay(date) {
-        return this.availabilities[date.format('YYYY-MM-DD')] || []
       },
       getEventAvailabilitiesForDay(date) {
         const matchingDay = this.filteredAvailabilities.find(day => date.isSame(day.date, 'day'))
