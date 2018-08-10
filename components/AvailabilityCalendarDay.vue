@@ -1,0 +1,103 @@
+<template>
+  <CalendarDay
+    :day="day"
+    @toggleExpandedWeek="$emit('toggleExpandedWeek')"
+  >
+    <TimeLines v-if="showTimelines"
+      slot="timelines"
+      class="sim-calendar--grid--day--timelines"
+      :showHalfHourTicks="false"
+      @createTimeBlock="createTimeBlock"
+    />
+    <div
+      class="local--day--blocks local--day--event-blocks"
+      slot="events"
+    ></div>
+    <div
+      v-if="!isBeforeToday"
+      class="local--day--blocks local--day--time-blocks"
+      slot="availabilities"
+    >
+      <template v-for="(block, index) in availabilities">
+        <AvailabilityBlock
+          theme="available"
+          :key="index"
+          :block="block"
+          @removeTimeBlock="removeTimeBlock(index)"
+          @updateTimeBlock="updateTimeBlock"
+        />
+      </template>
+    </div>
+  </CalendarDay>
+</template>
+
+<script>
+  import TimeLines from './TimeLines'
+  import AvailabilityBlock from './AvailabilityBlock'
+  import CalendarDay from './CalendarDay'
+
+  export default {
+    components: {
+      TimeLines,
+      AvailabilityBlock,
+      CalendarDay,
+    },
+    props: {
+      day: Object,
+      availabilities: Array,
+      showExpandedWeek: Boolean,
+    },
+    data() {
+      return {
+        timeBlockDefaultDuration: 1,
+      }
+    },
+    computed: {
+      dateService() {
+        return this.$store.state.services.date
+      },
+      isSelected() {
+        return this.dateService.selectedDate.isSame(this.day, 'day')
+      },
+      showTimelines() {
+        return this.isSelected && this.showExpandedWeek
+      },
+      today() {
+        return this.dateService.today
+      },
+      isBeforeToday() {
+        return this.today.isAfter(this.day, 'day')
+      },
+    },
+    methods: {
+      createTimeBlock(hour) {
+        const newBlock = {
+          startTime: hour,
+          duration: this.timeBlockDefaultDuration,
+        }
+        const availabilities = [...this.availabilities]
+        availabilities.push(newBlock)
+        this.updateAvailabilities(this.day, availabilities)
+      },
+      updateAvailabilities(date, availabilities) {
+        this.$emit('updateAvailabilities', date, availabilities)
+      },
+      removeTimeBlock(index) {
+        console.log('hey', index)
+        const availabilities = [...this.availabilities]
+        availabilities.splice(index, 1)
+        this.updateAvailabilities(this.day, availabilities)
+      },
+      updateTimeBlock(index, value) {
+        const availabilities = [...this.availabilities]
+        availabilities[index] = value
+        this.updateAvailabilities(this.day, availabilities)
+      },
+    },
+  }
+</script>
+
+<style lang="scss">
+  @import '../styles/calendar-day';
+</style>
+
