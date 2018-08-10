@@ -2,7 +2,7 @@ function filterAvailabilities(instructors, filters) {
   if (!(instructors instanceof Array)){
     instructors = normalize(instructors)
   }
-  return deepClone(instructors)
+  return instructors
     .map(filterDuration(filters.duration))
     .map(splitLongDurations(filters.duration))
     .reduce(aggregateDaysWithSpecificUsers(filters.instructors), [])
@@ -146,10 +146,6 @@ function foldUserAvailabilityIntoAggregateDay(specificInstructors, userId){
 }
 
 // Utilities
-function deepClone(object) {
-  return JSON.parse(JSON.stringify(object))
-}
-
 function stripKeys(object) {
   return Object.keys(object).reduce((array, key) => {
     array.push(object[key])
