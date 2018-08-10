@@ -112,14 +112,16 @@ export default {
       classes[`is-${this.contextLabel}-context`] = true
       return classes
     },
-    filteredAvailabilities() {
-      // Clean this up
+    decoratedFilters() {
       const filters = deepClone(this.filters)
       filters.instructorCount = filters.instructors.length
       filters.instructors = filters.instructors
         .map(instructor => instructor.id)
         .filter(id => id > 0)
-      return filterAvailabilities([...this.totalAvailabilities], filters)
+      return filters
+    },
+    filteredAvailabilities() {
+      return filterAvailabilities([...this.totalAvailabilities], this.decoratedFilters)
     },
     selectedDateAvailabilities() {
       const selectedDate = this.selectedDate.format('YYYY-MM-DD')
