@@ -1,41 +1,50 @@
 <template>
   <div class="sim-calendar--header">
     <div class="sim-calendar--header--controls sim-calendar--header--controls--months">
-      <span class="load-previous-month" @click="loadPreviousMonth">
-        <SimIconText icon="fa-arrow-left fa-fw"></SimIconText>
-      </span>
-      <span class="current-month">
-        {{ displayDate }}
-      </span>
-      <span class="load-next-month" @click="loadNextMonth">
-        <SimIconText icon="fa-arrow-right fa-fw"></SimIconText>
-      </span>
+      <IconText
+        icon="fa-arrow-left fa-fw"
+        class="load-previous-month"
+        @click.native="loadPreviousMonth"
+      />
+      <span class="current-month">{{ displayDate }}</span>
+      <IconText
+        icon="fa-arrow-right fa-fw"
+        class="load-next-month"
+        @click.native="loadNextMonth"
+      />
     </div>
     <div class="sim-calendar--header--mode" v-if="true">
-      <SimSwitch :value="isCoordinator" @change="$emit('toggleContext')" left-label="My Availability" right-label="Schedule Events"/>
+      <ToggleSwitch
+        :value="isCoordinator"
+        @change="$emit('toggleContext')"
+        left-label="My Availability"
+        right-label="Schedule Events"
+      />
     </div>
     <div class="sim-calendar--header--controls sim-calendar--header--controls--days">
-      <span class="load-previous-day" @click="loadPreviousDay">
-        <SimIconText icon="fa-arrow-left fa-fw"></SimIconText>
-      </span>
-      <span class="load-today" @click="loadToday">
-        today
-      </span>
-      <span class="load-next-day" @click="loadNextDay">
-        <SimIconText icon="fa-arrow-right fa-fw"></SimIconText>
-      </span>
+      <IconText
+        icon="fa-arrow-left fa-fw"
+        class="load-previous-day"
+        @click.native="loadPreviousDay"
+      />
+      <span class="load-today" @click="loadToday">today</span>
+      <IconText
+        icon="fa-arrow-right fa-fw"
+        class="load-next-day"
+        @click.native="loadNextDay"
+      />
     </div>
   </div>
 </template>
 
 <script>
-  import SimIconText from './IconText'
-  import SimSwitch from './Switch'
+  import IconText from './IconText'
+  import ToggleSwitch from './Switch'
 
   export default {
     components: {
-      SimIconText,
-      SimSwitch,
+      IconText,
+      ToggleSwitch,
     },
     props: {
       isCoordinator: Boolean,

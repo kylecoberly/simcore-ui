@@ -30,8 +30,6 @@
 </template>
 
 <script>
-  import dayjs from 'dayjs'
-
   import SimDatalist from './Datalist'
   import SimIconText from './IconText'
   import SimSlideHeader from './SlideHeader'
@@ -73,7 +71,7 @@
       })
     },
     methods: {
-      formatTimesForDisplay(start, duration) {
+      formatTimesForDisplay(/* start, duration */) {
         /*
         const day = dayjs().startOf('day')
         const startTime = day.add(start, 'hours').format('h:mma')

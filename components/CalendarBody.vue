@@ -3,9 +3,7 @@
     <div class="sim-calendar--grid">
       <div class="sim-calendar--grid--header">
         <div v-for="dayName in dayNames" class="sim-calendar--grid--header--day">
-          <span class="sim-calendar--grid--header--dayname">
-            {{ dayName }}
-          </span>
+          <span class="sim-calendar--grid--header--dayname">{{ dayName }}</span>
         </div>
       </div>
       <div class="sim-calendar--grid--body">
@@ -15,9 +13,7 @@
           <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
         </div>
         <slot name="bubble" />
-        <div class="sim-loader--shield" v-if="isLoading">
-          <Loader :isLoading="true" />
-        </div>
+        <div class="sim-loader--shield" v-if="isLoading"><Loader /></div>
       </div>
     </div>
   </main>

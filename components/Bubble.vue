@@ -4,22 +4,24 @@
       <div class="sim-bubble--content">
         <slot></slot>
       </div>
-      <div class="sim-bubble--dismiss" @click="dismiss">
-        <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
-      </div>
+      <IconText
+        icon="#icon--control--x"
+        icon-type="svg"
+        class="sim-bubble--dismiss"
+        @click.native="dismiss"
+      />
     </div>
   </transition>
 </template>
 
 <script>
-  import SimIconText from './IconText'
+  import IconText from './IconText'
 
   export default {
     components: {
-      SimIconText,
+      IconText,
     },
     props: {
-      target: Object,
       position: Object,
     },
     mounted() {
@@ -28,13 +30,8 @@
     destroyed() {
       this.setBubbleOpen(false)
     },
-    computed: {
-      metrics() {
-        return this.$el.getBoundingClientRect()
-      },
-    },
     methods: {
-      setBubbleOpen(value){
+      setBubbleOpen(value) {
         this.$store.dispatch('services/bubble/setOpen', value)
       },
       dismiss() {

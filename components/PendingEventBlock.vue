@@ -1,14 +1,19 @@
 <template>
   <TimeBlock theme="pending-event" class="is-moveable" :style="blockStyles">
-    <RemoverControl @click.native.stop="$emit('clearPendingEvent')" />
+    <IconText
+      class="sim-timeblock--remover"
+      icon="#icon--control--minus"
+      icon-type="svg"
+      @click.native.stop="$emit('removeTimeBlock')"
+    />
     <div class="sim-timeblock--mover" @mousedown="startMove"></div>
     <TimeBlockLabel :startTime="block.startTime" :duration="block.duration" />
   </TimeBlock>
 </template>
 
 <script>
+  import IconText from './IconText'
   import TimeBlock from './TimeBlock'
-  import RemoverControl from './RemoverControl'
   import TimeBlockLabel from './TimeBlockLabel'
 
   import dragAndDroppable from '../mixins/drag-drop-block'
@@ -17,8 +22,8 @@
     extends: TimeBlock,
     mixins: [dragAndDroppable],
     components: {
+      IconText,
       TimeBlock,
-      RemoverControl,
       TimeBlockLabel,
     },
     props: {

@@ -1,16 +1,14 @@
 <template>
-  <div class="sim-calendar-day sim-calendar--grid--day"
-    :class="dayClasses"
-  >
+  <div class="sim-calendar-day sim-calendar--grid--day" :class="dayClasses">
     <div class="local--day">
       <slot name="timelines" />
-      <div class="sim-calendar--grid--date">{{ day.format('D') }}</div>
+      <div class="sim-calendar--grid--date">{{ dayLabel }}</div>
       <slot />
       <div class="sim-calendar--grid--tools">
       <IconText
         :icon="expandIcon"
         iconType="svg"
-        @click.native="toggleExpandedWeek"
+        @click.native="$emit('toggleExpandedWeek')"
       />
       </div>
     </div>
@@ -42,8 +40,8 @@
       isInActiveWeek() {
         return this.dateService.selectedDate.isSame(this.day, 'week')
       },
-      isBeforeToday() {
-        return this.today.isAfter(this.day, 'day')
+      dayLabel() {
+        return this.day.format('D')
       },
       dayClasses() {
         const dayOfWeek = this.day.day()
@@ -60,12 +58,9 @@
         return classes
       },
       expandIcon() {
-        return this.showExpandedWeek && this.isInActiveWeek ? '#icon--control--contract' : '#icon--control--expand'
-      },
-    },
-    methods: {
-      toggleExpandedWeek() {
-        this.$emit('toggleExpandedWeek')
+        return this.showExpandedWeek && this.isInActiveWeek
+          ? '#icon--control--contract'
+          : '#icon--control--expand'
       },
     },
   }

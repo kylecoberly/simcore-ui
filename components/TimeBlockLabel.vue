@@ -20,6 +20,6 @@ export default {
     displayBlockTime() {
       return formatTimesForDisplay(this.startTime, this.duration)
     },
-  }
+  },
 }
 </script>

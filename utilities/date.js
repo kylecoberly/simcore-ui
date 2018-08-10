@@ -1,7 +1,6 @@
-import moment from 'moment'
 import dayjs from 'dayjs'
 
-export const getBoundariesOfMonth = (date) => {
+export function getBoundariesOfMonth(date) {
   date = dayjs(date)
   return {
     startDate: date.startOf('month').format('YYYY-MM-DD'),
@@ -9,11 +8,11 @@ export const getBoundariesOfMonth = (date) => {
   }
 }
 
-export const formatDateForDisplay = (date, format) => {
+export function formatDateForDisplay(date, format) {
   return dayjs(date).format(format)
 }
 
-export const formatHoursAsMeridians = (hour) => {
+export function formatHoursAsMeridians(hour) {
   hour = hour === 0 || hour === 24
     ? 'Midnight'
     : hour === 12
@@ -23,11 +22,11 @@ export const formatHoursAsMeridians = (hour) => {
   return hour > 12 ? `${hour - 12}p` : (+hour ? `${hour}a` : hour)
 }
 
-export const formatTimeMeridians = (time) => {
+export function formatTimeMeridians(time) {
   return time.replace(':00', '').replace('12am', 'Midnight').replace('12pm', 'Noon')
 }
 
-export const formatTimesForDisplay = (start, duration) => {
+export function formatTimesForDisplay(start, duration) {
   const day = dayjs().startOf('day')
 
   const startTime   = day.add(start, 'hours').format('h:mma')
@@ -36,10 +35,30 @@ export const formatTimesForDisplay = (start, duration) => {
   return `${formatTimeMeridians(startTime)} – ${formatTimeMeridians(endTime)}`
 }
 
-export const formatBlockHoursForDisplay = (duration) => {
+export function formatBlockHoursForDisplay(duration) {
   const output = duration.toString()
     .replace(/\.5/, '½')
     .replace(/^0/, '') || 0
 
   return `${output} ${(duration > 0 && duration <= 1 ? 'hour' : 'hours')}`
+}
+
+export function isDayTime(hour) {
+  return hour >= 6 && hour <= 17.5
+}
+
+export function isMidnight(hour) {
+  return hour === 0 || hour === 24
+}
+
+export function isNoon(hour) {
+  return hour === 12
+}
+
+export function isHour(hour) {
+  return hour % 1== 0
+}
+
+export function isWholeNumber(number) {
+  return number % 1 === 0
 }

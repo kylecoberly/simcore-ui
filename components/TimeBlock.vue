@@ -18,6 +18,7 @@
       },
       theme: String,
       maximumDuration: {
+        type: Number,
         default: 24,
       },
       minimumDuration: {

@@ -1,5 +1,7 @@
 import { boundDuration, getMetrics } from '../utilities/box-metrics'
 
+let metrics
+
 export default {
   data(){
     return {
@@ -8,15 +10,15 @@ export default {
   },
   methods: {
     setStretchingStart(event, mouseCoordinate) {
-      const calc = this.metrics.offset[this.orientation]
+      const calc = metrics.offset[this.orientation]
         + mouseCoordinate
-        - this.metrics.start[this.orientation]
-        - this.metrics.offset_parent[this.orientation]
-      const currentStart = Math.floor(calc / this.metrics.segment[this.orientation]) / 2
+        - metrics.start[this.orientation]
+        - metrics.offset_parent[this.orientation]
+      const currentStart = Math.floor(calc / metrics.segment[this.orientation]) / 2
       this.block.startTime = boundDuration(
         currentStart,
         0,
-        this.metrics.startValue + this.metrics.durationValue - 0.5,
+        metrics.startValue + metrics.durationValue - 0.5,
       ) + this.timeShiftOffset
 
       return currentStart
@@ -25,7 +27,7 @@ export default {
       if (event.which === 1) {
         event.preventDefault()
         this.stretchDirection = 'up'
-        this.metrics = getMetrics(event, this.$el, this.maximumDuration)
+        metrics = getMetrics(event, this.$el, this.maximumDuration)
         this.$emit('setStretching', true)
         addEventListener('mousemove', this.stretchUp)
         addEventListener('mouseup', this.doneStretchingUp)
@@ -43,10 +45,10 @@ export default {
       removeEventListener('mouseup', this.doneStretchingUp)
     },
     setDurationFromStart(event, mouseCoordinate, currentStart) {
-      const currentDuration = this.metrics.durationValue
+      const currentDuration = metrics.durationValue
         - Math.floor((mouseCoordinate
-        - this.metrics.start[this.orientation])
-        / this.metrics.segment[this.orientation])
+        - metrics.start[this.orientation])
+        / metrics.segment[this.orientation])
         / 2
 
       this.block.duration = boundDuration(currentDuration, 0.5, (

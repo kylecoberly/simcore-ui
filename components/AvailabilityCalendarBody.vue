@@ -40,10 +40,11 @@
       },
       daysInCurrentMonth() {
         const daysInMonth = []
-        let day, count
-        for (day = 1, count = this.selectedDate.daysInMonth(); day <= count; day += 1) {
-          let dayString = day.toString()
-          if (day < 10) {
+        let dayNumber
+        const count = this.selectedDate.daysInMonth()
+        for (dayNumber = 1; dayNumber <= count; dayNumber += 1) {
+          let dayString = dayNumber.toString()
+          if (dayNumber < 10) {
             dayString = `0${dayString}`
           }
           daysInMonth.push(dayString)

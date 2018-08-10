@@ -1,32 +1,36 @@
 <template>
   <transition name="fade">
     <ul class="sim-timelines">
-      <li v-for="segment in segments"
+      <li
+        v-for="segment in segments"
         :class="getHourClasses(segment)"
         @mousedown="createTimeBlock($event, segment)"
       >
-        <div v-if="segment === 12" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--noon">
-          <SimIconText icon="fa-sun-o"></SimIconText>
+        <div
+          v-if="isNoon(segment)"
+          class="sim-timeline--time sim-timeline--icon sim-timeline--icon--noon"
+        >
+          <IconText icon="fa-sun-o" />
         </div>
-        <div v-else-if="segment === 0 || segment === 24" class="sim-timeline--time sim-timeline--icon sim-timeline--icon--midnight">
-          <SimIconText icon="fa-moon-o"></SimIconText>
+        <div
+          v-else-if="isMidnight(segment)"
+          class="sim-timeline--time sim-timeline--icon sim-timeline--icon--midnight"
+        >
+          <IconText icon="fa-moon-o" />
         </div>
-        <div v-else-if="segment % 1 === 0" class="sim-timeline--time">
-          {{ displayHour(segment) }}
-        </div>
+        <div v-else-if="isWholeNumber(segment)" class="sim-timeline--time">{{ getDisplayHour(segment) }}</div>
       </li>
     </ul>
   </transition>
 </template>
 
 <script>
-  /* eslint no-nested-ternary: 0, comma-dangle: 0 */
-  import SimIconText from './IconText'
-  import { formatHoursAsMeridians } from '../utilities/date'
+  import IconText from './IconText'
+  import { isWholeNumber, isDayTime, isMidnight, isNoon, isHour, formatHoursAsMeridians } from '../utilities/date'
 
   export default {
     components: {
-      SimIconText,
+      IconText,
     },
     props: {
       showHalfHourTicks: {
@@ -44,29 +48,23 @@
       },
     },
     methods: {
-      displayHour(hour) {
+      isNoon,
+      isMidnight,
+      isWholeNumber,
+      getDisplayHour(hour) {
         return formatHoursAsMeridians(hour)
       },
       getHourClasses(hour) {
-        const classes = []
-
-        classes.push(
-          hour >= 6 && hour <= 17.5
-            ? 'is-daytime'
-            : 'is-nighttime'
-        )
-        classes.push(
-          hour === 0 || hour === 24
-            ? 'is-midnight'
-            : (hour === 12)
-              ? 'is-noon'
-              : ''
-        )
-        classes.push(
-          hour % 1 === 0
-            ? `is-hour is-hour-${hour}`
-            : `is-half-hour is-hour-${Math.floor(hour)}-half`
-        )
+        const classes = {
+          'is-daytime': isDayTime(hour),
+          'is-nighttime': !isDayTime(hour),
+          'is-midnight': isMidnight(hour),
+          'is-noon': isNoon(hour),
+          'is-hour': isHour(hour),
+          'is-half-hour': !isHour(hour),
+        }
+        classes[`is-hour-${hour}`] = isHour(hour)
+        classes[`is-hour-${hour}-half`] = !isHour(hour)
 
         return classes
       },

@@ -3,14 +3,16 @@
     :day="day"
     @toggleExpandedWeek="$emit('toggleExpandedWeek')"
   >
-    <TimeLines v-if="showTimelines"
+    <TimeLines
+      v-if="showTimelines"
       slot="timelines"
       class="sim-calendar--grid--day--timelines"
       :showHalfHourTicks="false"
     />
     <div class="local--day--blocks local--day--event-blocks"></div>
     <div class="local--day--blocks local--day--pending-blocks">
-      <PendingEventBlock v-if="pendingEvent"
+      <PendingEventBlock
+        v-if="pendingEvent"
         :block="pendingEvent"
         @updatePosition="updateBlockPosition"
         @updatePendingEvent="updatePendingEvent"
@@ -23,13 +25,11 @@
           <EventAvailabilityBlock
             :key="index"
             :block="block"
-            @click.native="createPendingEvent(block)"
+            @click.native="createPendingEvent(block, day)"
           />
         </div>
       </template>
-      <template v-else>
-        <NullTimeBlock />
-      </template>
+      <template v-else><NullTimeBlock /></template>
     </div>
   </CalendarDay>
 </template>
@@ -51,9 +51,9 @@
     },
     props: {
       day: Object,
-      availabilities: [Array, Object],
+      availabilities: Array,
       showExpandedWeek: Boolean,
-      pendingEvent: Object, // Needs to be an array, could be multiple
+      pendingEvent: Object,
     },
     computed: {
       dateService() {
@@ -67,8 +67,8 @@
       },
     },
     methods: {
-      createPendingEvent(block) {
-        block.day = this.day
+      createPendingEvent(block, day) {
+        block.day = day
         this.$emit('createPendingEvent', block)
       },
       updateBlockPosition(position) {

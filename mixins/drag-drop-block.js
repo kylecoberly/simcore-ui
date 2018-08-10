@@ -1,5 +1,7 @@
 import { boundDuration, getMetrics } from '../utilities/box-metrics'
 
+let metrics
+
 export default {
   data() {
     return {
@@ -11,7 +13,7 @@ export default {
       if (event.which === 1) {
         event.preventDefault()
         this.isMoving = true
-        this.metrics = getMetrics(event, this.$el, this.maximumDuration)
+        metrics = getMetrics(event, this.$el, this.maximumDuration)
         this.$emit('setMoving', true)
         addEventListener('mousemove', this.move)
         addEventListener('mouseup', this.doneMoving)
@@ -19,20 +21,20 @@ export default {
     },
     move(event) {
       const mouseCoordinate = this.orientation === 'x' ? event.clientX : event.clientY
-      const calc = this.metrics.offset[this.orientation]
+      const calc = metrics.offset[this.orientation]
         + mouseCoordinate
-        - this.metrics.start[this.orientation]
-        - this.metrics.offset_parent[this.orientation]
+        - metrics.start[this.orientation]
+        - metrics.offset_parent[this.orientation]
       const currentStart = boundDuration(
         calc,
         0,
-        this.metrics.max[this.orientation],
+        metrics.max[this.orientation],
       )
 
       let startTime = (
         Math.round(
           currentStart
-          / this.metrics.segment[this.orientation],
+          / metrics.segment[this.orientation],
         ) / 2
       ) + this.timeShiftOffset
 

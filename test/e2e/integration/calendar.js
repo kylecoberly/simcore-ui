@@ -235,7 +235,7 @@ describe('Calendar', function () {
         cy.get('.sim-datalist > ul').as('instructors-list')
           .find('li').as('instructors').should('have.length', 2)
         cy.get('@instructors-list')
-          .find('[placeholder="Any Available Instructor"]').as('instructor-entry').type('Carr{enter}')
+          .find('[placeholder="Any Available Instructor"]').as('instructor-entry').type('Carr{enter}{enter}')
         cy.get('@instructors').should('have.length', 2)
         cy.get('@instructor-entry').should('have.value', 'Dowd, Carrie')
       })

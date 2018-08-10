@@ -1,11 +1,12 @@
 <template>
   <transition name="fade">
     <ul class="sim-timelines">
-      <li v-for="(segment, index) in segments"
+      <li
+        v-for="(segment, index) in segments"
         :key="index"
         :class="getHourClasses(segment)"
       >
-        <div v-if="segment % 1 === 0" class="sim-timeline--time">
+        <div v-if="isWholeNumber(segment)" class="sim-timeline--time">
           {{ segment }}
         </div>
       </li>
@@ -14,6 +15,8 @@
 </template>
 
 <script>
+  import { isWholeNumber } from '../utilities/date'
+
   export default {
     props: {
       maximumDuration: Number,
@@ -26,11 +29,9 @@
         }
         return segments
       },
-      segmentSize() {
-        return (100 / this.maximumDuration)
-      },
     },
     methods: {
+      isWholeNumber,
       getHourClasses(hour) {
         return hour % 1 === 0
           ? `is-hour is-hour-${hour}`

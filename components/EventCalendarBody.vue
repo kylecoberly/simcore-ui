@@ -15,9 +15,9 @@
     />
     <Bubble v-if="pendingEvent"
       slot="bubble"
+      ref="bubble"
       :style="getStyles(position)"
       :position="position"
-      ref="bubble"
       @keydown.esc="clearPendingEvent"
       @dismiss="clearPendingEvent"
     >
