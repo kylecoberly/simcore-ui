@@ -10,10 +10,6 @@ function filterAvailabilities(instructors, filters) {
     .map(filterRequiredInstructors(filters.instructors))
 }
 
-function deepClone(object) {
-  return JSON.parse(JSON.stringify(object))
-}
-
 // Reorganizes the API response to something workable
 function normalize(unnormalizedUsers) {
   return Object.keys(unnormalizedUsers).map(id => {
@@ -100,18 +96,6 @@ function filterRequiredInstructors(instructors) {
   }
 }
 
-// Utilities
-function stripKeys(object) {
-  return Object.keys(object).reduce((array, key) => {
-    array.push(object[key])
-    return array
-  }, [])
-}
-
-function stripTime(datetime) {
-  return datetime.split(' ')[0]
-}
-
 function expandAvailabilitiesByDuration(availabilities, duration){
   return availabilities.reduce((expandedAvailabilities, availability) => {
     const newAvailabilities = expandedAvailabilities.concat(expandAvailability(availability, duration))
@@ -128,7 +112,6 @@ function expandAvailability(availability, duration) {
   return availabilities
 }
 
-// What were the specific instructors?
 function aggregateDaysWithSpecificUsers(specificInstructors){
   return function aggregateDays(aggregateDays, user) {
     return user.days.reduce((aggregateDays, userDay) => {
@@ -140,7 +123,6 @@ function aggregateDaysWithSpecificUsers(specificInstructors){
   }
 }
 
-// What were the specific instructors?
 function foldUserAvailabilityIntoAggregateDay(specificInstructors, userId){
   return function foldAvailabilityIntoAggregateDay(aggregateDay, userAvailability){
     const currentAvailability = findOrAdd(aggregateDay.availabilities, userAvailability, 'startTime')
@@ -149,7 +131,6 @@ function foldUserAvailabilityIntoAggregateDay(specificInstructors, userId){
     return aggregateDay
   }
 
-  // general or specific?
   function addUserToAvailability(specificInstructors = [], userId) {
     return function addToAvailability(availability){
       if (!(availability.specificInstructors && availability.generalInstructors)){
@@ -164,6 +145,37 @@ function foldUserAvailabilityIntoAggregateDay(specificInstructors, userId){
   }
 }
 
+// Utilities
+function deepClone(object) {
+  return JSON.parse(JSON.stringify(object))
+}
+
+function stripKeys(object) {
+  return Object.keys(object).reduce((array, key) => {
+    array.push(object[key])
+    return array
+  }, [])
+}
+
+function stripTime(datetime) {
+  return datetime.split(' ')[0]
+}
+
+function sortTimeBy(list, property) {
+  const dayjs = require('dayjs')
+  return list.sort((a, b) => {
+    let sortOrder
+    if (dayjs(a[property]).isBefore(b[property])){
+      sortOrder = -1
+    } else if (dayjs(a[property]).isAfter(b[property])) {
+      sortOrder = 1
+    } else {
+      sortOrder = 0
+    }
+    return sortOrder
+  })
+}
+
 function findOrAdd(list, item, property) {
   let currentItem = list.find(existingItem => existingItem[property] === item[property])
   if (!currentItem){
@@ -173,20 +185,6 @@ function findOrAdd(list, item, property) {
   }
   return currentItem
 
-  function sortTimeBy(list, property) {
-    const moment = require('moment')
-    return list.sort((a, b) => {
-      let sortOrder
-      if (moment(a[property]).isBefore(b[property])){
-        sortOrder = -1
-      } else if (moment(a[property]).isAfter(b[property])) {
-        sortOrder = 1
-      } else {
-        sortOrder = 0
-      }
-      return sortOrder
-    })
-  }
 }
 
 module.exports = {
