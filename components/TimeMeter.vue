@@ -1,14 +1,12 @@
 <template>
   <section class="sim-flex--1 sim-flex--column filter-molecule filter--duration">
     <header class="filter-molecule--heading text--orange--lighter">
-      <SimIconText icon="#icon--event-duration" icon-type="svg" text="Duration"></SimIconText>
+      <IconText icon="#icon--event-duration" icon-type="svg" text="Duration" />
     </header>
     <div class="filter-molecule--options sim-flex--handoff">
       <div class="sim-timepicker sim-timepicker--y">
         <div class="sim-timepicker--inner" :class="{'is-stretching': isStretching}">
-          <TimeMeterLines
-            :maximumDuration="maximumDuration"
-          />
+          <TimeMeterLines :maximumDuration="maximumDuration" />
           <TimeMeterBlock
             :duration="duration"
             :maximumDuration="maximumDuration"
@@ -23,13 +21,13 @@
 <script>
   import TimeMeterLines from './TimeMeterLines'
   import TimeMeterBlock from './TimeMeterBlock'
-  import SimIconText from './IconText'
+  import IconText from './IconText'
 
   export default {
     components: {
       TimeMeterLines,
       TimeMeterBlock,
-      SimIconText,
+      IconText,
     },
     data() {
       return {

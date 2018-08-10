@@ -5,7 +5,6 @@ export default {
   },
   mutations: {
     setOpen(state, value) {
-      console.log('bubble', value)
       state.isOpen = value
     },
   },

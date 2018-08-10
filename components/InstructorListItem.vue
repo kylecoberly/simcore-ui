@@ -1,28 +1,30 @@
 <template>
   <div class="sim-autofinder sim-autofinder--visible-options">
     <label class="sim-autofinder--search">
-      <SimIconText icon="#icon--checkbox--checked" icon-type="svg"></SimIconText>
+      <IconText icon="#icon--checkbox--checked" icon-type="svg" />
       <input type="text" class="sim-autofinder--search--input" :value="instructor.label" />
-      <div class="sim-autofinder--remove-item" @click="removeSpecificInstructor(instructor.id)">
-        <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
-      </div>
+      <IconText
+        class="sim-autofinder--remove-item"
+        icon="#icon--control--x" icon-type="svg"
+        @click.native="removeSpecificInstructor(instructor.id)"
+      />
     </label>
   </div>
 </template>
 
 <script>
-  import SimIconText from './IconText'
+  import IconText from './IconText'
 
   export default {
     components: {
-      SimIconText,
+      IconText,
     },
     props: {
       instructor: Object,
     },
     methods: {
-      removeSpecificInstructor() {
-        this.$emit('removeSpecificInstructor', this.instructor.id)
+      removeSpecificInstructor(id) {
+        this.$emit('removeSpecificInstructor', id)
       },
     },
   }

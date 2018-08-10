@@ -1,7 +1,7 @@
 <template>
   <aside class="sim-calendar--aside sim-calendar--day-control-panel">
     <div class="sim-calendar--aside--header">
-      <b>My Availability</b>
+      <strong>My Availability</strong>
     </div>
     <div class="sim-calendar--aside--body">
       <TimePicker

@@ -1,26 +1,40 @@
 <template>
   <div class="sim-timepicker--controls">
-    <div class="sim-timepicker--prev-day" @click="loadPreviousDay">
-      <SimIconText icon="fa-arrow-circle-left fa-lg"></SimIconText>
+    <div>
+      <IconText
+        icon="fa-arrow-circle-left fa-lg"
+        class="sim-timepicker--prev-day"
+        @click.native="loadPreviousDay"
+      />
     </div>
     <div class="sim-timepicker--display-date">
       <span>{{ displayDate }} <br /><b>{{ displayTotalTimeBlockHours }}</b></span>
-      <span v-if="countTimeBlockHours > 0" class="sim-timepicker--remove-blocks" @click="$emit('removeAllTimeBlocks')">
-        <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
-      </span>
+      <IconText
+        v-if="countTimeBlockHours > 0"
+        class="sim-timepicker--remove-blocks"
+        icon="#icon--control--x"
+        icon-type="svg"
+        @click.native="$emit('removeAllTimeBlocks')"
+      />
     </div>
-    <div class="sim-timepicker--next-day" @click="loadNextDay">
-      <SimIconText icon="fa-arrow-circle-right fa-lg"></SimIconText>
+    <div>
+      <IconText
+        icon="fa-arrow-circle-right fa-lg"
+        class="sim-timepicker--next-day"
+        @click.native="loadNextDay"
+      />
     </div>
   </div>
 </template>
 
 <script>
-  import SimIconText from './IconText'
+  import { formatBlockHoursForDisplay } from '../utilities/date'
+
+  import IconText from './IconText'
 
   export default {
     components: {
-      SimIconText,
+      IconText,
     },
     props: {
       availabilities: Array,
@@ -41,11 +55,7 @@
           .reduce((sum, value) => sum + value, 0)
       },
       displayTotalTimeBlockHours() {
-        const hourCount = this.countTimeBlockHours.toString()
-          .replace(/\.5/, '½')
-          .replace(/^0/, '') || 0
-
-        return `${hourCount} ${this.countTimeBlockHours > 1 ? 'hours' : 'hour'}`
+        return formatBlockHoursForDisplay(this.countTimeBlockHours)
       },
     },
     methods: {

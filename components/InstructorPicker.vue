@@ -1,55 +1,57 @@
 <template>
   <section class="filter-molecule filter--instructors sim-filter">
     <header class="filter-molecule--heading text--green">
-      <SimIconText icon="#icon--instructors-checked" icon-type="svg" :text="`Instructors: ${selectedInstructorCount}`"></SimIconText>
+      <IconText
+        icon="#icon--instructors-checked"
+        icon-type="svg"
+        :text="`Instructors: ${selectedInstructorCount}`"
+      />
     </header>
-    <div class="filter-molecule--options">
-      <div class="sim-datalist">
-        <transition-group
-          name="sim-datalist"
-          tag="ul"
-          mode="out-in"
+    <div class="filter-molecule--options sim-datalist">
+      <transition-group
+        name="sim-datalist"
+        tag="ul"
+        mode="out-in"
+      >
+        <li
+          v-for="(instructor, index) in selectedInstructors"
+          :key="`general-${index}`"
+          :class="`instructor-${instructor.id}`"
         >
-          <li :key="`general-${index}`" :class="`instructor-${instructor.id}`" v-for="(instructor, index) in selectedInstructors">
-            <SimAutofinder
-              :options="availableInstructors"
-              :selectedItem="instructor"
-              :canRemove="selectedInstructors.length > 1"
-              :isFocused="index === selectedInstructors.length - 1"
-              placeholder="Any Available Instructor"
-              @select="selectInstructor(index, ...arguments)"
-              @clear="clearInstructor(index)"
-              @remove="removeInstructor(index)"
-              @focusNextItem="focusNextItem(index)"
-              @keyup.shift.tab="focusPreviousItem(index)"
-              @click.native="focusItem(index)"
-            />
-          </li>
-          <li key="add">
-            <span class="control--add-item" @click="addInstructor">
-              <SimIconText icon="#icon--control--add" icon-type="svg"></SimIconText>
-            </span>
-          </li>
-        </transition-group>
-      </div>
+          <Autofinder
+            :options="availableInstructors"
+            :selectedItem="instructor"
+            :canRemove="selectedInstructors.length > 1"
+            :isFocused="index === selectedInstructors.length - 1"
+            placeholder="Any Available Instructor"
+            @select="selectInstructor(index, ...arguments)"
+            @clear="clearInstructor(index)"
+            @remove="removeInstructor(index)"
+            @next="next(index)"
+          />
+        </li>
+        <li key="add">
+          <IconText
+            class="control--add-item"
+            icon="#icon--control--add"
+            icon-type="svg"
+            @click.native="addInstructor"
+          />
+        </li>
+      </transition-group>
     </div>
   </section>
 </template>
 
 <script>
   import Vue from 'vue'
-  import SimIconText from './IconText'
-  import SimAutofinder from './Autofinder'
+  import IconText from './IconText'
+  import Autofinder from './Autofinder'
 
   export default {
     components: {
-      SimIconText,
-      SimAutofinder,
-    },
-    data() {
-      return {
-        currentlyFocusedField: 0,
-      }
+      IconText,
+      Autofinder,
     },
     props: {
       instructors: Array,
@@ -59,9 +61,12 @@
       selectedInstructorCount() {
         return this.selectedInstructors.length
       },
+      selectedInstructorIds() {
+        return this.selectedInstructors.map(instructor => instructor.id)
+      },
       availableInstructors() {
-        const selectedInstructorIds = this.selectedInstructors.map(instructor => instructor.id)
-        return this.instructors.filter(instructor => !selectedInstructorIds.includes(instructor.id))
+        return this.instructors
+          .filter(instructor => !this.selectedInstructorIds.includes(instructor.id))
       },
     },
     methods: {
@@ -81,19 +86,10 @@
         Vue.set(this.selectedInstructors, index, instructor)
         this.$emit('setInstructors', this.selectedInstructors)
       },
-      focusPreviousItem(index) {
-        if (index > 0) {
-          this.currentlyFocusedField = index - 1
-        }
-      },
-      focusItem(index) {
-        this.currentlyFocusedField = index
-      },
-      focusNextItem(index) {
-        if (this.currentlyFocusedField + 1 >= this.selectedInstructorCount) {
+      next(index) {
+        if (index + 1 >= this.selectedInstructorCount) {
           this.addInstructor()
         }
-        this.currentlyFocusedField = index + 1
       },
     },
   }

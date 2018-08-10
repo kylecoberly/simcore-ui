@@ -34,7 +34,7 @@
       },
       blockClasses() {
         return {
-          'is-stretching is-stretching-down': this.stretchDirection
+          'is-stretching is-stretching-down': this.stretchDirection,
         }
       },
       blockStyles() {
@@ -46,6 +46,6 @@
 
         return styles.join(';')
       },
-    }
+    },
   }
 </script>

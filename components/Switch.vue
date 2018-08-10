@@ -1,8 +1,12 @@
-<template lang="html">
+<template>
   <div class="sim-switch">
     <label>
       <span v-if="leftLabel">{{ leftLabel }}</span>
-      <input type="checkbox" :value="true" :checked="value" @change="change" />
+      <input
+        type="checkbox"
+        :checked="value"
+        @change="$emit('change', !value)"
+      />
       <span v-if="rightLabel">{{ rightLabel }}</span>
     </label>
   </div>
@@ -10,13 +14,10 @@
 
 <script>
   export default {
-    name: 'sim-switch',
-    props: ['value', 'leftLabel', 'rightLabel'],
-    methods: {
-      change() {
-        this.checked = !this.checked
-        this.$emit('change', this.checked)
-      },
+    props: {
+      value: Boolean,
+      leftLabel: String,
+      rightLabel: String,
     },
   }
 </script>

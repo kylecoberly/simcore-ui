@@ -1,6 +1,11 @@
 <template>
   <TimeBlock theme="available" :class="blockClasses" :style="blockStyles">
-    <RemoverControl @click.native.stop="$emit('removeTimeBlock')" />
+    <IconText
+      class="sim-timeblock--remover"
+      icon="#icon--control--minus"
+      icon-type="svg"
+      @click.native.stop="$emit('removeTimeBlock')"
+    />
     <StretchHandle direction="up" @mousedown.native="startStretchUp" />
     <div class="sim-timeblock--mover" @mousedown="startMove"></div>
     <StretchHandle direction="down" @mousedown.native="startStretchDown" />
@@ -9,8 +14,8 @@
 </template>
 
 <script>
+  import IconText from './IconText'
   import TimeBlock from './TimeBlock'
-  import RemoverControl from './RemoverControl'
   import StretchHandle from './StretchHandle'
   import TimeBlockLabel from './TimeBlockLabel'
 
@@ -20,8 +25,8 @@
 
   export default {
     components: {
+      IconText,
       TimeBlock,
-      RemoverControl,
       StretchHandle,
       TimeBlockLabel,
     },

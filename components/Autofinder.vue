@@ -1,7 +1,7 @@
 <template>
   <div class="sim-autofinder sim-autofinder--visible-options">
     <label class="sim-autofinder--search">
-      <SimIconText :icon="icon" icon-type="svg"></SimIconText>
+      <IconText :icon="icon" icon-type="svg" />
       <input type="text" class="sim-autofinder--search--input"
         ref="input"
         :placeholder="placeholder"
@@ -14,9 +14,12 @@
         @keydown.tab.exact="selectHighlighted"
         @keyup.esc="blur"
       />
-      <div v-if="canRemove" class="sim-autofinder--remove-item" @click="$emit('remove')">
-        <SimIconText icon="#icon--control--x" icon-type="svg"></SimIconText>
-      </div>
+      <IconText
+        v-if="canRemove"
+        class="sim-autofinder--remove-item"
+        @click.native="$emit('remove')"
+        icon="#icon--control--x" icon-type="svg"
+      />
     </label>
     <div v-if="optionsOpen" class="sim-autofinder--options">
       <transition-group appear name="list" tag="ul" mode="in-out">
@@ -38,11 +41,11 @@
 
 <script>
   /* eslint no-unused-expressions: 0 */
-  import SimIconText from './IconText'
+  import IconText from './IconText'
 
   export default {
     components: {
-      SimIconText,
+      IconText,
     },
     data() {
       return {
@@ -132,12 +135,11 @@
         if (option) {
           this.$emit('select', option)
         }
-        this.$emit('focusNextItem')
       },
       selectHighlighted() {
         this.optionsOpen
           ? this.select(this.matchingOptions[this.highlightedIndex])
-          : this.$emit('focusNextItem')
+          : this.$emit('next')
       },
       highlightPrevious() {
         if (this.highlightedIndex > 0) {

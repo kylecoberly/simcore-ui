@@ -101,19 +101,16 @@ export default {
     bubbleService() {
       return this.$store.state.services.bubble
     },
+    isCurrentMonth() {
+      return this.selectedDate.isSame(this.today, 'month')
+    },
     componentClasses() {
-      const classes = [`is-${this.contextLabel}-context`]
-      const isCurrentMonth = this.selectedDate.isSame(this.today, 'month')
-
-      if (isCurrentMonth) {
-        classes.push('is-current-month')
+      const classes = {
+        'is-current-month': this.isCurrentMonth,
+        'is-expanded': this.showExpandedWeek,
       }
-
-      if (this.showExpandedWeek || this.bubbleIsOpen) {
-        classes.push('is-expanded')
-      }
-
-      return classes.join(' ')
+      classes[`is-${this.contextLabel}-context`] = true
+      return classes
     },
     filteredAvailabilities() {
       // Clean this up
@@ -128,26 +125,8 @@ export default {
       const selectedDate = this.selectedDate.format('YYYY-MM-DD')
       return this.user.availabilities[selectedDate] || []
     },
-    filterContainerClasses() {
-      const classes = []
-
-      if (this.isCoordinator) {
-        classes.push('sim-calendar--filters')
-
-        if (this.bubbleIsOpen) {
-          classes.push('sim-calendar--filters--disabled')
-        }
-      } else {
-        classes.push('sim-calendar--day-control-panel')
-      }
-
-      return classes.join(' ')
-    },
     contextLabel() {
       return this.isCoordinator ? 'coordinator' : 'instructor'
-    },
-    activeInstructorCount() {
-      return this.activeInstructors.length
     },
     isBubbleOpen() {
       return this.bubbleService.isOpen
