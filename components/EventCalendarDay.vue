@@ -10,11 +10,9 @@
     />
     <div
       class="local--day--blocks local--day--event-blocks"
-      slot="events"
     ></div>
     <div
       class="local--day--blocks local--day--pending-blocks"
-      slot="pending-events"
     >
       <PendingEventBlock v-if="pendingEvent"
         :block="pendingEvent"
@@ -26,11 +24,8 @@
     <div
       v-if="!isBeforeToday"
       class="local--day--blocks local--day--aggregate-blocks"
-      slot="aggregates"
     >
-      <div v-for="(block, index) in availabilities"
-        slot="aggregates"
-      >
+      <div v-for="(block, index) in availabilities">
         <EventAvailabilityBlock
           :index="index"
           :block="block"

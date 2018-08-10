@@ -11,12 +11,10 @@
     />
     <div
       class="local--day--blocks local--day--event-blocks"
-      slot="events"
     ></div>
     <div
       v-if="!isBeforeToday"
       class="local--day--blocks local--day--time-blocks"
-      slot="availabilities"
     >
       <template v-for="(block, index) in availabilities">
         <AvailabilityBlock
@@ -83,7 +81,6 @@
         this.$emit('updateAvailabilities', date, availabilities)
       },
       removeTimeBlock(index) {
-        console.log('hey', index)
         const availabilities = [...this.availabilities]
         availabilities.splice(index, 1)
         this.updateAvailabilities(this.day, availabilities)

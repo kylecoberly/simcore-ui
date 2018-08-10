@@ -263,7 +263,7 @@ describe('Calendar', function () {
       })
     })
   })
-  describe('Filter Availabilities', function () {
+  describe('Events', function () {
     before(() => {
       initializeServer()
       cy.visit('/components/calendar')
