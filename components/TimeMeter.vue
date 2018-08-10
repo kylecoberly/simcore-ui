@@ -7,7 +7,7 @@
       <div class="sim-timepicker sim-timepicker--y">
         <div class="sim-timepicker--inner" :class="{'is-stretching': isStretching}">
           <TimeMeterLines :maximumDuration="maximumDuration" />
-          <TimeMeterBlock
+          <TimeBlockMeter
             :duration="duration"
             :maximumDuration="maximumDuration"
             @setDuration="setDuration"
@@ -20,13 +20,13 @@
 
 <script>
   import TimeMeterLines from './TimeMeterLines'
-  import TimeMeterBlock from './TimeMeterBlock'
+  import TimeBlockMeter from './TimeBlockMeter'
   import IconText from './IconText'
 
   export default {
     components: {
       TimeMeterLines,
-      TimeMeterBlock,
+      TimeBlockMeter,
       IconText,
     },
     data() {

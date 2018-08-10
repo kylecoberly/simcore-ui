@@ -6,7 +6,7 @@
     />
     <div class="sim-timepicker--inner" :class="timelineClasses">
       <TimeLines @createTimeBlock="createTimeBlock" />
-      <AvailabilityBlock v-for="(block, index) in availabilities"
+      <TimeBlockAvailability v-for="(block, index) in availabilities"
         theme="available"
         :key="index"
         :block="block"
@@ -18,13 +18,13 @@
 </template>
 
 <script>
-  import AvailabilityBlock from './AvailabilityBlock'
+  import TimeBlockAvailability from './TimeBlockAvailability'
   import TimeLines from './TimeLines'
   import TimePickerControls from './TimePickerControls'
 
   export default {
     components: {
-      AvailabilityBlock,
+      TimeBlockAvailability,
       TimeLines,
       TimePickerControls,
     },
