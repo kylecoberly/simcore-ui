@@ -5,14 +5,13 @@
     <div class="local--day">
       <slot name="timelines" />
       <div class="sim-calendar--grid--date">{{ day.format('D') }}</div>
-      <slot name="events" />
-      <slot name="pending-events" />
-      <slot name="availabilities" />
-      <slot name="aggregates" />
+      <slot />
       <div class="sim-calendar--grid--tools">
-        <span @click="toggleExpandedWeek">
-          <IconText :icon="expandIcon" icon-type="svg" />
-        </span>
+      <IconText
+        :icon="expandIcon"
+        iconType="svg"
+        @click.native="toggleExpandedWeek"
+      />
       </div>
     </div>
   </div>

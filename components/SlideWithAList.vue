@@ -61,9 +61,6 @@
       SimSlideHeader,
       SimSlideIntro,
     },
-    mounted() {
-      console.log(this.slide)
-    },
     data() {
       return {
         selectedItems: [],
