@@ -66,15 +66,12 @@
       isFocused: Boolean,
       selectedItem: Object,
     },
-    watch: {
-      isFocused: {
-        immediate: true,
-        handler(){
-          if (this.isFocused) {
-            this.$refs.input.focus()
-          }
+    mounted(){
+      this.$watch('isFocused', () => {
+        if (this.isFocused) {
+          this.$refs.input.focus()
         }
-      },
+      }, { immediate: true })
     },
     computed: {
       inputValue() {
