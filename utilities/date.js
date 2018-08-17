@@ -62,3 +62,10 @@ export function isHour(hour) {
 export function isWholeNumber(number) {
   return number % 1 === 0
 }
+
+export function getHour(datetime) {
+  const halfHour = +datetime.format('m') === 0
+    ? 0
+    : 0.5
+  return +datetime.format('H') + halfHour
+}
