@@ -2,7 +2,7 @@
 /* eslint */
 import { mount } from '@vue/test-utils'
 import assert from 'assert'
-import TimeBlock from '../../components/TimeBlock'
+import TimeBlock from '../../../components/TimeBlock'
 
 xdescribe('TimeBlock', () => {
   xdescribe('#render', () => {

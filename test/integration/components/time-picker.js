@@ -2,7 +2,7 @@
 /* eslint */
 import { mount } from '@vue/test-utils'
 import assert from 'assert'
-import TimePicker from '../../components/TimePicker'
+import TimePicker from '../../../components/TimePicker'
 
 xdescribe('TimePicker', () => {
   it('Renders basic text', () => {

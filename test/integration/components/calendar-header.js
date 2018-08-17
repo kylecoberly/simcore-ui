@@ -3,7 +3,7 @@
 import { mount } from '@vue/test-utils'
 import assert from 'assert'
 import dayjs from 'dayjs'
-import CalendarHeader from '../../components/CalendarHeader'
+import CalendarHeader from '../../../components/CalendarHeader'
 
 xdescribe('CalendarHeader', () => {
   beforeEach(() => {

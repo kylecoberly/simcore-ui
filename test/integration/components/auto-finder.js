@@ -3,7 +3,7 @@
 
 import assert from 'assert'
 import { shallowMount } from '@vue/test-utils'
-import AutoFinder from '../../components/Autofinder'
+import AutoFinder from '../../../components/Autofinder'
 
 xdescribe('AutoFinder', () => {
   beforeEach(() => {

@@ -9,7 +9,7 @@ const {
   expandAvailabilitiesByDuration,
   expandAvailability,
   addUserToTotalAvailability,
-} = require('../../utilities/filter-availabilities')
+} = require('../../../utilities/filter-availabilities')
 
 describe('NetAvailabilities', () => {
   // groupUserDays

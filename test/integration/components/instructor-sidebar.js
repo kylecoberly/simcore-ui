@@ -2,7 +2,7 @@
 /* eslint */
 import { shallowMount } from '@vue/test-utils'
 import assert from 'assert'
-import InstructorSidebar from '../../components/InstructorSidebar'
+import InstructorSidebar from '../../../components/SidebarInstructor'
 
 describe('InstructorSidebar', () => {
   it('#updateAvailabilities', () => {
