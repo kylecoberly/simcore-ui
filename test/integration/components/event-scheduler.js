@@ -1,24 +1,14 @@
 /* global before, describe, it */
-
-import dayjs from 'dayjs'
-import advancedFormat from 'dayjs/plugin/advancedFormat'
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import assert from 'assert'
 import EventScheduler from '../../../components/EventScheduler'
-
-dayjs.extend(advancedFormat)
+import smallEvent from '../fixtures/small-event'
 
 describe('Event Scheduler', () => {
   before(() => {
-    this.component = shallowMount(EventScheduler, {
+    this.component = mount(EventScheduler, {
       propsData: {
-        event: {
-          time: dayjs('2018-07-01 01:00:00'),
-          duration: 1.5,
-          title: 'A Title',
-          description: 'A Description',
-          department: 'A Department',
-        },
+        event: smallEvent,
         categories: [{
           id: 1,
           label: 'A',
@@ -29,12 +19,22 @@ describe('Event Scheduler', () => {
           id: 3,
           label: 'C',
         }],
+        departments: [{
+          id: 1,
+          label: 'X',
+        }, {
+          id: 2,
+          label: 'Y',
+        }, {
+          id: 3,
+          label: 'Z',
+        }],
       },
     })
   })
   describe('header', () => {
     it('shows the title as New Event', () => {
-      const title = this.component.find('h3').text()
+      const title = this.component.find('header span').text()
       assert.equal(title, 'New Event')
     })
     it('displays the date', () => {
@@ -59,9 +59,19 @@ describe('Event Scheduler', () => {
       const categories = this.component.findAll('#category option')
       assert.equal(categories.length, 3)
     })
-    xit('displays a selected department', () => {
+    it('displays a selected department', () => {
       const department = this.component.find('#department input').element.value
       assert.equal(department, 'A Department')
+    })
+  })
+  describe('submission', () => {
+    it('saves a draft', () => {
+      this.component.find('.save-draft').trigger('click')
+      assert.deepEqual(this.component.emitted().saveDraft[0][0], smallEvent)
+    })
+    it('submits an event for approval', () => {
+      this.component.find('form').trigger('submit')
+      assert.deepEqual(this.component.emitted().submitEvent[0][0], smallEvent)
     })
   })
 })
