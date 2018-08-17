@@ -67,16 +67,14 @@
       selectedItem: Object,
     },
     watch: {
-      isFocused() {
-        if (this.isFocused) {
-          this.$refs.input.focus()
+      isFocused: {
+        immediate: true,
+        handler(){
+          if (this.isFocused) {
+            this.$refs.input.focus()
+          }
         }
       },
-    },
-    mounted() {
-      if (this.isFocused) {
-        this.$refs.input.focus()
-      }
     },
     computed: {
       inputValue() {
