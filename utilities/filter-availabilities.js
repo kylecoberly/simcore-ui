@@ -1,8 +1,11 @@
+const { deepClone } = require('./deep-clone')
+
 function filterAvailabilities(instructors, filters) {
   if (!(instructors instanceof Array)){
     instructors = normalize(instructors)
   }
   return instructors
+    .map(deepClone)
     .map(filterDuration(filters.duration))
     .map(splitLongDurations(filters.duration))
     .reduce(aggregateDaysWithSpecificUsers(filters.instructors), [])
@@ -180,7 +183,6 @@ function findOrAdd(list, item, property) {
     list = sortTimeBy(list, property)
   }
   return currentItem
-
 }
 
 module.exports = {
@@ -189,4 +191,4 @@ module.exports = {
   expandAvailability,
   aggregateDaysWithSpecificUsers,
   normalize,
-};
+}
