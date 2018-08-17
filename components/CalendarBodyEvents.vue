@@ -21,7 +21,11 @@
       @keydown.esc="clearPendingEvent"
       @dismiss="clearPendingEvent"
     >
-      <SlidePresenter :slides="slides" />
+      <EventScheduler
+        :event="event"
+        :departments="departments"
+        :categories="categories"
+      />
     </Bubble>
   </CalendarBody>
 </template>
@@ -33,7 +37,7 @@
   import CalendarBody from './CalendarBody'
   import CalendarDayEvent from './CalendarDayEvent'
   import Bubble from './Bubble'
-  import SlidePresenter from './SlidePresenter'
+  import EventScheduler from './EventScheduler'
 
   import { formatTimesForDisplay, formatBlockHoursForDisplay } from '../utilities/date'
 
@@ -42,7 +46,7 @@
       CalendarBody,
       CalendarDayEvent,
       Bubble,
-      SlidePresenter,
+      EventScheduler,
     },
     data() {
       return {
@@ -74,20 +78,42 @@
         const currentMonthString = this.selectedDate.format('YYYY-MM-')
         return daysInMonth.map(day => dayjs(`${currentMonthString}${day}`))
       },
-      slides() {
-        return this.pendingEvent
-          ? [{
-            title: this.pendingEvent.day.format('dddd, MMMM Do'),
-            subtitle: `${formatBlockHoursForDisplay(this.pendingEvent.duration)} • ${formatTimesForDisplay(this.pendingEvent.startTime, this.pendingEvent.duration)}`,
-            componentType: 'SimSlideWithAList',
-            content: {
-              segment_start: (this.pendingEvent.startTime * 2),
-              segment_end: (((this.pendingEvent.startTime + this.pendingEvent.duration) * 2) - 1),
-              generalItems: this.pendingEvent.generalInstructors,
-              specificItems: this.pendingEvent.specificInstructors,
-            },
-          }]
-          : []
+      event() {
+        return {
+          time: dayjs('2018-07-01 01:00:00'),
+          duration: 1.5,
+          title: 'A Title',
+          description: 'A Description',
+          department: {
+            id: 1,
+            label: 'A Department',
+          },
+          isApproved: false,
+        }
+      },
+      departments() {
+        return [{
+          id: 1,
+          label: 'A',
+        }, {
+          id: 2,
+          label: 'B',
+        }, {
+          id: 3,
+          label: 'C',
+        }]
+      },
+      categories() {
+        return [{
+          id: 1,
+          label: 'X',
+        }, {
+          id: 2,
+          label: 'Y',
+        }, {
+          id: 3,
+          label: 'Z',
+        }]
       },
     },
     methods: {

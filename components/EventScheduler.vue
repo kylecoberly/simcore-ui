@@ -1,8 +1,7 @@
 <template>
-  <form @submit.prevent="submitEvent">
+  <form class="event-scheduler" @submit.prevent="submitEvent">
     <header>
-      <IconText icon="#icon--event-duration" icon-type="svg" text="Duration" />
-      <h3>New Event</h3>
+      <IconText icon="#icon--event-duration" icon-type="svg" text="New Event" />
       <div class="schedule">
         <time class="event-date">{{eventDate}}</time>
         <time class="event-time">{{eventTime}}</time>
@@ -23,16 +22,16 @@
                 v-for="(category, id) in categories"
                 :key="id"
               >
-                {{category}}
+                {{category.label}}
               </option>
             </select>
             <label>Department</label>
             <AutoFinder
-                id="department"
-                placeholder="Start typing to find a Department"
-                :options="departments"
-                :canRemove="false"
-                :selectedItem="event.department"
+              id="department"
+              placeholder="Start typing to find a Department"
+              :options="departments"
+              :canRemove="false"
+              :selectedItem="event.department"
             />
           </fieldset>
         </li>
@@ -54,7 +53,7 @@
       </ol>
     </main>
     <footer>
-      <button @click="saveDraft">Save Draft</button>
+      <button class="save-draft" @click="saveDraft">Save Draft</button>
       <input type="submit" value="Submit For Approval" />
     </footer>
   </form>
@@ -88,10 +87,89 @@ export default {
   },
   methods: {
     saveDraft() {
+      this.$emit('saveDraft', this.event)
+    },
+    submitEvent() {
+      this.$emit('submitEvent', this.event)
     },
   },
 }
 </script>
 
 <style lang="scss">
+.event-scheduler {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  height: 100%;
+  header, main, footer {
+    padding: 0.5rem;
+  }
+  header {
+    background-color: #fff;
+    span {
+      color: orange;
+      font-size: 1rem;
+    }
+    .schedule {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      color: black;
+    }
+  }
+  main {
+    flex: 1;
+    overflow-y: auto;
+    > ol {
+      counter-reset: event-planning-counter;
+      list-style-type: none;
+      padding-left: 0;
+      > li {
+        display: flex;
+        flex-flow: row no-wrap;
+        &:not(:last-child) {
+          border-bottom: 2px solid #333;
+        }
+        h4 {
+          margin-bottom: 0;
+          color: orange;
+        }
+        h4::before {
+          content: counter(event-planning-counter);
+          counter-increment: event-planning-counter;
+          color: orange;
+          font-size: 2rem;
+          margin-right: 0.5rem;
+        }
+        input, textarea, select {
+          background-color: #eee;
+          margin-bottom: 0.5rem;
+        }
+      }
+    }
+    fieldset {
+      border: none;
+    }
+    textarea {
+      resize: none;
+    }
+  }
+  footer {
+    display: flex;
+    justify-content: space-between;
+    .save-draft {
+      padding: 1rem;
+      background-color: orange;
+      color: white;
+      border-radius: 4px;
+    }
+    [type=submit] {
+      padding: 1rem;
+      background-color: #ccc;
+      color: #999;
+      border-radius: 4px;
+    }
+  }
+}
 </style>
