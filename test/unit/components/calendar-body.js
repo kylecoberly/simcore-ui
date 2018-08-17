@@ -3,7 +3,7 @@
 import { shallowMount } from '@vue/test-utils'
 import assert from 'assert'
 import dayjs from 'dayjs'
-import CalendarBody from '../../../components/CalendarBody'
+// import CalendarBody from '../../../components/CalendarBody'
 
 xdescribe('CalendarBody', () => {
   beforeEach(() => {

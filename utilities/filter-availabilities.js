@@ -31,24 +31,24 @@ function normalize(unnormalizedUsers) {
     user.days = stripKeys(user.days.reduce(groupUserDays, {}))
     return user
   })
-}
 
-function groupUserDays(groupedAvailabilities, availability) {
-  groupedAvailabilities[availability.date]
-    ? groupedAvailabilities[availability.date].availabilities.push({
-      startTime: availability.startTime,
-      duration: availability.duration,
-    })
-    : groupedAvailabilities[availability.date] = initializeAvailabilityDate(availability)
-  return groupedAvailabilities
-
-  function initializeAvailabilityDate(availability) {
-    return {
-      date: availability.date,
-      availabilities: [{
+  function groupUserDays(groupedAvailabilities, availability) {
+    groupedAvailabilities[availability.date]
+      ? groupedAvailabilities[availability.date].availabilities.push({
         startTime: availability.startTime,
         duration: availability.duration,
-      }]
+      })
+      : groupedAvailabilities[availability.date] = initializeAvailabilityDate(availability)
+    return groupedAvailabilities
+
+    function initializeAvailabilityDate(availability) {
+      return {
+        date: availability.date,
+        availabilities: [{
+          startTime: availability.startTime,
+          duration: availability.duration,
+        }]
+      }
     }
   }
 }
@@ -191,4 +191,7 @@ module.exports = {
   expandAvailability,
   aggregateDaysWithSpecificUsers,
   normalize,
+  filterDuration,
+  splitLongDurations,
+  filterEnoughInstructors,
 }
