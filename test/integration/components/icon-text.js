@@ -2,7 +2,7 @@
 /* eslint */
 import { mount } from '@vue/test-utils'
 import assert from 'assert'
-import IconText from '../../components/IconText'
+import IconText from '../../../components/IconText'
 
 describe('IconText', () => {
   before(() => {

@@ -2,7 +2,7 @@
 /* eslint */
 import { shallowMount } from '@vue/test-utils'
 import assert from 'assert'
-import CoordinatorSidebar from '../../components/CoordinatorSidebar'
+import CoordinatorSidebar from '../../../components/SidebarCoordinator'
 
 xdescribe('CoordinatorSidebar', () => {
   beforeEach(() => {

@@ -1,9 +1,13 @@
 /* global describe, before, it */
 /* eslint */
 import dayjs from 'dayjs'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
+
 import { shallowMount } from '@vue/test-utils'
 import assert from 'assert'
-import Calendar from '../../components/Calendar'
+import Calendar from '../../../components/Calendar'
+
+dayjs.extend(advancedFormat)
 
 xdescribe('Calendar', () => {
   before(() => {

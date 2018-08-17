@@ -2,7 +2,7 @@
 /* eslint */
 import { shallowMount } from '@vue/test-utils'
 import assert from 'assert'
-import CalendarDay from '../../components/CalendarDay'
+import CalendarDay from '../../../components/CalendarDay'
 
 xdescribe('CalendarDay', () => {
   describe('#render', () => {

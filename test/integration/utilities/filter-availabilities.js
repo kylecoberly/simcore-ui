@@ -1,7 +1,7 @@
 const assert = require('assert')
 const {
   filterAvailabilities,
-} = require('../../utilities/filter-availabilities')
+} = require('../../../utilities/filter-availabilities')
 
 describe('#filterAvailabilities', () => {
   it('adds a matching availability to the total availabilities', () => {

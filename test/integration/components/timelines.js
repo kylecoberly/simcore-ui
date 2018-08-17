@@ -2,7 +2,7 @@
 /* eslint */
 import { mount } from '@vue/test-utils'
 import assert from 'assert'
-import TimeLines from '../../components/TimeLines'
+import TimeLines from '../../../components/TimeLines'
 
 describe('TimeLines', () => {
   it('Renders basic text', () => {
