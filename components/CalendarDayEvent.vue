@@ -1,7 +1,8 @@
 <template>
   <CalendarDay
-    :day="day"
     @toggleExpandedWeek="$emit('toggleExpandedWeek')"
+    :showExpandedWeek="showExpandedWeek"
+    :day="day"
   >
     <TimeLines
       v-if="showTimelines"
@@ -14,12 +15,15 @@
       <TimeBlockPendingEvent
         v-if="pendingEvent"
         :block="pendingEvent"
+        @click.native="openBubble"
         @updatePosition="updateBlockPosition"
-        @updatePendingEvent="updatePendingEvent"
+        @updateTimeBlock="updatePendingEvent"
         @clearPendingEvent="$emit('clearPendingEvent')"
       />
     </div>
-    <div class="local--day--blocks local--day--aggregate-blocks">
+    <div class="local--day--blocks local--day--aggregate-blocks"
+       @click="expandWeek"
+     >
       <template v-if="availabilities.length">
         <div v-for="(block, index) in availabilities">
           <TimeBlockAggregateAvailability
@@ -49,6 +53,7 @@
       TimeBlockPendingEvent,
       TimeBlockNull,
     },
+    extends: CalendarDay,
     props: {
       day: Object,
       availabilities: Array,
@@ -76,6 +81,9 @@
       },
       updatePendingEvent(block) {
         this.$emit('updatePendingEvent', block)
+      },
+      openBubble() {
+        this.$store.dispatch('services/bubble/setOpen', true)
       },
     },
   }

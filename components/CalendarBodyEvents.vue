@@ -8,12 +8,13 @@
       :pendingEvent="isPendingEventToday(pendingEvent, day)"
       @click.native="setDate(day)"
       @toggleExpandedWeek="toggleExpandedWeek"
+      @expandWeek="expandWeek"
       @createPendingEvent="createPendingEvent"
       @clearPendingEvent="clearPendingEvent"
       @updateBlockPosition="updateBlockPosition(...arguments, day)"
       @updatePendingEvent="updatePendingEvent"
     />
-    <Bubble v-if="pendingEvent"
+    <Bubble v-if="isBubbleOpen && pendingEvent"
       slot="bubble"
       ref="bubble"
       :style="getStyles(position)"
@@ -48,6 +49,7 @@
       Bubble,
       EventScheduler,
     },
+    extends: CalendarBody,
     data() {
       return {
         position: {},
@@ -55,29 +57,11 @@
       }
     },
     props: {
-      showExpandedWeek: Boolean,
       filteredAvailabilities: Array,
       instructors: Array,
+      showExpandedWeek: Boolean,
     },
     computed: {
-      dateService() {
-        return this.$store.state.services.date
-      },
-      selectedDate() {
-        return this.dateService.selectedDate
-      },
-      daysInCurrentMonth() {
-        const daysInMonth = []
-        for (let day = 1, count = this.selectedDate.daysInMonth(); day <= count; day += 1) {
-          let dayString = day.toString()
-          if (day < 10) {
-            dayString = `0${dayString}`
-          }
-          daysInMonth.push(dayString)
-        }
-        const currentMonthString = this.selectedDate.format('YYYY-MM-')
-        return daysInMonth.map(day => dayjs(`${currentMonthString}${day}`))
-      },
       event() {
         return {
           time: dayjs('2018-07-01 01:00:00'),
@@ -117,9 +101,6 @@
       },
     },
     methods: {
-      toggleExpandedWeek() {
-        this.$emit('toggleExpandedWeek')
-      },
       getEventAvailabilitiesForDay(date) {
         const matchingDay = this.filteredAvailabilities.find(day => date.isSame(day.date, 'day'))
         return matchingDay
@@ -129,18 +110,36 @@
       createPendingEvent(block) {
         this.pendingEvent = {
           day: block.day,
-          specificInstructors: block.specificInstructors.map(id => {
-            return this.instructors.find(instructor => +instructor.id === +id)
-          }),
-          generalInstructors: block.generalInstructors.map(id => {
-            return this.instructors.find(instructor => +instructor.id === +id)
-          }),
+          specificInstructors: block.specificInstructors.map(this.getInstructor),
+          generalInstructors: block.generalInstructors.map(this.getInstructor),
           startTime: block.startTime,
           duration: block.duration,
         }
+        this.$store.dispatch('services/bubble/setOpen', true)
+      },
+      getInstructor(id){
+        return this.instructors.find(instructor => +instructor.id === +id)
       },
       updatePendingEvent(block) {
-        this.pendingEvent = block
+        const matchingAvailability = this.filteredAvailabilities
+          .find(day => day.date === block.day.format("YYYY-MM-DD"))
+          .availabilities
+          .find(availability => availability.startTime === block.startTime)
+
+        const {
+          specificInstructors,
+          generalInstructors,
+        } = matchingAvailability || {
+          specificInstructors: [],
+          generalInstructors: [],
+        }
+
+        Object.assign(this.pendingEvent, {
+          startTime: block.startTime,
+          duration: block.duration,
+          specificInstructors: specificInstructors.map(this.getInstructor),
+          generalInstructors: generalInstructors.map(this.getInstructor),
+        })
       },
       clearPendingEvent() {
         this.pendingEvent = null
@@ -159,6 +158,7 @@
       updateBlockPosition(position, day) {
         position.offset.x = day.day() + 1
         this.position = this.getBubblePosition(position)
+        // Update calendar position
       },
       getBubblePosition({ domPosition, offset }) {
         const position = {}
@@ -186,9 +186,6 @@
             ? pendingEvent
             : undefined
           : undefined
-      },
-      setDate(date) {
-        this.$store.dispatch('services/date/setDate', date)
       },
     },
   }

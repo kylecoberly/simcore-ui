@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="sim-calendar--grid--body">
-        <div class="sim-calendar--grid--days" @click.meta="$emit('toggleExpandedWeek')">
+        <div class="sim-calendar--grid--days" @click.meta="toggleExpandedWeek">
           <div v-if="startOffset > 0" class="sim-calendar--grid--before" :style="{'--offset': startOffset}"></div>
           <slot name="day" />
           <div v-if="endOffset > 0" class="sim-calendar--grid--after"></div>
@@ -47,6 +47,32 @@
       },
       endOffset() {
         return 6 - dayjs(this.selectedDate).endOf('month').day()
+      },
+      daysInCurrentMonth() {
+        const daysInMonth = []
+        for (let day = 1, count = this.selectedDate.daysInMonth(); day <= count; day += 1) {
+          let dayString = day.toString()
+          if (day < 10) {
+            dayString = `0${dayString}`
+          }
+          daysInMonth.push(dayString)
+        }
+        const currentMonthString = this.selectedDate.format('YYYY-MM-')
+        return daysInMonth.map(day => dayjs(`${currentMonthString}${day}`))
+      },
+      isBubbleOpen() {
+        return this.$store.state.services.bubble.isOpen
+      }
+    },
+    methods: {
+      toggleExpandedWeek() {
+        this.$emit('toggleExpandedWeek')
+      },
+      expandWeek() {
+        this.$emit('expandWeek')
+      },
+      setDate(date) {
+        this.$store.dispatch('services/date/setDate', date)
       },
     },
   }

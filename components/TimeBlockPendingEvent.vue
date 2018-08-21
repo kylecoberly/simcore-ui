@@ -4,7 +4,7 @@
       class="sim-timeblock--remover"
       icon="#icon--control--minus"
       icon-type="svg"
-      @click.native.stop="$emit('removeTimeBlock')"
+      @click.native.stop="$emit('clearPendingEvent')"
     />
     <div class="sim-timeblock--mover" @mousedown="startMove"></div>
     <TimeBlockLabel :startTime="block.startTime" :duration="block.duration" />
@@ -46,9 +46,6 @@
       this.updatePosition()
     },
     methods: {
-      updatePendingEvent(block) {
-        this.$emit('updatePendingEvent', block)
-      },
       updatePosition() {
         this.$emit('updatePosition', {
           domPosition: this.$el.getBoundingClientRect(),

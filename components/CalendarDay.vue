@@ -8,7 +8,7 @@
       <IconText
         :icon="expandIcon"
         iconType="svg"
-        @click.native="$emit('toggleExpandedWeek')"
+        @click.native="toggleExpandedWeek"
       />
       </div>
     </div>
@@ -17,6 +17,10 @@
 
 <script>
   import IconText from './IconText'
+  import dayjs from 'dayjs'
+  import weekOfYear from 'dayjs/plugin/weekOfYear'
+
+  dayjs.extend(weekOfYear)
 
   export default {
     components: {
@@ -24,7 +28,6 @@
     },
     props: {
       day: Object,
-      availabilities: Array,
       showExpandedWeek: Boolean,
     },
     computed: {
@@ -38,7 +41,9 @@
         return this.dateService.selectedDate.isSame(this.day, 'day')
       },
       isInActiveWeek() {
-        return this.dateService.selectedDate.isSame(this.day, 'week')
+        // Rewrite this
+        const currentWeek = this.dateService.selectedDate.week()
+        return this.day.week() === currentWeek
       },
       dayLabel() {
         return this.day.format('D')
@@ -62,6 +67,14 @@
           ? '#icon--control--contract'
           : '#icon--control--expand'
       },
+    },
+    methods: {
+      expandWeek(){
+        this.$emit('expandWeek')
+      },
+      toggleExpandedWeek(){
+        this.$emit('toggleExpandedWeek')
+      }
     },
   }
 </script>
