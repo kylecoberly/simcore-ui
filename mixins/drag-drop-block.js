@@ -47,7 +47,7 @@ export default {
     doneMoving() {
       this.isMoving = false
       this.$emit('setMoving', false)
-      this.$emit('updateTimeblock')
+      this.$emit('updateTimeBlock', this.block)
       removeEventListener('mousemove', this.move)
       removeEventListener('mouseup', this.doneMoving)
     },

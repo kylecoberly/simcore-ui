@@ -17,6 +17,7 @@
           :bubbleIsOpen="bubbleIsOpen"
           :showExpandedWeek="showExpandedWeek"
           @toggleExpandedWeek="toggleExpandedWeek"
+          @expandWeek="expandWeek"
         />
         <SidebarCoordinator
           :instructors="instructors"
@@ -31,6 +32,7 @@
           :showExpandedWeek="showExpandedWeek"
           @updateAvailabilities="updateAvailabilities"
           @toggleExpandedWeek="toggleExpandedWeek"
+          @expandWeek="expandWeek"
         />
         <SidebarInstructor
           :availabilities="selectedDateAvailabilities"
@@ -146,6 +148,9 @@ export default {
     },
     toggleContext() {
       this.isCoordinator = !this.isCoordinator
+    },
+    expandWeek() {
+      this.showExpandedWeek = true
     },
   },
 }

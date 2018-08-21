@@ -1,7 +1,8 @@
 <template>
   <CalendarDay
     :day="day"
-    @toggleExpandedWeek="$emit('toggleExpandedWeek')"
+    :showExpandedWeek="showExpandedWeek"
+    @toggleExpandedWeek="toggleExpandedWeek"
   >
     <TimeLines v-if="showTimelines"
       slot="timelines"
@@ -34,6 +35,7 @@
       TimeBlockAvailability,
       CalendarDay,
     },
+    extends: CalendarDay,
     props: {
       day: Object,
       availabilities: Array,

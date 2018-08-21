@@ -138,7 +138,7 @@
       },
       highlightPrevious() {
         if (this.highlightedIndex > 0) {
-          this.highlightedIndex -= this.highlightedIndex
+          this.highlightedIndex -= 1
         }
       },
       highlightNext() {

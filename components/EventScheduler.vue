@@ -1,5 +1,5 @@
 <template>
-  <form class="event-scheduler" @submit.prevent="submitEvent">
+  <form class="event-scheduler" @submit.prevent="submitEvent" v-on-clickaway="closeBubble">
     <header>
       <IconText icon="#icon--event-duration" icon-type="svg" text="New Event" />
       <div class="schedule">
@@ -63,12 +63,14 @@
 import IconText from './IconText'
 import AutoFinder from './Autofinder'
 import { getHour, formatTimesForDisplay } from '../utilities/date'
+import { mixin as clickaway } from 'vue-clickaway'
 
 export default {
   components: {
     IconText,
     AutoFinder,
   },
+  mixins: [ clickaway ],
   props: {
     event: Object,
     departments: Array,
@@ -86,6 +88,9 @@ export default {
     },
   },
   methods: {
+    closeBubble() {
+      this.$store.dispatch('services/bubble/setOpen', false)
+    },
     saveDraft() {
       this.$emit('saveDraft', this.event)
     },
