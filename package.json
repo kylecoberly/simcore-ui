@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "babel-polyfill": "^6.26.0",
     "dotenv": "^4.0.0",
     "lodash": "^4.17.4",
     "moment": "^2.19.3",
