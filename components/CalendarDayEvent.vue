@@ -26,7 +26,14 @@
      >
       <template v-if="availabilities.length">
         <div v-for="(block, index) in availabilities">
+          <TimeBlockSpecificAvailability
+            v-if="hasOnlySpecificInstructors(block)"
+            :key="index"
+            :block="block"
+            @click.native="creatependingevent(block, day)"
+          />
           <TimeBlockAggregateAvailability
+            v-else
             :key="index"
             :block="block"
             @click.native="createPendingEvent(block, day)"
@@ -42,6 +49,7 @@
   import CalendarDay from './CalendarDay'
   import TimeLines from './TimeLines'
   import TimeBlockAggregateAvailability from './TimeBlockAggregateAvailability'
+  import TimeBlockSpecificAvailability from './TimeBlockSpecificAvailability'
   import TimeBlockPendingEvent from './TimeBlockPendingEvent'
   import TimeBlockNull from './TimeBlockNull'
 
@@ -50,6 +58,7 @@
       CalendarDay,
       TimeLines,
       TimeBlockAggregateAvailability,
+      TimeBlockSpecificAvailability,
       TimeBlockPendingEvent,
       TimeBlockNull,
     },
@@ -85,6 +94,10 @@
       openBubble() {
         this.$store.dispatch('services/bubble/setOpen', true)
       },
+      hasOnlySpecificInstructors(block){
+          return block.specificInstructors.length
+          && !block.generalInstructors.length
+      }
     },
   }
 </script>
