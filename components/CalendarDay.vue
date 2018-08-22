@@ -41,9 +41,10 @@
         return this.dateService.selectedDate.isSame(this.day, 'day')
       },
       isInActiveWeek() {
-        // Rewrite this
-        const currentWeek = this.dateService.selectedDate.week()
-        return this.day.week() === currentWeek
+        // Need to offset by a day to account for Sunday-start weeks
+        const currentWeek = this.dateService.selectedDate.add(1, 'day').week()
+        const dayWeek = this.day.add(1, 'day').week()
+        return currentWeek === dayWeek
       },
       dayLabel() {
         return this.day.format('D')
