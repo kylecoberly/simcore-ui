@@ -38,11 +38,7 @@ export default {
         ) / 2
       ) + this.timeShiftOffset
 
-      if (this.block.limits && this.block.limits.starting && this.block.limits.ending) {
-        startTime = boundDuration(startTime, this.block.limits.starting, this.block.limits.ending)
-      }
-
-      this.block.startTime = startTime
+      this.block.startTime = boundDuration(startTime, 0, this.maximumDuration - this.block.duration)
     },
     doneMoving() {
       this.isMoving = false
