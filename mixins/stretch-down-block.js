@@ -19,23 +19,7 @@ export default {
       }
     },
     stretchDown(event) {
-      this.setDurationFromEnd(event, event.clientY)
-    },
-    doneStretchingDown() {
-      this.stretchDirection = null
-      this.$emit('updateTimeblock', this.block)
-      removeEventListener('mousemove', this.stretchDown)
-      removeEventListener('mouseup', this.doneStretchingDown)
-    },
-    getNewDuration(mouseCoordinate) {
-      return Math.round(
-        (metrics.axis[this.orientation]
-          + mouseCoordinate
-          - metrics.start[this.orientation])
-        / metrics.segment[this.orientation],
-      ) / 2
-    },
-    setDurationFromEnd(event, mouseCoordinate) {
+      const mouseCoordinate = event.clientY
       const newDuration = this.getNewDuration(mouseCoordinate)
       this.$emit('setDuration', newDuration)
 
@@ -44,6 +28,25 @@ export default {
         this.minimumDuration,
         this.maximumDuration - this.block.startTime + this.timeShiftOffset,
       )
+    },
+    getNewDuration(mouseCoordinate) {
+      const position = Math.round(
+        (metrics.axis[this.orientation]
+          + mouseCoordinate
+          - metrics.start[this.orientation])
+        / metrics.segment[this.orientation],
+      ) / 2
+      return position >= this.minimumDuration
+        ? position <= this.maximumDuration
+          ? position
+          : this.maximumDuration
+        : this.minimumDuration
+    },
+    doneStretchingDown() {
+      this.stretchDirection = null
+      this.$emit('updateTimeblock', this.block)
+      removeEventListener('mousemove', this.stretchDown)
+      removeEventListener('mouseup', this.doneStretchingDown)
     },
   }
 }
