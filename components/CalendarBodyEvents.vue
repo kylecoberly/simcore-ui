@@ -151,32 +151,30 @@
         const top = this.$refs.bubble
           ? this.$refs.bubble.$el.getBoundingClientRect().top
           : 0
-        const styles = []
-        styles.push(`--x: ${parseInt(position.x, 10)}`)
-        styles.push(`--y: ${parseInt(position.y, 10)}`)
-        styles.push(`--dink-y: ${parseInt(position.dinkY - top, 10)}`)
-
-        return styles.join(';')
+        console.log('calculated styles', position.dinkY, top)
+        return {
+          "--x": +position.x,
+          "--y": +position.y,
+          "--dink-y": +position.dinkY - top,
+        }
       },
-      updateBlockPosition(position, day) {
+      async updateBlockPosition(position, day) {
         position.offset.x = day.day() + 1
+        await this.$nextTick() // Wait for bubble to be in the DOM
         this.position = this.getBubblePosition(position)
-        // Update calendar position
       },
       getBubblePosition({ domPosition, offset }) {
-        const position = {}
-        position.dinkY = domPosition.top + domPosition.height / 2
-        position.dinkX = domPosition.left + domPosition.width / 2
+        const position = {
+          dinkY: domPosition.top + domPosition.height / 2,
+          dinkX: domPosition.left + domPosition.width / 2,
+          x: offset.x,
+          y: offset.y,
+        }
 
-        position.x = offset.x
-        position.y = offset.y
-
-        if (this.position && position.x > this.position.x && position.x > 2) {
+        if (position.x > this.position.x && position.x > 2) {
           position.orientation = 'right'
-        } else if (this.position && this.x < this.position.x && position.x < 6) {
+        } else if (this.x < this.position.x && position.x < 6) {
           position.orientation = 'left'
-        } else if (this.position.orientation) {
-          position.orientation = this.position.orientation
         } else {
           position.orientation = 'right'
         }
