@@ -151,7 +151,6 @@
         const top = this.$refs.bubble
           ? this.$refs.bubble.$el.getBoundingClientRect().top
           : 0
-        console.log('calculated styles', position.dinkY, top)
         return {
           "--x": +position.x,
           "--y": +position.y,
