@@ -99,6 +99,9 @@
           label: 'Z',
         }]
       },
+      isBubbleOpen() {
+        return this.$store.state.services.bubble.isOpen
+      },
     },
     methods: {
       getEventAvailabilitiesForDay(date) {
