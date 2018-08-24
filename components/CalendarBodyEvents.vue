@@ -19,8 +19,8 @@
       ref="bubble"
       :style="getStyles(position)"
       :position="position"
-      @keydown.esc="clearPendingEvent"
-      @dismiss="clearPendingEvent"
+      @keydown.esc="closeBubble"
+      @dismiss="closeBubble"
     >
       <EventScheduler
         :event="event"
@@ -143,6 +143,9 @@
           specificInstructors: specificInstructors.map(this.getInstructor),
           generalInstructors: generalInstructors.map(this.getInstructor),
         })
+      },
+      closeBubble() {
+        this.$store.dispatch('services/bubble/setOpen', false)
       },
       clearPendingEvent() {
         this.pendingEvent = null
