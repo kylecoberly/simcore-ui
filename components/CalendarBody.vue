@@ -60,9 +60,6 @@
         const currentMonthString = this.selectedDate.format('YYYY-MM-')
         return daysInMonth.map(day => dayjs(`${currentMonthString}${day}`))
       },
-      isBubbleOpen() {
-        return this.$store.state.services.bubble.isOpen
-      }
     },
     methods: {
       toggleExpandedWeek() {

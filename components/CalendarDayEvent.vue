@@ -15,7 +15,7 @@
       <TimeBlockPendingEvent
         v-if="pendingEvent"
         :block="pendingEvent"
-        @click.native="openBubble"
+        @click.native.stop="openBubble"
         @updatePosition="updateBlockPosition"
         @updateTimeBlock="updatePendingEvent"
         @clearPendingEvent="$emit('clearPendingEvent')"
