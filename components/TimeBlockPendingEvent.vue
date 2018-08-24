@@ -43,18 +43,7 @@
       },
     },
     mounted() {
-      this.updatePosition()
-    },
-    methods: {
-      updatePosition() {
-        this.$emit('updatePosition', {
-          domPosition: this.$el.getBoundingClientRect(),
-          offset: {
-            x: 0,
-            y: 0,
-          },
-        })
-      },
+      this.$emit('updatePosition')
     },
   }
 </script>

@@ -39,6 +39,7 @@ export default {
       ) + this.timeShiftOffset
 
       this.block.startTime = boundDuration(startTime, 0, this.maximumDuration - this.block.duration)
+      this.$emit('updatePosition')
     },
     doneMoving() {
       this.isMoving = false

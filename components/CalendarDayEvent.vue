@@ -14,6 +14,7 @@
     <div class="local--day--blocks local--day--pending-blocks">
       <TimeBlockPendingEvent
         v-if="pendingEvent"
+        ref="pendingEvent"
         :block="pendingEvent"
         @click.native.stop="openBubble"
         @updatePosition="updateBlockPosition"
@@ -85,14 +86,21 @@
         block.day = day
         this.$emit('createPendingEvent', block)
       },
-      updateBlockPosition(position) {
-        this.$emit('updateBlockPosition', position)
+      updateBlockPosition() {
+        this.$emit('updateBlockPosition', {
+          domPosition: this.$refs.pendingEvent.$el.getBoundingClientRect(),
+          offset: {
+            x: 0,
+            y: 0,
+          },
+        })
       },
       updatePendingEvent(block) {
         this.$emit('updatePendingEvent', block)
       },
       openBubble() {
         this.$store.dispatch('services/bubble/setOpen', true)
+        this.updateBlockPosition()
       },
       hasOnlySpecificInstructors(block){
           return block.specificInstructors.length
