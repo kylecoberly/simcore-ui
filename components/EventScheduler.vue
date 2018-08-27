@@ -1,54 +1,31 @@
 <template>
   <form class="event-scheduler" @submit.prevent="submitEvent" v-on-clickaway="closeBubble">
-    <header>
-      <IconText icon="#icon--event-duration" icon-type="svg" text="New Event" />
-      <div class="schedule">
-        <time class="event-date">{{eventDate}}</time>
-        <time class="event-time">{{eventTime}}</time>
-      </div>
-    </header>
+    <EventSchedulerHeader
+      :time="event.time"
+      :duration="event.duration"
+    />
     <main>
       <ol>
         <li>
-          <fieldset>
-            <h4>Event Information</h4>
-            <label for="title">Title</label>
-            <input type="text" id="title" required v-model="event.title" />
-            <label for="description">Description</label>
-            <textarea id="description" required v-model="event.description"></textarea>
-            <label for="category">Category</label>
-            <select id="category">
-              <option
-                v-for="(category, id) in categories"
-                :key="id"
-              >
-                {{category.label}}
-              </option>
-            </select>
-            <label>Department</label>
-            <AutoFinder
-              id="department"
-              placeholder="Start typing to find a Department"
-              :options="departments"
-              :canRemove="false"
-              :selectedItem="event.department"
-            />
-          </fieldset>
+          <EventSchedulerInformation
+            :title="event.title"
+            :description="event.description"
+            :department="event.department"
+            :category="event.category"
+            @updateEventProperty="updateEventProperty"
+          />
         </li>
         <li>
-          <fieldset>
-            <h4>Scenarios</h4>
-          </fieldset>
+          <EventSchedulerScenarios
+            :scenarios="event.scenarios"
+            @addScenario="addScenario"
+          />
         </li>
         <li>
-          <fieldset>
-            <h4>People</h4>
-          </fieldset>
-        </li>
-        <li>
-          <fieldset>
-            <h4>Communication</h4>
-          </fieldset>
+          <EventSchedulerPeople
+            :scenarios="event.scenarios"
+            @updateEventProperty="updateEventProperty"
+          />
         </li>
       </ol>
     </main>
@@ -62,6 +39,14 @@
 <script>
 import IconText from './IconText'
 import AutoFinder from './Autofinder'
+import DataList from './Datalist'
+import SimSelection from './Selection'
+
+import EventSchedulerHeader from './EventSchedulerHeader'
+import EventSchedulerInformation from './EventSchedulerInformation'
+import EventSchedulerScenarios from './EventSchedulerScenarios'
+import EventSchedulerPeople from './EventSchedulerPeople'
+
 import { getHour, formatTimesForDisplay } from '../utilities/date'
 import { mixin as clickaway } from 'vue-clickaway'
 
@@ -69,12 +54,16 @@ export default {
   components: {
     IconText,
     AutoFinder,
+    DataList,
+    SimSelection,
+    EventSchedulerHeader,
+    EventSchedulerInformation,
+    EventSchedulerScenarios,
+    EventSchedulerPeople,
   },
   mixins: [ clickaway ],
   props: {
     event: Object,
-    departments: Array,
-    categories: Array,
   },
   computed: {
     eventDate() {
@@ -95,8 +84,15 @@ export default {
       this.$emit('saveDraft', this.event)
     },
     submitEvent() {
+      console.log("submitting", this.event)
       this.$emit('submitEvent', this.event)
     },
+    updateEventProperty(property, value) {
+      this.$emit('updateEventProperty', property, value)
+    },
+    addScenario(scenario) {
+      this.$emit('addScenario', scenario)
+    }
   },
 }
 </script>
@@ -110,6 +106,10 @@ export default {
   header, main, footer {
     padding: 0.5rem;
   }
+  #category {
+    background-color: var(--dark);
+    color: var(--light);
+  }
   header {
     background-color: #fff;
     span {
@@ -121,6 +121,12 @@ export default {
       flex-flow: row nowrap;
       justify-content: space-between;
       color: black;
+    }
+  }
+  .sim-slide--content--section--specific, .sim-slide--content--section--general {
+    header {
+      padding-left: 0;
+      background-color: var(--dark-grey);
     }
   }
   main {
