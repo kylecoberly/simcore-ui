@@ -24,8 +24,8 @@
     >
       <EventScheduler
         :event="event"
-        :departments="departments"
-        :categories="categories"
+        @submitEvent="submitEvent"
+        @updateEventProperty="updateEventProperty"
       />
     </Bubble>
   </CalendarBody>
@@ -73,6 +73,22 @@
             label: 'A Department',
           },
           isApproved: false,
+          scenarios: [{
+            label: "Scenario 1",
+            instructors: {
+              minimumCount: 2,
+              requiredIds: [1],
+              list: [{
+                id: 1,
+                firstName: "Albert",
+                lastName: "Bezel",
+              },{
+                id: 2,
+                firstName: "Chris",
+                lastName: "Delmer",
+              }]
+            },
+          }],
         }
       },
       departments() {
@@ -117,6 +133,7 @@
           generalInstructors: block.generalInstructors.map(this.getInstructor),
           startTime: block.startTime,
           duration: block.duration,
+          scenarios: [],
         }
         this.$store.dispatch('services/bubble/setOpen', true)
       },
@@ -149,6 +166,14 @@
       },
       clearPendingEvent() {
         this.pendingEvent = null
+      },
+      updateEventProperty(property, value) {
+        this.$set('event', property, value)
+      },
+      addScenario(scenario) {
+        this.pendingEvent.scenarios.push(scenario)
+      },
+      submitEvent() {
       },
       getStyles(position) {
         const top = this.$refs.bubble
