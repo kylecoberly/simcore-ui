@@ -1,5 +1,6 @@
+@import 'scss-variables';
+
 .override-css-variables {
-  @import 'scss-variables';
   @import 'overrides/css-variables/autocomplete';
   @import 'overrides/css-variables/autofinder';
   @import 'overrides/css-variables/badge';
