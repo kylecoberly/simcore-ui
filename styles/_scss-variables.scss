@@ -4,34 +4,34 @@ $dark: #333;
 $dark-grey: #444;
 $grey: #565656;
 $medium-grey: #777;
-$light-grey: #CCC;
-$lighter-grey: #DDD;
-$light: #EEE;
-$lighter: #FAFAFA;
-$lightest: #FFF;
+$light-grey: #ccc;
+$lighter-grey: #ddd;
+$light: #eee;
+$lighter: #fafafa;
+$lightest: #fff;
 
 // colors
-$red: #CA1E34;
-$red-film: rgba(#CA1E34, .5);
-$red-film-light: rgba(#CA1E34, .15);
-$red-film-lighter: rgba(#CA1E34, .05);
-$orange: #FF7042;
-$orange-lighter: #F5A623;
-$orange-film: rgba(#FF7042, .5);
-$yellow: #FFC929;
-$yellow-film: rgba(#FFC929, .5);
-$green: #9CCC66;
-$green-lighter: #BFD98C;
-$green-film: rgba(#9CCC66, .5);
-$aqua: #00C1D9;
-$aqua-film: rgba(#00C1D9, .5);
-$blue: #4A93B9;
+$red: #ca1e34;
+$red-film: rgba(#ca1e34, .5);
+$red-film-light: rgba(#ca1e34, .15);
+$red-film-lighter: rgba(#ca1e34, .05);
+$orange: #ff7042;
+$orange-lighter: #f5a623;
+$orange-film: rgba(#ff7042, .5);
+$yellow: #ffc929;
+$yellow-film: rgba(#ffc929, .5);
+$green: #9ccc66;
+$green-lighter: #bfd98c;
+$green-film: rgba(#9ccc66, .5);
+$aqua: #00c1d9;
+$aqua-film: rgba(#00c1d9, .5);
+$blue: #4a93b9;
 $blue-lighter: #96b3cb;
-$blue-film: rgba(#4A93B9, .5);
-$blue-film-light: rgba(#4A93B9, .15);
+$blue-film: rgba(#4a93b9, .5);
+$blue-film-light: rgba(#4a93b9, .15);
 $blue-film-heavy: rgba(14, 103, 150, .9);
-$purple: #AB47BD;
-$purple-film: rgba(#AB47BD, .5);
+$purple: #ab47bd;
+$purple-film: rgba(#ab47bd, .5);
 $accent: $medium-grey;
 $action: $blue;
 $active: $blue-film-heavy;
@@ -50,12 +50,25 @@ $dust: rgba(#777, .05);
 $edge: rgba(#777, .15);
 $line: rgba(#777, .5);
 $ghost: rgba(#808080, .5); // middle grey, middle opacity
-$mist: rgba(#FFF, .2);
-$fog: rgba(#FFF, .5);
-$frost: rgba(#FFF, .8);
+$mist: rgba(#fff, .2);
+$fog: rgba(#fff, .5);
+$frost: rgba(#fff, .8);
 
+// alternate color spellings
+$dark-gray: $dark-grey;
+$gray: $grey;
+$medium-gray: $medium-grey;
+$light-gray: $light-grey;
+$lighter-gray: $lighter-grey;
+
+// animation
 $default-ms: 350ms;
+$ms: 350ms;
+$ms-quick: 200ms;
+$ms-lodestar: 600ms;
+$parallax-amount: 15vh;
 
+// font icons
 $icon-font-family: 'FontAwesome';
 $icon-check: '\f00c';
 $icon-check-circle: '\f058';
@@ -63,13 +76,6 @@ $icon-check-square: '\f14a';
 $icon-check-square-o: '\f046';
 $icon-circle-thin: '\f1db';
 $icon-minus-circle: '\f056';
-
-// alternate spellings
-$dark-gray: $dark-grey;
-$gray: $grey;
-$medium-gray: $medium-grey;
-$light-gray: $light-grey;
-$lighter-gray: $lighter-grey;
 
 $base-font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 $serif-font-family: 'Garamond', 'Cambria', Georgia, serif;
