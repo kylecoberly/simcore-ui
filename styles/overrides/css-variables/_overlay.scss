@@ -35,6 +35,10 @@
 // assignment manager overlay
 .assignment-manager {
 
+  .sim-overlay {
+    background: $lightest;
+  }
+
   .sim-overlay .fa-plus:before {
     font-size: 1rem;
   }
