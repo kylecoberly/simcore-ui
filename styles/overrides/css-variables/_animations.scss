@@ -5,19 +5,19 @@
 
 .animator {
   &.in-from-bottom {
-    transform: translateY(0, 100vh));
+    transform: translateY(100vh);
   }
 
   &.in-from-top {
-    transform: translateY(0, -100vh));
+    transform: translateY(-100vh);
   }
 
   &.in-from-left {
-    transform: translateX(0, -100vw));
+    transform: translateX(-100vw);
   }
 
   &.in-from-right {
-    transform: translateX(0, 100vw));
+    transform: translateX(100vw);
   }
 }
 
@@ -29,55 +29,51 @@
 
   &.in-from-left,
   &.in-from-right {
-    transform: translateX(calc(100vw - 100vw));
+    transform: translateX(calc(100vw - 70em));
   }
 
   // effect on animator's animatable sibling elements
   &.shift.in-from-bottom ~ .animatable {
-    transform: translateX(calc(15vh * -1));
+    transform: translateX(calc(0vh * -1));
   }
 
   &.shift.in-from-top ~ .animatable {
-    transform: translateX(calc(15vh));
+    transform: translateX(calc(0vh));
   }
 
   &.shift.in-from-left ~ .animatable {
-    transform: translateX(calc(15vw));
+    transform: translateX(calc(0vw));
   }
 
   &.shift.in-from-right ~ .animatable {
-    transform: translateX(calc(15vw * -1));
+    transform: translateX(calc(0vw * -1));
   }
 
   &.parallax.in-from-bottom ~ .animatable {
-    transform: translateY(calc(15vh * -1));
-
+    transform: translateY(calc(0vh * -1));
     ~ .animatable {
-      transform: translateY(calc(7.5vh * -1));
+        transform: translateY(calc(7.5vh * -1));
     }
   }
 
   &.parallax.in-from-top ~ .animatable {
     transform: translateY(calc(15vh));
-
     ~ .animatable {
-      transform: translateY(calc(7.5vh));
+        transform: translateY(calc(7.5vh));
     }
   }
 
   &.parallax.in-from-left ~ .animatable {
     transform: translateX(calc(15vw));
-
     ~ .animatable {
-      transform: translateY(calc(7.5vh));
+        transform: translateY(calc(7.5vh));
     }
   }
 
   &.parallax.in-from-right ~ .animatable {
-    transform: translateX(calc(15vw * -1));
-
+    transform: translateX(calc(0vw * -1));
     ~ .animatable {
-      transform: translateY(calc(7.5vh * -1));
+        transform: translateY(calc(7.5vh * -1));
     }
   }
 }
