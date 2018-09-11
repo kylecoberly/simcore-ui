@@ -4,7 +4,7 @@ import assert from 'assert'
 import EventScheduler from '../../../components/EventScheduler'
 import smallEvent from '../fixtures/small-event'
 
-describe('Event Scheduler', () => {
+xdescribe('Event Scheduler', () => {
   before(() => {
     this.component = mount(EventScheduler, {
       propsData: {

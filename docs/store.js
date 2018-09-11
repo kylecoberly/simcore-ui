@@ -21,12 +21,19 @@ const store = new Vuex.Store({
     },
     purviewAvailabilities: {},
     instructors: [],
+    equipment: [],
   },
   getters: {
     instructors(state) {
       return state.instructors.map(instructor => {
         instructor.label = `${instructor.lastname}, ${instructor.firstname}`
         return instructor
+      })
+    },
+    equipment(state) {
+      return state.equipment.map(equipment => {
+        equipment.label = equipment.name
+        return equipment
       })
     }
   },
@@ -39,6 +46,9 @@ const store = new Vuex.Store({
     },
     updateInstructors(state, instructors) {
       state.instructors = instructors
+    },
+    updateEquipment(state, equipment) {
+      state.equipment = equipment
     },
     updateInstructorAvailabilities(state, availabilities) {
       state.purviewAvailabilities = availabilities
@@ -87,6 +97,15 @@ const store = new Vuex.Store({
         .catch(error => console.error(error.message))
       dispatch('services/loading/popLoading')
       return commit('updateInstructors', instructors)
+    },
+    async fetchEquipmentList({dispatch, state, commit}) {
+      const url = buildUrl('purviewEquipment')(state.currentUser.id)
+      dispatch('services/loading/pushLoading')
+      const equipment = await axios.get(url)
+        .then(response => response.data)
+        .catch(error => console.error(error.message))
+      dispatch('services/loading/popLoading')
+      return commit('updateEquipment', equipment)
     },
     async createEvent({commit}, pendingEvent) {
     },

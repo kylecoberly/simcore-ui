@@ -21,6 +21,7 @@
         />
         <SidebarCoordinator
           :instructors="instructors"
+          :equipment="equipment"
           :filters="filters"
           :isDisabled="isBubbleOpen"
           @updateFilters="updateFilters"
@@ -73,6 +74,7 @@ export default {
   props: {
     user: Object,
     instructors: Array,
+    equipment: Array,
     totalAvailabilities: Array,
   },
   data() {
@@ -85,6 +87,9 @@ export default {
       filters: {
         duration: 1,
         instructors: [{
+          id: -1,
+        }],
+        equipment: [{
           id: -1,
         }],
       },

@@ -1,5 +1,6 @@
 import purviewAvailabilities from '../test/e2e/fixtures/purview_availabilities.json'
 import instructors from '../test/e2e/fixtures/purview_users.json'
+import equipment from '../test/e2e/fixtures/purview_equipment.json'
 import availabilities from '../test/e2e/fixtures/availabilities.json'
 
 export default function mockHttpResponses(axios){
@@ -20,6 +21,10 @@ export default function mockHttpResponses(axios){
       }
       case /\/availabilities/.test(error.config.url): {
         data = availabilities
+        break
+      }
+      case /\/purview_equipment/.test(error.config.url): {
+        data = equipment
         break
       }
     }
