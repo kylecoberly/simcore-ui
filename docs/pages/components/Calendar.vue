@@ -11,6 +11,7 @@
         <Calendar
           :user="currentUser"
           :instructors="instructors"
+          :equipment="equipment"
           :totalAvailabilities="totalAvailabilities"
           @updateAvailabilities="updateAvailabilities"
         />
@@ -45,6 +46,7 @@
     },
     created() {
       this.$store.dispatch('fetchInstructorList')
+      this.$store.dispatch('fetchEquipmentList')
       this.$store.dispatch('fetchCurrentUserAvailabilities')
       this.$store.dispatch('fetchInstructorAvailabilities')
     },
@@ -54,6 +56,9 @@
       },
       instructors() {
         return this.$store.getters.instructors
+      },
+      equipment() {
+        return this.$store.getters.equipment
       },
       totalAvailabilities() {
         return normalize(this.$store.state.purviewAvailabilities)

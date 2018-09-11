@@ -10,6 +10,10 @@ export default function buildUrl(name){
       return buildPurviewUsersUrl
       break
     }
+    case 'purviewEquipment': {
+      return buildPurviewEquipmentUrl
+      break
+    }
     case 'purviewAvailabilities': {
       return buildPurviewAvailabilitiesUrl
       break
@@ -35,4 +39,8 @@ function buildPurviewAvailabilitiesUrl(userId, { startDate, endDate }) {
 
 function buildUpdateAvailabilitiesUrl(userId) {
   return `${baseUrl}/users/${userId}/availabilities`
+}
+
+function buildPurviewEquipmentUrl(userId) {
+  return `${baseUrl}/users/${userId}/purview_equipment`
 }
