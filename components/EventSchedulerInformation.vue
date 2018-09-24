@@ -6,6 +6,7 @@
       required
       type="text"
       id="title"
+      :focused="true"
       :value="title"
       @input="updateEventProperty('title', $event.target.value)"
     />

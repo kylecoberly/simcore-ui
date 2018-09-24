@@ -10,7 +10,7 @@
         @blur="blur"
         @keydown.down="highlightNext"
         @keydown.up="highlightPrevious"
-        @keydown.enter="selectHighlighted"
+        @keydown.enter.prevent="selectHighlighted"
         @keydown.tab.exact="selectHighlighted"
         @keyup.esc="blur"
       />

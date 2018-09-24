@@ -27,6 +27,10 @@ export default function mockHttpResponses(axios){
         data = equipment
         break
       }
+      case /\/events/.test(error.config.url): {
+        data = error.config.data
+        break
+      }
     }
     return Promise.resolve({
       data,
