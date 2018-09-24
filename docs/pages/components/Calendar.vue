@@ -11,9 +11,13 @@
         <Calendar
           :user="currentUser"
           :instructors="instructors"
+          :learners="instructors"
+          :rooms="rooms"
           :equipment="equipment"
+          :scenarios="scenarios"
           :totalAvailabilities="totalAvailabilities"
           @updateAvailabilities="updateAvailabilities"
+          @submitEvent="submitEvent"
         />
 
       </template>
@@ -60,6 +64,12 @@
       equipment() {
         return this.$store.getters.equipment
       },
+      rooms() {
+        return [{id: 1, label: "Room 1"}, {id: 2, label: "Room 2"}]
+      },
+      scenarios() {
+        return [{id: 1, label: "Scenario 1"}, {id: 2, label: "Scenario 2"}]
+      },
       totalAvailabilities() {
         return normalize(this.$store.state.purviewAvailabilities)
       },
@@ -70,6 +80,9 @@
           date: date.format('YYYY-MM-DD'),
           availabilities,
         })
+      },
+      submitEvent(event) {
+        this.$store.dispatch('submitEvent', event)
       },
     },
   }

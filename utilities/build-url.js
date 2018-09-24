@@ -22,6 +22,10 @@ export default function buildUrl(name){
       return buildUpdateAvailabilitiesUrl
       break
     }
+    case 'addEvent': {
+      return buildAddEventUrl
+      break
+    }
   }
 }
 
@@ -43,4 +47,8 @@ function buildUpdateAvailabilitiesUrl(userId) {
 
 function buildPurviewEquipmentUrl(userId) {
   return `${baseUrl}/users/${userId}/purview_equipment`
+}
+
+function buildAddEventUrl(userId) {
+  return `${baseUrl}/users/${userId}/events`
 }

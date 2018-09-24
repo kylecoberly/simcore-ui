@@ -15,17 +15,53 @@
             @updateEventProperty="updateEventProperty"
           />
         </li>
+        <!--
         <li>
           <EventSchedulerScenarios
             :scenarios="event.scenarios"
             @addScenario="addScenario"
           />
         </li>
+        -->
         <li>
-          <EventSchedulerPeople
-            :scenarios="event.scenarios"
-            @updateEventProperty="updateEventProperty"
-          />
+          <fieldset>
+            <h4>Sessions</h4>
+            <SessionList
+              :sessions="event.sessions"
+              :scenarios="scenarios"
+              :rooms="rooms"
+              :learners="learners"
+              :instructors="instructors"
+              @setSessions="setSessions"
+            />
+          </fieldset>
+        </li>
+        <li>
+          <fieldset>
+            <h4>Equipment</h4>
+            <AutoFinderList
+              :selectedItems="selectedEquipment"
+              :availableItems="availableEquipment"
+              @setSelectedList="setSelectedEquipment"
+            />
+          </fieldset>
+        </li>
+        <li class="attachments">
+          <fieldset>
+            <h4>Attachments</h4>
+            <ul>
+              <li>
+                <label for="file-upload">Upload a file</label>
+                <input id="file-upload" type="file" />
+              </li>
+            </ul>
+          </fieldset>
+        </li>
+        <li>
+          <fieldset>
+            <h4>Note</h4>
+            <textarea v-model="event.note"></textarea>
+          </fieldset>
         </li>
       </ol>
     </main>
@@ -38,9 +74,10 @@
 
 <script>
 import IconText from './IconText'
-import AutoFinder from './Autofinder'
+import AutoFinderList from './AutofinderList'
 import DataList from './Datalist'
 import SimSelection from './Selection'
+import SessionList from './SessionList'
 
 import EventSchedulerHeader from './EventSchedulerHeader'
 import EventSchedulerInformation from './EventSchedulerInformation'
@@ -53,17 +90,33 @@ import { mixin as clickaway } from 'vue-clickaway'
 export default {
   components: {
     IconText,
-    AutoFinder,
+    AutoFinderList,
     DataList,
     SimSelection,
     EventSchedulerHeader,
     EventSchedulerInformation,
     EventSchedulerScenarios,
     EventSchedulerPeople,
+    SessionList,
   },
   mixins: [ clickaway ],
+  data() {
+    return {
+      selectedEquipment: [{
+        id: 3,
+        label: 'Aloha',
+      }, {
+        id: -1,
+      }],
+    }
+  },
   props: {
     event: Object,
+    equipment: Array,
+    scenarios: Array,
+    rooms: Array,
+    learners: Array,
+    instructors: Array,
   },
   computed: {
     eventDate() {
@@ -75,6 +128,17 @@ export default {
     eventTime() {
       return formatTimesForDisplay(this.eventHour, this.event.duration)
     },
+    availableEquipment() {
+      return this.equipment.filter(equipment => {
+        return !this.selectedEquipment
+          .find(selectedEquipment => +selectedEquipment.id === +equipment.id)
+      })
+    },
+    selectedEquipmentIds() {
+      return this.selectedEquipment
+        .map(this.getIds)
+        .filter(this.getNonBlanks)
+    },
   },
   methods: {
     closeBubble() {
@@ -84,15 +148,34 @@ export default {
       this.$emit('saveDraft', this.event)
     },
     submitEvent() {
-      console.log("submitting", this.event)
+      this.event.equipment = this.selectedEquipmentIds
+      this.event.date = this.event.time.format('YYYY-MM-DD')
+      this.event.startTime = this.event.time.format('H')
       this.$emit('submitEvent', this.event)
+    },
+    getEquipmentIds(){
+      return this.selectedEquipment
+        .map(this.getIds)
+        .filter(this.getNonBlanks)
+    },
+    getNonBlanks(item) {
+      return +item >= 0
+    },
+    getIds(item) {
+      return item.id
     },
     updateEventProperty(property, value) {
       this.$emit('updateEventProperty', property, value)
     },
     addScenario(scenario) {
       this.$emit('addScenario', scenario)
-    }
+    },
+    setSelectedEquipment(equipment) {
+      this.selectedEquipment = equipment
+    },
+    setSessions(sessions) {
+      this.event.sessions = sessions;
+    },
   },
 }
 </script>
@@ -132,6 +215,7 @@ export default {
   main {
     flex: 1;
     overflow-y: auto;
+    padding: 0;
     > ol {
       counter-reset: event-planning-counter;
       list-style-type: none;
@@ -158,9 +242,21 @@ export default {
           margin-bottom: 0.5rem;
         }
       }
+      .attachments {
+        input {
+          position: static;
+          opacity: 1;
+          background-color: #333;
+          padding: 0.25rem;
+          height: auto;
+          width: 100%;
+        }
+      }
     }
     fieldset {
       border: none;
+      width: 100%;
+      padding: 0;
     }
     textarea {
       resize: none;

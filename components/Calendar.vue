@@ -14,11 +14,17 @@
         <CalendarBodyEvents
           :filteredAvailabilities="filteredAvailabilities"
           :instructors="instructors"
+          :learners="learners"
+          :rooms="rooms"
+          :scenarios="scenarios"
+          :equipment="equipment"
           :bubbleIsOpen="bubbleIsOpen"
           :showExpandedWeek="showExpandedWeek"
           @toggleExpandedWeek="toggleExpandedWeek"
           @expandWeek="expandWeek"
+          @submitEvent="submitEvent"
         />
+        <!--
         <SidebarCoordinator
           :instructors="instructors"
           :equipment="equipment"
@@ -26,6 +32,7 @@
           :isDisabled="isBubbleOpen"
           @updateFilters="updateFilters"
         />
+        -->
       </template>
       <template v-else>
         <CalendarBodyAvailability
@@ -74,7 +81,10 @@ export default {
   props: {
     user: Object,
     instructors: Array,
+    learners: Array,
+    rooms: Array,
     equipment: Array,
+    scenarios: Array,
     totalAvailabilities: Array,
   },
   data() {
@@ -156,6 +166,9 @@ export default {
     },
     expandWeek() {
       this.showExpandedWeek = true
+    },
+    submitEvent(event) {
+      this.$emit('submitEvent', event)
     },
   },
 }

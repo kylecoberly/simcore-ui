@@ -24,6 +24,11 @@
     >
       <EventScheduler
         :event="event"
+        :equipment="equipment"
+        :learners="learners"
+        :instructors="instructors"
+        :rooms="rooms"
+        :scenarios="scenarios"
         @submitEvent="submitEvent"
         @updateEventProperty="updateEventProperty"
       />
@@ -59,7 +64,11 @@
     props: {
       filteredAvailabilities: Array,
       instructors: Array,
+      learners: Array,
+      rooms: Array,
+      scenarios: Array,
       showExpandedWeek: Boolean,
+      equipment: Array,
     },
     computed: {
       event() {
@@ -73,21 +82,23 @@
             label: 'A Department',
           },
           isApproved: false,
-          scenarios: [{
-            label: "Scenario 1",
-            instructors: {
-              minimumCount: 2,
-              requiredIds: [1],
-              list: [{
-                id: 1,
-                firstName: "Albert",
-                lastName: "Bezel",
-              },{
-                id: 2,
-                firstName: "Chris",
-                lastName: "Delmer",
-              }]
+          equipment: [],
+          sessions: [{
+            scenario: {
+              id: 1,
+              label: "Good scenario",
             },
+            rooms: [],
+            learners: [],
+            instructors: [{
+              id: 1,
+              firstName: "Albert",
+              lastName: "Bezel",
+            },{
+              id: 2,
+              firstName: "Chris",
+              lastName: "Delmer",
+            }]
           }],
         }
       },
@@ -173,7 +184,8 @@
       addScenario(scenario) {
         this.pendingEvent.scenarios.push(scenario)
       },
-      submitEvent() {
+      submitEvent(event) {
+        this.$emit('submitEvent', event)
       },
       getStyles(position) {
         const top = this.$refs.bubble

@@ -22,6 +22,9 @@ const store = new Vuex.Store({
     purviewAvailabilities: {},
     instructors: [],
     equipment: [],
+    rooms: [],
+    scenarios: [],
+    learners: [],
   },
   getters: {
     instructors(state) {
@@ -107,7 +110,19 @@ const store = new Vuex.Store({
       dispatch('services/loading/popLoading')
       return commit('updateEquipment', equipment)
     },
-    async createEvent({commit}, pendingEvent) {
+    async fetchRoomList() {
+    }
+    async fetchScenarioList() {
+    }
+    async fetchLearnerList() {
+    }
+    async submitEvent({dispatch, state, commit}, event) {
+      const url = buildUrl('addEvent')(state.currentUser.id)
+      dispatch('services/loading/pushLoading')
+      const postedEvent = await axios.post(url, event)
+        .then(response => response.data)
+        .catch(error => console.error(error.message))
+      dispatch('services/loading/popLoading')
     },
   },
   modules: {
