@@ -59,20 +59,7 @@
       return {
         position: {},
         pendingEvent: null,
-      }
-    },
-    props: {
-      filteredAvailabilities: Array,
-      instructors: Array,
-      learners: Array,
-      rooms: Array,
-      scenarios: Array,
-      showExpandedWeek: Boolean,
-      equipment: Array,
-    },
-    computed: {
-      event() {
-        return {
+        event: {
           time: dayjs('2018-07-01 01:00:00'),
           duration: 1.5,
           title: 'A Title',
@@ -101,7 +88,18 @@
             }]
           }],
         }
-      },
+      }
+    },
+    props: {
+      filteredAvailabilities: Array,
+      instructors: Array,
+      learners: Array,
+      rooms: Array,
+      scenarios: Array,
+      showExpandedWeek: Boolean,
+      equipment: Array,
+    },
+    computed: {
       departments() {
         return [{
           id: 1,
@@ -226,6 +224,8 @@
             ? pendingEvent
             : undefined
           : undefined
+      },
+      setSessions(session) {
       },
     },
   }
