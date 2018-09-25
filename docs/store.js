@@ -38,7 +38,13 @@ const store = new Vuex.Store({
         equipment.label = equipment.name
         return equipment
       })
-    }
+    },
+    rooms(state) {
+      return state.rooms.map(room => {
+        room.label = room.name
+        return room
+      })
+    },
   },
   mutations: {
     updateCurrentUserAvailabilitiesByDate(state, {date, availabilities}) {
@@ -52,6 +58,9 @@ const store = new Vuex.Store({
     },
     updateEquipment(state, equipment) {
       state.equipment = equipment
+    },
+    updateRooms(state, rooms) {
+      state.rooms = rooms
     },
     updateInstructorAvailabilities(state, availabilities) {
       state.purviewAvailabilities = availabilities
@@ -110,13 +119,21 @@ const store = new Vuex.Store({
       dispatch('services/loading/popLoading')
       return commit('updateEquipment', equipment)
     },
-    async fetchRoomList() {
-    }
+    async fetchRoomList({dispatch, state, commit}) {
+      const url = buildUrl('purviewRooms')(state.currentUser.id)
+      dispatch('services/loading/pushLoading')
+      const rooms = await axios.get(url)
+        .then(response => response.data)
+        .catch(error => console.error(error.message))
+      dispatch('services/loading/popLoading')
+      return commit('updateRooms', rooms)
+    },
     async fetchScenarioList() {
-    }
+    },
     async fetchLearnerList() {
-    }
+    },
     async submitEvent({dispatch, state, commit}, event) {
+      console.log("submitted:", JSON.stringify(event.sessions))
       const url = buildUrl('addEvent')(state.currentUser.id)
       dispatch('services/loading/pushLoading')
       const postedEvent = await axios.post(url, event)

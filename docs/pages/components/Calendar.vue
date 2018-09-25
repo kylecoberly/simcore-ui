@@ -11,7 +11,7 @@
         <Calendar
           :user="currentUser"
           :instructors="instructors"
-          :learners="instructors"
+          :learners="learners"
           :rooms="rooms"
           :equipment="equipment"
           :scenarios="scenarios"
@@ -51,6 +51,7 @@
     created() {
       this.$store.dispatch('fetchInstructorList')
       this.$store.dispatch('fetchEquipmentList')
+      this.$store.dispatch('fetchRoomList')
       this.$store.dispatch('fetchCurrentUserAvailabilities')
       this.$store.dispatch('fetchInstructorAvailabilities')
     },
@@ -61,11 +62,14 @@
       instructors() {
         return this.$store.getters.instructors
       },
+      learners() {
+        return this.$store.getters.instructors
+      },
       equipment() {
         return this.$store.getters.equipment
       },
       rooms() {
-        return [{id: 1, label: "Room 1"}, {id: 2, label: "Room 2"}]
+        return this.$store.getters.rooms
       },
       scenarios() {
         return [{id: 1, label: "Scenario 1"}, {id: 2, label: "Scenario 2"}]

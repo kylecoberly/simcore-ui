@@ -25,6 +25,7 @@
 <script>
 import SessionListing from './SessionListing'
 import IconText from './IconText'
+import { deepClone } from '../utilities/deep-clone'
 
 export default {
   components: {
@@ -40,15 +41,25 @@ export default {
   },
   methods: {
     add() {
+      const sessions = deepClone(this.sessions)
+      sessions.push({
+        scenario: {},
+        rooms: [],
+        learners: [],
+        instructors: [],
+      })
+      this.$emit('setSessions', sessions)
     },
     setSessions() {
-      this.$emit('setSessions', this.sessions)
+      const sessions = deepClone(this.sessions)
+      this.$emit('setSessions', sessions)
     },
     removeSession(sessionToRemove) {
       const sessions = this.sessions
-        .filter(session => +session.id !== +sessionToRemove.id)
+        .filter(session => session === sessionToRemove)
+      this.$emit('setSessions', sessions)
     },
-  }
+  },
 }
 </script>
 

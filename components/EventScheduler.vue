@@ -27,7 +27,7 @@
           <fieldset>
             <h4>Sessions</h4>
             <SessionList
-              :sessions="event.sessions"
+              :sessions="sessions"
               :scenarios="scenarios"
               :rooms="rooms"
               :learners="learners"
@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import IconText from './IconText'
 import AutoFinderList from './AutofinderList'
 import DataList from './Datalist'
@@ -139,6 +140,9 @@ export default {
         .map(this.getIds)
         .filter(this.getNonBlanks)
     },
+    sessions() {
+      return this.event.sessions
+    },
   },
   methods: {
     closeBubble() {
@@ -174,7 +178,7 @@ export default {
       this.selectedEquipment = equipment
     },
     setSessions(sessions) {
-      this.event.sessions = sessions;
+      Vue.set(this.event, "sessions", sessions)
     },
   },
 }
