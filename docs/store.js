@@ -45,6 +45,12 @@ const store = new Vuex.Store({
         return room
       })
     },
+    scenarios(state) {
+      return state.scenarios.map(scenario => {
+        scenario.label = scenario.title
+        return scenario.name
+      })
+    },
   },
   mutations: {
     updateCurrentUserAvailabilitiesByDate(state, {date, availabilities}) {
@@ -61,6 +67,9 @@ const store = new Vuex.Store({
     },
     updateRooms(state, rooms) {
       state.rooms = rooms
+    },
+    updateScenarios(state, scenarios) {
+      state.scenarios = scenarios
     },
     updateInstructorAvailabilities(state, availabilities) {
       state.purviewAvailabilities = availabilities
@@ -129,6 +138,13 @@ const store = new Vuex.Store({
       return commit('updateRooms', rooms)
     },
     async fetchScenarioList() {
+      const url = buildUrl('purviewScenarios')(state.currentUser.id)
+      dispatch('services/loading/pushLoading')
+      const scenarios = await axios.get(url)
+        .then(response => response.data)
+        .catch(error => console.error(error.message))
+      dispatch('services/loading/popLoading')
+      return commit('updateScenarios', scenarios)
     },
     async fetchLearnerList() {
     },

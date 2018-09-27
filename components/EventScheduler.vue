@@ -50,9 +50,21 @@
           <fieldset>
             <h4>Attachments</h4>
             <ul>
+              <li v-for="(attachment, index) in event.attachments">
+                <FileUploader
+                  :file="attachment"
+                  @uploading=""
+                  @doneUploading="setAttachment(index, ...arguments)"
+                  @clear="clearAttachment(attachment)"
+                />
+              </li>
               <li>
-                <label for="file-upload">Upload a file</label>
-                <input id="file-upload" type="file" />
+                <IconText
+                  class="control--add-item"
+                  icon="#icon--control--add"
+                  icon-type="svg"
+                  @click.native="addAttachment"
+                />
               </li>
             </ul>
           </fieldset>
@@ -79,6 +91,7 @@ import AutoFinderList from './AutofinderList'
 import DataList from './Datalist'
 import SimSelection from './Selection'
 import SessionList from './SessionList'
+import FileUploader from './FileUploader'
 
 import EventSchedulerHeader from './EventSchedulerHeader'
 import EventSchedulerInformation from './EventSchedulerInformation'
@@ -87,6 +100,7 @@ import EventSchedulerPeople from './EventSchedulerPeople'
 
 import { getHour, formatTimesForDisplay } from '../utilities/date'
 import { mixin as clickaway } from 'vue-clickaway'
+import { deepClone } from '../utilities/deep-clone'
 
 export default {
   components: {
@@ -99,6 +113,7 @@ export default {
     EventSchedulerScenarios,
     EventSchedulerPeople,
     SessionList,
+    FileUploader,
   },
   mixins: [ clickaway ],
   data() {
@@ -179,6 +194,27 @@ export default {
     },
     setSessions(sessions) {
       Vue.set(this.event, "sessions", sessions)
+    },
+    setAttachments(attachments) {
+      Vue.set(this.event, "attachments", attachments)
+    },
+    clearAttachment(attachmentToClear) {
+      const filteredAttachments = this.event.attachments
+        .filter(attachment => attachment !== attachmentToClear)
+      this.setAttachments(filteredAttachments)
+    },
+    addAttachment(){
+      const attachments = deepClone(this.event.attachments)
+      attachments.push({id: -1})
+      this.setAttachments(attachments)
+    },
+    setAttachment(index, url){
+      const attachments = deepClone(this.event.attachments)
+      attachments[index] = {
+        id: 1,
+        location: url,
+      }
+      this.setAttachments(attachments)
     },
   },
 }
