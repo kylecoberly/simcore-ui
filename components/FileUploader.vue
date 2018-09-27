@@ -3,7 +3,7 @@
     <label v-if="file.id < 0" for="file-upload">Upload a file</label>
     <input v-if="file.id < 0" @change="uploadFile" id="file-upload" type="file" />
     <div v-else class="uploaded-file">
-      <span>{{file.location}}</span>
+      <span>{{name}}</span>
       <IconText
         class="sim-autofinder--remove-item"
         @click.native.prevent="clear"
@@ -31,6 +31,12 @@ export default {
   },
   props: {
     file: Object,
+  },
+  computed: {
+    name() {
+      const segments = this.file.location.split('/')
+      return segments[segments.length - 1].split('-').splice(1).join('')
+    },
   },
   methods: {
     clear() {
