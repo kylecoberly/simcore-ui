@@ -30,6 +30,10 @@ export default function buildUrl(name){
       return buildPurviewRoomsUrl
       break
     }
+    case 'purviewScenarios': {
+      return buildPurviewScenariosUrl
+      break
+    }
   }
 }
 
@@ -59,4 +63,8 @@ function buildAddEventUrl(userId) {
 
 function buildPurviewRoomsUrl(userId) {
   return `${baseUrl}/users/${userId}/purview_rooms`
+}
+
+function buildPurviewScenariosUrl(userId) {
+  return `${baseUrl}/users/${userId}/purview_scenarios`
 }

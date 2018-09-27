@@ -70,6 +70,12 @@
           },
           isApproved: false,
           equipment: [],
+          attachments: [{
+            id: 2,
+            location: "www.google.com"
+          }, {
+            id: -1
+          }],
           sessions: [{
             scenario: {
               id: 1,

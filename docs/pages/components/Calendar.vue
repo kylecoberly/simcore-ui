@@ -72,7 +72,7 @@
         return this.$store.getters.rooms
       },
       scenarios() {
-        return [{id: 1, label: "Scenario 1"}, {id: 2, label: "Scenario 2"}]
+        return this.$store.getters.scenarios
       },
       totalAvailabilities() {
         return normalize(this.$store.state.purviewAvailabilities)
