@@ -10,11 +10,7 @@
 
         <Calendar
           :user="currentUser"
-          :instructors="instructors"
-          :learners="learners"
-          :rooms="rooms"
-          :equipment="equipment"
-          :scenarios="scenarios"
+          :lookups="lookups"
           :totalAvailabilities="totalAvailabilities"
           @updateAvailabilities="updateAvailabilities"
           @submitEvent="submitEvent"
@@ -49,30 +45,34 @@
       }
     },
     created() {
-      this.$store.dispatch('fetchInstructorList')
-      this.$store.dispatch('fetchEquipmentList')
-      this.$store.dispatch('fetchRoomList')
-      this.$store.dispatch('fetchCurrentUserAvailabilities')
-      this.$store.dispatch('fetchInstructorAvailabilities')
+      [
+        'users',
+        'equipment',
+        'rooms',
+        'scenarios',
+        'departments',
+      ].forEach(action => this.$store.dispatch('fetchList', action));
+      [
+        'fetchCurrentUserAvailabilities',
+        'fetchInstructorAvailabilities',
+      ].forEach(action => this.$store.dispatch(action));
     },
     computed: {
+      lookups() {
+        return {
+          instructors: this.$store.getters.instructors,
+          learners: this.$store.getters.instructors,
+          equipment: this.$store.getters.list({ list: 'equipment', value: 'name' }),
+          rooms: this.$store.getters.list({ list: 'rooms', value: 'name' }),
+          scenarios: this.$store.getters.list({ list: 'scenarios', value: 'name' }),
+          departments: this.$store.getters.list({ list: 'departments', value: 'name' }),
+        }
+      },
       currentUser() {
         return this.$store.state.currentUser
       },
-      instructors() {
-        return this.$store.getters.instructors
-      },
-      learners() {
-        return this.$store.getters.instructors
-      },
-      equipment() {
-        return this.$store.getters.equipment
-      },
-      rooms() {
-        return this.$store.getters.rooms
-      },
-      scenarios() {
-        return this.$store.getters.scenarios
+      events() {
+        return this.$store.state.events
       },
       totalAvailabilities() {
         return normalize(this.$store.state.purviewAvailabilities)

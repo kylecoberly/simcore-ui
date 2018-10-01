@@ -13,13 +13,10 @@
       <template v-if="isCoordinator">
         <CalendarBodyEvents
           :filteredAvailabilities="filteredAvailabilities"
-          :instructors="instructors"
-          :learners="learners"
-          :rooms="rooms"
-          :scenarios="scenarios"
-          :equipment="equipment"
+          :lookups="lookups"
           :bubbleIsOpen="bubbleIsOpen"
           :showExpandedWeek="showExpandedWeek"
+          :user="user"
           @toggleExpandedWeek="toggleExpandedWeek"
           @expandWeek="expandWeek"
           @submitEvent="submitEvent"
@@ -80,11 +77,7 @@ export default {
   },
   props: {
     user: Object,
-    instructors: Array,
-    learners: Array,
-    rooms: Array,
-    equipment: Array,
-    scenarios: Array,
+    lookups: Object,
     totalAvailabilities: Array,
   },
   data() {

@@ -2,13 +2,13 @@
   <section class="session-listing">
     <header>
       <AutoFinder
-        :options="scenarios"
+        :options="lookups.scenarios"
         :selectedItem="session.scenario"
         :canRemove="false"
         :isFocused="false"
-        placeholder="Type to search"
-        @select="selectScenario"
-        @clear="clearScenario"
+        placeholder="Type to search scenarios"
+        @select="update('scenario', ...arguments)"
+        @clear="update('scenario', {})"
       />
       <IconText
         v-if="canRemove"
@@ -19,33 +19,13 @@
     </header>
     <main>
       <ul>
-        <li>
+        <li v-for="(section, index) in sections">
           <fieldset>
-            <h5>Rooms</h5>
+            <h5>{{section.label}}</h5>
             <AutoFinderList
-              :selectedItems="selectedRooms"
-              :availableItems="rooms"
-              @setSelectedList="setSelectedRooms"
-            />
-          </fieldset>
-        </li>
-        <li>
-          <fieldset>
-            <h5>Instructors</h5>
-            <AutoFinderList
-              :selectedItems="selectedInstructors"
-              :availableItems="instructors"
-              @setSelectedList="setSelectedInstructors"
-            />
-          </fieldset>
-        </li>
-        <li>
-          <fieldset>
-            <h5>Learners</h5>
-            <AutoFinderList
-              :selectedItems="selectedLearners"
-              :availableItems="learners"
-              @setSelectedList="setSelectedLearners"
+              :selectedItems="session[section.key]"
+              :availableItems="lookups[section.key]"
+              @setSelectedList="update(section.key, ...arguments)"
             />
           </fieldset>
         </li>
@@ -59,37 +39,38 @@ import IconText from './IconText'
 import AutoFinderList from './AutofinderList'
 import AutoFinder from './Autofinder'
 
+import { deepClone } from '../utilities/deep-clone'
+
 export default {
   components: {
     IconText,
     AutoFinder,
     AutoFinderList,
   },
-  data() {
-    return {
-      selectedRooms: [{id: -1}],
-      selectedInstructors: [{id: -1}],
-      selectedLearners: [{id: -1}],
-    }
-  },
   props: {
-    scenarios: Array,
     session: Object,
     canRemove: Boolean,
-    rooms: Array,
-    instructors: Array,
-    learners: Array,
+    lookups: Object,
+  },
+  computed: {
+    sections() {
+      return [{
+        label: 'Rooms',
+        key: 'rooms',
+      }, {
+        label: 'Instructors',
+        key: 'instructors',
+      }, {
+        label: 'Learners',
+        key: 'learners',
+      }]
+    },
   },
   methods: {
-    setSelectedRooms(rooms) {
-    },
-    setSelectedLearners(learners) {
-    },
-    setSelectedInstructors(instructors) {
-    },
-    selectScenario() {
-    },
-    clearScenario() {
+    update(property, value){
+      const session = deepClone(this.session)
+      session[property] = value
+      this.$emit('update', session)
     },
   },
 }

@@ -1,7 +1,8 @@
 <template>
-  <form class="event-scheduler" @submit.prevent="submitEvent" v-on-clickaway="closeBubble">
+  <form class="event-scheduler" @submit.prevent="submitEvent">
     <EventSchedulerHeader
-      :time="event.time"
+      :day="event.day"
+      :startTime="event.startTime"
       :duration="event.duration"
     />
     <main>
@@ -11,63 +12,30 @@
             :title="event.title"
             :description="event.description"
             :department="event.department"
+            :departments="lookups.departments"
             :category="event.category"
             @updateEventProperty="updateEventProperty"
           />
         </li>
-        <!--
         <li>
-          <EventSchedulerScenarios
-            :scenarios="event.scenarios"
-            @addScenario="addScenario"
+          <EventSchedulerSessions
+            :sessions="event.sessions"
+            :lookups="lookups"
+            @update="updateEventProperty('sessions', ...arguments)"
           />
         </li>
-        -->
         <li>
-          <fieldset>
-            <h4>Sessions</h4>
-            <SessionList
-              :sessions="sessions"
-              :scenarios="scenarios"
-              :rooms="rooms"
-              :learners="learners"
-              :instructors="instructors"
-              @setSessions="setSessions"
-            />
-          </fieldset>
+          <EventSchedulerEquipment
+            :equipmentList="lookups.equipment"
+            :selectedEquipment="event.equipment"
+            @update="updateEventProperty('equipment', ...arguments)"
+          />
         </li>
         <li>
-          <fieldset>
-            <h4>Equipment</h4>
-            <AutoFinderList
-              :selectedItems="selectedEquipment"
-              :availableItems="availableEquipment"
-              @setSelectedList="setSelectedEquipment"
-            />
-          </fieldset>
-        </li>
-        <li class="attachments">
-          <fieldset>
-            <h4>Attachments</h4>
-            <ul>
-              <li v-for="(attachment, index) in event.attachments">
-                <FileUploader
-                  :file="attachment"
-                  @uploading=""
-                  @doneUploading="setAttachment(index, ...arguments)"
-                  @clear="clearAttachment(attachment)"
-                />
-              </li>
-              <li>
-                <IconText
-                  class="control--add-item"
-                  icon="#icon--control--add"
-                  icon-type="svg"
-                  @click.native="addAttachment"
-                />
-              </li>
-            </ul>
-          </fieldset>
+          <EventSchedulerAttachments
+            :attachments="event.attachments"
+            @update="updateEventProperty('attachments', ...arguments)"
+          />
         </li>
         <li>
           <fieldset>
@@ -77,144 +45,50 @@
         </li>
       </ol>
     </main>
-    <footer>
-      <button class="save-draft" @click="saveDraft">Save Draft</button>
-      <input type="submit" value="Submit For Approval" />
-    </footer>
+    <EventSchedulerFooter />
   </form>
 </template>
 
 <script>
-import Vue from 'vue'
 import IconText from './IconText'
 import AutoFinderList from './AutofinderList'
-import DataList from './Datalist'
-import SimSelection from './Selection'
-import SessionList from './SessionList'
-import FileUploader from './FileUploader'
 
 import EventSchedulerHeader from './EventSchedulerHeader'
 import EventSchedulerInformation from './EventSchedulerInformation'
-import EventSchedulerScenarios from './EventSchedulerScenarios'
-import EventSchedulerPeople from './EventSchedulerPeople'
+import EventSchedulerSessions from './EventSchedulerSessions'
+import EventSchedulerAttachments from './EventSchedulerAttachments'
+import EventSchedulerEquipment from './EventSchedulerEquipment'
+import EventSchedulerFooter from './EventSchedulerFooter'
 
-import { getHour, formatTimesForDisplay } from '../utilities/date'
-import { mixin as clickaway } from 'vue-clickaway'
 import { deepClone } from '../utilities/deep-clone'
 
 export default {
   components: {
     IconText,
     AutoFinderList,
-    DataList,
-    SimSelection,
     EventSchedulerHeader,
     EventSchedulerInformation,
-    EventSchedulerScenarios,
-    EventSchedulerPeople,
-    SessionList,
-    FileUploader,
-  },
-  mixins: [ clickaway ],
-  data() {
-    return {
-      selectedEquipment: [{
-        id: 3,
-        label: 'Aloha',
-      }, {
-        id: -1,
-      }],
-    }
+    EventSchedulerSessions,
+    EventSchedulerAttachments,
+    EventSchedulerEquipment,
+    EventSchedulerFooter,
   },
   props: {
     event: Object,
-    equipment: Array,
-    scenarios: Array,
-    rooms: Array,
-    learners: Array,
-    instructors: Array,
-  },
-  computed: {
-    eventDate() {
-      return this.event.time.format('dddd, MMMM Do, YYYY')
-    },
-    eventHour() {
-      return getHour(this.event.time)
-    },
-    eventTime() {
-      return formatTimesForDisplay(this.eventHour, this.event.duration)
-    },
-    availableEquipment() {
-      return this.equipment.filter(equipment => {
-        return !this.selectedEquipment
-          .find(selectedEquipment => +selectedEquipment.id === +equipment.id)
-      })
-    },
-    selectedEquipmentIds() {
-      return this.selectedEquipment
-        .map(this.getIds)
-        .filter(this.getNonBlanks)
-    },
-    sessions() {
-      return this.event.sessions
-    },
+    lookups: Object,
   },
   methods: {
-    closeBubble() {
-      this.$store.dispatch('services/bubble/setOpen', false)
-    },
     saveDraft() {
       this.$emit('saveDraft', this.event)
     },
     submitEvent() {
-      this.event.equipment = this.selectedEquipmentIds
-      this.event.date = this.event.time.format('YYYY-MM-DD')
-      this.event.startTime = this.event.time.format('H')
       this.$emit('submitEvent', this.event)
-    },
-    getEquipmentIds(){
-      return this.selectedEquipment
-        .map(this.getIds)
-        .filter(this.getNonBlanks)
-    },
-    getNonBlanks(item) {
-      return +item >= 0
-    },
-    getIds(item) {
-      return item.id
     },
     updateEventProperty(property, value) {
       this.$emit('updateEventProperty', property, value)
     },
-    addScenario(scenario) {
-      this.$emit('addScenario', scenario)
-    },
-    setSelectedEquipment(equipment) {
-      this.selectedEquipment = equipment
-    },
     setSessions(sessions) {
-      Vue.set(this.event, "sessions", sessions)
-    },
-    setAttachments(attachments) {
-      Vue.set(this.event, "attachments", attachments)
-    },
-    clearAttachment(attachmentToClear) {
-      const filteredAttachments = this.event.attachments
-        .filter(attachment => attachment !== attachmentToClear)
-      this.setAttachments(filteredAttachments)
-    },
-    addAttachment(){
-      const attachments = deepClone(this.event.attachments)
-      attachments.push({id: -1})
-      this.setAttachments(attachments)
-    },
-    setAttachment(index, url){
-      const attachments = deepClone(this.event.attachments)
-      attachments[index] = {
-        id: 1,
-        location: url,
-      }
-      this.setAttachments(attachments)
+      this.$set(this.event, "sessions", sessions)
     },
   },
 }
@@ -280,16 +154,6 @@ export default {
         input, textarea, select {
           background-color: #eee;
           margin-bottom: 0.5rem;
-        }
-      }
-      .attachments {
-        input {
-          position: static;
-          opacity: 1;
-          background-color: #333;
-          padding: 0.25rem;
-          height: auto;
-          width: 100%;
         }
       }
     }

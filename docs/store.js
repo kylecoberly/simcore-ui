@@ -18,6 +18,9 @@ const store = new Vuex.Store({
     currentUser: {
       id: 912,
       availabilities: {},
+      institution: {
+        id: 200,
+      },
     },
     purviewAvailabilities: {},
     instructors: [],
@@ -25,30 +28,20 @@ const store = new Vuex.Store({
     rooms: [],
     scenarios: [],
     learners: [],
+    events: [],
+    departments: [],
   },
   getters: {
+    list: (state) => ({list, value}) => {
+      return state[list].map(item => {
+        item.label = item[value]
+        return item
+      })
+    },
     instructors(state) {
       return state.instructors.map(instructor => {
         instructor.label = `${instructor.lastname}, ${instructor.firstname}`
         return instructor
-      })
-    },
-    equipment(state) {
-      return state.equipment.map(equipment => {
-        equipment.label = equipment.name
-        return equipment
-      })
-    },
-    rooms(state) {
-      return state.rooms.map(room => {
-        room.label = room.name
-        return room
-      })
-    },
-    scenarios(state) {
-      return state.scenarios.map(scenario => {
-        scenario.label = scenario.title
-        return scenario.name
       })
     },
   },
@@ -59,23 +52,25 @@ const store = new Vuex.Store({
     updateCurrentUserAvailabilities(state, availabilities) {
       state.currentUser.availabilities = availabilities
     },
-    updateInstructors(state, instructors) {
-      state.instructors = instructors
-    },
-    updateEquipment(state, equipment) {
-      state.equipment = equipment
-    },
-    updateRooms(state, rooms) {
-      state.rooms = rooms
-    },
-    updateScenarios(state, scenarios) {
-      state.scenarios = scenarios
-    },
     updateInstructorAvailabilities(state, availabilities) {
       state.purviewAvailabilities = availabilities
     },
+    updateList(state, { key, list }) {
+      state[key] = list
+    },
   },
   actions: {
+    async fetchList({ dispatch, state, commit }, key) {
+      /*
+      const url = buildUrl(key)(state.currentUser.id)
+      dispatch('services/loading/pushLoading')
+      const list = await axios.get(url)
+        .then(response => response.data)
+        .catch(error => console.error(error.message))
+      dispatch('services/loading/popLoading')
+      return commit('updateList', { key, list })
+      */
+    },
     async updateCurrentUserAvailabilities({dispatch, state, commit}, {date, availabilities}) {
       const url = buildUrl('updateAvailabilities')(state.currentUser.id)
       const payload = {
@@ -102,7 +97,7 @@ const store = new Vuex.Store({
     },
     async fetchInstructorAvailabilities({dispatch, state, commit}) {
       const {startDate, endDate} = getBoundariesOfMonth(state.services.date.selectedDate)
-      const url = buildUrl('purviewAvailabilities')(state.currentUser.id, {startDate, endDate})
+      const url = buildUrl('userAvailabilities')(state.currentUser.id, {startDate, endDate})
       dispatch('services/loading/pushLoading')
       const availabilities = await axios.get(url)
         .then(response => response.data.users)
@@ -111,7 +106,7 @@ const store = new Vuex.Store({
       return commit('updateInstructorAvailabilities', availabilities)
     },
     async fetchInstructorList({dispatch, state, commit}) {
-      const url = buildUrl('purviewUsers')(state.currentUser.id)
+      const url = buildUrl('availabilities')(state.currentUser.id)
       dispatch('services/loading/pushLoading')
       const instructors = await axios.get(url)
         .then(response => response.data.users.list)
@@ -119,37 +114,10 @@ const store = new Vuex.Store({
       dispatch('services/loading/popLoading')
       return commit('updateInstructors', instructors)
     },
-    async fetchEquipmentList({dispatch, state, commit}) {
-      const url = buildUrl('purviewEquipment')(state.currentUser.id)
-      dispatch('services/loading/pushLoading')
-      const equipment = await axios.get(url)
-        .then(response => response.data)
-        .catch(error => console.error(error.message))
-      dispatch('services/loading/popLoading')
-      return commit('updateEquipment', equipment)
-    },
-    async fetchRoomList({dispatch, state, commit}) {
-      const url = buildUrl('purviewRooms')(state.currentUser.id)
-      dispatch('services/loading/pushLoading')
-      const rooms = await axios.get(url)
-        .then(response => response.data)
-        .catch(error => console.error(error.message))
-      dispatch('services/loading/popLoading')
-      return commit('updateRooms', rooms)
-    },
-    async fetchScenarioList() {
-      const url = buildUrl('purviewScenarios')(state.currentUser.id)
-      dispatch('services/loading/pushLoading')
-      const scenarios = await axios.get(url)
-        .then(response => response.data)
-        .catch(error => console.error(error.message))
-      dispatch('services/loading/popLoading')
-      return commit('updateScenarios', scenarios)
-    },
     async fetchLearnerList() {
     },
     async submitEvent({dispatch, state, commit}, event) {
-      console.log("submitted:", JSON.stringify(event.sessions))
+      console.log("submitted:", JSON.parse(JSON.stringify(event)))
       const url = buildUrl('addEvent')(state.currentUser.id)
       dispatch('services/loading/pushLoading')
       const postedEvent = await axios.post(url, event)
