@@ -63,15 +63,7 @@
         default: 'find...',
       },
       canRemove: Boolean,
-      isFocused: Boolean,
       selectedItem: Object,
-    },
-    mounted(){
-      this.$watch('isFocused', () => {
-        if (this.isFocused) {
-          this.$refs.input.focus()
-        }
-      }, { immediate: true })
     },
     computed: {
       inputValue() {
@@ -132,9 +124,7 @@
         }
       },
       selectHighlighted() {
-        this.optionsOpen
-          ? this.select(this.matchingOptions[this.highlightedIndex])
-          : this.$emit('next')
+          this.select(this.matchingOptions[this.highlightedIndex])
       },
       highlightPrevious() {
         if (this.highlightedIndex > 0) {

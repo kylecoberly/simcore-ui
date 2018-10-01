@@ -37,7 +37,8 @@
 <script>
   import IconText from './IconText'
   import Autofinder from './Autofinder'
-  import Vue from 'Vue'
+
+  import { deepClone } from '../utilities/deep-clone'
 
   export default {
     components: {
@@ -55,16 +56,19 @@
     },
     methods: {
       add(){
-        this.selectedItems.push({ id: -1 })
-        this.$emit('setSelectedList', this.selectedItems)
+        const selectedItems = deepClone(this.selectedItems)
+        selectedItems.push({ id: -1 })
+        this.$emit('setSelectedList', selectedItems)
       },
       remove(index){
-        this.selectedItems.splice(index, 1)
-        this.$emit('setSelectedList', this.selectedItems)
+        const selectedItems = deepClone(this.selectedItems)
+        selectedItems.splice(index, 1)
+        this.$emit('setSelectedList', selectedItems)
       },
       clear(index){
-        Vue.set(this.selectedItems, index, { id: -1 })
-        this.$emit('setSelectedList', this.selectedItems)
+        const selectedItems = deepClone(this.selectedItems)
+        selectedItems[index] = { id: -1 }
+        this.$emit('setSelectedList', selectedItems)
       },
       next(index){
         if (index + 1 >= this.selectedItemCount) {
@@ -72,8 +76,9 @@
         }
       },
       select(index, item){
-        Vue.set(this.selectedItems, index, item)
-        this.$emit('setSelectedList', this.selectedItems)
+        const selectedItems = deepClone(this.selectedItems)
+        selectedItems[index] = item
+        this.$emit('setSelectedList', selectedItems)
       },
     },
   }

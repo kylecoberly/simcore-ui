@@ -19,18 +19,16 @@ export default {
     IconText,
   },
   props: {
-    time: Object,
+    day: Object,
+    startTime: Number,
     duration: Number,
   },
   computed: {
     eventDate() {
-      return this.time.format('dddd, MMMM Do, YYYY')
-    },
-    eventHour() {
-      return getHour(this.time)
+      return this.day.format('dddd, MMMM Do, YYYY')
     },
     eventTime() {
-      return formatTimesForDisplay(this.eventHour, this.duration)
+      return formatTimesForDisplay(this.startTime, this.duration)
     },
   },
 }

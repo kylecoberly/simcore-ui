@@ -12,23 +12,19 @@
       @createPendingEvent="createPendingEvent"
       @clearPendingEvent="clearPendingEvent"
       @updateBlockPosition="updateBlockPosition(...arguments, day)"
-      @updatePendingEvent="updatePendingEvent"
     />
     <Bubble v-if="isBubbleOpen && pendingEvent"
       slot="bubble"
       ref="bubble"
       :style="getStyles(position)"
       :position="position"
+      v-on-clickaway="closeBubble"
       @keydown.esc="closeBubble"
       @dismiss="closeBubble"
     >
       <EventScheduler
-        :event="event"
-        :equipment="equipment"
-        :learners="learners"
-        :instructors="instructors"
-        :rooms="rooms"
-        :scenarios="scenarios"
+        :event="pendingEvent"
+        :lookups="lookups"
         @submitEvent="submitEvent"
         @updateEventProperty="updateEventProperty"
       />
@@ -39,6 +35,7 @@
 <script>
   /* eslint no-nested-ternary: 0 */
   import dayjs from 'dayjs'
+  import Vue from 'vue'
 
   import CalendarBody from './CalendarBody'
   import CalendarDayEvent from './CalendarDayEvent'
@@ -46,6 +43,7 @@
   import EventScheduler from './EventScheduler'
 
   import { formatTimesForDisplay, formatBlockHoursForDisplay } from '../utilities/date'
+  import { mixin as clickaway } from 'vue-clickaway'
 
   export default {
     components: {
@@ -55,83 +53,33 @@
       EventScheduler,
     },
     extends: CalendarBody,
+    mixins: [ clickaway ],
     data() {
       return {
         position: {},
         pendingEvent: null,
-        event: {
-          time: dayjs('2018-07-01 01:00:00'),
-          duration: 1.5,
-          title: 'A Title',
-          description: 'A Description',
-          department: {
-            id: 1,
-            label: 'A Department',
-          },
-          isApproved: false,
-          equipment: [],
-          attachments: [{
-            id: 2,
-            location: "www.google.com"
-          }, {
-            id: -1
-          }],
-          sessions: [{
-            scenario: {
-              id: 1,
-              label: "Good scenario",
-            },
-            rooms: [],
-            learners: [],
-            instructors: [{
-              id: 1,
-              firstName: "Albert",
-              lastName: "Bezel",
-            },{
-              id: 2,
-              firstName: "Chris",
-              lastName: "Delmer",
-            }]
-          }],
-        }
       }
     },
     props: {
       filteredAvailabilities: Array,
-      instructors: Array,
-      learners: Array,
-      rooms: Array,
-      scenarios: Array,
       showExpandedWeek: Boolean,
-      equipment: Array,
+      lookups: Object,
+      user: Object,
     },
     computed: {
-      departments() {
-        return [{
-          id: 1,
-          label: 'A',
-        }, {
-          id: 2,
-          label: 'B',
-        }, {
-          id: 3,
-          label: 'C',
-        }]
-      },
-      categories() {
-        return [{
-          id: 1,
-          label: 'X',
-        }, {
-          id: 2,
-          label: 'Y',
-        }, {
-          id: 3,
-          label: 'Z',
-        }]
-      },
       isBubbleOpen() {
         return this.$store.state.services.bubble.isOpen
+      },
+      getEquipmentIds(){
+        return this.event.equipment
+          .map(this.getIds)
+          .filter(this.getNonBlanks)
+      },
+      getNonBlanks(item) {
+        return +item >= 0
+      },
+      getIds(item) {
+        return item.id
       },
     },
     methods: {
@@ -141,40 +89,43 @@
           ? matchingDay.availabilities
           : []
       },
-      createPendingEvent(block) {
-        this.pendingEvent = {
-          day: block.day,
-          specificInstructors: block.specificInstructors.map(this.getInstructor),
-          generalInstructors: block.generalInstructors.map(this.getInstructor),
-          startTime: block.startTime,
-          duration: block.duration,
-          scenarios: [],
+      CalendarEvent({ day, startTime, duration }) {
+        return {
+          day,
+          startTime,
+          duration,
+          title: '',
+          description: '',
+          department: {},
+          isApproved: false,
+          institution: this.user.institution,
+          equipment: [{
+            id: -1
+          }],
+          attachments: [{
+            id: -1
+          }],
+          sessions: [{
+            scenario: {},
+            rooms: [{
+              id: -1,
+            }],
+            learners: [{
+              id: -1,
+            }],
+            instructors: [{
+              id: -1,
+            }]
+          }],
         }
+      },
+      createPendingEvent(block) {
+        const { day, startTime, duration } = block
+        this.pendingEvent = new this.CalendarEvent({ day, startTime, duration })
         this.$store.dispatch('services/bubble/setOpen', true)
       },
       getInstructor(id){
-        return this.instructors.find(instructor => +instructor.id === +id)
-      },
-      updatePendingEvent(block) {
-        const matchingAvailability = this.filteredAvailabilities
-          .find(day => day.date === block.day.format("YYYY-MM-DD"))
-          .availabilities
-          .find(availability => availability.startTime === block.startTime)
-
-        const {
-          specificInstructors,
-          generalInstructors,
-        } = matchingAvailability || {
-          specificInstructors: [],
-          generalInstructors: [],
-        }
-
-        Object.assign(this.pendingEvent, {
-          startTime: block.startTime,
-          duration: block.duration,
-          specificInstructors: specificInstructors.map(this.getInstructor),
-          generalInstructors: generalInstructors.map(this.getInstructor),
-        })
+        return this.lookups.instructors.find(instructor => +instructor.id === +id)
       },
       closeBubble() {
         this.$store.dispatch('services/bubble/setOpen', false)
@@ -183,13 +134,45 @@
         this.pendingEvent = null
       },
       updateEventProperty(property, value) {
-        this.$set('event', property, value)
+        this.$set(this.pendingEvent, property, value)
       },
       addScenario(scenario) {
         this.pendingEvent.scenarios.push(scenario)
       },
+      isValidId(id) {
+        return +id > 0
+      },
+      getId(object) {
+        return object.id
+      },
+      prepareSession(session) {
+        return {
+          scenario_id: session.scenario.id,
+          instructors: session.instructors
+            .map(this.getId)
+            .filter(this.isValidId),
+          learners: session.learners
+            .map(this.getId)
+            .filter(this.isValidId),
+          rooms: session.rooms
+            .map(this.getId)
+            .filter(this.isValidId),
+        }
+      },
+      prepareEvent(event) {
+        return {
+          date: event.day.format('YYYY-MM-DD'),
+          startTime: +event.startTime,
+          duration: +event.duration,
+          institution_id: +event.institution.id,
+          department_id: event.department.id,
+          equipment: event.equipment.map(this.getId),
+          attachments: Object.assign([], event.attachments),
+          sessions: event.sessions.map(this.prepareSession)
+        }
+      },
       submitEvent(event) {
-        this.$emit('submitEvent', event)
+        console.log(JSON.parse(JSON.stringify(this.prepareEvent(event))))
       },
       getStyles(position) {
         const top = this.$refs.bubble
@@ -230,8 +213,6 @@
             ? pendingEvent
             : undefined
           : undefined
-      },
-      setSessions(session) {
       },
     },
   }
