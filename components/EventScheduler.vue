@@ -74,21 +74,28 @@ export default {
     EventSchedulerFooter,
   },
   props: {
-    event: Object,
-    lookups: Object,
+    properties: Object,
+  },
+  computed: {
+    event() {
+      return this.properties.event
+    },
+    lookups() {
+      return this.properties.lookups
+    },
   },
   methods: {
     saveDraft() {
-      this.$emit('saveDraft', this.event)
+      this.$emit('saveDraft', this.properties.event)
     },
     submitEvent() {
-      this.$emit('submitEvent', this.event)
+      this.$emit('submitEvent', this.properties.event)
     },
     updateEventProperty(property, value) {
       this.$emit('updateEventProperty', property, value)
     },
     setSessions(sessions) {
-      this.$set(this.event, "sessions", sessions)
+      this.$set(this.properties.event, "sessions", sessions)
     },
   },
 }

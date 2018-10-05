@@ -34,6 +34,7 @@
       id="department"
       class="department-finder"
       placeholder="Type to search departments"
+      :isRequired="true"
       :options="departments"
       :canRemove="false"
       :selectedItem="department"

@@ -11,6 +11,7 @@
         <Calendar
           :user="currentUser"
           :lookups="lookups"
+          :events="events"
           :totalAvailabilities="totalAvailabilities"
           @updateAvailabilities="updateAvailabilities"
           @submitEvent="submitEvent"
@@ -51,6 +52,7 @@
         'rooms',
         'scenarios',
         'departments',
+        'events',
       ].forEach(action => this.$store.dispatch('fetchList', action));
       [
         'fetchCurrentUserAvailabilities',

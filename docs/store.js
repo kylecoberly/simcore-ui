@@ -8,6 +8,8 @@ if (process.env.NODE_ENV === 'development') {
   mockHttpResponses(axios)
 }
 
+import camelize from 'camelize'
+
 import { getBoundariesOfMonth } from '../utilities/date'
 import buildUrl from '../utilities/build-url'
 
@@ -18,9 +20,6 @@ const store = new Vuex.Store({
     currentUser: {
       id: 912,
       availabilities: {},
-      institution: {
-        id: 200,
-      },
     },
     purviewAvailabilities: {},
     instructors: [],
@@ -61,15 +60,14 @@ const store = new Vuex.Store({
   },
   actions: {
     async fetchList({ dispatch, state, commit }, key) {
-      /*
       const url = buildUrl(key)(state.currentUser.id)
       dispatch('services/loading/pushLoading')
       const list = await axios.get(url)
         .then(response => response.data)
+        .then(normalizeResponse(key))
         .catch(error => console.error(error.message))
       dispatch('services/loading/popLoading')
       return commit('updateList', { key, list })
-      */
     },
     async updateCurrentUserAvailabilities({dispatch, state, commit}, {date, availabilities}) {
       const url = buildUrl('updateAvailabilities')(state.currentUser.id)
@@ -132,3 +130,22 @@ const store = new Vuex.Store({
 })
 
 export default store
+
+function normalizeResponse(key){
+  const transformations = {
+    users: response => {
+      return response.users.list
+    },
+    departments: response => {
+      return Object.values(response)
+    },
+    events: response => {
+      return camelize(response)
+    },
+  }
+  return response => {
+    return transformations[key]
+      ? transformations[key](response)
+      : response
+  }
+}
