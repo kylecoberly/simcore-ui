@@ -17,7 +17,7 @@ const methods = {
     return `${baseUrl}/users/${userId}/purview_scenarios`
   },
   events(userId) {
-    return `${baseUrl}/users/${userId}/purview_events`
+    return `${baseUrl}/users/${userId}/clinic_events`
   },
   departments(userId) {
     return `${baseUrl}/users/${userId}/purview_departments`

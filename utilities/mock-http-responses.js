@@ -5,6 +5,7 @@ import availabilities from '../test/e2e/fixtures/availabilities.json'
 import rooms from '../test/e2e/fixtures/purview_rooms.json'
 import scenarios from '../test/e2e/fixtures/purview_scenarios.json'
 import departments from '../test/e2e/fixtures/purview_departments.json'
+import events from '../test/e2e/fixtures/clinic_events.json'
 
 export default function mockHttpResponses(axios){
   axios.interceptors.request.use(config => {
@@ -42,7 +43,7 @@ export default function mockHttpResponses(axios){
         data = departments
         break
       }
-      case /\/purview_events/.test(error.config.url): {
+      case /\/clinic_events/.test(error.config.url): {
         data = events
         break
       }

@@ -1,6 +1,6 @@
 <template>
   <header>
-    <IconText icon="#icon--event-duration" icon-type="svg" text="New Event" />
+    <IconText icon="#icon--event-duration" icon-type="svg" :text="this.headline" />
     <div class="schedule">
       <time class="event-date">{{eventDate}}</time>
       <time class="event-time">{{eventTime}}</time>
@@ -22,6 +22,10 @@ export default {
     day: Object,
     startTime: Number,
     duration: Number,
+    headline: {
+      type: String,
+      default: 'New Event',
+    },
   },
   computed: {
     eventDate() {

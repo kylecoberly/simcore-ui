@@ -17,6 +17,7 @@
           :bubbleIsOpen="bubbleIsOpen"
           :showExpandedWeek="showExpandedWeek"
           :user="user"
+          :events="events"
           @toggleExpandedWeek="toggleExpandedWeek"
           @expandWeek="expandWeek"
           @submitEvent="submitEvent"
@@ -79,6 +80,7 @@ export default {
     user: Object,
     lookups: Object,
     totalAvailabilities: Array,
+    events: Array,
   },
   data() {
     return {

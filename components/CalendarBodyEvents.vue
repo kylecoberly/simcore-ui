@@ -6,29 +6,37 @@
       :availabilities="getEventAvailabilitiesForDay(day)"
       :showExpandedWeek="showExpandedWeek"
       :pendingEvent="isPendingEventToday(pendingEvent, day)"
+      :events="getEvents(day)"
       @click.native="setDate(day)"
       @toggleExpandedWeek="toggleExpandedWeek"
       @expandWeek="expandWeek"
       @createPendingEvent="createPendingEvent"
+      @selectEvent="selectEvent"
       @clearPendingEvent="clearPendingEvent"
       @updateBlockPosition="updateBlockPosition(...arguments, day)"
     />
-    <Bubble v-if="isBubbleOpen && pendingEvent"
-      slot="bubble"
+    <Bubble
+      v-if="isBubbleOpen"
       ref="bubble"
+      slot="bubble"
       :style="getStyles(position)"
       :position="position"
+      :content="bubbleContent"
       v-on-clickaway="closeBubble"
       @keydown.esc="closeBubble"
       @dismiss="closeBubble"
-    >
+    />
+    <!--
       <EventScheduler
         :event="pendingEvent"
         :lookups="lookups"
         @submitEvent="submitEvent"
         @updateEventProperty="updateEventProperty"
       />
-    </Bubble>
+      <EventListing
+        :event="selectedEvent"
+      />
+    -->
   </CalendarBody>
 </template>
 
@@ -39,6 +47,7 @@
 
   import CalendarBody from './CalendarBody'
   import CalendarDayEvent from './CalendarDayEvent'
+  import EventListing from './EventListing'
   import Bubble from './Bubble'
   import EventScheduler from './EventScheduler'
 
@@ -51,6 +60,7 @@
       CalendarDayEvent,
       Bubble,
       EventScheduler,
+      EventListing,
     },
     extends: CalendarBody,
     mixins: [ clickaway ],
@@ -58,6 +68,14 @@
       return {
         position: {},
         pendingEvent: null,
+        selectedEvent: null,
+        bubbleContent: {
+          component: 'EventListing',
+          props: {
+            event: this.events[0],
+            //lookups: this.lookups,
+          },
+        },
       }
     },
     props: {
@@ -65,6 +83,7 @@
       showExpandedWeek: Boolean,
       lookups: Object,
       user: Object,
+      events: Array,
     },
     computed: {
       isBubbleOpen() {
@@ -84,10 +103,15 @@
     },
     methods: {
       getEventAvailabilitiesForDay(date) {
-        const matchingDay = this.filteredAvailabilities.find(day => date.isSame(day.date, 'day'))
+        const matchingDay = this.filteredAvailabilities
+          .find(day => date.isSame(day.date, 'day'))
         return matchingDay
           ? matchingDay.availabilities
           : []
+      },
+      getEvents(day) {
+        const date = day.format('YYYY-MM-DD')
+        return this.events.filter(event => event.date === date)
       },
       CalendarEvent({ day, startTime, duration }) {
         return {
@@ -119,8 +143,8 @@
           }],
         }
       },
-      createPendingEvent(block) {
-        const { day, startTime, duration } = block
+      createPendingEvent(day, startTime) {
+        const duration = 1;
         this.pendingEvent = new this.CalendarEvent({ day, startTime, duration })
         this.$store.dispatch('services/bubble/setOpen', true)
       },
@@ -128,6 +152,7 @@
         return this.lookups.instructors.find(instructor => +instructor.id === +id)
       },
       closeBubble() {
+        this.resetSelectedEvent()
         this.$store.dispatch('services/bubble/setOpen', false)
       },
       clearPendingEvent() {
@@ -165,7 +190,7 @@
           startTime: +event.startTime,
           duration: +event.duration,
           institution_id: +event.institution.id,
-          department_id: event.department.id,
+          department_id: +event.department.id,
           equipment: event.equipment.map(this.getId),
           attachments: Object.assign([], event.attachments),
           sessions: event.sessions.map(this.prepareSession)
@@ -213,6 +238,12 @@
             ? pendingEvent
             : undefined
           : undefined
+      },
+      selectEvent(event) {
+        this.selectedEvent = event
+      },
+      resetSelectedEvent() {
+        this.selectedEvent = null
       },
     },
   }

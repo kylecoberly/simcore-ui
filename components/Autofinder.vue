@@ -6,6 +6,7 @@
         ref="input"
         :placeholder="placeholder"
         :value="inputValue"
+        :required="isRequired"
         @input="updateInput"
         @blur="blur"
         @keydown.down="highlightNext"
@@ -64,6 +65,7 @@
       },
       canRemove: Boolean,
       selectedItem: Object,
+      isRequired: Boolean,
     },
     computed: {
       inputValue() {

@@ -9,8 +9,17 @@
       slot="timelines"
       class="sim-calendar--grid--day--timelines"
       :showHalfHourTicks="false"
+      @createTimeBlock="createPendingEvent"
     />
-    <div class="local--day--blocks local--day--event-blocks"></div>
+    <div class="local--day--blocks local--day--event-blocks">
+      <template v-for="event in events">
+        <TimeBlockEvent
+          :block="event"
+          ref="timeBlockEvent"
+          @click.native.stop="selectEvent(event)"
+        />
+      </template>
+    </div>
     <div class="local--day--blocks local--day--pending-blocks">
       <TimeBlockPendingEvent
         v-if="pendingEvent"
@@ -22,16 +31,18 @@
         @clearPendingEvent="$emit('clearPendingEvent')"
       />
     </div>
-    <div class="local--day--blocks local--day--aggregate-blocks"
-       @click="expandWeek"
+    <div
+      class="local--day--blocks local--day--aggregate-blocks"
+      @click="expandWeek"
      >
+    <!--
       <template v-if="availabilities.length">
         <div v-for="(block, index) in availabilities">
           <TimeBlockSpecificAvailability
             v-if="hasOnlySpecificInstructors(block)"
             :key="index"
             :block="block"
-            @click.native="creatependingevent(block, day)"
+            @click.native="createPendingEvent(block, day)"
           />
           <TimeBlockAggregateAvailability
             v-else
@@ -42,6 +53,7 @@
         </div>
       </template>
       <template v-else><TimeBlockNull /></template>
+    -->
     </div>
   </CalendarDay>
 </template>
@@ -52,6 +64,7 @@
   import TimeBlockAggregateAvailability from './TimeBlockAggregateAvailability'
   import TimeBlockSpecificAvailability from './TimeBlockSpecificAvailability'
   import TimeBlockPendingEvent from './TimeBlockPendingEvent'
+  import TimeBlockEvent from './TimeBlockEvent'
   import TimeBlockNull from './TimeBlockNull'
 
   export default {
@@ -62,6 +75,7 @@
       TimeBlockSpecificAvailability,
       TimeBlockPendingEvent,
       TimeBlockNull,
+      TimeBlockEvent,
     },
     extends: CalendarDay,
     props: {
@@ -69,6 +83,7 @@
       availabilities: Array,
       showExpandedWeek: Boolean,
       pendingEvent: Object,
+      events: Array,
     },
     computed: {
       dateService() {
@@ -82,13 +97,13 @@
       },
     },
     methods: {
-      createPendingEvent(block, day) {
-        block.day = day
-        this.$emit('createPendingEvent', block)
+      createPendingEvent(startTime) {
+        this.$emit('createPendingEvent', this.day, startTime)
       },
       updateBlockPosition() {
         this.$emit('updateBlockPosition', {
-          domPosition: this.$refs.pendingEvent.$el.getBoundingClientRect(),
+          // Uh oh
+          domPosition: this.$refs.timeBlockEvent[0].$el.getBoundingClientRect(),
           offset: {
             x: 0,
             y: 0,
@@ -99,12 +114,17 @@
         this.$emit('updatePendingEvent', block)
       },
       openBubble() {
+        console.log('here?')
         this.$store.dispatch('services/bubble/setOpen', true)
         this.updateBlockPosition()
       },
-      hasOnlySpecificInstructors(block){
+      hasOnlySpecificInstructors(block) {
           return block.specificInstructors.length
           && !block.generalInstructors.length
+      },
+      selectEvent(event) {
+        this.openBubble()
+        this.$emit('selectEvent', event)
       }
     },
   }
@@ -112,4 +132,7 @@
 
 <style lang="scss">
   @import '../styles/calendar-day';
+  .local--day--event-blocks {
+    margin-left: 1em;
+  }
 </style>
