@@ -10,8 +10,6 @@ import common from './mixins'
 
 import store from '../modules/store'
 
-import availabilitiesStub from '../test/e2e/fixtures/availabilities.json'
-
 Vue.config.productionTip = false
 
 // helpers
