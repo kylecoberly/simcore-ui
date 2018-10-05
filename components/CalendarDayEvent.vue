@@ -12,11 +12,12 @@
       @createTimeBlock="createPendingEvent"
     />
     <div class="local--day--blocks local--day--event-blocks">
-      <template v-for="event in events">
+      <template v-for="(event, index) in events">
         <TimeBlockEvent
           :block="event"
           ref="timeBlockEvent"
-          @click.native.stop="selectEvent(event)"
+          @updatePosition="updateBlockPosition('event', index)"
+          @click.native.stop="selectEvent(event, index)"
         />
       </template>
     </div>
@@ -25,8 +26,8 @@
         v-if="pendingEvent"
         ref="pendingEvent"
         :block="pendingEvent"
-        @click.native.stop="openBubble"
-        @updatePosition="updateBlockPosition"
+        @click.native.stop="selectPendingEvent(pendingEvent)"
+        @updatePosition="updateBlockPosition('pendingEvent')"
         @updateTimeBlock="updatePendingEvent"
         @clearPendingEvent="$emit('clearPendingEvent')"
       />
@@ -100,10 +101,13 @@
       createPendingEvent(startTime) {
         this.$emit('createPendingEvent', this.day, startTime)
       },
-      updateBlockPosition() {
+      updateBlockPosition(type, index) {
+        const elements = {
+          event: this.$refs.timeBlockEvent[index],
+          pendingEvent: this.$refs.pendingEvent,
+        }
         this.$emit('updateBlockPosition', {
-          // Uh oh
-          domPosition: this.$refs.timeBlockEvent[0].$el.getBoundingClientRect(),
+          domPosition: elements[type].$el.getBoundingClientRect(),
           offset: {
             x: 0,
             y: 0,
@@ -113,26 +117,29 @@
       updatePendingEvent(block) {
         this.$emit('updatePendingEvent', block)
       },
-      openBubble() {
-        console.log('here?')
-        this.$store.dispatch('services/bubble/setOpen', true)
-        this.updateBlockPosition()
-      },
       hasOnlySpecificInstructors(block) {
           return block.specificInstructors.length
           && !block.generalInstructors.length
       },
-      selectEvent(event) {
-        this.openBubble()
+      selectPendingEvent(event) {
+        this.$emit('selectPendingEvent', event)
+        this.updateBlockPosition('pendingEvent')
+      },
+      selectEvent(event, index) {
         this.$emit('selectEvent', event)
-      }
+        this.updateBlockPosition('event', index)
+      },
     },
   }
 </script>
 
 <style lang="scss">
   @import '../styles/calendar-day';
-  .local--day--event-blocks {
-    margin-left: 1em;
+  .local--day--event-blocks, .local--day--pending-blocks {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    left: 50%;
+    margin: 0 !important;
   }
 </style>
