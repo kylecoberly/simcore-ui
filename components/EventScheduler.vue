@@ -136,7 +136,6 @@ export default {
   main {
     flex: 1;
     overflow-y: auto;
-    padding: 0;
     > ol {
       counter-reset: event-planning-counter;
       list-style-type: none;

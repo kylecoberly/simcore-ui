@@ -8,7 +8,7 @@
       </template>
       <template slot="view">
 
-        <Calendar
+        <CalendarEvents
           :user="currentUser"
           :lookups="lookups"
           :events="events"
@@ -32,13 +32,13 @@
 <script>
   import { normalize } from '../../../utilities/filter-availabilities'
   import Demobox from '../../utility/Demobox'
-  import Calendar from '../../../components/Calendar'
+  import CalendarEvents from '../../../components/CalendarEvents'
 
   export default {
     name: 'calendar-doc',
     components: {
       Demobox,
-      Calendar,
+      CalendarEvents,
     },
     data() {
       return {

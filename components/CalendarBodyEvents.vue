@@ -12,19 +12,20 @@
       @expandWeek="expandWeek"
       @createPendingEvent="createPendingEvent"
       @selectEvent="selectEvent"
+      @selectPendingEvent="selectPendingEvent"
       @clearPendingEvent="clearPendingEvent"
       @updateBlockPosition="updateBlockPosition(...arguments, day)"
     />
     <Bubble
-      v-if="isBubbleOpen"
+      v-if="bubbleContent"
       ref="bubble"
       slot="bubble"
       :style="getStyles(position)"
       :position="position"
       :content="bubbleContent"
-      v-on-clickaway="closeBubble"
-      @keydown.esc="closeBubble"
-      @dismiss="closeBubble"
+      v-on-clickaway="resetBubbleContent"
+      @keydown.esc="resetBubbleContent"
+      @dismiss="resetBubbleContent"
     />
     <!--
       <EventScheduler
@@ -68,14 +69,7 @@
       return {
         position: {},
         pendingEvent: null,
-        selectedEvent: null,
-        bubbleContent: {
-          component: 'EventListing',
-          props: {
-            event: this.events[0],
-            //lookups: this.lookups,
-          },
-        },
+        bubbleContent: null,
       }
     },
     props: {
@@ -146,7 +140,7 @@
       createPendingEvent(day, startTime) {
         const duration = 1;
         this.pendingEvent = new this.CalendarEvent({ day, startTime, duration })
-        this.$store.dispatch('services/bubble/setOpen', true)
+        this.selectPendingEvent(this.pendingEvent);
       },
       getInstructor(id){
         return this.lookups.instructors.find(instructor => +instructor.id === +id)
@@ -197,7 +191,7 @@
         }
       },
       submitEvent(event) {
-        console.log(JSON.parse(JSON.stringify(this.prepareEvent(event))))
+        this.$emit('submitEvent', event)
       },
       getStyles(position) {
         const top = this.$refs.bubble
@@ -240,10 +234,24 @@
           : undefined
       },
       selectEvent(event) {
-        this.selectedEvent = event
+        this.bubbleContent = {
+          component: 'EventListing',
+          props: {
+            event,
+          },
+        }
       },
-      resetSelectedEvent() {
-        this.selectedEvent = null
+      selectPendingEvent(event) {
+        this.bubbleContent = {
+          component: 'EventScheduler',
+          props: {
+            event,
+            lookups: this.lookups,
+          },
+        }
+      },
+      resetBubbleContent() {
+        this.bubbleContent = null
       },
     },
   }
