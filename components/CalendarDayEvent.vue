@@ -139,7 +139,7 @@
     position: absolute;
     width: 50%;
     height: 100%;
-    left: 50%;
+    left: 50% !important;
     margin: 0 !important;
   }
 </style>
