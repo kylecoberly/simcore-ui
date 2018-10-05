@@ -1,19 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+import camelize from 'camelize'
+import mockHttpResponses from '../utilities/mock-http-responses'
+import { getBoundariesOfMonth } from '../utilities/date'
+import buildUrl from '../utilities/build-url'
+import services from './services'
+
 Vue.use(Vuex)
 
-import axios from 'axios'
-import mockHttpResponses from '../utilities/mock-http-responses'
 if (process.env.NODE_ENV === 'development') {
   mockHttpResponses(axios)
 }
-
-import camelize from 'camelize'
-
-import { getBoundariesOfMonth } from '../utilities/date'
-import buildUrl from '../utilities/build-url'
-
-import services from './services'
 
 const store = new Vuex.Store({
   state: {
