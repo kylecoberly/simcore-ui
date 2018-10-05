@@ -3,7 +3,7 @@
     <div class="title">{{ this.title }}</div>
     <ul v-if="Array.isArray(this.content)">
       <template v-if="this.content.length > 0">
-        <li v-for="item in this.content">
+        <li v-for="(item, index) in this.content" :key="index">
           <template v-if="item.count">{{ item.count }}</template>
           <template v-if="item.label">{{ item.label }}</template>
           <template v-else>{{ item }}</template>
