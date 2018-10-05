@@ -8,7 +8,7 @@ import App from './App'
 import router from './router'
 import common from './mixins'
 
-import store from './store'
+import store from '../modules/store'
 
 import availabilitiesStub from '../test/e2e/fixtures/availabilities.json'
 
