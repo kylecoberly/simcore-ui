@@ -147,3 +147,5 @@ function normalizeResponse(key){
       : response
   }
 }
+
+export default store
