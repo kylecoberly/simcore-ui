@@ -13,7 +13,7 @@ import camelize from 'camelize'
 import { getBoundariesOfMonth } from '../utilities/date'
 import buildUrl from '../utilities/build-url'
 
-import services from '../modules/services'
+import services from './services'
 
 const store = new Vuex.Store({
   state: {
